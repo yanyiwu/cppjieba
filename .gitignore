@@ -6,3 +6,5 @@ tags
 *.d
 *.ut
 log
+main
+cppcommon/cmlib.a
