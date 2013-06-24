@@ -35,6 +35,7 @@ namespace CppJieba
             void display();
             bool find(const ChUnicode* chUniStr, size_t len);
         private:
+            bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
             bool _insert(const ChUnicode* chUniBuf, size_t len);
     };

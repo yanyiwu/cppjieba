@@ -56,7 +56,16 @@ namespace CppJieba
 
     bool Trie::destroy()
     {
-        return true;
+        if(NULL == _root)
+        {
+            return false;
+        }
+        else
+        {
+            bool ret = _destroyNode(_root);
+            _root = NULL;
+            return ret;
+        }
     }
 
     void Trie::display()
@@ -80,6 +89,18 @@ namespace CppJieba
             }
         }
         return p->isLeaf;
+    }
+
+    bool Trie::_destroyNode(TrieNode* node)
+    {
+        for(TrieNodeHashMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
+        {
+            TrieNode* next = it->second;
+            _destroyNode(next);
+        }
+        
+        delete node;
+        return true;
     }
 
     void Trie::_display(TrieNode* node, int level)
@@ -137,12 +158,16 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("test/dict.txt");
-    trie.display();
-    char * utf = "B";
+    //trie.init("test/dict.txt");
+    trie.init("dict.txt");
+    //trie.display();
+    const char * utf = "B";
     ChUnicode chUniStr[16];
     int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
     cout<<trie.find(chUniStr, uniLen)<<endl;
+    getchar();
+    trie.destroy();
+    getchar();
     //hash_map<ChUnicode, int> hmap;
     //hmap[136]=1;
     return 0;
