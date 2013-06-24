@@ -33,8 +33,9 @@ namespace CppJieba
             bool init(const char* const filepath = DICT_FILE_PATH);
             bool destroy();
             void display();
-            void _display(TrieNode* node, int level);
+            bool find(const ChUnicode* chUniStr, size_t len);
         private:
+            void _display(TrieNode* node, int level);
             bool _insert(const ChUnicode* chUniBuf, size_t len);
     };
 }

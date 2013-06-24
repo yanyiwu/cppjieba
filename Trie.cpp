@@ -64,6 +64,24 @@ namespace CppJieba
         _display(_root, 0);
     }
 
+    bool Trie::find(const ChUnicode* chUniStr, size_t len)
+    {
+        TrieNode* p = _root;
+        for(size_t i = 0; i < len; i++)
+        {
+            ChUnicode chUni = chUniStr[i];
+            if(p->hmap.find(chUni) == p->hmap.end())
+            {
+                return false;
+            }
+            else
+            {
+                p = p->hmap[chUni];
+            }
+        }
+        return p->isLeaf;
+    }
+
     void Trie::_display(TrieNode* node, int level)
     {
         if(NULL == node)
@@ -112,7 +130,6 @@ namespace CppJieba
         p->isLeaf = true;
         return true;
     }
-    
 }
 
 #ifdef TRIE_UT
@@ -122,6 +139,10 @@ int main()
     Trie trie;
     trie.init("test/dict.txt");
     trie.display();
+    char * utf = "B";
+    ChUnicode chUniStr[16];
+    int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
+    cout<<trie.find(chUniStr, uniLen)<<endl;
     //hash_map<ChUnicode, int> hmap;
     //hmap[136]=1;
     return 0;
