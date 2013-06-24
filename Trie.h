@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <ext/hash_map>
+#include <cstring>
 #include "cppcommon/str_functs.h"
 #include "cppcommon/vec_functs.h"
 #include "cppcommon/logger.h"
@@ -34,6 +35,7 @@ namespace CppJieba
             bool destroy();
             void display();
             bool find(const ChUnicode* chUniStr, size_t len);
+            bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
         private:
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);

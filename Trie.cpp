@@ -91,6 +91,26 @@ namespace CppJieba
         return p->isLeaf;
     }
 
+    bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
+    {
+        res.clear();
+        cout<<len<<endl;
+        for(size_t i = 0; i < len; i++)
+        {
+            cout<<__LINE__<<","<<chUniStr[i]<<endl;
+            res.push_back(vector<size_t>());
+            vector<size_t>& vec = res[i];
+            for(size_t j = i; j < len; j++)
+            {
+                if(find(chUniStr + i, j - i + 1))
+                {
+                    vec.push_back(j);
+                }
+            }
+        }
+        return true;
+    }
+
     bool Trie::_destroyNode(TrieNode* node)
     {
         for(TrieNodeHashMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
@@ -161,13 +181,27 @@ int main()
     //trie.init("test/dict.txt");
     trie.init("dict.txt");
     //trie.display();
-    const char * utf = "B";
-    ChUnicode chUniStr[16];
-    int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
-    cout<<trie.find(chUniStr, uniLen)<<endl;
-    getchar();
+    //const char * utf = "B";
+    //ChUnicode chUniStr[16];
+    //int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
+    //cout<<trie.find(chUniStr, uniLen)<<endl;
+    char utf[1024] = "我来到北京清华大学";
+    char buf[1024];
+    ChUnicode chUniStr[1024];
+    //cout<<sizeof(utf)<<endl;
+    int uniLen = utf8ToUnicode(utf, strlen(utf), chUniStr);
+    vector< vector<size_t> > res;
+    cout<<trie.cut(chUniStr, uniLen, res)<<endl;
+    PRINT_MATRIX(res);
+    FOR_VECTOR(res, i)
+    {
+        FOR_VECTOR(res[i], j)
+        {
+            unicodeToUtf8(chUniStr + i, res[i][j] - i + 1, buf);
+            cout<<buf<<endl;
+        }
+    }
     trie.destroy();
-    getchar();
     //hash_map<ChUnicode, int> hmap;
     //hmap[136]=1;
     return 0;
