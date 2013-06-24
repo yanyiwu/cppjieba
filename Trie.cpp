@@ -22,7 +22,6 @@ namespace CppJieba
             return false;
         }
         _root = new TrieNode;
-        _root->isLeaf = false;
         ifstream ifile(filepath);
         string line;
         vector<string> vecBuf;
@@ -36,20 +35,11 @@ namespace CppJieba
                 LogError(msgBuf);
                 return false;
             }
-            //PRINT_VECTOR(vecBuf);
-            //getchar();
             string chWord = vecBuf[0];
+            unsigned int count = atoi(vecBuf[1].c_str());
+            const string& tag = vecBuf[2];
             size_t uniLen = utf8ToUnicode(chWord.c_str(), chWord.size(), chUniBuf);
-            _insert(chUniBuf, uniLen);
-            //for(int i = 0; i < unilen; i++)
-            //{
-            //    // printf("%x\n", strbuf[i]);
-            //}
-            //char utf8str[512]={0};
-            //unicodeToUtf8(strbuf, unilen, utf8str);
-            //cout<<strlen(utf8str);
-            //cout<<utf8str<<endl;
-            
+            _insert(chUniBuf, uniLen, count, tag);
         }
         return true;
     }
@@ -145,7 +135,7 @@ namespace CppJieba
         }
     }
 
-    bool Trie::_insert(const ChUnicode* chUniStr, size_t len)
+    bool Trie::_insert(const ChUnicode* chUniStr, size_t len, unsigned int cnt, const string& tag)
     {
         if(0 == len)
         {
@@ -159,7 +149,6 @@ namespace CppJieba
             if(p->hmap.end() == p->hmap.find(cu))
             {
                 TrieNode * next = new TrieNode;
-                next->isLeaf = false;
                 p->hmap[cu] = next;
                 p = next;
             }

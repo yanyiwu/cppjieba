@@ -22,6 +22,13 @@ namespace CppJieba
     {
         TrieNodeHashMap hmap;
         bool isLeaf;
+        unsigned int count;
+        string tag;
+        TrieNode()
+        {
+            isLeaf = false;
+            count = 0;
+        }
     };
 
     class Trie
@@ -39,7 +46,7 @@ namespace CppJieba
         private:
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
-            bool _insert(const ChUnicode* chUniBuf, size_t len);
+            bool _insert(const ChUnicode* chUniBuf, size_t len, unsigned int cnt, const string& tag);
     };
 }
 
