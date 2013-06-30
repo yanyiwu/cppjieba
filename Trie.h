@@ -27,8 +27,6 @@ namespace CppJieba
         TrieNode()
         :hmap(), isLeaf(false), count(0), tag()
         {
-            isLeaf = false;
-            count = 0;
         }
     };
 
