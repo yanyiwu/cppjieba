@@ -25,6 +25,7 @@ namespace CppJieba
         unsigned int count;
         string tag;
         TrieNode()
+        :hmap(), isLeaf(false), count(0), tag()
         {
             isLeaf = false;
             count = 0;
