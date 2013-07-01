@@ -2,6 +2,16 @@
 
 namespace CppJieba
 {
+    Trie::iterator Trie::begin()
+    {
+        return Trie::iterator(_root);
+    }
+
+    Trie::iterator Trie::end()
+    {
+        return Trie::iterator(NULL);
+    }
+
     Trie::Trie()
     {
         _root = NULL;
@@ -167,8 +177,11 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    //trie.init("test/dict.txt");
-    trie.init("dict.txt");
+    trie.init("test/dict.txt");
+    cout<<trie.begin()->count<<endl;
+    
+    return 0;
+    //trie.init("dict.txt");
     //trie.display();
     //const char * utf = "B";
     //ChUnicode chUniStr[16];

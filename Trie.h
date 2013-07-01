@@ -30,10 +30,59 @@ namespace CppJieba
         }
     };
 
+    struct TrieNodeIterator
+    {
+        TrieNode* ptNode;
+        
+        TrieNodeIterator():ptNode(NULL)
+        {
+        }
+
+        TrieNodeIterator(TrieNode* ptr):ptNode(NULL)
+        {
+            ptNode = ptr;
+        }
+
+        const int operator++(int)
+        {
+            return 1;
+        }
+
+        TrieNodeIterator& operator++()
+        {
+            return *this;
+        }
+
+        TrieNode& operator*() const
+        {
+            return *ptNode;
+        }
+
+        TrieNode* operator->() const
+        {
+            return ptNode;
+        }
+        
+        bool operator==(const TrieNodeIterator& x) const
+        {
+            return ptNode == x.ptNode;
+        }
+        
+        bool operator!=(const TrieNodeIterator& x) const
+        {
+            return ptNode != x.ptNode;
+        }
+    };
+
     class Trie
     {
         private:
             TrieNode* _root;
+        public:
+            typedef TrieNodeIterator iterator;
+        public:
+            iterator begin();
+            iterator end();
         public:
             Trie();
             ~Trie();
