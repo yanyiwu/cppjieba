@@ -177,10 +177,11 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("test/dict.txt");
-    cout<<trie.begin()->count<<endl;
+    trie.init("dict.utf8");
+    //trie.init("test/dict.txt");
+    //cout<<trie.begin()->count<<endl;
     
-    return 0;
+    //return 0;
     //trie.init("dict.txt");
     //trie.display();
     //const char * utf = "B";

@@ -2,7 +2,8 @@
 #define TRIE_H
 #include <iostream>
 #include <fstream>
-#include <ext/hash_map>
+//#include <ext/hash_map>
+#include <map>
 #include <cstring>
 #include "cppcommon/str_functs.h"
 #include "cppcommon/vec_functs.h"
@@ -14,9 +15,9 @@ namespace CppJieba
 {
     using namespace CPPCOMMON;
     using namespace std;
-    using __gnu_cxx::hash_map;
+    //using __gnu_cxx::hash_map;
     typedef uint16_t ChUnicode;
-    typedef hash_map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
+    typedef map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
 
     struct TrieNode
     {
