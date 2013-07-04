@@ -188,7 +188,7 @@ int main()
     //ChUnicode chUniStr[16];
     //int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
     //cout<<trie.find(chUniStr, uniLen)<<endl;
-    char utf[1024] = "我来到北京清华大学";
+    char utf[1024] = "我来到北京清华大学3D电视";
     char buf[1024];
     ChUnicode chUniStr[1024];
     //cout<<sizeof(utf)<<endl;

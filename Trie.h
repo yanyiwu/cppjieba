@@ -19,10 +19,11 @@ namespace CppJieba
     typedef uint16_t ChUnicode;
     typedef map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
 
-    struct TrieNode
+	struct TrieNode
     {
         TrieNodeHashMap hmap;
         bool isLeaf;
+		
         unsigned int count;
         string tag;
         TrieNode()
@@ -79,6 +80,7 @@ namespace CppJieba
     {
         private:
             TrieNode* _root;
+			vector<TrieNode> _nodeVec;
         public:
             typedef TrieNodeIterator iterator;
         public:
