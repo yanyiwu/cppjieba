@@ -16,6 +16,7 @@ namespace CppJieba
 			bool init(const char* const dictFilePath);
 			bool destroy();
 		public:
+			bool cutMM(const string& chStr, vector<string>& res);
 			bool cutRMM(const string& chStr, vector<string>& res);
 
 		private:

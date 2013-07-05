@@ -95,8 +95,11 @@ namespace CppJieba
             bool init(const char* const filepath = DICT_FILE_PATH);
             bool destroy();
             void display();
+
+		public:
             bool find(const ChUnicode* chUniStr, size_t len);
-			bool find(const vector<ChUnicode>& uniVec);
+			//bool find(const vector<ChUnicode>& uniVec);
+			int findMaxMatch(const ChUnicode* chUniStr, size_t len);
 
 		public:
             bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);

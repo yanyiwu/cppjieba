@@ -75,6 +75,7 @@ namespace CppJieba
 
     bool Trie::find(const ChUnicode* chUniStr, size_t len)
     {
+		int res = -1;
         TrieNode* p = _root;
         for(size_t i = 0; i < len; i++)
         {
@@ -91,6 +92,7 @@ namespace CppJieba
         return p->isLeaf;
     }
 
+	/*
 	bool Trie::find(const vector<ChUnicode>& uniVec)
 	{
 		TrieNode * p = _root;
@@ -107,6 +109,33 @@ namespace CppJieba
 			}
 		}
 		return p->isLeaf;
+	}
+	*/
+
+	int Trie::findMaxMatch(const ChUnicode* chUniStr, size_t len)
+	{
+		int res = -1;
+		TrieNode * p = _root;
+		for(int i = 0; i < len; i++)
+		{
+			ChUnicode chWord = chUniStr[i];
+			TrieNodeHashMap::const_iterator iter = p->hmap.find(chWord);
+			if(iter != p->hmap.end())
+			{
+				TrieNode * next = iter->second;
+				if(next->isLeaf)
+				{
+					res = i + 1;
+				}
+				p = next;
+			}
+			else
+			{
+				break;
+			}
+		}
+		cout<<__FILE__<<__LINE__<<res<<endl;
+		return res;
 	}
 
     bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
