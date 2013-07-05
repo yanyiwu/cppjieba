@@ -91,6 +91,24 @@ namespace CppJieba
         return p->isLeaf;
     }
 
+	bool Trie::find(const vector<ChUnicode>& uniVec)
+	{
+		TrieNode * p = _root;
+		for(size_t i = 0; i < uniVec.size(); i++)
+		{
+			ChUnicode chUni = uniVec[i];
+			if(p->hmap.find(chUni) == p->hmap.end())
+			{
+				return false;
+			}
+			else
+			{
+				p = p-> hmap[chUni];
+			}
+		}
+		return p->isLeaf;
+	}
+
     bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
     {
         res.clear();

@@ -96,6 +96,7 @@ namespace CppJieba
             bool destroy();
             void display();
             bool find(const ChUnicode* chUniStr, size_t len);
+			bool find(const vector<ChUnicode>& uniVec);
 
 		public:
             bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
