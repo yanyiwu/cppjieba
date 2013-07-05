@@ -17,6 +17,10 @@ namespace CppJieba
 			bool destroy();
 		public:
 			bool cutRMM(const string& chStr, vector<string>& res);
+
+		private:
+			enum {bufSize = 1024};
+			
 	};
 }
 

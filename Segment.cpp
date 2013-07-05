@@ -22,7 +22,56 @@ namespace CppJieba
 
 	bool Segment::cutRMM(const string& chStr, vector<string>& res)
 	{
-		return false;
+		res.clear();
+		char logBuf[bufSize];
+		char utfBuf[bufSize];
+		ChUnicode uniStr[bufSize];
+		memset(uniStr, 0, sizeof(uniStr));
+		size_t len = utf8ToUnicode(chStr.c_str(), chStr.size(), uniStr);
+
+		if(0 == len)
+		{
+			sprintf(logBuf, "utf8ToUnicode [%s] failed!", chStr.c_str());
+			LogError(logBuf);
+			return false;
+		}
+
+		if(sizeof(uniStr) - len <= 5)
+		{
+			sprintf(logBuf, "%s too long!", chStr.c_str());
+			LogError(logBuf);
+			return false;
+		}
+		
+
+		int i = len - 1;
+		while(i >= 0)
+		{
+			bool flag = false;
+			for(int j = 0; j <= i; j++)
+			{
+				size_t uniLen = i - j + 1;
+				if(_trie.find(uniStr + j, uniLen))
+				{
+					memset(utfBuf, 0 ,sizeof(utfBuf));
+					size_t ret = unicodeToUtf8(uniStr + j, uniLen, utfBuf);
+					if(0 == ret)
+					{
+						LogError("unicodeToUtf8 failed!");
+						return false;
+					}
+					res.push_back(utfBuf);
+					flag = true;
+					i -= uniLen;
+					break;
+				}
+			}
+			if(!flag)
+			{
+				i--;
+			}
+		}
+		return true;
 	}
 }
 
@@ -34,6 +83,17 @@ int main()
 {
 	Segment segment;
 	segment.init("dict.utf8");
+	vector<string> res;
+	string title = "我来到北京清华大学3D电视";
+	bool flag = segment.cutRMM(title, res);
+	if(flag)
+	{
+		for(int i = 0; i < res.size(); i++)
+		{
+			cout<<res[i]<<endl;
+		}
+	}
+
 	segment.destroy();
 	return 0;
 }
