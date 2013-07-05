@@ -24,8 +24,7 @@ namespace CppJieba
     
     bool Trie::init(const char* const filepath)
     {
-        char msgBuf[512];
-        ChUnicode chUniBuf[512];
+        char msgBuf[bufSize];
         if(NULL != _root)
         {
             LogError("already initted!");
@@ -48,8 +47,21 @@ namespace CppJieba
             string chWord = vecBuf[0];
             unsigned int count = atoi(vecBuf[1].c_str());
             const string& tag = vecBuf[2];
-            size_t uniLen = utf8ToUnicode(chWord.c_str(), chWord.size(), chUniBuf);
-            _insert(chUniBuf, uniLen, count, tag);
+
+			//insert node
+			TrieNodeInfo nodeInfo;
+			nodeInfo.word = chWord;
+			nodeInfo.count = count;
+			nodeInfo.tag = tag;
+
+			bool flag = _insert(nodeInfo);
+			if(!flag)
+			{
+				LogError("insert node failed!");
+				return false;
+			}
+			
+
         }
         return true;
     }
@@ -66,6 +78,7 @@ namespace CppJieba
             _root = NULL;
             return ret;
         }
+		_nodeInfoVec.clear();
     }
 
     void Trie::display()
@@ -214,20 +227,37 @@ namespace CppJieba
         }
     }
 
-    bool Trie::_insert(const ChUnicode* chUniStr, size_t len, unsigned int cnt, const string& tag)
-    {
-        if(0 == len)
-        {
-            LogError("input args illegal: len == 0");
-            return false;
-        }
+	bool Trie::_insert(const TrieNodeInfo& nodeInfo)
+	{
+		_nodeInfoVec.push_back(nodeInfo);
+		const string& word = nodeInfo.word;
+		ChUnicode chUniStr[bufSize];
+		memset(chUniStr, 0, sizeof(chUniStr));
+		size_t len = utf8ToUnicode(word.c_str(), word.size(), chUniStr);
+		if(0 == len)
+		{
+			return false;
+		}
         TrieNode* p = _root;
         for(int i = 0; i < len; i++)
         {
             ChUnicode cu = chUniStr[i];
+			if(NULL == p)
+			{
+				return false;
+			}
             if(p->hmap.end() == p->hmap.find(cu))
             {
-                TrieNode * next = new TrieNode;
+				TrieNode * next = NULL;
+				try
+				{
+					next = new TrieNode;
+				}
+				catch(const bad_alloc& e)
+				{
+					return false;
+				}
+				
                 p->hmap[cu] = next;
                 p = next;
             }
@@ -236,7 +266,19 @@ namespace CppJieba
                 p = p->hmap[cu];
             }
         }
+		if(NULL == p)
+		{
+			return false;
+		}
         p->isLeaf = true;
+		if(!_nodeInfoVec.empty())
+		{
+			p->nodeInfoVecPos = _nodeInfoVec.size() - 1;
+		}
+		else
+		{
+			return false;
+		}
         return true;
     }
 }
@@ -247,25 +289,9 @@ int main()
 {
     Trie trie;
     trie.init("dict.utf8");
-    //trie.init("test/dict.txt");
-    //cout<<trie.begin()->count<<endl;
-    
-    //return 0;
-    //trie.init("dict.txt");
-    //trie.display();
-    //const char * utf = "B";
-    //ChUnicode chUniStr[16];
-    //int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
-    //cout<<trie.find(chUniStr, uniLen)<<endl;
     char utf[1024] = "我来到北京清华大学3D电视";
-    //ChUnicode chUniStr[1024];
-    //cout<<sizeof(utf)<<endl;
-    //int uniLen = utf8ToUnicode(utf, strlen(utf), chUniStr);
     vector< vector<size_t> > res;
-    //cout<<trie.cutUtf8(utf, res)<<endl;
     trie.destroy();
-    //hash_map<ChUnicode, int> hmap;
-    //hmap[136]=1;
     return 0;
 }
 #endif

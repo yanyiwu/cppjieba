@@ -20,15 +20,24 @@ namespace CppJieba
 	const size_t ChUniMaxLen = 1024;
     typedef map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
 
+	struct TrieNodeInfo
+	{
+		string word;
+		unsigned int count;
+		string tag;
+		TrieNodeInfo():word(),count(0),tag()
+		{
+		}
+	};
+
 	struct TrieNode
     {
         TrieNodeHashMap hmap;
         bool isLeaf;
-		
-        unsigned int count;
-        string tag;
+		unsigned int nodeInfoVecPos;
+
         TrieNode()
-        :hmap(), isLeaf(false), count(0), tag()
+        :hmap(), isLeaf(false), nodeInfoVecPos(0)
         {
         }
     };
@@ -81,7 +90,7 @@ namespace CppJieba
     {
         private:
             TrieNode* _root;
-			vector<TrieNode> _nodeVec;
+			vector<TrieNodeInfo> _nodeInfoVec;
         public:
             typedef TrieNodeIterator iterator;
 
@@ -110,7 +119,10 @@ namespace CppJieba
         private:
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
-            bool _insert(const ChUnicode* chUniBuf, size_t len, unsigned int cnt, const string& tag);
+			bool _insert(const TrieNodeInfo& nodeInfo);
+
+		private:
+			enum {bufSize = 1024};
     };
 }
 
