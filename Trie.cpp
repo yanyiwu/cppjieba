@@ -94,10 +94,10 @@ namespace CppJieba
     bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
     {
         res.clear();
-        cout<<len<<endl;
+        //cout<<len<<endl;
         for(size_t i = 0; i < len; i++)
         {
-            cout<<__LINE__<<","<<chUniStr[i]<<endl;
+            //cout<<__LINE__<<","<<chUniStr[i]<<endl;
             res.push_back(vector<size_t>());
             vector<size_t>& vec = res[i];
             for(size_t j = i; j < len; j++)
@@ -110,6 +110,28 @@ namespace CppJieba
         }
         return true;
     }
+
+	bool Trie::cutUtf8(const string& str, vector< vector<size_t> >& res)
+	{
+		ChUnicode buf[ChUniMaxLen];
+		size_t len = utf8ToUnicode(str.c_str(), str.size(), buf);
+		if(0 ==  len)
+		{
+		  return false;
+		}
+		return cut(buf, len, res);
+		/*
+		PRINT_MATRIX(res);
+		char buf[1024];
+		FOR_VECTOR(res, i)
+		{
+			FOR_VECTOR(res[i], j)
+			{
+				unicodeToUtf8(chUniStr + i, res[i][j] - i + 1, buf);
+				cout<<buf<<endl;
+			}
+		}*/
+	}
 
     bool Trie::_destroyNode(TrieNode* node)
     {
@@ -189,21 +211,11 @@ int main()
     //int uniLen = utf8ToUnicode(utf, sizeof(utf), chUniStr);
     //cout<<trie.find(chUniStr, uniLen)<<endl;
     char utf[1024] = "我来到北京清华大学3D电视";
-    char buf[1024];
-    ChUnicode chUniStr[1024];
+    //ChUnicode chUniStr[1024];
     //cout<<sizeof(utf)<<endl;
-    int uniLen = utf8ToUnicode(utf, strlen(utf), chUniStr);
+    //int uniLen = utf8ToUnicode(utf, strlen(utf), chUniStr);
     vector< vector<size_t> > res;
-    cout<<trie.cut(chUniStr, uniLen, res)<<endl;
-    PRINT_MATRIX(res);
-    FOR_VECTOR(res, i)
-    {
-        FOR_VECTOR(res[i], j)
-        {
-            unicodeToUtf8(chUniStr + i, res[i][j] - i + 1, buf);
-            cout<<buf<<endl;
-        }
-    }
+    //cout<<trie.cutUtf8(utf, res)<<endl;
     trie.destroy();
     //hash_map<ChUnicode, int> hmap;
     //hmap[136]=1;

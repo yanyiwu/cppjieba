@@ -17,6 +17,7 @@ namespace CppJieba
     using namespace std;
     //using __gnu_cxx::hash_map;
     typedef uint16_t ChUnicode;
+	const size_t ChUniMaxLen = 1024;
     typedef map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
 
 	struct TrieNode
@@ -83,9 +84,11 @@ namespace CppJieba
 			vector<TrieNode> _nodeVec;
         public:
             typedef TrieNodeIterator iterator;
+
         public:
             iterator begin();
             iterator end();
+
         public:
             Trie();
             ~Trie();
@@ -93,7 +96,13 @@ namespace CppJieba
             bool destroy();
             void display();
             bool find(const ChUnicode* chUniStr, size_t len);
+
+		public:
             bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
+			//bool cutUni(const vector<ChUnicode>& uniVec, )
+			bool cutUtf8(const string& str, vector< vector<size_t> >& res);
+			//bool cutMa
+
         private:
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
