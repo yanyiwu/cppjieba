@@ -20,26 +20,22 @@ namespace CppJieba
 		return _trie.destroy();
 	}
 
+	bool Segment::cutDAG(const string& chStr, vector<string>& res)
+	{
+		
+	}
+
+
 	bool Segment::cutMM(const string& chStr, vector<string>& res)
 	{
 		res.clear();
-		char logBuf[bufSize];
 		char utfBuf[bufSize];
 		ChUnicode uniStr[bufSize];
 		memset(uniStr, 0, sizeof(uniStr));
-		size_t len = utf8ToUnicode(chStr.c_str(), chStr.size(), uniStr);
-
+		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
 		if(0 == len)
 		{
-			sprintf(logBuf, "utf8ToUnicode [%s] failed!", chStr.c_str());
-			LogError(logBuf);
-			return false;
-		}
-
-		if(sizeof(uniStr) - len <= 5)
-		{
-			sprintf(logBuf, "%s too long!", chStr.c_str());
-			LogError(logBuf);
+			LogError("_utf8ToUni failed.");
 			return false;
 		}
 
@@ -71,23 +67,14 @@ namespace CppJieba
 	bool Segment::cutRMM(const string& chStr, vector<string>& res)
 	{
 		res.clear();
-		char logBuf[bufSize];
 		char utfBuf[bufSize];
 		ChUnicode uniStr[bufSize];
 		memset(uniStr, 0, sizeof(uniStr));
-		size_t len = utf8ToUnicode(chStr.c_str(), chStr.size(), uniStr);
 
+		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
 		if(0 == len)
 		{
-			sprintf(logBuf, "utf8ToUnicode [%s] failed!", chStr.c_str());
-			LogError(logBuf);
-			return false;
-		}
-
-		if(sizeof(uniStr) - len <= 5)
-		{
-			sprintf(logBuf, "%s too long!", chStr.c_str());
-			LogError(logBuf);
+			LogError("_utf8ToUni failed.");
 			return false;
 		}
 
@@ -119,6 +106,28 @@ namespace CppJieba
 			}
 		}
 		return true;
+	}
+
+	size_t Segment::_utf8ToUni(const string& chStr, ChUnicode* uniStr, size_t size)
+	{
+		char logBuf[bufSize];
+		size_t len = utf8ToUnicode(chStr.c_str(), chStr.size(), uniStr);
+
+		if(0 == len)
+		{
+			sprintf(logBuf, "utf8ToUnicode [%s] failed!", chStr.c_str());
+			LogError(logBuf);
+			return 0;
+		}
+
+		if(size - len <= 5)
+		{
+			sprintf(logBuf, "%s too long!", chStr.c_str());
+			LogError(logBuf);
+			return 0;
+		}
+		return len;
+		
 	}
 }
 

@@ -183,7 +183,7 @@ namespace CppJieba
 		for(int i = 0; i < len; i++)
 		{
 			ChUnicode chWord = chUniStr[i];
-			TrieNodeHashMap::const_iterator iter = p->hmap.find(chWord);
+			TrieNodeMap::const_iterator iter = p->hmap.find(chWord);
 			if(iter != p->hmap.end())
 			{
 				TrieNode * next = iter->second;
@@ -240,7 +240,7 @@ namespace CppJieba
 
     bool Trie::_destroyNode(TrieNode* node)
     {
-        for(TrieNodeHashMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
+        for(TrieNodeMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
         {
             TrieNode* next = it->second;
             _destroyNode(next);
@@ -257,7 +257,7 @@ namespace CppJieba
             LogError("failed! node is null.");
             return;
         }
-        for(TrieNodeHashMap::const_iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
+        for(TrieNodeMap::const_iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
         {
             char utfBuf[8];
             ChUnicode chBuf[1];

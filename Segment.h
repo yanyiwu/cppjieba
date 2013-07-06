@@ -16,8 +16,12 @@ namespace CppJieba
 			bool init(const char* const dictFilePath);
 			bool destroy();
 		public:
+			bool cutDAG(const string& chStr, vector<string>& res);
 			bool cutMM(const string& chStr, vector<string>& res);
 			bool cutRMM(const string& chStr, vector<string>& res);
+
+		private:
+			size_t _utf8ToUni(const string& chStr, ChUnicode* uniStr, size_t size);
 
 		private:
 			enum {bufSize = 1024};

@@ -19,9 +19,7 @@ namespace CppJieba
     using namespace CPPCOMMON;
     using namespace std;
     //using __gnu_cxx::hash_map;
-    typedef uint16_t ChUnicode;
-	const size_t ChUniMaxLen = 1024;
-    typedef map<ChUnicode, struct TrieNode*> TrieNodeHashMap;
+	typedef map<ChUnicode, struct TrieNode*> TrieNodeMap;
 
 	struct TrieNodeInfo
 	{
@@ -36,7 +34,7 @@ namespace CppJieba
 
 	struct TrieNode
     {
-        TrieNodeHashMap hmap;
+        TrieNodeMap hmap;
         bool isLeaf;
 		unsigned int nodeInfoVecPos;
 
