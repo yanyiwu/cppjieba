@@ -7,6 +7,7 @@
 #include <cstring>
 #include <stdint.h>
 #include <cmath>
+#include <limits>
 #include "cppcommon/str_functs.h"
 #include "cppcommon/vec_functs.h"
 #include "cppcommon/logger.h"
@@ -45,6 +46,7 @@ namespace CppJieba
         }
     };
 
+	/*
     struct TrieNodeIterator
     {
         TrieNode* ptNode;
@@ -88,16 +90,19 @@ namespace CppJieba
             return ptNode != x.ptNode;
         }
     };
+	*/
 
     class Trie
     {
         private:
             TrieNode* _root;
 			vector<TrieNodeInfo> _nodeInfoVec;
-			int64_t _totalWeight;
+
+			int64_t _totalCount;
+			double _minWeight;
 
         public:
-            typedef TrieNodeIterator iterator;
+            typedef vector<TrieNodeInfo>::iterator iterator;
 
         public:
             iterator begin();
@@ -111,22 +116,24 @@ namespace CppJieba
             void display();
 
 		public:
-            bool find(const ChUnicode* chUniStr, size_t len);
+			const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
+            //bool find(const ChUnicode* chUniStr, size_t len);
 			//bool find(const vector<ChUnicode>& uniVec);
 			int findMaxMatch(const ChUnicode* chUniStr, size_t len);
 
 		public:
-            bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
+			double getWeight(const ChUnicode* uniStr, size_t len);
+            //bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
 			//bool cutUni(const vector<ChUnicode>& uniVec, )
-			bool cutUtf8(const string& str, vector< vector<size_t> >& res);
+			//bool cutUtf8(const string& str, vector< vector<size_t> >& res);
 			//bool cutMa
 
         private:
 			bool _buildTree(const char* const filePath);
+			bool _countWeight();
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
 			bool _insert(const TrieNodeInfo& nodeInfo);
-			bool _countWeight();
 
 		private:
 			enum {bufSize = 1024};

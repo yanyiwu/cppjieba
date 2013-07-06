@@ -4,16 +4,17 @@ namespace CppJieba
 {
     Trie::iterator Trie::begin()
     {
-        return Trie::iterator(_root);
+        return _nodeInfoVec.begin();
     }
 
     Trie::iterator Trie::end()
     {
-        return Trie::iterator(NULL);
+        return _nodeInfoVec.end();
     }
 
-    Trie::Trie():_root(NULL), _nodeInfoVec(), _totalWeight(0)
+    Trie::Trie():_root(NULL), _totalCount(0)
     {
+		_minWeight = numeric_limits<double>::max();
     }
     
     Trie::~Trie()
@@ -103,6 +104,38 @@ namespace CppJieba
         _display(_root, 0);
     }
 
+	const TrieNodeInfo* Trie::find(const ChUnicode* const chUniStr, size_t len)
+	{
+		TrieNode* p = _root;
+		for(size_t i = 0; i < len; i++)
+		{
+			ChUnicode chUni = chUniStr[i];
+			if(p->hmap.find(chUni) == p-> hmap.end())
+			{
+				return NULL;
+			}
+			else
+			{
+				p = p->hmap[chUni];
+			}
+		}
+		if(p->isLeaf)
+		{
+			unsigned int pos = p->nodeInfoVecPos;
+			if(pos < _nodeInfoVec.size())
+			{
+				return &(_nodeInfoVec[pos]);
+			}
+			else
+			{
+				LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+				return NULL;
+			}
+		}
+		return NULL;
+	}
+
+	/*
     bool Trie::find(const ChUnicode* chUniStr, size_t len)
     {
 		int res = -1;
@@ -121,6 +154,7 @@ namespace CppJieba
         }
         return p->isLeaf;
     }
+	*/
 
 	/*
 	bool Trie::find(const vector<ChUnicode>& uniVec)
@@ -168,6 +202,12 @@ namespace CppJieba
 		return res;
 	}
 
+	double getWeight(const ChUnicode* uniStr, size_t len)
+	{
+		
+	}
+
+	/*
     bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
     {
         res.clear();
@@ -187,28 +227,8 @@ namespace CppJieba
         }
         return true;
     }
+	*/
 
-	bool Trie::cutUtf8(const string& str, vector< vector<size_t> >& res)
-	{
-		ChUnicode buf[ChUniMaxLen];
-		size_t len = utf8ToUnicode(str.c_str(), str.size(), buf);
-		if(0 ==  len)
-		{
-		  return false;
-		}
-		return cut(buf, len, res);
-		/*
-		PRINT_MATRIX(res);
-		char buf[1024];
-		FOR_VECTOR(res, i)
-		{
-			FOR_VECTOR(res[i], j)
-			{
-				unicodeToUtf8(chUniStr + i, res[i][j] - i + 1, buf);
-				cout<<buf<<endl;
-			}
-		}*/
-	}
 
     bool Trie::_destroyNode(TrieNode* node)
     {
@@ -301,25 +321,26 @@ namespace CppJieba
 
 	bool Trie::_countWeight()
 	{
-		if(_nodeInfoVec.empty() || 0 != _totalWeight)
+		if(_nodeInfoVec.empty() || 0 != _totalCount)
 		{
-			LogError("_nodeInfoVec is empty or _totalWeight has been counted already.");
+			LogError("_nodeInfoVec is empty or _totalCount has been counted already.");
 			return false;
 		}
 		
 		//count total freq
 		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
 		{
-			_totalWeight += _nodeInfoVec[i].count;
+			_totalCount += _nodeInfoVec[i].count;
 			//cout<<_nodeInfoVec[i].word<<_nodeInfoVec[i].count<<endl;
 		}
 		
 		//normalize
 		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
 		{
-			_nodeInfoVec[i].weight = log(double(_nodeInfoVec[i].count)/double(_totalWeight));
+			_nodeInfoVec[i].weight = log(double(_nodeInfoVec[i].count)/double(_totalCount));
 			//cout<<_nodeInfoVec[i].weight<<endl;
 		}
+		cout<<_minWeight<<endl;
 		
 		return true;
 	}

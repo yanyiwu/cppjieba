@@ -98,7 +98,7 @@ namespace CppJieba
 			for(int j = 0; j <= i; j++)
 			{
 				size_t uniLen = i - j + 1;
-				if(_trie.find(uniStr + j, uniLen))
+				if(NULL != _trie.find(uniStr + j, uniLen))
 				{
 					memset(utfBuf, 0 ,sizeof(utfBuf));
 					size_t ret = unicodeToUtf8(uniStr + j, uniLen, utfBuf);
