@@ -5,6 +5,8 @@
 //#include <ext/hash_map>
 #include <map>
 #include <cstring>
+#include <stdint.h>
+#include <cmath>
 #include "cppcommon/str_functs.h"
 #include "cppcommon/vec_functs.h"
 #include "cppcommon/logger.h"
@@ -25,7 +27,8 @@ namespace CppJieba
 		string word;
 		unsigned int count;
 		string tag;
-		TrieNodeInfo():word(),count(0),tag()
+		double weight;
+		TrieNodeInfo():word(),count(0),tag(),weight(0.0)
 		{
 		}
 	};
@@ -91,6 +94,8 @@ namespace CppJieba
         private:
             TrieNode* _root;
 			vector<TrieNodeInfo> _nodeInfoVec;
+			int64_t _totalWeight;
+
         public:
             typedef TrieNodeIterator iterator;
 
@@ -101,7 +106,7 @@ namespace CppJieba
         public:
             Trie();
             ~Trie();
-            bool init(const char* const filepath = DICT_FILE_PATH);
+            bool init(const char* const filePath);
             bool destroy();
             void display();
 
@@ -117,9 +122,11 @@ namespace CppJieba
 			//bool cutMa
 
         private:
+			bool _buildTree(const char* const filePath);
             bool _destroyNode(TrieNode* node);
             void _display(TrieNode* node, int level);
 			bool _insert(const TrieNodeInfo& nodeInfo);
+			bool _countWeight();
 
 		private:
 			enum {bufSize = 1024};

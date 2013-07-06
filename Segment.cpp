@@ -129,7 +129,8 @@ using namespace CppJieba;
 int main()
 {
 	Segment segment;
-	segment.init("dict.utf8");
+	segment.init("jieba.dict.utf8");
+	
 	vector<string> res;
 	string title = "我来到北京清华大学3D电视";
 	bool flag = segment.cutMM(title, res);

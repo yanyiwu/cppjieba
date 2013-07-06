@@ -12,17 +12,34 @@ namespace CppJieba
         return Trie::iterator(NULL);
     }
 
-    Trie::Trie()
+    Trie::Trie():_root(NULL), _nodeInfoVec(), _totalWeight(0)
     {
-        _root = NULL;
     }
     
     Trie::~Trie()
     {
         destroy();
     }
+
+	bool Trie::init(const char* const filePath)
+	{
+		bool res = false;
+		res = _buildTree(filePath);
+		if(!res)
+		{
+			LogError("_buildTree failed.");
+			return false;
+		}
+		res = _countWeight();
+		if(!res)
+		{
+			LogError("_countWeight failed.");
+			return false;
+		}
+		return true;
+	}
     
-    bool Trie::init(const char* const filepath)
+    bool Trie::_buildTree(const char* const filePath)
     {
         char msgBuf[bufSize];
         if(NULL != _root)
@@ -31,7 +48,7 @@ namespace CppJieba
             return false;
         }
         _root = new TrieNode;
-        ifstream ifile(filepath);
+        ifstream ifile(filePath);
         string line;
         vector<string> vecBuf;
         while(getline(ifile, line))
@@ -281,6 +298,31 @@ namespace CppJieba
 		}
         return true;
     }
+
+	bool Trie::_countWeight()
+	{
+		if(_nodeInfoVec.empty() || 0 != _totalWeight)
+		{
+			LogError("_nodeInfoVec is empty or _totalWeight has been counted already.");
+			return false;
+		}
+		
+		//count total freq
+		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
+		{
+			_totalWeight += _nodeInfoVec[i].count;
+			//cout<<_nodeInfoVec[i].word<<_nodeInfoVec[i].count<<endl;
+		}
+		
+		//normalize
+		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
+		{
+			_nodeInfoVec[i].weight = log(double(_nodeInfoVec[i].count)/double(_totalWeight));
+			//cout<<_nodeInfoVec[i].weight<<endl;
+		}
+		
+		return true;
+	}
 }
 
 #ifdef TRIE_UT
@@ -288,9 +330,8 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("dict.utf8");
-    char utf[1024] = "我来到北京清华大学3D电视";
-    vector< vector<size_t> > res;
+    trie.init("jieba.dict.utf8");
+    //char utf[1024] = "我来到北京清华大学3D电视";
     trie.destroy();
     return 0;
 }
