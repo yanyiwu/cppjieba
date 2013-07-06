@@ -202,9 +202,17 @@ namespace CppJieba
 		return res;
 	}
 
-	double getWeight(const ChUnicode* uniStr, size_t len)
+	double Trie::getWeight(const ChUnicode* uniStr, size_t len)
 	{
-		
+		const TrieNodeInfo* p = find(uniStr, len);
+		if(NULL != p)
+		{
+			return p->weight;
+		}
+		else
+		{
+			return _minWeight;
+		}
 	}
 
 	/*
@@ -337,8 +345,13 @@ namespace CppJieba
 		//normalize
 		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
 		{
-			_nodeInfoVec[i].weight = log(double(_nodeInfoVec[i].count)/double(_totalCount));
+			TrieNodeInfo& nodeInfo = _nodeInfoVec[i];
+			nodeInfo.weight = log(double(nodeInfo.count)/double(_totalCount));
 			//cout<<_nodeInfoVec[i].weight<<endl;
+			if(_minWeight > nodeInfo.weight)
+			{
+				_minWeight = nodeInfo.weight;
+			}
 		}
 		cout<<_minWeight<<endl;
 		
