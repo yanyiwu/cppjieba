@@ -22,7 +22,7 @@ namespace CppJieba
 
 		private:
 			size_t _utf8ToUni(const string& chStr, ChUnicode* uniStr, size_t size);
-			bool _calcDP(const ChUnicode* uniStr, size_t len, vector<pair<uint, double> >& res);
+			bool _calcDP(const ChUnicode* uniStr, size_t len, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
 
 		private:
 			enum {bufSize = 1024};

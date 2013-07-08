@@ -48,8 +48,20 @@ namespace CppJieba
 			}
 			dag.push_back(vec);
 		}
+
+		cout<<__FILE__<<__LINE__<<endl;
 		PRINT_MATRIX(dag);
 		getchar();
+
+		vector<pair<int, double> > dp;
+		_calcDP(uniStr, len, dag, dp);
+
+		cout<<__FILE__<<__LINE__<<endl;
+		for(int i = 0 ;i< dp.size(); i++)
+		{
+			cout<<dp[i].first<<","
+				<<dp[i].second<<endl;
+		}
 
 		
 
@@ -166,8 +178,35 @@ namespace CppJieba
 		
 	}
 
-	bool Segment::_calcDP(const ChUnicode* uniStr, size_t len, vector<pair<uint, double> >& res)
+	bool Segment::_calcDP(const ChUnicode* uniStr, size_t len, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
 	{
+		if(len != dag.size())
+		{
+			LogFatal("dag is illegal!");
+			return false;
+		}
+		res.clear();
+		res.assign(len + 1, pair<int, double>(-1, 0.0));
+		res[len].first = -1;
+		res[len].second = 0.0;
+		for(int i = len - 1; i >= 0; i--)
+		{
+			// calc max
+			res[i].first = -1;
+			res[i].second = -(numeric_limits<double>::max());
+			for(int j = 0; j < dag[i].size(); j++)
+			{
+				int pos = dag[i][j];
+				double val = _trie.getWeight(uniStr + i, pos - i + 1) + res[pos+1].second;
+				//cout<<__LINE__<<","
+				//	<<pos<<","<<val<<endl;
+				if(val > res[i].second)
+				{
+					res[i].first = pos;
+					res[i].second = val;
+				}
+			}
+		}
 		return true;
 	}
 
