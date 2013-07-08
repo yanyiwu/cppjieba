@@ -22,7 +22,43 @@ namespace CppJieba
 
 	bool Segment::cutDAG(const string& chStr, vector<string>& res)
 	{
+		res.clear();
+		char utfBuf[bufSize];
+		ChUnicode uniStr[bufSize];
+		memset(uniStr, 0, sizeof(uniStr));
+		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
+		if(0 == len)
+		{
+			LogError("_utf8ToUni failed.");
+			return false;
+		}
+
+		//calc DAG
+		vector<vector<uint> > dag;
+		for(uint i = 0; i < len; i++)
+		{
+			vector<uint> vec;
+			vec.push_back(i);
+			for(uint j = i + 2; j <= len; j++)
+			{
+				if(NULL != _trie.find(uniStr + i, j - i))
+				{
+					vec.push_back(j - 1);
+				}
+			}
+			dag.push_back(vec);
+		}
+		PRINT_MATRIX(dag);
+		getchar();
+
 		
+
+		//calc dp
+		
+
+
+		
+		return true;
 	}
 
 
@@ -129,6 +165,12 @@ namespace CppJieba
 		return len;
 		
 	}
+
+	bool Segment::_calcDP(const ChUnicode* uniStr, size_t len, vector<pair<uint, double> >& res)
+	{
+		return true;
+	}
+
 }
 
 
@@ -141,8 +183,8 @@ int main()
 	segment.init("jieba.dict.utf8");
 	
 	vector<string> res;
-	string title = "我来到北京清华大学3D电视";
-	bool flag = segment.cutMM(title, res);
+	string title = "我来到北京清华大学";
+	bool flag = segment.cutDAG(title, res);
 	if(flag)
 	{
 		for(int i = 0; i < res.size(); i++)

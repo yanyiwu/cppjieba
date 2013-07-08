@@ -44,52 +44,6 @@ namespace CppJieba
         }
     };
 
-	/*
-    struct TrieNodeIterator
-    {
-        TrieNode* ptNode;
-        
-        TrieNodeIterator():ptNode(NULL)
-        {
-        }
-
-        TrieNodeIterator(TrieNode* ptr):ptNode(NULL)
-        {
-            ptNode = ptr;
-        }
-
-        const int operator++(int)
-        {
-            return 1;
-        }
-
-        TrieNodeIterator& operator++()
-        {
-            return *this;
-        }
-
-        TrieNode& operator*() const
-        {
-            return *ptNode;
-        }
-
-        TrieNode* operator->() const
-        {
-            return ptNode;
-        }
-        
-        bool operator==(const TrieNodeIterator& x) const
-        {
-            return ptNode == x.ptNode;
-        }
-        
-        bool operator!=(const TrieNodeIterator& x) const
-        {
-            return ptNode != x.ptNode;
-        }
-    };
-	*/
-
     class Trie
     {
         private:
@@ -115,16 +69,10 @@ namespace CppJieba
 
 		public:
 			const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
-            //bool find(const ChUnicode* chUniStr, size_t len);
-			//bool find(const vector<ChUnicode>& uniVec);
 			int findMaxMatch(const ChUnicode* chUniStr, size_t len);
 
 		public:
 			double getWeight(const ChUnicode* uniStr, size_t len);
-            //bool cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res);
-			//bool cutUni(const vector<ChUnicode>& uniVec, )
-			//bool cutUtf8(const string& str, vector< vector<size_t> >& res);
-			//bool cutMa
 
         private:
 			bool _buildTree(const char* const filePath);
