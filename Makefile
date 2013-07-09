@@ -8,8 +8,9 @@ DOLINK = $(LINK) $(LINKOPT) -o $@ $^
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-CMDIR = ./cppcommon/
-CMLIB = $(CMDIR)cmlib.a
+CMDIR = ./cppcommon
+CMLIB = $(CMDIR)/cmlib.a
+CMLIB_DEPS := $(wildcard $(CMDIR)/*)
 
 
 # remove the objs after compilation
@@ -28,7 +29,7 @@ all: main
 main: $(OBJS) $(CMLIB)
 	$(DOLINK)
 
-$(CMLIB): $(CMDIR)
+$(CMLIB): $(CMLIB_DEPS)
 	cd $(CMDIR) && $(MAKE)
 
 #unit test
