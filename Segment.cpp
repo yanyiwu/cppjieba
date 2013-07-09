@@ -32,19 +32,7 @@ namespace CppJieba
 
 		//calc DAG
 		vector<vector<uint> > dag;
-		for(uint i = 0; i < uniStr.size(); i+=2)
-		{
-			vector<uint> vec;
-			vec.push_back(i/2);
-			for(uint j = i + 4; j <= uniStr.size(); j+=2)
-			{
-				if(NULL != _trie.find(uniStr.substr(i, j - i)))
-				{
-					vec.push_back((j - 2)/2);
-				}
-			}
-			dag.push_back(vec);
-		}
+		_calcDAG(uniStr, dag);
 
 		cout<<__FILE__<<__LINE__<<endl;
 		PRINT_MATRIX(dag);
@@ -84,6 +72,24 @@ namespace CppJieba
 			return "";
 		}
 		return uniStr;
+	}
+
+	bool Segment::_calcDAG(const string& uniStr, vector<vector<uint> >& dag)
+	{
+		for(uint i = 0; i < uniStr.size(); i+=2)
+		{
+			vector<uint> vec;
+			vec.push_back(i/2);
+			for(uint j = i + 4; j <= uniStr.size(); j+=2)
+			{
+				if(NULL != _trie.find(uniStr.substr(i, j - i)))
+				{
+					vec.push_back((j - 2)/2);
+				}
+			}
+			dag.push_back(vec);
+		}
+		return true;
 	}
 
 	bool Segment::_calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)

@@ -22,6 +22,7 @@ namespace CppJieba
 
 		private:
 			string _utf8ToUni(const string& chStr);
+			bool _calcDAG(const string& uniStr, vector<vector<uint> >& dag);
 			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
 
 		private:
