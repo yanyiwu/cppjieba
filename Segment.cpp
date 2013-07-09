@@ -23,11 +23,8 @@ namespace CppJieba
 	bool Segment::cutDAG(const string& chStr, vector<string>& res)
 	{
 		res.clear();
-		char utfBuf[bufSize];
-		ChUnicode uniStr[bufSize];
-		memset(uniStr, 0, sizeof(uniStr));
-		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
-		if(0 == len)
+		string uniStr = _utf8ToUni(chStr);
+		if(uniStr.empty())
 		{
 			LogError("_utf8ToUni failed.");
 			return false;
@@ -35,15 +32,15 @@ namespace CppJieba
 
 		//calc DAG
 		vector<vector<uint> > dag;
-		for(uint i = 0; i < len; i++)
+		for(uint i = 0; i < uniStr.size(); i+=2)
 		{
 			vector<uint> vec;
-			vec.push_back(i);
-			for(uint j = i + 2; j <= len; j++)
+			vec.push_back(i/2);
+			for(uint j = i + 4; j <= uniStr.size(); j+=2)
 			{
-				if(NULL != _trie.find(uniStr + i, j - i))
+				if(NULL != _trie.find(uniStr.substr(i, j - i)))
 				{
-					vec.push_back(j - 1);
+					vec.push_back((j - 2)/2);
 				}
 			}
 			dag.push_back(vec);
@@ -54,7 +51,7 @@ namespace CppJieba
 		getchar();
 
 		vector<pair<int, double> > dp;
-		_calcDP(uniStr, len, dag, dp);
+		_calcDP(uniStr, dag, dp);
 
 		cout<<__FILE__<<__LINE__<<endl;
 		for(int i = 0 ;i< dp.size(); i++)
@@ -62,6 +59,8 @@ namespace CppJieba
 			cout<<dp[i].first<<","
 				<<dp[i].second<<endl;
 		}
+
+		
 
 		
 
@@ -74,14 +73,12 @@ namespace CppJieba
 	}
 
 
+	/*
 	bool Segment::cutMM(const string& chStr, vector<string>& res)
 	{
 		res.clear();
-		char utfBuf[bufSize];
-		ChUnicode uniStr[bufSize];
-		memset(uniStr, 0, sizeof(uniStr));
-		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
-		if(0 == len)
+		string uniStr = _utf8ToUni(chStr);
+		if(uniStr.empty())
 		{
 			LogError("_utf8ToUni failed.");
 			return false;
@@ -111,15 +108,15 @@ namespace CppJieba
 		}
 		return true;
 	}
+	*/
 
+	/*
 	bool Segment::cutRMM(const string& chStr, vector<string>& res)
 	{
 		res.clear();
 		char utfBuf[bufSize];
-		ChUnicode uniStr[bufSize];
-		memset(uniStr, 0, sizeof(uniStr));
 
-		size_t len = _utf8ToUni(chStr, uniStr, bufSize);
+		string uniStr = _utf8ToUni(chStr);
 		if(0 == len)
 		{
 			LogError("_utf8ToUni failed.");
@@ -155,55 +152,68 @@ namespace CppJieba
 		}
 		return true;
 	}
+	*/
 
-	size_t Segment::_utf8ToUni(const string& chStr, ChUnicode* uniStr, size_t size)
+	string Segment::_utf8ToUni(const string& utfStr)
 	{
 		char logBuf[bufSize];
-		size_t len = utf8ToUnicode(chStr.c_str(), chStr.size(), uniStr);
+		string uniStr = utf8ToUnicode(utfStr);
 
-		if(0 == len)
+		if(uniStr.empty())
 		{
-			sprintf(logBuf, "utf8ToUnicode [%s] failed!", chStr.c_str());
+			sprintf(logBuf, "utf8ToUnicode [%s] failed!", utfStr.c_str());
 			LogError(logBuf);
-			return 0;
+			return "";
 		}
-
-		if(size - len <= 5)
-		{
-			sprintf(logBuf, "%s too long!", chStr.c_str());
-			LogError(logBuf);
-			return 0;
-		}
-		return len;
-		
+		return uniStr;
 	}
 
-	bool Segment::_calcDP(const ChUnicode* uniStr, size_t len, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
+	bool Segment::_calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
 	{
-		if(len != dag.size())
+		/*
+		for(int i =0;i<dag.size();i++)
 		{
-			LogFatal("dag is illegal!");
+			cout<<i<<","<<dag[i].size()<<",";
+			for(int j =0;j<dag[i].size();j++)
+			{
+				cout<<j<<","<<dag[i][j]<<",";
+			}
+			cout<<endl;
+		}
+		getchar();
+		*/
+
+		if(uniStr.size() / 2 != dag.size())
+		{
+			LogError("dag is illegal!");
 			return false;
 		}
+		if(uniStr.size() < 2)
+		{
+			LogError("uniStr illegal");
+			return false;
+		}
+
 		res.clear();
-		res.assign(len + 1, pair<int, double>(-1, 0.0));
-		res[len].first = -1;
-		res[len].second = 0.0;
-		for(int i = len - 1; i >= 0; i--)
+		res.assign(uniStr.size()/2 + 1, pair<int, double>(-1, 0.0));
+		res[uniStr.size()/2].first = -1;
+		res[uniStr.size()/2].second = 0.0;
+		for(int i = uniStr.size() - 2; i >= 0; i-=2)
 		{
 			// calc max
-			res[i].first = -1;
-			res[i].second = -(numeric_limits<double>::max());
-			for(int j = 0; j < dag[i].size(); j++)
+			res[i/2].first = -1;
+			res[i/2].second = -(numeric_limits<double>::max());
+			for(int j = 0; j < dag[i/2].size(); j++)
 			{
-				int pos = dag[i][j];
-				double val = _trie.getWeight(uniStr + i, pos - i + 1) + res[pos+1].second;
-				//cout<<__LINE__<<","
-				//	<<pos<<","<<val<<endl;
-				if(val > res[i].second)
+				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
+				//getchar();
+				int pos = dag[i/2][j];
+				double val = _trie.getWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
+				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
+				if(val > res[i/2].second)
 				{
-					res[i].first = pos;
-					res[i].second = val;
+					res[i/2].first = pos;
+					res[i/2].second = val;
 				}
 			}
 		}
@@ -223,13 +233,15 @@ int main()
 	
 	vector<string> res;
 	string title = "我来到北京清华大学";
-	bool flag = segment.cutDAG(title, res);
-	if(flag)
+	/*segment.cutMM(title, res);
+	for(int i = 0; i < res.size(); i++)
 	{
-		for(int i = 0; i < res.size(); i++)
-		{
-			cout<<res[i]<<endl;
-		}
+		cout<<res[i]<<endl;
+	}*/
+	segment.cutDAG(title, res);
+	for(int i = 0; i < res.size(); i++)
+	{
+		cout<<res[i]<<endl;
 	}
 
 	segment.destroy();

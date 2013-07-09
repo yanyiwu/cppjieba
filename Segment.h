@@ -17,12 +17,12 @@ namespace CppJieba
 			bool destroy();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
-			bool cutMM(const string& chStr, vector<string>& res);
-			bool cutRMM(const string& chStr, vector<string>& res);
+			//bool cutMM(const string& chStr, vector<string>& res);
+			//bool cutRMM(const string& chStr, vector<string>& res);
 
 		private:
-			size_t _utf8ToUni(const string& chStr, ChUnicode* uniStr, size_t size);
-			bool _calcDP(const ChUnicode* uniStr, size_t len, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
+			string _utf8ToUni(const string& chStr);
+			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
 
 		private:
 			enum {bufSize = 1024};

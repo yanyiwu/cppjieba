@@ -233,6 +233,19 @@ namespace CppJieba
 		}
 	}
 
+	double Trie::getWeight(const string& uniStr)
+	{
+		const TrieNodeInfo * p = find(uniStr);
+		if(NULL != p)
+		{
+			return p->weight;
+		}
+		else
+		{
+			return _minWeight;
+		}
+	}
+
 	/*
     bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
     {
