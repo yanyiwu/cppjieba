@@ -12,7 +12,9 @@ namespace CppJieba
 
 	bool Segment::init(const char* const dictFilePath)
 	{
+		LogInfo(string_format("_trie.init(%s) start...", dictFilePath));
 		_trie.init(dictFilePath);
+		LogInfo("_trie.init end.");
 	}
 
 	bool Segment::destroy()
@@ -69,8 +71,7 @@ namespace CppJieba
 
 		if(uniStr.empty())
 		{
-			sprintf(logBuf, "utf8ToUnicode [%s] failed!", utfStr.c_str());
-			LogError(logBuf);
+			LogError(string_format("utf8ToUnicode [%s] failed!", utfStr.c_str()));
 			return "";
 		}
 		return uniStr;
@@ -178,11 +179,6 @@ int main()
 	
 	vector<string> res;
 	string title = "我来到北京清华大学";
-	/*segment.cutMM(title, res);
-	for(int i = 0; i < res.size(); i++)
-	{
-		cout<<res[i]<<endl;
-	}*/
 	segment.cutDAG(title, res);
 	for(int i = 0; i < res.size(); i++)
 	{

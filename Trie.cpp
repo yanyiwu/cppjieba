@@ -42,7 +42,6 @@ namespace CppJieba
     
     bool Trie::_buildTree(const char* const filePath)
     {
-        char msgBuf[bufSize];
         if(NULL != _root)
         {
             LogError("already initted!");
@@ -58,8 +57,7 @@ namespace CppJieba
             splitStr(line, vecBuf, " ");
             if(3 != vecBuf.size())
             {
-                sprintf(msgBuf, "line[%s] illegal.", line.c_str());
-                LogError(msgBuf);
+                LogError(string_format("line[%s] illegal.", line.c_str()));
                 return false;
             }
             string chWord = vecBuf[0];
