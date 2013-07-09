@@ -198,12 +198,13 @@ namespace CPPCOMMON
 		char * utfStr = new char[len<<1];
 		for(int i = 0; i < len; i+=2)
 		{
-			uint16_t tmp1 = uniStr[i];
-			tmp1 <<= 8;
-			tmp1&= 0xff00;
-			uint16_t tmp2 = uniStr[i+1];
-			tmp2 &= 0x00ff;
-			uniArr[i>>1] = tmp1 | tmp2;
+			//uint16_t tmp1 = uniStr[i];
+			//tmp1 <<= 8;
+			//tmp1 &= 0xff00;
+			//uint16_t tmp2 = uniStr[i+1];
+			//tmp2 &= 0x00ff;
+			//uniArr[i>>1] = tmp1 | tmp2;
+			uniArr[i>>1] = twocharToUint16(uniStr[i], uniStr[i+1]);
 		}
 		
 		string res;
@@ -269,11 +270,14 @@ namespace CPPCOMMON
 		{
 			for(uint i = 0; i < uniLen; i++)
 			{
-				char c = 0;
-				c = ((pUni[i]>>8) & 0x00ff);
-				res += c;
-				c = (pUni[i] & 0x00ff);
-				res += c;
+				//char c = 0;
+				//c = ((pUni[i]>>8) & 0x00ff);
+				//res += c;
+				//c = (pUni[i] & 0x00ff);
+				//res += c;
+				pair<char, char> char2= uint16ToChar2(pUni[i]);
+				res += char2.first;
+				res += char2.second;
 			}
 		}
 		delete [] pUni;
@@ -324,7 +328,7 @@ int main()
     //    //cout<<strlen(utf8str);
     //    cout<<utf8str<<endl;
     //}
-	ifstream ifile("jieba.dict.utf8");
+	ifstream ifile("testdata/dict.txt");
 	string line;
 	while(getline(ifile, line))
 	{

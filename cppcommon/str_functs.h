@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
+#include <map>
 #include <stdint.h>
 #include "typedefs.h"
 namespace CPPCOMMON
@@ -31,5 +32,20 @@ namespace CPPCOMMON
 	string unicodeToUtf8(const string& uniStr);
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
 	string utf8ToUnicode(const string& utfStr);
+	
+	inline uint16_t twocharToUint16(char high, char low)
+	{
+		return (((uint16_t(high) & 0x00ff ) << 8) | (uint16_t(low) & 0x00ff));
+	}
+
+	inline pair<char, char> uint16ToChar2(uint16_t in)
+	{
+		pair<char, char> res;
+		res.first = (in>>8) & 0x00ff; //high
+		res.second = (in) & 0x00ff; //low
+		return res;
+	}
+
+	
 }
 #endif
