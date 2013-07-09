@@ -72,88 +72,6 @@ namespace CppJieba
 		return true;
 	}
 
-
-	/*
-	bool Segment::cutMM(const string& chStr, vector<string>& res)
-	{
-		res.clear();
-		string uniStr = _utf8ToUni(chStr);
-		if(uniStr.empty())
-		{
-			LogError("_utf8ToUni failed.");
-			return false;
-		}
-
-		int i = 0;
-		while(i < len)
-		{
-			cout<<__FILE__<<__LINE__<<i<<endl;
-			int pos = _trie.findMaxMatch(uniStr + i, len - i);
-			if(-1 != pos)
-			{
-				int utfLen = unicodeToUtf8(uniStr + i, pos, utfBuf);
-				if(0 == utfLen)
-				{
-					LogError("unicodeToUtf8 failed!");
-					return false;
-				}
-				res.push_back(utfBuf);
-
-				i += pos;
-			}
-			else
-			{
-				i++;
-			}
-		}
-		return true;
-	}
-	*/
-
-	/*
-	bool Segment::cutRMM(const string& chStr, vector<string>& res)
-	{
-		res.clear();
-		char utfBuf[bufSize];
-
-		string uniStr = _utf8ToUni(chStr);
-		if(0 == len)
-		{
-			LogError("_utf8ToUni failed.");
-			return false;
-		}
-
-		int i = len - 1;
-		while(i >= 0)
-		{
-			bool flag = false;
-			for(int j = 0; j <= i; j++)
-			{
-				size_t uniLen = i - j + 1;
-				if(NULL != _trie.find(uniStr + j, uniLen))
-				{
-					memset(utfBuf, 0 ,sizeof(utfBuf));
-					size_t ret = unicodeToUtf8(uniStr + j, uniLen, utfBuf);
-					if(0 == ret)
-					{
-						LogError("unicodeToUtf8 failed!");
-						return false;
-					}
-					res.push_back(utfBuf);
-					flag = true;
-					i -= uniLen;
-					break;
-				}
-			}
-			if(!flag)
-			{
-				i--;
-			}
-		}
-		return true;
-	}
-	*/
-
 	string Segment::_utf8ToUni(const string& utfStr)
 	{
 		char logBuf[bufSize];
@@ -170,19 +88,6 @@ namespace CppJieba
 
 	bool Segment::_calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
 	{
-		/*
-		for(int i =0;i<dag.size();i++)
-		{
-			cout<<i<<","<<dag[i].size()<<",";
-			for(int j =0;j<dag[i].size();j++)
-			{
-				cout<<j<<","<<dag[i][j]<<",";
-			}
-			cout<<endl;
-		}
-		getchar();
-		*/
-
 		if(uniStr.size() / 2 != dag.size())
 		{
 			LogError("dag is illegal!");
