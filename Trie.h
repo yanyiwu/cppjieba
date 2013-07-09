@@ -68,11 +68,13 @@ namespace CppJieba
             void display();
 
 		public:
+			const TrieNodeInfo* find(const string& uniStr);
 			const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
-			int findMaxMatch(const ChUnicode* chUniStr, size_t len);
+			//int findMaxMatch(const ChUnicode* chUniStr, size_t len);
 
 		public:
 			double getWeight(const ChUnicode* uniStr, size_t len);
+			double getWeight(const string& uniStr);
 
         private:
 			bool _buildTree(const char* const filePath);

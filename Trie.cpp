@@ -63,7 +63,7 @@ namespace CppJieba
                 return false;
             }
             string chWord = vecBuf[0];
-            unsigned int count = atoi(vecBuf[1].c_str());
+            uint count = atoi(vecBuf[1].c_str());
             const string& tag = vecBuf[2];
 
 			//insert node
@@ -104,10 +104,26 @@ namespace CppJieba
         _display(_root, 0);
     }
 
+	const TrieNodeInfo* Trie::find(const string& uniStr)
+	{
+		ChUnicode* pUni = new ChUnicode[uniStr.size()];
+		for(uint i = 0; i < uniStr.size(); i+=2)
+		{
+			//ChUnicode w = (uniStr[i] & 0x00ff);
+			//w <<= 8;
+			//w |= (uniStr[i+1] & 0x00ff);
+			//pUni[i/2] = w;
+			pUni[i/2] = twocharToUint16(uniStr[i], uniStr[i+1]);
+		}
+		const TrieNodeInfo* res = find(pUni, uniStr.size()/2);
+		delete [] pUni;
+		return res;
+	}
+
 	const TrieNodeInfo* Trie::find(const ChUnicode* const chUniStr, size_t len)
 	{
 		TrieNode* p = _root;
-		for(size_t i = 0; i < len; i++)
+		for(uint i = 0; i < len; i++)
 		{
 			ChUnicode chUni = chUniStr[i];
 			if(p->hmap.find(chUni) == p-> hmap.end())
@@ -121,7 +137,7 @@ namespace CppJieba
 		}
 		if(p->isLeaf)
 		{
-			unsigned int pos = p->nodeInfoVecPos;
+			uint pos = p->nodeInfoVecPos;
 			if(pos < _nodeInfoVec.size())
 			{
 				return &(_nodeInfoVec[pos]);
@@ -176,6 +192,7 @@ namespace CppJieba
 	}
 	*/
 
+	/*
 	int Trie::findMaxMatch(const ChUnicode* chUniStr, size_t len)
 	{
 		int res = -1;
@@ -198,9 +215,10 @@ namespace CppJieba
 				break;
 			}
 		}
-		cout<<__FILE__<<__LINE__<<res<<endl;
+		//cout<<__FILE__<<__LINE__<<res<<endl;
 		return res;
 	}
+	*/
 
 	double Trie::getWeight(const ChUnicode* uniStr, size_t len)
 	{
@@ -353,7 +371,7 @@ namespace CppJieba
 				_minWeight = nodeInfo.weight;
 			}
 		}
-		cout<<_minWeight<<endl;
+		//cout<<_minWeight<<endl;
 		
 		return true;
 	}
