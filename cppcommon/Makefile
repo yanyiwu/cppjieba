@@ -33,7 +33,7 @@ vec_functs.test: vec_functs.cpp vec_functs.h vec_functs.tcc
 	g++ -o $@ $< -DTEST_VEC_FUNCTS
 
 logger.ut: logger.cpp logger.h file_functs.cpp file_functs.h
-	g++ -o $@ $< file_functs.cpp -DUNIT_TEST
+	g++ -o $@ $< file_functs.cpp -DLOGGER_UT
 config.ut: config.cpp config.h 
 	g++ -o $@ $< -DCONFIG_UT $(CMLIB)
 

@@ -32,7 +32,7 @@ namespace CPPCOMMON
 			createDir(_logDir);
 		}
 		_logFile.open((string(_logDir) + string(_logName)).c_str(), ios::app);
-		
+
 	}
 	bool Logger::Logging(unsigned int level, const string& msg, const string& fileName, const int& lineNo)
 	{
@@ -47,7 +47,7 @@ namespace CPPCOMMON
 		sprintf(_cStrBuf, _logFormat, timeStr.c_str(), fileName.c_str(), lineNo, _logLevel[level], msg.c_str());
 		if(_isCoutOpen && level >= _logCoutLevel)
 		{
-		  cout<<_cStrBuf<<endl;
+			cerr<<_cStrBuf<<endl;
 		}
 		if(_logFile && level >= _logFileLevel)
 		{
@@ -62,7 +62,7 @@ namespace CPPCOMMON
 }
 
 
-#ifdef UNIT_TEST
+#ifdef LOGGER_UT
 using namespace CPPCOMMON;
 int main()
 {

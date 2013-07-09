@@ -8,10 +8,13 @@
 #include <cctype>
 #include <map>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include "typedefs.h"
 namespace CPPCOMMON
 {
 	using namespace std;
+	std::string string_format(const std::string fmt, ...) ;
 	string joinStr(const vector<string>& source, const string& connector);
 	vector<string> splitStr(const string& source, const string& pattern = " \t\n");
 	void splitStr(const string& source, vector<string>& out_vec, const string& pattern = " \t\n");
