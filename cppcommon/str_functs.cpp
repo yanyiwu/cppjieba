@@ -186,6 +186,41 @@ namespace CPPCOMMON
         return res;
     }
 
+	string unicodeToUtf8(const string& uniStr)
+	{
+		size_t len = uniStr.size();
+		if(len%2)
+		{
+			return "";
+		}
+
+		uint16_t * uniArr = new uint16_t[len>>1];
+		char * utfStr = new char[len<<1];
+		for(int i = 0; i < len; i+=2)
+		{
+			uint16_t tmp1 = uniStr[i];
+			tmp1 <<= 8;
+			tmp1&= 0xff00;
+			uint16_t tmp2 = uniStr[i+1];
+			tmp2 &= 0x00ff;
+			uniArr[i>>1] = tmp1 | tmp2;
+		}
+		
+		string res;
+		size_t utfLen = unicodeToUtf8(uniArr, len>>1, utfStr);
+		if(0 == utfLen)
+		{
+			res = "";
+		}
+		else
+		{
+			res = utfStr;
+		}
+		delete [] uniArr;
+		delete [] utfStr;
+		return res;
+	}
+
     /*from: http://www.cppblog.com/lf426/archive/2008/03/31/45796.html */
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
     {
@@ -221,6 +256,30 @@ namespace CPPCOMMON
         return length;
     }
 
+	string utf8ToUnicode(const string& utfStr)
+	{
+		uint16_t* pUni = new uint16_t[utfStr.size()];
+		size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
+		string res;
+		if(uniLen ==0 )
+		{
+			res = "";
+		}
+		else
+		{
+			for(uint i = 0; i < uniLen; i++)
+			{
+				char c = 0;
+				c = ((pUni[i]>>8) & 0x00ff);
+				res += c;
+				c = (pUni[i] & 0x00ff);
+				res += c;
+			}
+		}
+		delete [] pUni;
+		return res;
+	}
+
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -249,22 +308,33 @@ int main()
 	//
 	//s = "ab1ba2ab3";
 	//cout<<replaceStr(s,"ab","###")<<endl;
-    ifstream ifile("testdata/dict.txt");
-    string line;
-    while(getline(ifile, line))
-    {
-        uint16_t strbuf[1024];
+    //ifstream ifile("testdata/dict.txt");
+    //string line;
+    //while(getline(ifile, line))
+    //{
+    //    uint16_t strbuf[1024];
 
-        size_t unilen = utf8ToUnicode(line.c_str(), line.size(), strbuf);
-        for(int i = 0; i < unilen; i++)
-        {
-            // printf("%x\n", strbuf[i]);
-        }
-        char utf8str[512]={0};
-        unicodeToUtf8(strbuf, unilen, utf8str);
-        //cout<<strlen(utf8str);
-        cout<<utf8str<<endl;
-    }
+    //    size_t unilen = utf8ToUnicode(line.c_str(), line.size(), strbuf);
+    //    for(int i = 0; i < unilen; i++)
+    //    {
+    //        // printf("%x\n", strbuf[i]);
+    //    }
+    //    char utf8str[512]={0};
+    //    unicodeToUtf8(strbuf, unilen, utf8str);
+    //    //cout<<strlen(utf8str);
+    //    cout<<utf8str<<endl;
+    //}
+	ifstream ifile("jieba.dict.utf8");
+	string line;
+	while(getline(ifile, line))
+	{
+		cout<<line<<endl;
+		string uniStr = utf8ToUnicode(line);
+		//cout<<uniStr<<endl;
+		string utfStr = unicodeToUtf8(uniStr);
+		cout<<utfStr<<endl;
+	}
+	getchar();
 	return 0;
 }
 #endif

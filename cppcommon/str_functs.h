@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cctype>
 #include <stdint.h>
+#include "typedefs.h"
 namespace CPPCOMMON
 {
 	using namespace std;
@@ -25,8 +26,10 @@ namespace CPPCOMMON
 	unsigned int countStrDistance(const string& A, const string& B);
 	unsigned int countStrSimilarity(const string& A, const string& B);
 
-    
+    //encode
     size_t unicodeToUtf8(uint16_t *in, size_t len, char * out);
+	string unicodeToUtf8(const string& uniStr);
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
+	string utf8ToUnicode(const string& utfStr);
 }
 #endif
