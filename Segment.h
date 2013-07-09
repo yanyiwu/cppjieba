@@ -24,6 +24,7 @@ namespace CppJieba
 			string _utf8ToUni(const string& chStr);
 			bool _calcDAG(const string& uniStr, vector<vector<uint> >& dag);
 			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
+			bool _cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res);
 
 		private:
 			enum {bufSize = 1024};

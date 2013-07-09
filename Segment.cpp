@@ -22,6 +22,7 @@ namespace CppJieba
 
 	bool Segment::cutDAG(const string& chStr, vector<string>& res)
 	{
+		bool retFlag;
 		res.clear();
 		string uniStr = _utf8ToUni(chStr);
 		if(uniStr.empty())
@@ -32,30 +33,31 @@ namespace CppJieba
 
 		//calc DAG
 		vector<vector<uint> > dag;
-		_calcDAG(uniStr, dag);
-
-		cout<<__FILE__<<__LINE__<<endl;
-		PRINT_MATRIX(dag);
-		getchar();
-
-		vector<pair<int, double> > dp;
-		_calcDP(uniStr, dag, dp);
-
-		cout<<__FILE__<<__LINE__<<endl;
-		for(int i = 0 ;i< dp.size(); i++)
+		retFlag = _calcDAG(uniStr, dag);
+		if(!retFlag)
 		{
-			cout<<dp[i].first<<","
-				<<dp[i].second<<endl;
+			LogError("_calcDAG failed.");
+			return false;
 		}
 
-		
+		//cout<<__FILE__<<__LINE__<<endl;
+		//PRINT_MATRIX(dag);
+		//getchar();
 
-		
+		vector<pair<int, double> > dp;
+		retFlag = _calcDP(uniStr, dag, dp);
+		if(!retFlag)
+		{
+			LogError("_calcDP failed.");
+			return false;
+		}
 
-		//calc dp
-		
-
-
+		retFlag = _cutDAG(uniStr, dp, res);
+		if(!retFlag)
+		{
+			LogError("_cutDAG failed.");
+			return false;
+		}
 		
 		return true;
 	}
@@ -127,6 +129,38 @@ namespace CppJieba
 					res[i/2].second = val;
 				}
 			}
+		}
+		res.pop_back();
+		return true;
+	}
+	bool Segment::_cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res)
+	{
+		if(dp.size() != uniStr.size()/2)
+		{
+			LogError("dp or uniStr illegal!");
+			return false;
+		}
+
+		res.clear();
+
+		uint begin = 0;
+		for(uint i = 0; i < dp.size(); i++)
+		{
+			//cout<<dp[i].first<<","
+			//	<<dp[i].second<<endl;
+			uint end = dp[i].first * 2 + 2;
+			if(end <= begin)
+			{
+				continue;
+			}
+			string tmp = unicodeToUtf8(uniStr.substr(begin, end - begin));
+			if(tmp.empty())
+			{
+				LogError("unicodeToUtf8 failed.");
+				return false;
+			}
+			res.push_back(tmp);
+			begin = end;
 		}
 		return true;
 	}
