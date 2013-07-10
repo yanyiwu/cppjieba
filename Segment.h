@@ -1,6 +1,7 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
+#include <algorithm>
 #include "Trie.h"
 
 namespace CppJieba
@@ -17,14 +18,18 @@ namespace CppJieba
 			bool destroy();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
-			//bool cutMM(const string& chStr, vector<string>& res);
-			//bool cutRMM(const string& chStr, vector<string>& res);
+			bool extract(const string& utf8Str, vector<string>& keywords);
+			double getUtf8WordWeight(const string& word);
+			double getUniWordWeight(const string& word);
 
 		private:
 			string _utf8ToUni(const string& chStr);
 			bool _calcDAG(const string& uniStr, vector<vector<uint> >& dag);
 			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
 			bool _cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res);
+			bool _filter(vector<string>& utf8Strs);
+			static bool _pair_compare(const pair<string, double>& a, const pair<string, double>& b);
+			bool _extract(const vector<string>& words, vector<string>& keywords, uint topN);
 
 		private:
 			enum {bufSize = 1024};

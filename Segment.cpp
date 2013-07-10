@@ -58,7 +58,68 @@ namespace CppJieba
 			LogError("_cutDAG failed.");
 			return false;
 		}
+
+		retFlag = _filter(res);
+		if(!retFlag)
+		{
+			LogError("_cutDAG failed.");
+			return false;
+		}
 		
+		return true;
+	}
+	bool Segment::extract(const string& utf8Str, vector<string>& keywords)
+	{
+		bool retFlag;
+		vector<string> tmp;
+		retFlag = cutDAG(utf8Str, tmp);
+		if(!retFlag)
+		{
+			LogError(string_format("cutDAG(%s) failed.", utf8Str.c_str()));
+			return false;
+		}
+
+		retFlag = _extract(tmp, keywords, 5);
+		if(!retFlag)
+		{
+			LogError("_extract failed.");
+			return false;
+		}
+
+		return true;
+	}
+
+	double Segment::getUtf8WordWeight(const string& word)
+	{
+		return _trie.getWeight(utf8ToUnicode(word));
+	}
+
+	double Segment::getUniWordWeight(const string& word)
+	{
+		return _trie.getWeight(word);
+	}
+
+	bool Segment::_pair_compare(const pair<string, double>& a, const pair<string, double>& b)
+	{
+		return a.second < b.second;
+	}
+
+	bool Segment::_extract(const vector<string>& words, vector<string>& keywords, uint topN)
+	{
+		keywords.clear();
+		vector<pair<string, double> > tmp;
+		for(uint i = 0; i < words.size(); i++)
+		{
+			double w = getUtf8WordWeight(words[i]);
+			tmp.push_back(pair<string, double>(words[i], w));
+			LogDebug(string_format("(%s,%lf)", words[i].c_str(), w));
+		}
+		
+		sort(tmp.begin(), tmp.end(), _pair_compare);
+		for(uint i = 0; i < topN && i < tmp.size(); i++)
+		{
+			keywords.push_back(tmp[i].first);
+		}
 		return true;
 	}
 
@@ -119,7 +180,7 @@ namespace CppJieba
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
 				//getchar();
 				int pos = dag[i/2][j];
-				double val = _trie.getWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
+				double val = getUniWordWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
 				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
 				if(val > res[i/2].second)
 				{
@@ -163,6 +224,30 @@ namespace CppJieba
 		return true;
 	}
 
+	bool Segment::_filter(vector<string>& utf8Strs)
+	{
+		for(vector<string>::iterator it = utf8Strs.begin(); it != utf8Strs.end();)
+		{
+			string uniStr = utf8ToUnicode(*it);
+			if(uniStr.empty() || uniStr.size()%2)
+			{
+				LogError("utf8ToUnicode error");
+				return false;
+			}
+
+			// filter single word
+			if(uniStr.size() == 2) 
+			{
+				it = utf8Strs.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}
+		return true;
+	}
+
 }
 
 
@@ -179,7 +264,8 @@ int main()
 	//string title = "我来到北京清华大学";
 	string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
 	cout<<title<<endl;
-	segment.cutDAG(title, res);
+	//segment.cutDAG(title, res);
+	segment.extract(title, res);
 	for(int i = 0; i < res.size(); i++)
 	{
 		cout<<res[i]<<endl;
