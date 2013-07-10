@@ -175,6 +175,7 @@ int main()
 {
 	Segment segment;
 	segment.init("dicts/segdict.utf8.v2.1");
+	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
 	//string title = "我来到北京清华大学";
