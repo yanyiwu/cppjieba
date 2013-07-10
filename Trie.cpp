@@ -368,21 +368,29 @@ namespace CppJieba
 		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
 		{
 			_totalCount += _nodeInfoVec[i].count;
-			//cout<<_nodeInfoVec[i].word<<_nodeInfoVec[i].count<<endl;
+		}
+
+		if(0 == _totalCount)
+		{
+			LogError("_totalCount == 0 .");
+			return false;
 		}
 		
 		//normalize
-		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
+		for(uint i = 0; i < _nodeInfoVec.size(); i++)
 		{
 			TrieNodeInfo& nodeInfo = _nodeInfoVec[i];
+			if(0 == nodeInfo.count)
+			{
+				LogFatal("nodeInfo.count == 0!");
+				return false;
+			}
 			nodeInfo.weight = log(double(nodeInfo.count)/double(_totalCount));
-			//cout<<_nodeInfoVec[i].weight<<endl;
 			if(_minWeight > nodeInfo.weight)
 			{
 				_minWeight = nodeInfo.weight;
 			}
 		}
-		//cout<<_minWeight<<endl;
 		
 		return true;
 	}

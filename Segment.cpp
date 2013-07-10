@@ -66,7 +66,6 @@ namespace CppJieba
 
 	string Segment::_utf8ToUni(const string& utfStr)
 	{
-		char logBuf[bufSize];
 		string uniStr = utf8ToUnicode(utfStr);
 
 		if(uniStr.empty())
