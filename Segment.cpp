@@ -174,7 +174,7 @@ using namespace CppJieba;
 int main()
 {
 	Segment segment;
-	segment.init("jieba.dict.utf8");
+	segment.init("dicts/segdict.utf8.v2.0");
 	
 	vector<string> res;
 	string title = "我来到北京清华大学";

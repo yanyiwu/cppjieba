@@ -24,6 +24,11 @@ namespace CppJieba
 
 	bool Trie::init(const char* const filePath)
 	{
+		if(!checkFileExist(filePath))
+		{
+			LogError(string_format("cann't find fiel[%s].",filePath));
+			return false;
+		}
 		bool res = false;
 		res = _buildTree(filePath);
 		if(!res)

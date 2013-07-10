@@ -1,5 +1,6 @@
 #ifndef TRIE_H
 #define TRIE_H
+
 #include <iostream>
 #include <fstream>
 //#include <ext/hash_map>
@@ -10,6 +11,7 @@
 #include <limits>
 #include "cppcommon/str_functs.h"
 #include "cppcommon/vec_functs.h"
+#include "cppcommon/file_functs.h"
 #include "cppcommon/logger.h"
 #include "globals.h"
 
