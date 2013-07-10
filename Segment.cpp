@@ -43,8 +43,6 @@ namespace CppJieba
 		}
 
 		//cout<<__FILE__<<__LINE__<<endl;
-		//PRINT_MATRIX(dag);
-		//getchar();
 
 		vector<pair<int, double> > dp;
 		retFlag = _calcDP(uniStr, dag, dp);

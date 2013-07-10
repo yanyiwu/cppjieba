@@ -406,7 +406,7 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("jieba.dict.utf8");
+    trie.init("dicts/segdict.utf8.v2.1");
     //char utf[1024] = "我来到北京清华大学3D电视";
     trie.destroy();
     return 0;
