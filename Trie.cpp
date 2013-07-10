@@ -104,7 +104,12 @@ namespace CppJieba
 
     void Trie::display()
     {
-        _display(_root, 0);
+		for(uint i = 0; i < _nodeInfoVec.size(); i++)
+		{
+			cout<<_nodeInfoVec[i].word<<","
+				<<_nodeInfoVec[i].count<<","
+				<<endl;
+		}
     }
 
 	const TrieNodeInfo* Trie::find(const string& uniStr)
@@ -112,10 +117,6 @@ namespace CppJieba
 		ChUnicode* pUni = new ChUnicode[uniStr.size()];
 		for(uint i = 0; i < uniStr.size(); i+=2)
 		{
-			//ChUnicode w = (uniStr[i] & 0x00ff);
-			//w <<= 8;
-			//w |= (uniStr[i+1] & 0x00ff);
-			//pUni[i/2] = w;
 			pUni[i/2] = twocharToUint16(uniStr[i], uniStr[i+1]);
 		}
 		const TrieNodeInfo* res = find(pUni, uniStr.size()/2);
@@ -154,75 +155,6 @@ namespace CppJieba
 		return NULL;
 	}
 
-	/*
-    bool Trie::find(const ChUnicode* chUniStr, size_t len)
-    {
-		int res = -1;
-        TrieNode* p = _root;
-        for(size_t i = 0; i < len; i++)
-        {
-            ChUnicode chUni = chUniStr[i];
-            if(p->hmap.find(chUni) == p->hmap.end())
-            {
-                return false;
-            }
-            else
-            {
-                p = p->hmap[chUni];
-            }
-        }
-        return p->isLeaf;
-    }
-	*/
-
-	/*
-	bool Trie::find(const vector<ChUnicode>& uniVec)
-	{
-		TrieNode * p = _root;
-		for(size_t i = 0; i < uniVec.size(); i++)
-		{
-			ChUnicode chUni = uniVec[i];
-			if(p->hmap.find(chUni) == p->hmap.end())
-			{
-				return false;
-			}
-			else
-			{
-				p = p-> hmap[chUni];
-			}
-		}
-		return p->isLeaf;
-	}
-	*/
-
-	/*
-	int Trie::findMaxMatch(const ChUnicode* chUniStr, size_t len)
-	{
-		int res = -1;
-		TrieNode * p = _root;
-		for(int i = 0; i < len; i++)
-		{
-			ChUnicode chWord = chUniStr[i];
-			TrieNodeMap::const_iterator iter = p->hmap.find(chWord);
-			if(iter != p->hmap.end())
-			{
-				TrieNode * next = iter->second;
-				if(next->isLeaf)
-				{
-					res = i + 1;
-				}
-				p = next;
-			}
-			else
-			{
-				break;
-			}
-		}
-		//cout<<__FILE__<<__LINE__<<res<<endl;
-		return res;
-	}
-	*/
-
 	double Trie::getWeight(const ChUnicode* uniStr, size_t len)
 	{
 		const TrieNodeInfo* p = find(uniStr, len);
@@ -232,7 +164,7 @@ namespace CppJieba
 		}
 		else
 		{
-			return _minWeight;
+			return getMinWeight();
 		}
 	}
 
@@ -245,8 +177,18 @@ namespace CppJieba
 		}
 		else
 		{
-			return _minWeight;
+			return getMinWeight();
 		}
+	}
+
+	double Trie::getMinWeight()
+	{
+		return _minWeight;
+	}
+
+	int64_t Trie::getTotalCount()
+	{
+		return _totalCount;
 	}
 
 	/*
@@ -282,28 +224,6 @@ namespace CppJieba
         
         delete node;
         return true;
-    }
-
-    void Trie::_display(TrieNode* node, int level)
-    {
-        if(NULL == node)
-        {
-            LogError("failed! node is null.");
-            return;
-        }
-        for(TrieNodeMap::const_iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
-        {
-            char utfBuf[8];
-            ChUnicode chBuf[1];
-            for(int i = 0; i < level; i++)
-            {
-                cout<<" ";
-            }
-            chBuf[0]=it->first;
-            unicodeToUtf8(chBuf, 1, utfBuf);
-            cout<<utfBuf<<endl;
-            _display(it->second, level + 1);
-        }
     }
 
 	bool Trie::_insert(const TrieNodeInfo& nodeInfo)
@@ -407,7 +327,13 @@ int main()
 {
     Trie trie;
     trie.init("dicts/segdict.utf8.v2.1");
+    //trie.init("dicts/jieba.dict.utf8");
+    //trie.init("dict.100");
     //char utf[1024] = "我来到北京清华大学3D电视";
+	//trie.display();
+	//getchar();
+	cout<<trie.getMinWeight()<<endl;
+	cout<<trie.getTotalCount()<<endl;
     trie.destroy();
     return 0;
 }

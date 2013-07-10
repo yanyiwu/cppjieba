@@ -178,6 +178,7 @@ int main()
 	vector<string> res;
 	//string title = "我来到北京清华大学";
 	string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
+	cout<<title<<endl;
 	segment.cutDAG(title, res);
 	for(int i = 0; i < res.size(); i++)
 	{
