@@ -79,6 +79,9 @@ namespace CppJieba
 			return false;
 		}
 
+		// like str.join([]) in python
+		LogDebug(string_format("cutDAG result:[%s]", joinStr(tmp, ",").c_str()));
+
 		retFlag = _extract(tmp, keywords, 5);
 		if(!retFlag)
 		{
@@ -108,14 +111,25 @@ namespace CppJieba
 	{
 		keywords.clear();
 		vector<pair<string, double> > tmp;
+
 		for(uint i = 0; i < words.size(); i++)
 		{
 			double w = getUtf8WordWeight(words[i]);
 			tmp.push_back(pair<string, double>(words[i], w));
-			LogDebug(string_format("(%s,%lf)", words[i].c_str(), w));
 		}
+
 		
 		sort(tmp.begin(), tmp.end(), _pair_compare);
+
+		//logging result
+		vector<string> logBuf;//for LogDebug
+		for(uint i = 0; i < tmp.size(); i++)
+		{
+			logBuf.push_back(string_format("(%s,%lf)", tmp[i].first.c_str(), tmp[i].second));
+		}
+		LogDebug(string_format("calc weight:%s",joinStr(logBuf, ",").c_str()));
+		
+		//extract TopN
 		for(uint i = 0; i < topN && i < tmp.size(); i++)
 		{
 			keywords.push_back(tmp[i].first);
@@ -226,6 +240,26 @@ namespace CppJieba
 
 	bool Segment::_filter(vector<string>& utf8Strs)
 	{
+		bool retFlag;
+		retFlag = _filterSingleWord(utf8Strs);
+		if(!retFlag)
+		{
+			LogError("_filterSingleWord failed.");
+			return false;
+		}
+
+		retFlag = _filterSubstr(utf8Strs);
+		if(!retFlag)
+		{
+			LogError("_filterSubstr failed.");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool Segment::_filterSingleWord(vector<string>& utf8Strs)
+	{
 		for(vector<string>::iterator it = utf8Strs.begin(); it != utf8Strs.end();)
 		{
 			string uniStr = utf8ToUnicode(*it);
@@ -248,6 +282,37 @@ namespace CppJieba
 		return true;
 	}
 
+	bool Segment::_filterSubstr(vector<string>& utf8Strs)
+	{
+		vector<string> tmp = utf8Strs;
+		set<string> subs;
+		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); it ++)
+		{
+			for(uint j = 0; j < tmp.size(); j++)
+			{
+				if(*it != tmp[j] && string::npos != tmp[j].find(*it, 0))
+				{
+					subs.insert(*it);
+				}
+			}
+		}
+
+		//erase subs from utf8Strs
+		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); it++)
+		{
+			if(subs.end() != subs.find(*it))
+			{
+				LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
+				it =  utf8Strs.erase(it);
+			}
+			else
+			{
+				it ++;
+			}
+		}
+		return true;
+	}
+
 }
 
 
@@ -263,8 +328,8 @@ int main()
 	vector<string> res;
 	//string title = "我来到北京清华大学";
 	//string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
-	//string title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
-	string title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
+	string title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
+	//string title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
 	cout<<title<<endl;
 	//segment.cutDAG(title, res);
 	segment.extract(title, res);
