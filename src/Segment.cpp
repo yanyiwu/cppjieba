@@ -12,9 +12,11 @@ namespace CppJieba
 
 	bool Segment::init(const char* const dictFilePath)
 	{
+		bool retFlag;
 		LogInfo(string_format("_trie.init(%s) start...", dictFilePath));
-		_trie.init(dictFilePath);
+		retFlag = _trie.init(dictFilePath);
 		LogInfo("_trie.init end.");
+		return retFlag;
 	}
 
 	bool Segment::destroy()
@@ -327,7 +329,11 @@ using namespace CppJieba;
 int main()
 {
 	Segment segment;
-	segment.init("dicts/segdict.utf8.v2.1");
+	if(!segment.init("../dicts/segdict.utf8.v2.1"))
+	{
+		cerr<<"1"<<endl;
+		return 1;
+	}
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
