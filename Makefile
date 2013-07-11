@@ -41,7 +41,8 @@ Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
 
 
 clean:
-	rm -f *.o *.ut $(CMLIB) main
+	rm -f *.o *.d *.ut main
+	cd $(CMDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp
