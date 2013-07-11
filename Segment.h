@@ -33,7 +33,7 @@ namespace CppJieba
 			bool _filterSingleWord(vector<string>& utf8Strs);
 			bool _filterSubstr(vector<string>& utf8Strs);
 			static bool _pair_compare(const pair<string, double>& a, const pair<string, double>& b);
-			bool _extract(const vector<string>& words, vector<string>& keywords, uint topN);
+			bool _extractTopN(const vector<string>& words, vector<string>& keywords, uint topN);
 
 		private:
 			enum {bufSize = 1024};

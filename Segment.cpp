@@ -41,8 +41,7 @@ namespace CppJieba
 			LogError("_calcDAG failed.");
 			return false;
 		}
-
-		//cout<<__FILE__<<__LINE__<<endl;
+		LogDebug("_calcDAG finished.");
 
 		vector<pair<int, double> > dp;
 		retFlag = _calcDP(uniStr, dag, dp);
@@ -51,6 +50,7 @@ namespace CppJieba
 			LogError("_calcDP failed.");
 			return false;
 		}
+		LogDebug("_calcDP finished.");
 
 		retFlag = _cutDAG(uniStr, dp, res);
 		if(!retFlag)
@@ -58,18 +58,13 @@ namespace CppJieba
 			LogError("_cutDAG failed.");
 			return false;
 		}
-
-		retFlag = _filter(res);
-		if(!retFlag)
-		{
-			LogError("_cutDAG failed.");
-			return false;
-		}
+		LogDebug("_cutDAG finished.");
 		
 		return true;
 	}
 	bool Segment::extract(const string& utf8Str, vector<string>& keywords)
 	{
+		LogInfo(utf8Str);
 		bool retFlag;
 		vector<string> tmp;
 		retFlag = cutDAG(utf8Str, tmp);
@@ -78,17 +73,26 @@ namespace CppJieba
 			LogError(string_format("cutDAG(%s) failed.", utf8Str.c_str()));
 			return false;
 		}
-
 		// like str.join([]) in python
 		LogDebug(string_format("cutDAG result:[%s]", joinStr(tmp, ",").c_str()));
 
-		retFlag = _extract(tmp, keywords, 5);
+		retFlag = _filter(tmp);
 		if(!retFlag)
 		{
-			LogError("_extract failed.");
+			LogError("_filter failed.");
 			return false;
 		}
+		LogDebug(string_format("_filter res:[%s]", joinStr(tmp, ",").c_str()));
 
+		retFlag = _extractTopN(tmp, keywords, 5);
+		if(!retFlag)
+		{
+			LogError("_extractTopN failed.");
+			return false;
+		}
+		LogDebug("_extractTopN finished.");
+
+		LogInfo(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
 		return true;
 	}
 
@@ -107,7 +111,7 @@ namespace CppJieba
 		return a.second < b.second;
 	}
 
-	bool Segment::_extract(const vector<string>& words, vector<string>& keywords, uint topN)
+	bool Segment::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
 	{
 		keywords.clear();
 		vector<pair<string, double> > tmp;
@@ -117,7 +121,6 @@ namespace CppJieba
 			double w = getUtf8WordWeight(words[i]);
 			tmp.push_back(pair<string, double>(words[i], w));
 		}
-
 		
 		sort(tmp.begin(), tmp.end(), _pair_compare);
 
@@ -247,6 +250,7 @@ namespace CppJieba
 			LogError("_filterSingleWord failed.");
 			return false;
 		}
+		LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		retFlag = _filterSubstr(utf8Strs);
 		if(!retFlag)
@@ -254,6 +258,7 @@ namespace CppJieba
 			LogError("_filterSubstr failed.");
 			return false;
 		}
+		LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		return true;
 	}
@@ -298,7 +303,7 @@ namespace CppJieba
 		}
 
 		//erase subs from utf8Strs
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); it++)
+		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
 		{
 			if(subs.end() != subs.find(*it))
 			{
@@ -326,17 +331,22 @@ int main()
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
-	//string title = "我来到北京清华大学";
-	//string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
-	string title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
-	//string title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
-	cout<<title<<endl;
-	//segment.cutDAG(title, res);
+	string title;
+	title = "我来到北京清华大学";
+	res.clear();
 	segment.extract(title, res);
-	for(int i = 0; i < res.size(); i++)
-	{
-		cout<<res[i]<<endl;
-	}
+	
+	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
+	res.clear();
+	segment.extract(title, res);
+
+	title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
+	res.clear();
+	segment.extract(title, res);
+
+	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
+	res.clear();
+	segment.extract(title, res);
 
 	segment.destroy();
 	return 0;
