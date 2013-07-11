@@ -10,7 +10,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 DOPACK = $(PACK) $(PACKOPT) $@ $?
 DOLINK = $(LINK) $(LINKOPT) -o $@ $?
 
-CMLIB = cmlib.a
+CMLIB = libcm.a
 
 %.o: %.cpp
 	$(CC) $(CCOPT) $<
