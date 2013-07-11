@@ -7,4 +7,5 @@ tags
 *.ut
 log
 main
-cppcommon/cmlib.a
+cmlib.a
+demo
