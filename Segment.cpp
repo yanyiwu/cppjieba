@@ -262,7 +262,9 @@ int main()
 	
 	vector<string> res;
 	//string title = "我来到北京清华大学";
-	string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
+	//string title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
+	//string title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
+	string title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
 	cout<<title<<endl;
 	//segment.cutDAG(title, res);
 	segment.extract(title, res);
