@@ -12,7 +12,7 @@ SRCDIR = ./src
 SRCLIB = $(SRCDIR)/libcppjieba.a
 
 # remove the objs after compilation
-.INTERMEDIATE:  $(OBJS) *.o
+.INTERMEDIATE:  $(OBJS) 
 .PHONY: clean $(SRCLIB)
 
 # Main Targets

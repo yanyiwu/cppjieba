@@ -8,7 +8,7 @@ using namespace CppJieba;
 int main()
 {
 	Segment segment;
-	/*
+	
 	if(!segment.init("./dicts/segdict.utf8.v2.1"))
 	{
 		cerr<<"1"<<endl;
@@ -35,6 +35,6 @@ int main()
 	segment.extract(title, res);
 
 	segment.destroy();
-	*/
+	
     return 0;
 }
