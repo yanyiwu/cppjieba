@@ -9,10 +9,10 @@ SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
 SRCDIR = ./src
-SRCLIB = $(SRCDIR)/cppjiebalib.a
+SRCLIB = $(SRCDIR)/libcppjieba.a
 
 # remove the objs after compilation
-.INTERMEDIATE:  $(OBJS)
+.INTERMEDIATE:  $(OBJS) *.o
 .PHONY: clean $(SRCLIB)
 
 # Main Targets
@@ -24,10 +24,17 @@ all: demo
 	$(CC) $(CCOPT) $<
 
 demo: $(OBJS) $(SRCLIB)
-	$(DOLINK)
+	$(DOLINK) 
 
 $(SRCLIB): $(SRCLIB_DEPS)
 	cd $(SRCDIR) && $(MAKE)
 
 clean:
 	rm -f *.o *.ut demo
+
+sinclude $(SOURCES:.cpp=.d)
+%.d:%.cpp
+	@set -e; rm -f $@; \
+	$(CC) -MM $< > $@.$$$$; \
+	sed 's,\($*\).o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$

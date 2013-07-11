@@ -5,30 +5,33 @@ LINKOPT =
 PACKA = ar
 PACKAOPT = rc
 DOLINK = $(LINK) $(LINKOPT) -o $@ $^
-DOPACK = $(PACKA) $(PACKAOPT) $@ $?
+DOPACK = $(PACKA) $(PACKAOPT) $@ 
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
 CMDIR = ./cppcommon
-CMLIB = $(CMDIR)/cmlib.a
+CMLIB = $(CMDIR)/libcm.a
 
-LIBA = cppjiebalib.a
+TMPDIR = ./cppjiebatmp
+
+LIBA = libcppjieba.a
 
 # remove the objs after compilation
 .INTERMEDIATE: 
-.PHONY: clean $(CMLIB)
+.PHONY: clean $(CMLIB) 
 
 all: $(LIBA)
-
 
 # This is a suffix rule 
 #.c.o: 
 %.o: %.cpp
 	$(CC) $(CCOPT) $<
 
-
-$(LIBA): $(OBJS) $(CMLIB)
-	$(DOPACK)
+$(LIBA): $(OBJS) $(CMLIB) 
+	mkdir $(TMPDIR)
+	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
+	$(DOPACK) $(OBJS) $(TMPDIR)/*.o 
+	rm -rf $(TMPDIR)
 
 $(CMLIB):
 	cd $(CMDIR) && $(MAKE)
@@ -41,10 +44,10 @@ Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
 	$(CC) -o $@ Segment.cpp Trie.cpp -DSEGMENT_UT $(CMLIB) 
 
 clean:
-	rm -f *.o *.d *.ut $(LIBA)
+	rm -f *.o *.d *.ut $(LIBA) 
+	rm -rf $(TMPDIR)
 	cd $(CMDIR) && make clean
 
-sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp
 	@set -e; rm -f $@; \
 	$(CC) -MM $< > $@.$$$$; \
