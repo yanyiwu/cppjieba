@@ -3,33 +3,34 @@ CCOPT = -Wall -c
 LINK = g++
 LINKOPT =
 PACKA = ar
-PARCAOPT = rc
+PACKAOPT = rc
 DOLINK = $(LINK) $(LINKOPT) -o $@ $^
+DOPACK = $(PACKA) $(PACKAOPT) $@ $?
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
 CMDIR = ./cppcommon
 CMLIB = $(CMDIR)/cmlib.a
-CMLIB_DEPS := $(wildcard $(CMDIR)/*)
 
+LIBA = cppjiebalib.a
 
 # remove the objs after compilation
 .INTERMEDIATE: 
-.PHONY: clean
+.PHONY: clean $(CMLIB)
+
+all: $(LIBA)
+
 
 # This is a suffix rule 
 #.c.o: 
 %.o: %.cpp
 	$(CC) $(CCOPT) $<
 
-# Main Targets
-all: main
 
+$(LIBA): $(OBJS) $(CMLIB)
+	$(DOPACK)
 
-main: $(OBJS) $(CMLIB)
-	$(DOLINK)
-
-$(CMLIB): $(CMLIB_DEPS)
+$(CMLIB):
 	cd $(CMDIR) && $(MAKE)
 
 #unit test
@@ -39,9 +40,8 @@ Trie.ut: Trie.cpp Trie.h globals.h $(CMLIB)
 Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
 	$(CC) -o $@ Segment.cpp Trie.cpp -DSEGMENT_UT $(CMLIB) 
 
-
 clean:
-	rm -f *.o *.d *.ut main
+	rm -f *.o *.d *.ut $(LIBA)
 	cd $(CMDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
