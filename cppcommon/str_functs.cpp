@@ -27,18 +27,18 @@ namespace CPPCOMMON
 
 	string joinStr(const vector<string>& src, const string& connectorStr)
 	{
-		string res;
-		string tmpStr;
-		size_t len = src.size();
-		for(size_t i = 0; i < len - 1; i++)
+		string res = "";
+		int len = src.size();
+		if(0 == len)
+		{
+			return "";
+		}
+		for(int i = 0; i < len - 1; i++)
 		{
 			res += stripStr(src[i]);
 			res += connectorStr;
 		}
-		if(0 < len)
-		{
-			res +=  stripStr(src[len-1]);
-		}
+		res += stripStr(src[len-1]);
 		return res;
 	}
 	vector<string> splitStr(const string& source, const string& pattern)
@@ -362,7 +362,11 @@ int main()
 		string utfStr = unicodeToUtf8(uniStr);
 		cout<<utfStr<<endl;
 	}
-	getchar();
+	vector<string> tmp;
+	tmp.push_back("1");
+	//tmp.push_back("2");
+	//tmp.clear();
+	cout<<joinStr(tmp, ",")<<endl;
 	return 0;
 }
 #endif
