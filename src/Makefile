@@ -41,7 +41,10 @@ Trie.ut: Trie.cpp Trie.h globals.h $(CMLIB)
 	$(CC) -o $@ $< -DTRIE_UT $(CMLIB) 
 
 Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
-	$(CC) -o $@ Segment.cpp Trie.cpp -DSEGMENT_UT $(CMLIB) 
+	$(CC) -o $@ Segment.cpp Trie.cpp -DSEGMENT_UT $(CMLIB) -liconv
+
+KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h Segment.h Trie.h globals.h  $(CMLIB)
+	$(CC) -o $@ KeyWordExt.cpp Segment.cpp Trie.cpp -DKEYWORDEXT_UT $(CMLIB) -liconv
 
 clean:
 	rm -f *.o *.d *.ut $(LIBA) 
