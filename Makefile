@@ -24,7 +24,7 @@ all: demo
 	$(CC) $(CCOPT) $<
 
 demo: $(OBJS) $(SRCLIB)
-	$(DOLINK) 
+	$(DOLINK) -liconv
 
 $(SRCLIB): 
 	cd $(SRCDIR) && $(MAKE)

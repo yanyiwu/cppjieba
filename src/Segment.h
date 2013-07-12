@@ -30,6 +30,7 @@ namespace CppJieba
 			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
 			bool _cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res);
 			bool _filter(vector<string>& utf8Strs);
+			bool _filterDuplicate(vector<string>& utf8Strs);
 			bool _filterSingleWord(vector<string>& utf8Strs);
 			bool _filterSubstr(vector<string>& utf8Strs);
 			static bool _pair_compare(const pair<string, double>& a, const pair<string, double>& b);

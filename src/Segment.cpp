@@ -246,6 +246,14 @@ namespace CppJieba
 	bool Segment::_filter(vector<string>& utf8Strs)
 	{
 		bool retFlag;
+		retFlag = _filterDuplicate(utf8Strs);
+		if(!retFlag)
+		{
+			LogError("_filterDuplicate failed.");
+			return false;
+		}
+		LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(utf8Strs, ",").c_str()));
+
 		retFlag = _filterSingleWord(utf8Strs);
 		if(!retFlag)
 		{
@@ -262,6 +270,24 @@ namespace CppJieba
 		}
 		LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
+		return true;
+	}
+
+	bool Segment::_filterDuplicate(vector<string>& utf8Strs)
+	{
+		set<string> st;
+		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
+		{
+			if(st.find(*it) != st.end())
+			{
+				it = utf8Strs.erase(it);
+			}
+			else
+			{
+				st.insert(*it);
+				it++;
+			}
+		}
 		return true;
 	}
 
