@@ -1,5 +1,5 @@
-#ifndef TRIE_H
-#define TRIE_H
+#ifndef CPPJIEBA_TRIE_H
+#define CPPJIEBA_TRIE_H
 
 #include <iostream>
 #include <fstream>

@@ -1,5 +1,5 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#ifndef CPPJIEBA_GLOBALS_H
+#define CPPJIEBA_GLOBALS_H
 
 #include <map>
 #include <vector>

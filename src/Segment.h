@@ -1,5 +1,5 @@
-#ifndef SEGMENT_H
-#define SEGMENT_H
+#ifndef CPPJIEBA_SEGMENT_H
+#define CPPJIEBA_SEGMENT_H
 
 #include <algorithm>
 #include <set>
