@@ -307,6 +307,49 @@ namespace CPPCOMMON
 		return res;
 	}
 
+	//iconv
+	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen)
+	{
+		iconv_t cd;
+
+		char **pin = &inbuf;
+		char **pout = &outbuf;
+
+		cd = iconv_open(to_charset,from_charset);
+		if (cd==NULL) 
+		{
+			//cout<<__FILE__<<__LINE__<<endl;
+			return -1;
+		}
+		memset(outbuf,0,outlen);
+		size_t ret = iconv(cd,pin,&inlen,pout,&outlen);
+		if (ret == -1)
+		{
+			//cout<<__FILE__<<__LINE__<<endl;
+			return -1;
+		}
+		iconv_close(cd);
+		return 0;
+	}
+
+	//gbk -> utf8
+	string gbkToUtf8(const string& gbk)
+	{
+		//cout<<__FILE__<<__LINE__<<gbk<<endl;
+		string res;
+		size_t maxLen = gbk.size()*4;
+		char * pUtf = new char[maxLen];
+		int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
+		if(ret == -1)
+		{
+			delete [] pUtf;
+			return "";
+		}
+		res = pUtf;
+		delete [] pUtf;
+		return res;
+	}
+
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -351,22 +394,30 @@ int main()
     //    //cout<<strlen(utf8str);
     //    cout<<utf8str<<endl;
     //}
-	cout<<string_format("hehe%s11asd%dasf","[here]",2);
-	ifstream ifile("testdata/dict.txt");
+	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
+	//ifstream ifile("testdata/dict.utf8");
+	//string line;
+	//while(getline(ifile, line))
+	//{
+	//	cout<<line<<endl;
+	//	string uniStr = utf8ToUnicode(line);
+	//	//cout<<uniStr<<endl;
+	//	string utfStr = unicodeToUtf8(uniStr);
+	//	cout<<utfStr<<endl;
+	//}
+	//vector<string> tmp;
+	//tmp.push_back("1");
+	////tmp.push_back("2");
+	////tmp.clear();
+	//cout<<joinStr(tmp, ",")<<endl;
+	ifstream ifile("testdata/dict.gbk");
 	string line;
 	while(getline(ifile, line))
 	{
-		cout<<line<<endl;
-		string uniStr = utf8ToUnicode(line);
-		//cout<<uniStr<<endl;
-		string utfStr = unicodeToUtf8(uniStr);
-		cout<<utfStr<<endl;
+		//cout<<line<<endl;
+		string s = gbkToUtf8(line);
+		cout<<s<<endl;
 	}
-	vector<string> tmp;
-	tmp.push_back("1");
-	//tmp.push_back("2");
-	//tmp.clear();
-	cout<<joinStr(tmp, ",")<<endl;
 	return 0;
 }
 #endif

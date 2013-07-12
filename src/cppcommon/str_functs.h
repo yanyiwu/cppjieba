@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <iconv.h>
+#include <memory.h>
 #include "typedefs.h"
 namespace CPPCOMMON
 {
@@ -35,6 +37,8 @@ namespace CPPCOMMON
 	string unicodeToUtf8(const string& uniStr);
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
 	string utf8ToUnicode(const string& utfStr);
+	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
+	string gbkToUtf8(const string& gbk);
 	
 	inline uint16_t twocharToUint16(char high, char low)
 	{
