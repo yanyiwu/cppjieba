@@ -350,6 +350,24 @@ namespace CPPCOMMON
 		return res;
 	}
 
+	//utf8 -> gbk
+	string utf8ToGbk(const string& utf)
+	{
+		//cout<<__FILE__<<__LINE__<<gbk<<endl;
+		string res;
+		size_t maxLen = utf.size()*4;
+		char * pGbk = new char[maxLen];
+		int ret = code_convert("utf-8", "gbk", (char *)utf.c_str(), utf.size(), pGbk, maxLen);
+		if(ret == -1)
+		{
+			delete [] pGbk;
+			return "";
+		}
+		res = pGbk;
+		delete [] pGbk;
+		return res;
+	}
+
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -414,8 +432,9 @@ int main()
 	string line;
 	while(getline(ifile, line))
 	{
-		//cout<<line<<endl;
+		cout<<line<<endl;
 		string s = gbkToUtf8(line);
+		s = utf8ToGbk(s);
 		cout<<s<<endl;
 	}
 	return 0;
