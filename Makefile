@@ -26,7 +26,7 @@ all: demo
 demo: $(OBJS) $(SRCLIB)
 	$(DOLINK) 
 
-$(SRCLIB): $(SRCLIB_DEPS)
+$(SRCLIB): 
 	cd $(SRCDIR) && $(MAKE)
 
 clean:
