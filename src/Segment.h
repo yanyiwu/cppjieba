@@ -20,7 +20,7 @@ namespace CppJieba
 			bool destroy();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
-			bool extract(const string& utf8Str, vector<string>& keywords);
+			bool extract(const string& utf8Str, vector<string>& keywords, uint topN);
 			double getUtf8WordWeight(const string& word);
 			double getUniWordWeight(const string& word);
 

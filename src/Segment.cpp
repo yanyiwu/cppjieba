@@ -64,7 +64,7 @@ namespace CppJieba
 		
 		return true;
 	}
-	bool Segment::extract(const string& utf8Str, vector<string>& keywords)
+	bool Segment::extract(const string& utf8Str, vector<string>& keywords, uint topN)
 	{
 		LogInfo(utf8Str);
 		bool retFlag;
@@ -86,7 +86,7 @@ namespace CppJieba
 		}
 		LogDebug(string_format("_filter res:[%s]", joinStr(tmp, ",").c_str()));
 
-		retFlag = _extractTopN(tmp, keywords, 5);
+		retFlag = _extractTopN(tmp, keywords, topN);
 		if(!retFlag)
 		{
 			LogError("_extractTopN failed.");
