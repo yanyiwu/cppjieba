@@ -15,6 +15,9 @@ namespace CppJieba
 			bool init(const char * const filePath);
 			bool destroy();
 
+		public:
+			bool extract(const string& utf8Str);
+
 	};
 
 }

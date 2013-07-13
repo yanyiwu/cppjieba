@@ -14,10 +14,16 @@ namespace CppJieba
 
 	bool KeyWordExt::init(const char * const filePath)
 	{
-		return true;
+		return _segment.init(filePath);
 	}
 	
 	bool KeyWordExt::destroy()
+	{
+		_segment.destroy();
+		return true;
+	}
+
+	bool KeyWordExt::extract(const string& utf8Str)
 	{
 		return true;
 	}
