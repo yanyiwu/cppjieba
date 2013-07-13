@@ -16,7 +16,14 @@ namespace CppJieba
 			bool destroy();
 
 		public:
-			bool extract(const string& utf8Str);
+			bool extract(const string& utf8Str, vector<string>& keywords, uint topN);
+		private:
+			static bool _pair_compare(const pair<string, double>& a, const pair<string, double>& b);
+			bool _extractTopN(const vector<string>& words, vector<string>& keywords, uint topN);
+			bool _filter(vector<string>& utf8Strs);
+			bool _filterDuplicate(vector<string>& utf8Strs);
+			bool _filterSingleWord(vector<string>& utf8Strs);
+			bool _filterSubstr(vector<string>& utf8Strs);
 
 	};
 

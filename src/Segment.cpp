@@ -64,39 +64,6 @@ namespace CppJieba
 		
 		return true;
 	}
-	bool Segment::extract(const string& utf8Str, vector<string>& keywords, uint topN)
-	{
-		LogInfo(utf8Str);
-		bool retFlag;
-		vector<string> tmp;
-		retFlag = cutDAG(utf8Str, tmp);
-		if(!retFlag)
-		{
-			LogError(string_format("cutDAG(%s) failed.", utf8Str.c_str()));
-			return false;
-		}
-		// like str.join([]) in python
-		LogDebug(string_format("cutDAG result:[%s]", joinStr(tmp, ",").c_str()));
-
-		retFlag = _filter(tmp);
-		if(!retFlag)
-		{
-			LogError("_filter failed.");
-			return false;
-		}
-		LogDebug(string_format("_filter res:[%s]", joinStr(tmp, ",").c_str()));
-
-		retFlag = _extractTopN(tmp, keywords, topN);
-		if(!retFlag)
-		{
-			LogError("_extractTopN failed.");
-			return false;
-		}
-		LogDebug("_extractTopN finished.");
-
-		LogInfo(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
-		return true;
-	}
 
 	double Segment::getUtf8WordWeight(const string& word)
 	{
@@ -108,39 +75,7 @@ namespace CppJieba
 		return _trie.getWeight(word);
 	}
 
-	bool Segment::_pair_compare(const pair<string, double>& a, const pair<string, double>& b)
-	{
-		return a.second < b.second;
-	}
 
-	bool Segment::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
-	{
-		keywords.clear();
-		vector<pair<string, double> > tmp;
-
-		for(uint i = 0; i < words.size(); i++)
-		{
-			double w = getUtf8WordWeight(words[i]);
-			tmp.push_back(pair<string, double>(words[i], w));
-		}
-		
-		sort(tmp.begin(), tmp.end(), _pair_compare);
-
-		//logging result
-		vector<string> logBuf;//for LogDebug
-		for(uint i = 0; i < tmp.size(); i++)
-		{
-			logBuf.push_back(string_format("(%s,%lf)", tmp[i].first.c_str(), tmp[i].second));
-		}
-		LogDebug(string_format("calc weight:%s",joinStr(logBuf, ",").c_str()));
-		
-		//extract TopN
-		for(uint i = 0; i < topN && i < tmp.size(); i++)
-		{
-			keywords.push_back(tmp[i].first);
-		}
-		return true;
-	}
 
 	string Segment::_utf8ToUni(const string& utfStr)
 	{
@@ -243,108 +178,6 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_filter(vector<string>& utf8Strs)
-	{
-		bool retFlag;
-		retFlag = _filterDuplicate(utf8Strs);
-		if(!retFlag)
-		{
-			LogError("_filterDuplicate failed.");
-			return false;
-		}
-		LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(utf8Strs, ",").c_str()));
-
-		retFlag = _filterSingleWord(utf8Strs);
-		if(!retFlag)
-		{
-			LogError("_filterSingleWord failed.");
-			return false;
-		}
-		LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
-
-		retFlag = _filterSubstr(utf8Strs);
-		if(!retFlag)
-		{
-			LogError("_filterSubstr failed.");
-			return false;
-		}
-		LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
-
-		return true;
-	}
-
-	bool Segment::_filterDuplicate(vector<string>& utf8Strs)
-	{
-		set<string> st;
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
-		{
-			if(st.find(*it) != st.end())
-			{
-				it = utf8Strs.erase(it);
-			}
-			else
-			{
-				st.insert(*it);
-				it++;
-			}
-		}
-		return true;
-	}
-
-	bool Segment::_filterSingleWord(vector<string>& utf8Strs)
-	{
-		for(vector<string>::iterator it = utf8Strs.begin(); it != utf8Strs.end();)
-		{
-			string uniStr = utf8ToUnicode(*it);
-			if(uniStr.empty() || uniStr.size()%2)
-			{
-				LogError("utf8ToUnicode error");
-				return false;
-			}
-
-			// filter single word
-			if(uniStr.size() == 2) 
-			{
-				it = utf8Strs.erase(it);
-			}
-			else
-			{
-				it++;
-			}
-		}
-		return true;
-	}
-
-	bool Segment::_filterSubstr(vector<string>& utf8Strs)
-	{
-		vector<string> tmp = utf8Strs;
-		set<string> subs;
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); it ++)
-		{
-			for(uint j = 0; j < tmp.size(); j++)
-			{
-				if(*it != tmp[j] && string::npos != tmp[j].find(*it, 0))
-				{
-					subs.insert(*it);
-				}
-			}
-		}
-
-		//erase subs from utf8Strs
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
-		{
-			if(subs.end() != subs.find(*it))
-			{
-				LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
-				it =  utf8Strs.erase(it);
-			}
-			else
-			{
-				it ++;
-			}
-		}
-		return true;
-	}
 
 }
 
@@ -366,19 +199,23 @@ int main()
 	string title;
 	title = "我来到北京清华大学";
 	res.clear();
-	segment.extract(title, res, 5);
+	segment.cutDAG(title, res);
+	PRINT_VECTOR(res);
 	
 	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
 	res.clear();
-	segment.extract(title, res, 5);
+	segment.cutDAG(title, res);
+	PRINT_VECTOR(res);
 
 	title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
 	res.clear();
-	segment.extract(title, res, 5);
+	segment.cutDAG(title, res);
+	PRINT_VECTOR(res);
 
 	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
 	res.clear();
-	segment.extract(title, res, 5);
+	segment.cutDAG(title, res);
+	PRINT_VECTOR(res);
 
 	segment.destroy();
 	return 0;
