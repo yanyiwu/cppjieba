@@ -5,14 +5,18 @@
 
 namespace CppJieba
 {
+
 	class KeyWordExt
 	{
 		private:
 			Segment _segment;
+			set<string> _stopWords;
 		public:
 			KeyWordExt();
 			~KeyWordExt();
 			bool init(const char * const filePath);
+
+			bool loadStopWords(const char * const filePath);
 			bool destroy();
 
 		public:
@@ -24,6 +28,7 @@ namespace CppJieba
 			bool _filterDuplicate(vector<string>& utf8Strs);
 			bool _filterSingleWord(vector<string>& utf8Strs);
 			bool _filterSubstr(vector<string>& utf8Strs);
+			bool _filterStopWords(vector<string>& utf8Strs);
 
 	};
 

@@ -14,7 +14,36 @@ namespace CppJieba
 
 	bool KeyWordExt::init(const char * const filePath)
 	{
+		if(!checkFileExist(filePath))
+		{
+			LogError(string_format("cann't find fiel[%s].",filePath));
+			return false;
+		}
 		return _segment.init(filePath);
+	}
+
+	bool KeyWordExt::loadStopWords(const char * const filePath)
+	{
+		if(!_stopWords.empty())
+		{
+			LogError("_stopWords has been loaded before! ");
+			return false;
+		}
+		if(!checkFileExist(filePath))
+		{
+			LogError(string_format("cann't find fiel[%s].",filePath));
+			return false;
+		}
+
+		ifstream ifile(filePath);
+		string line;
+		while(getline(ifile, line))
+		{
+			_stopWords.insert(line);
+		}
+		LogDebug(string_format("load stopwords[%d] finished.", _stopWords.size()));
+		
+		return true;
 	}
 	
 	bool KeyWordExt::destroy()
@@ -109,6 +138,14 @@ namespace CppJieba
 		}
 		LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
+		retFlag = _filterStopWords(utf8Strs);
+		if(!retFlag)
+		{
+			LogError("_filterStopWords failed.");
+			return false;
+		}
+		LogDebug(string_format("_filterStopWords res:[%s]", joinStr(utf8Strs, ",").c_str()));
+
 		retFlag = _filterSubstr(utf8Strs);
 		if(!retFlag)
 		{
@@ -117,6 +154,26 @@ namespace CppJieba
 		}
 		LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
+		return true;
+	}
+
+	bool KeyWordExt::_filterStopWords(vector<string>& utf8Strs)
+	{
+		if(_stopWords.empty())
+		{
+			return true;
+		}
+		for(VSI it = utf8Strs.begin(); it != utf8Strs.end();)
+		{
+			if(_stopWords.find(*it) != _stopWords.end())
+			{
+				it = utf8Strs.erase(it);
+			}
+			else
+			{
+				it ++;
+			}
+		}
 		return true;
 	}
 
@@ -206,6 +263,7 @@ int main()
 	{
 		return 1;
 	}
+	ext.loadStopWords("stopwords.tmp");
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
