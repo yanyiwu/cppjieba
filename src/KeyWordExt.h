@@ -64,7 +64,7 @@ namespace CppJieba
 			bool _filterSubstr(vector<string>& utf8Strs);
 			bool _filterStopWords(vector<string>& utf8Strs);
 		private:
-			bool _priorWordPrefixes(vector<string>& utf8Strs);
+			bool _priorWordPrefixes(vector<WordInfo>& wordInfos);
 
 	};
 

@@ -14,19 +14,24 @@ namespace CppJieba
 
 	bool KeyWordExt::init(const char * const filePath)
 	{
+		LogInfo(string_format("init(%s) start", filePath));
 		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find fiel[%s].",filePath));
+			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
-		return _segment.init(filePath);
+		bool retFlag = _segment.init(filePath);
+		LogInfo(string_format("init(%s) end", filePath));
+		return retFlag;
+
 	}
 
 	bool KeyWordExt::loadPriorWordPrefixes(const char * const filePath)
 	{
+		LogInfo(string_format("loadPriorWordPrefixes(%s) start", filePath));
 		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find fiel[%s].",filePath));
+			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
 		bool retFlag = _priorPrefixTrie.init(filePath);
@@ -35,11 +40,14 @@ namespace CppJieba
 			LogError("_priorPrefixTrie.init return false.");
 			return false;
 		}
+		LogInfo(string_format("loadPriorWordPrefixes(%s) end", filePath));
 		return true;
 	}
 
 	bool KeyWordExt::loadStopWords(const char * const filePath)
 	{
+
+		LogInfo(string_format("loadStopWords(%s) start", filePath));
 		if(!_stopWords.empty())
 		{
 			LogError("_stopWords has been loaded before! ");
@@ -47,7 +55,7 @@ namespace CppJieba
 		}
 		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find fiel[%s].",filePath));
+			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
 
@@ -57,7 +65,7 @@ namespace CppJieba
 		{
 			_stopWords.insert(line);
 		}
-		LogDebug(string_format("load stopwords[%d] finished.", _stopWords.size()));
+		LogInfo(string_format("load stopwords[%d] finished.", _stopWords.size()));
 		
 		return true;
 	}
@@ -73,6 +81,7 @@ namespace CppJieba
 	{
 		return a.weight < b.weight;
 	}
+
 	bool KeyWordExt::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
 	{
 		keywords.clear();
@@ -86,20 +95,11 @@ namespace CppJieba
 			wInfo.idf = w;
 			wordInfos.push_back(wInfo);
 		}
-		
 		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
-
-		//logging result
-		/*
-		vector<string> logBuf;//for LogDebug
-		for(uint i = 0; i < tmp.size(); i++)
-		{
-			logBuf.push_back(string_format("(%s,%lf)", tmp[i].first.c_str(), tmp[i].second));
-		}
-		LogDebug(string_format("calc weight:%s",joinStr(logBuf, ",").c_str()));
-		*/
-		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
+		LogDebug(string_format("calc weight & sorted:\n%s",joinWordInfos(wordInfos).c_str()));
 		
+		_priorWordPrefixes(wordInfos);
+		LogDebug(string_format("_priorWordPrefixes res:\n%s", joinWordInfos(wordInfos).c_str()));
 		//extract TopN
 		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
 		{
@@ -274,8 +274,34 @@ namespace CppJieba
 		return true;
 	}
 
-	bool _priorWordPrefixes(vector<string>& utf8Strs)
+	bool KeyWordExt::_priorWordPrefixes(vector<WordInfo>& wordInfos)
 	{
+		if(2 > wordInfos.size())
+		{
+			return true;
+		}
+
+		WordInfo prior;
+		bool flag = false;
+		for(vector<WordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
+		{
+			cout<<__FILE__<<__LINE__<<endl;
+			if(NULL != _priorPrefixTrie.findUtf8(it->word))
+			{
+				prior = *it;
+				it = wordInfos.erase(it);
+				flag = true;
+				break;
+			}
+			else
+			{
+				it ++;
+			}
+		}
+		if(flag)
+		{
+			wordInfos.insert(wordInfos.begin(), prior);
+		}
 		return true;
 	}
 }
@@ -293,20 +319,27 @@ int main()
 		return 1;
 	}
 	ext.loadStopWords("stopwords.tmp");
-	ext.loadPriorWordPrefixes("prior.utf8");
+
+	if(!ext.loadPriorWordPrefixes("prior.utf8"))
+	{
+		cerr<<"err"<<endl;
+		return 1;
+	}
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
 	string title;
-	title = "我来到北京清华大学";
+	/*title = "我来到北京清华大学";
 	res.clear();
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
+	
 	
 	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
 	res.clear();
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
+	*/
 
 
 	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女装";

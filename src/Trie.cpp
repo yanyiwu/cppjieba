@@ -142,6 +142,11 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const ChUnicode* const chUniStr, size_t len)
 	{
+		if(NULL == _root)
+		{
+			LogFatal("trie not initted!");
+			return NULL;
+		}
 		TrieNode* p = _root;
 		for(uint i = 0; i < len; i++)
 		{
