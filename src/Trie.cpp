@@ -112,8 +112,13 @@ namespace CppJieba
 		}
     }
 
-	const TrieNodeInfo* Trie::findUtf8(const string& utf8Str)
+	const TrieNodeInfo* Trie::findPrefix(const string& utf8Str)
 	{
+		if(NULL == _root)
+		{
+			LogFatal("trie not initted!");
+			return NULL;
+		}
 		if(utf8Str.empty())
 		{
 			LogError("utf8Str is empty");
@@ -122,10 +127,44 @@ namespace CppJieba
 		string uniStr = utf8ToUnicode(utf8Str);
 		if(uniStr.empty())
 		{
-			LogError("utf8ToUnicode return empty str");
+			LogError("utf8ToUnicode return empty star");
 			return NULL;
 		}
-		return find(uniStr);
+		if(uniStr.size() % 2)
+		{
+			LogError("utf8ToUnicode return uniStr illegal");
+			return NULL;
+		}
+		//find
+		TrieNode* p = _root;
+		TrieNodeInfo * res = NULL;
+		for(uint i = 0; i < uniStr.size(); i+=2)
+		{
+			ChUnicode chUni = twocharToUint16(uniStr[0], uniStr[i+1]);
+			if(p->isLeaf)
+			{
+				uint pos = p->nodeInfoVecPos;
+				if(pos < _nodeInfoVec.size())
+				{
+					res = &(_nodeInfoVec[pos]);
+				}
+				else
+				{
+					LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+					return NULL;
+				}
+				
+			}
+			if(p->hmap.find(chUni) == p->hmap.end())
+			{
+				break;
+			}
+			else
+			{
+				p = p->hmap[chUni];
+			}
+		}
+		return res;
 	}
 
 	const TrieNodeInfo* Trie::find(const string& uniStr)
