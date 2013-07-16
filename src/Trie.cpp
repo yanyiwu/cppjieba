@@ -112,6 +112,22 @@ namespace CppJieba
 		}
     }
 
+	const TrieNodeInfo* Trie::findUtf8(const string& utf8Str)
+	{
+		if(utf8Str.empty())
+		{
+			LogError("utf8Str is empty");
+			return NULL;
+		}
+		string uniStr = utf8ToUnicode(utf8Str);
+		if(uniStr.empty())
+		{
+			LogError("utf8ToUnicode return empty str");
+			return NULL;
+		}
+		return find(uniStr);
+	}
+
 	const TrieNodeInfo* Trie::find(const string& uniStr)
 	{
 		ChUnicode* pUni = new ChUnicode[uniStr.size()];

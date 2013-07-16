@@ -70,6 +70,7 @@ namespace CppJieba
             void display();
 
 		public:
+			const TrieNodeInfo* findUtf8(const string& utf8Str);
 			const TrieNodeInfo* find(const string& uniStr);
 			const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
 

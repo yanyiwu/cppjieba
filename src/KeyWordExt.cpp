@@ -22,6 +22,22 @@ namespace CppJieba
 		return _segment.init(filePath);
 	}
 
+	bool KeyWordExt::loadPriorWordPrefixes(const char * const filePath)
+	{
+		if(!checkFileExist(filePath))
+		{
+			LogError(string_format("cann't find fiel[%s].",filePath));
+			return false;
+		}
+		bool retFlag = _priorPrefixTrie.init(filePath);
+		if(!retFlag)
+		{
+			LogError("_priorPrefixTrie.init return false.");
+			return false;
+		}
+		return true;
+	}
+
 	bool KeyWordExt::loadStopWords(const char * const filePath)
 	{
 		if(!_stopWords.empty())
@@ -49,6 +65,7 @@ namespace CppJieba
 	bool KeyWordExt::destroy()
 	{
 		_segment.destroy();
+		_priorPrefixTrie.destroy();
 		return true;
 	}
 
@@ -177,6 +194,7 @@ namespace CppJieba
 		return true;
 	}
 
+
 	bool KeyWordExt::_filterDuplicate(vector<string>& utf8Strs)
 	{
 		set<string> st;
@@ -249,6 +267,11 @@ namespace CppJieba
 		}
 		return true;
 	}
+
+	bool _priorWordPrefixes(vector<string>& utf8Strs)
+	{
+		return true;
+	}
 }
 
 
@@ -264,6 +287,7 @@ int main()
 		return 1;
 	}
 	ext.loadStopWords("stopwords.tmp");
+	ext.loadPriorWordPrefixes("prior.utf8");
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;
@@ -278,12 +302,8 @@ int main()
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
 
-	title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
-	res.clear();
-	ext.extract(title, res, 5);
-	PRINT_VECTOR(res);
 
-	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
+	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女装";
 	res.clear();
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
