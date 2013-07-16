@@ -69,62 +69,68 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_pair_compare(const pair<string, double>& a, const pair<string, double>& b)
+	bool KeyWordExt::_wordInfoCompare(const WordInfo& a, const WordInfo& b)
 	{
-		return a.second < b.second;
+		return a.weight < b.weight;
 	}
 	bool KeyWordExt::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
 	{
 		keywords.clear();
-		vector<pair<string, double> > tmp;
-
+		vector<WordInfo> wordInfos;
 		for(uint i = 0; i < words.size(); i++)
 		{
 			double w = _segment.getUtf8WordWeight(words[i]);
-			tmp.push_back(pair<string, double>(words[i], w));
+			WordInfo wInfo;
+			wInfo.word = words[i];
+			wInfo.weight = w;
+			wInfo.idf = w;
+			wordInfos.push_back(wInfo);
 		}
 		
-		sort(tmp.begin(), tmp.end(), _pair_compare);
+		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
 
 		//logging result
+		/*
 		vector<string> logBuf;//for LogDebug
 		for(uint i = 0; i < tmp.size(); i++)
 		{
 			logBuf.push_back(string_format("(%s,%lf)", tmp[i].first.c_str(), tmp[i].second));
 		}
 		LogDebug(string_format("calc weight:%s",joinStr(logBuf, ",").c_str()));
+		*/
+		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
 		
 		//extract TopN
-		for(uint i = 0; i < topN && i < tmp.size(); i++)
+		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
 		{
-			keywords.push_back(tmp[i].first);
+			keywords.push_back(wordInfos[i].word);
 		}
 		return true;
 	}
 
 	bool KeyWordExt::extract(const string& utf8Str, vector<string>& keywords, uint topN)
 	{
-		LogInfo(utf8Str);
+		LogInfo(string_format("title:[%s]",utf8Str.c_str()));
+
 		bool retFlag;
-		vector<string> tmp;
-		retFlag = _segment.cutDAG(utf8Str, tmp);
+		vector<string> words;
+		retFlag = _segment.cutDAG(utf8Str, words);
 		if(!retFlag)
 		{
 			LogError(string_format("cutDAG(%s) failed.", utf8Str.c_str()));
 			return false;
 		}
-		// like str.join([]) in python
-		LogDebug(string_format("cutDAG result:[%s]", joinStr(tmp, ",").c_str()));
+		LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
 
-		retFlag = _filter(tmp);
+		retFlag = _filter(words);
 		if(!retFlag)
 		{
 			LogError("_filter failed.");
 			return false;
 		}
-		LogDebug(string_format("_filter res:[%s]", joinStr(tmp, ",").c_str()));
+		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
 
-		retFlag = _extractTopN(tmp, keywords, topN);
+		retFlag = _extractTopN(words, keywords, topN);
 		if(!retFlag)
 		{
 			LogError("_extractTopN failed.");

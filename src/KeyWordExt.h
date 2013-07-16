@@ -6,6 +6,33 @@
 namespace CppJieba
 {
 
+	struct WordInfo
+	{
+		string word;
+		double weight;
+		double idf;
+		WordInfo()
+		{
+			word = "";
+			weight = 0.0;
+			idf = 0.0;
+		}
+		string getInfoStr() const
+		{
+			return string_format("{word:%s, weight:%lf, idf:%lf}", word.c_str(), weight, idf);
+		}
+	};
+
+	inline string joinWordInfos(const vector<WordInfo>& vec)
+	{
+		vector<string> tmp;
+		for(uint i = 0; i < vec.size(); i++)
+		{
+			tmp.push_back(vec[i].getInfoStr());
+		};
+		return joinStr(tmp, ",");
+	}
+
 	class KeyWordExt
 	{
 		private:
@@ -28,7 +55,8 @@ namespace CppJieba
 		public:
 			bool extract(const string& utf8Str, vector<string>& keywords, uint topN);
 		private:
-			static bool _pair_compare(const pair<string, double>& a, const pair<string, double>& b);
+			static bool _wordInfoCompare(const WordInfo& a, const WordInfo& b);
+		private:
 			bool _extractTopN(const vector<string>& words, vector<string>& keywords, uint topN);
 			bool _filter(vector<string>& utf8Strs);
 			bool _filterDuplicate(vector<string>& utf8Strs);
