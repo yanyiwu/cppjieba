@@ -285,7 +285,6 @@ namespace CppJieba
 		bool flag = false;
 		for(vector<WordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
-			cout<<__FILE__<<__LINE__<<endl;
 			if(NULL != _priorPrefixTrie.findPrefix(it->word))
 			{
 				prior = *it;
