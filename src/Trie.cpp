@@ -1,3 +1,7 @@
+/*
+ * file encoding: utf-8
+ * author: wuyanyi09@gmail.com
+ */
 #include "Trie.h"
 
 namespace CppJieba
@@ -72,6 +76,13 @@ namespace CppJieba
 			//insert node
 			TrieNodeInfo nodeInfo;
 			nodeInfo.word = chWord;
+			size_t wLen = getUtf8WordLen(chWord);
+			if(0 == wLen)
+			{
+				LogFatal(string_format("getUtf8WordLen(%s) return 0", chWord.c_str()));
+				return false;
+			}
+			nodeInfo.wLen = wLen;
 			nodeInfo.count = count;
 			nodeInfo.tag = tag;
 

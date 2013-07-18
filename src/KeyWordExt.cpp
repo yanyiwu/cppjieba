@@ -79,7 +79,43 @@ namespace CppJieba
 
 	bool KeyWordExt::_wordInfoCompare(const WordInfo& a, const WordInfo& b)
 	{
-		return a.weight < b.weight;
+		return a.weight > b.weight;
+	}
+
+	bool KeyWordExt::_sortWLIDF(vector<WordInfo>& wordInfos)
+	{
+		size_t wLenSum = 0;
+		for(uint i = 0; i < wordInfos.size(); i++)
+		{
+			wordInfos[i].wLen = getUtf8WordLen(wordInfos[i].word);
+			if(0 == wordInfos[i].wLen)
+			{
+				LogFatal("wLen is 0");
+				return false;
+			}
+			wLenSum += wordInfos[i].wLen;
+		}
+
+		if(0 == wLenSum)
+		{
+			LogFatal("wLenSum == 0.");
+			return false;
+		}
+
+		for(uint i = 0; i < wordInfos.size(); i++)
+		{
+			WordInfo& wInfo = wordInfos[i];
+			double logWordFreq = _segment.getUtf8WordWeight(wInfo.word);
+			wInfo.idf = -logWordFreq;
+			size_t wLen = getUtf8WordLen(wInfo.word);
+			if(0 == wLen)
+			{
+				LogFatal("getUtf8WordLen(%s) return 0");
+			}
+			wInfo.weight = 1.0 * wLen / wLenSum * wInfo.idf;
+		}
+		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
+		return true;
 	}
 
 	bool KeyWordExt::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
@@ -88,14 +124,12 @@ namespace CppJieba
 		vector<WordInfo> wordInfos;
 		for(uint i = 0; i < words.size(); i++)
 		{
-			double w = _segment.getUtf8WordWeight(words[i]);
 			WordInfo wInfo;
 			wInfo.word = words[i];
-			wInfo.weight = w;
-			wInfo.idf = w;
 			wordInfos.push_back(wInfo);
 		}
-		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
+		
+		_sortWLIDF(wordInfos);
 		LogDebug(string_format("calc weight & sorted:\n%s",joinWordInfos(wordInfos).c_str()));
 		
 		_priorWordPrefixes(wordInfos);

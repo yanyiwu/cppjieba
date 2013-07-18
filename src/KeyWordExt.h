@@ -9,17 +9,19 @@ namespace CppJieba
 	struct WordInfo
 	{
 		string word;
+		size_t wLen;
 		double weight;
 		double idf;
 		WordInfo()
 		{
 			word = "";
+			wLen = 0;
 			weight = 0.0;
 			idf = 0.0;
 		}
 		string getInfoStr() const
 		{
-			return string_format("{word:%s, weight:%lf, idf:%lf}", word.c_str(), weight, idf);
+			return string_format("{word:%s,wLen:%d weight:%lf, idf:%lf}", word.c_str(), wLen, weight, idf);
 		}
 	};
 
@@ -58,6 +60,10 @@ namespace CppJieba
 			static bool _wordInfoCompare(const WordInfo& a, const WordInfo& b);
 		private:
 			bool _extractTopN(const vector<string>& words, vector<string>& keywords, uint topN);
+		private:
+			//sort by word len - idf
+			bool _sortWLIDF(vector<WordInfo>& wordInfos);
+		private:
 			bool _filter(vector<string>& utf8Strs);
 			bool _filterDuplicate(vector<string>& utf8Strs);
 			bool _filterSingleWord(vector<string>& utf8Strs);

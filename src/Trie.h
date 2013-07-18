@@ -1,3 +1,7 @@
+/*
+ * file encoding: utf-8
+ * author: wuyanyi09@gmail.com
+ */
 #ifndef CPPJIEBA_TRIE_H
 #define CPPJIEBA_TRIE_H
 
@@ -25,12 +29,18 @@ namespace CppJieba
 
 	struct TrieNodeInfo
 	{
-		string word;
+		string word;// utf8 string word
+		size_t wLen;// the word's len , not string.size(), eg: "我是中国人" wLen = 5 .
 		unsigned int count;
 		string tag;
 		double weight;
-		TrieNodeInfo():word(),count(0),tag(),weight(0.0)
+		TrieNodeInfo()
 		{
+			word = "";
+			wLen = 0;
+			count = 0;
+			tag = "";
+			weight = 0.0;
 		}
 	};
 

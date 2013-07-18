@@ -38,7 +38,7 @@ $(CMLIB):
 
 #unit test
 Trie.ut: Trie.cpp Trie.h globals.h $(CMLIB)
-	$(CC) -o $@ $< -DTRIE_UT $(CMLIB) 
+	$(CC) -o $@ $< -DTRIE_UT $(CMLIB)  -liconv
 
 Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
 	$(CC) -o $@ Segment.cpp Trie.cpp -DSEGMENT_UT $(CMLIB) -liconv
