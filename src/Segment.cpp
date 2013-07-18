@@ -43,7 +43,7 @@ namespace CppJieba
 			LogError("_calcDAG failed.");
 			return false;
 		}
-		LogDebug("_calcDAG finished.");
+		//LogDebug("_calcDAG finished.");
 
 		vector<pair<int, double> > dp;
 		retFlag = _calcDP(uniStr, dag, dp);
@@ -52,7 +52,7 @@ namespace CppJieba
 			LogError("_calcDP failed.");
 			return false;
 		}
-		LogDebug("_calcDP finished.");
+		//LogDebug("_calcDP finished.");
 
 		retFlag = _cutDAG(uniStr, dp, res);
 		if(!retFlag)
@@ -60,7 +60,7 @@ namespace CppJieba
 			LogError("_cutDAG failed.");
 			return false;
 		}
-		LogDebug("_cutDAG finished.");
+		//LogDebug("_cutDAG finished.");
 		
 		return true;
 	}

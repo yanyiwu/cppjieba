@@ -175,7 +175,7 @@ namespace CppJieba
 			LogError("_extractTopN failed.");
 			return false;
 		}
-		LogDebug("_extractTopN finished.");
+		//LogDebug("_extractTopN finished.");
 
 		LogInfo(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
 		return true;
@@ -190,7 +190,7 @@ namespace CppJieba
 			LogError("_filterDuplicate failed.");
 			return false;
 		}
-		LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		retFlag = _filterSingleWord(utf8Strs);
 		if(!retFlag)
@@ -198,7 +198,7 @@ namespace CppJieba
 			LogError("_filterSingleWord failed.");
 			return false;
 		}
-		LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		retFlag = _filterStopWords(utf8Strs);
 		if(!retFlag)
@@ -206,7 +206,7 @@ namespace CppJieba
 			LogError("_filterStopWords failed.");
 			return false;
 		}
-		LogDebug(string_format("_filterStopWords res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterStopWords res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		retFlag = _filterSubstr(utf8Strs);
 		if(!retFlag)
@@ -214,7 +214,7 @@ namespace CppJieba
 			LogError("_filterSubstr failed.");
 			return false;
 		}
-		LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
 
 		return true;
 	}
