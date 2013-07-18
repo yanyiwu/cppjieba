@@ -26,9 +26,9 @@ namespace CppJieba
 
 	}
 
-	bool KeyWordExt::loadPriorSubWord(const char * const filePath)
+	bool KeyWordExt::loadPriorSubWords(const char * const filePath)
 	{
-		LogInfo(string_format("loadPriorSubWord(%s) start", filePath));
+		LogInfo(string_format("loadPriorSubWords(%s) start", filePath));
 		if(!checkFileExist(filePath))
 		{
 			LogError(string_format("cann't find file[%s].",filePath));
@@ -45,7 +45,7 @@ namespace CppJieba
 		{
 			_priorSubWords.push_back(subword);
 		}
-		LogInfo(string_format("loadPriorSubWord(%s) end", filePath));
+		LogInfo(string_format("loadPriorSubWords(%s) end", filePath));
 		infile.close();
 		return true;
 	}
@@ -370,7 +370,7 @@ int main()
 	}
 	ext.loadStopWords("stopwords.tmp");
 
-	if(!ext.loadPriorSubWord("prior.utf8"))
+	if(!ext.loadPriorSubWords("prior.utf8"))
 	{
 		cerr<<"err"<<endl;
 		return 1;

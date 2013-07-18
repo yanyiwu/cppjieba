@@ -50,7 +50,7 @@ namespace CppJieba
 			bool loadStopWords(const char * const filePath);
 
 			//load prior words' prefix
-			bool loadPriorSubWord( const char * const filePath);
+			bool loadPriorSubWords( const char * const filePath);
 
 			bool destroy();
 
