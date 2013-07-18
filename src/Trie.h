@@ -31,7 +31,7 @@ namespace CppJieba
 	{
 		string word;// utf8 string word
 		size_t wLen;// the word's len , not string.size(), eg: "我是中国人" wLen = 5 .
-		unsigned int count;
+		size_t count;
 		string tag;
 		double weight;
 		TrieNodeInfo()

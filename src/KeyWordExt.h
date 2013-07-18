@@ -31,7 +31,7 @@ namespace CppJieba
 		for(uint i = 0; i < vec.size(); i++)
 		{
 			tmp.push_back(vec[i].getInfoStr());
-		};
+		}
 		return joinStr(tmp, ",");
 	}
 
@@ -39,7 +39,7 @@ namespace CppJieba
 	{
 		private:
 			Segment _segment;
-			Trie _priorPrefixTrie;
+			vector<string> _priorSubWords;
 			set<string> _stopWords;
 		public:
 			KeyWordExt();
@@ -50,7 +50,7 @@ namespace CppJieba
 			bool loadStopWords(const char * const filePath);
 
 			//load prior words' prefix
-			bool loadPriorWordPrefixes( const char * const filePath);
+			bool loadPriorSubWord( const char * const filePath);
 
 			bool destroy();
 
@@ -70,7 +70,8 @@ namespace CppJieba
 			bool _filterSubstr(vector<string>& utf8Strs);
 			bool _filterStopWords(vector<string>& utf8Strs);
 		private:
-			bool _priorWordPrefixes(vector<WordInfo>& wordInfos);
+			bool _prioritizeSubWords(vector<WordInfo>& wordInfos);
+			bool _isContainSubWords(const string& word);
 
 	};
 

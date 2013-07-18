@@ -26,21 +26,27 @@ namespace CppJieba
 
 	}
 
-	bool KeyWordExt::loadPriorWordPrefixes(const char * const filePath)
+	bool KeyWordExt::loadPriorSubWord(const char * const filePath)
 	{
-		LogInfo(string_format("loadPriorWordPrefixes(%s) start", filePath));
+		LogInfo(string_format("loadPriorSubWord(%s) start", filePath));
 		if(!checkFileExist(filePath))
 		{
 			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
-		bool retFlag = _priorPrefixTrie.init(filePath);
-		if(!retFlag)
+		if(!_priorSubWords.empty())
 		{
-			LogError("_priorPrefixTrie.init return false.");
+			LogError("_priorSubWords has been initted before");
 			return false;
 		}
-		LogInfo(string_format("loadPriorWordPrefixes(%s) end", filePath));
+		ifstream infile(filePath);
+		string subword;
+		while(getline(infile, subword))
+		{
+			_priorSubWords.push_back(subword);
+		}
+		LogInfo(string_format("loadPriorSubWord(%s) end", filePath));
+		infile.close();
 		return true;
 	}
 
@@ -73,7 +79,6 @@ namespace CppJieba
 	bool KeyWordExt::destroy()
 	{
 		_segment.destroy();
-		_priorPrefixTrie.destroy();
 		return true;
 	}
 
@@ -132,8 +137,8 @@ namespace CppJieba
 		_sortWLIDF(wordInfos);
 		LogDebug(string_format("calc weight & sorted:\n%s",joinWordInfos(wordInfos).c_str()));
 		
-		_priorWordPrefixes(wordInfos);
-		LogDebug(string_format("_priorWordPrefixes res:\n%s", joinWordInfos(wordInfos).c_str()));
+		_prioritizeSubWords(wordInfos);
+		LogDebug(string_format("_prioritizeSubWords res:\n%s", joinWordInfos(wordInfos).c_str()));
 		//extract TopN
 		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
 		{
@@ -308,7 +313,19 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_priorWordPrefixes(vector<WordInfo>& wordInfos)
+	bool KeyWordExt::_isContainSubWords(const string& word)
+	{
+		for(uint i = 0; i < _priorSubWords.size(); i++)
+		{
+			if(string::npos != word.find(_priorSubWords[i]))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool KeyWordExt::_prioritizeSubWords(vector<WordInfo>& wordInfos)
 	{
 		if(2 > wordInfos.size())
 		{
@@ -319,7 +336,7 @@ namespace CppJieba
 		bool flag = false;
 		for(vector<WordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
-			if(NULL != _priorPrefixTrie.findPrefix(it->word))
+			if(_isContainSubWords(it->word))
 			{
 				prior = *it;
 				it = wordInfos.erase(it);
@@ -353,7 +370,7 @@ int main()
 	}
 	ext.loadStopWords("stopwords.tmp");
 
-	if(!ext.loadPriorWordPrefixes("prior.utf8"))
+	if(!ext.loadPriorSubWord("prior.utf8"))
 	{
 		cerr<<"err"<<endl;
 		return 1;
@@ -375,7 +392,7 @@ int main()
 	*/
 
 
-	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女装";
+	title = "2013夏季新款韩版女装甜美雪纺长裙连衣裙碎花裙蕾丝无袖连衣裙子";
 	res.clear();
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
