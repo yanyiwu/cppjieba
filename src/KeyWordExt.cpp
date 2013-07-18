@@ -138,7 +138,7 @@ namespace CppJieba
 		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
 		
 		_prioritizeSubWords(wordInfos);
-		LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
+		//LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
 		//extract TopN
 		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
 		{
