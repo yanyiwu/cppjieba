@@ -293,11 +293,6 @@ namespace CPPCOMMON
 		{
 			for(uint i = 0; i < uniLen; i++)
 			{
-				//char c = 0;
-				//c = ((pUni[i]>>8) & 0x00ff);
-				//res += c;
-				//c = (pUni[i] & 0x00ff);
-				//res += c;
 				pair<char, char> char2= uint16ToChar2(pUni[i]);
 				res += char2.first;
 				res += char2.second;
@@ -368,6 +363,19 @@ namespace CPPCOMMON
 		return res;
 	}
 
+	size_t getUtf8WordLen(const string& utf)
+	{
+		string uni = utf8ToUnicode(utf);
+		if(uni.empty()||uni.size()%2)
+		{
+			return 0;
+		}
+		else
+		{
+			return uni.size()/2;
+		}
+	}
+
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -434,6 +442,7 @@ int main()
 	{
 		cout<<line<<endl;
 		string s = gbkToUtf8(line);
+		cout<<getUtf8WordLen(s)<<endl;
 		s = utf8ToGbk(s);
 		cout<<s<<endl;
 	}

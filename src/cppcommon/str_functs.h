@@ -40,6 +40,8 @@ namespace CPPCOMMON
 	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
 	string gbkToUtf8(const string& gbk);
 	string utf8ToGbk(const string& utf);
+
+	size_t getUtf8WordLen(const string& utf);
 	
 	inline uint16_t twocharToUint16(char high, char low)
 	{
