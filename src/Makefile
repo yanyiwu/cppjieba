@@ -1,4 +1,4 @@
-CC = g++
+GCC = g++
 CCOPT = -Wall -c
 LINK = g++
 LINKOPT =
@@ -27,11 +27,13 @@ all: $(LIBA)
 %.o: %.cpp
 	$(CC) $(CCOPT) $<
 
-$(LIBA): $(OBJS) $(CMLIB) 
-	mkdir $(TMPDIR)
+$(LIBA): $(TMPDIR) $(OBJS) $(CMLIB) 
 	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
 	$(DOPACK) $(OBJS) $(TMPDIR)/*.o 
 	rm -rf $(TMPDIR)
+
+$(TMPDIR):
+	mkdir $@
 
 $(CMLIB):
 	cd $(CMDIR) && $(MAKE)
@@ -51,6 +53,7 @@ clean:
 	rm -rf $(TMPDIR)
 	cd $(CMDIR) && make clean
 
+sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp
 	@set -e; rm -f $@; \
 	$(CC) -MM $< > $@.$$$$; \
