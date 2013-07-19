@@ -392,7 +392,7 @@ int main()
 	*/
 
 
-	title = "2013夏季新款韩版女装甜美雪纺长裙连衣裙碎花裙蕾丝无袖连衣裙子";
+	title = "韩国MAGGIC 爆花石水晶飞机 锁骨链短款项链 女 进口韩国饰品";
 	res.clear();
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);

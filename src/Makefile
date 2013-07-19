@@ -1,4 +1,4 @@
-GCC = g++
+CC = g++
 CCOPT = -Wall -c
 LINK = g++
 LINKOPT =
