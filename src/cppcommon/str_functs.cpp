@@ -331,14 +331,18 @@ namespace CPPCOMMON
 	string gbkToUtf8(const string& gbk)
 	{
 		//cout<<__FILE__<<__LINE__<<gbk<<endl;
-		string res;
+		if(gbk.empty())
+		{
+			return "";
+		}
+		string res("");
 		size_t maxLen = gbk.size()*4;
 		char * pUtf = new char[maxLen];
 		int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
 		if(ret == -1)
 		{
 			delete [] pUtf;
-			return "";
+			return res;
 		}
 		res = pUtf;
 		delete [] pUtf;

@@ -149,7 +149,7 @@ namespace CppJieba
 
 	bool KeyWordExt::extract(const string& utf8Str, vector<string>& keywords, uint topN)
 	{
-		LogInfo(string_format("title:[%s]",utf8Str.c_str()));
+		LogDebug(string_format("title:[%s]",utf8Str.c_str()));
 
 		bool retFlag;
 		vector<string> words;
@@ -177,7 +177,7 @@ namespace CppJieba
 		}
 		//LogDebug("_extractTopN finished.");
 
-		LogInfo(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
+		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
 		return true;
 	}
 
