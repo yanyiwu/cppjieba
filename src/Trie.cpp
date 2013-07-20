@@ -6,6 +6,9 @@
 
 namespace CppJieba
 {
+	const string& Trie::UTF8 = "utf-8";
+	const string& Trie::GBK = "gbk";
+
     Trie::iterator Trie::begin()
     {
         return _nodeInfoVec.begin();
@@ -16,8 +19,16 @@ namespace CppJieba
         return _nodeInfoVec.end();
     }
 
-    Trie::Trie():_root(NULL), _totalCount(0)
+    Trie::Trie()
     {
+		//encodings : utf-8, gbk
+		_encVec.push_back(UTF8);
+		_encVec.push_back(GBK);
+		//default encoding : utf-8
+		_encoding = UTF8;
+
+		_root = NULL;
+		_totalCount = 0;
 		_minWeight = numeric_limits<double>::max();
     }
     
@@ -25,12 +36,23 @@ namespace CppJieba
     {
         destroy();
     }
-
-	bool Trie::init(const char* const filePath)
+	
+	bool Trie::setEncoding(const string& enc)
 	{
-		if(!checkFileExist(filePath))
+		if(!isInVec<string>(_encVec, enc))
 		{
-			LogError(string_format("cann't find fiel[%s].",filePath));
+			LogError(string_format("%s illegal : not in [%s]", enc.c_str(), joinStr(_encVec, ",").c_str()));
+			return false;
+		}
+		_encoding = enc;
+		return true;
+	}
+
+	bool Trie::init(const string& filePath)
+	{
+		if(!checkFileExist(filePath.c_str()))
+		{
+			LogError(string_format("cann't find fiel[%s].",filePath.c_str()));
 			return false;
 		}
 		bool res = false;
@@ -49,7 +71,7 @@ namespace CppJieba
 		return true;
 	}
     
-    bool Trie::_buildTree(const char* const filePath)
+    bool Trie::_buildTree(const string& filePath)
     {
         if(NULL != _root)
         {
@@ -57,7 +79,8 @@ namespace CppJieba
             return false;
         }
         _root = new TrieNode;
-        ifstream ifile(filePath);
+		
+        ifstream ifile(filePath.c_str());
         string line;
         vector<string> vecBuf;
         while(getline(ifile, line))
@@ -86,7 +109,7 @@ namespace CppJieba
 			nodeInfo.count = count;
 			nodeInfo.tag = tag;
 
-			bool flag = _insert(nodeInfo);
+			bool flag = insert(nodeInfo);
 			if(!flag)
 			{
 				LogError("insert node failed!");
@@ -178,29 +201,27 @@ namespace CppJieba
 		return res;
 	}
 
-	const TrieNodeInfo* Trie::find(const string& uniStr)
+	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		ChUnicode* pUni = new ChUnicode[uniStr.size()];
-		for(uint i = 0; i < uniStr.size(); i+=2)
-		{
-			pUni[i/2] = twocharToUint16(uniStr[i], uniStr[i+1]);
-		}
-		const TrieNodeInfo* res = find(pUni, uniStr.size()/2);
-		delete [] pUni;
-		return res;
+		string uniStr = decode(str);
+		return _findUniStr(uniStr);
 	}
 
-	const TrieNodeInfo* Trie::find(const ChUnicode* const chUniStr, size_t len)
+	const TrieNodeInfo* Trie::_findUniStr(const string& uniStr)
 	{
 		if(NULL == _root)
 		{
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		TrieNode* p = _root;
-		for(uint i = 0; i < len; i++)
+		if(uniStr.empty() || uniStr.size() % 2)
 		{
-			ChUnicode chUni = chUniStr[i];
+			LogError("uniStr illegal");
+		}
+		TrieNode* p = _root;
+		for(uint i = 0; i < uniStr.size(); i+=2)
+		{
+			ChUnicode chUni = twocharToUint16(uniStr[i], uniStr[i+1]);
 			if(p->hmap.find(chUni) == p-> hmap.end())
 			{
 				return NULL;
@@ -226,6 +247,7 @@ namespace CppJieba
 		return NULL;
 	}
 
+	/*
 	double Trie::getWeight(const ChUnicode* uniStr, size_t len)
 	{
 		const TrieNodeInfo* p = find(uniStr, len);
@@ -238,10 +260,11 @@ namespace CppJieba
 			return getMinWeight();
 		}
 	}
+	*/
 
 	double Trie::getWeight(const string& uniStr)
 	{
-		const TrieNodeInfo * p = find(uniStr);
+		const TrieNodeInfo * p = _findUniStr(uniStr);
 		if(NULL != p)
 		{
 			return p->weight;
@@ -262,29 +285,6 @@ namespace CppJieba
 		return _totalCount;
 	}
 
-	/*
-    bool Trie::cut(const ChUnicode* chUniStr, size_t len, vector< vector<size_t> >& res)
-    {
-        res.clear();
-        //cout<<len<<endl;
-        for(size_t i = 0; i < len; i++)
-        {
-            //cout<<__LINE__<<","<<chUniStr[i]<<endl;
-            res.push_back(vector<size_t>());
-            vector<size_t>& vec = res[i];
-            for(size_t j = i; j < len; j++)
-            {
-                if(find(chUniStr + i, j - i + 1))
-                {
-                    vec.push_back(j);
-                }
-            }
-        }
-        return true;
-    }
-	*/
-
-
     bool Trie::_destroyNode(TrieNode* node)
     {
         for(TrieNodeMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
@@ -297,21 +297,55 @@ namespace CppJieba
         return true;
     }
 
-	bool Trie::_insert(const TrieNodeInfo& nodeInfo)
+	string Trie::decode(const string& str)
 	{
-		_nodeInfoVec.push_back(nodeInfo);
-		const string& word = nodeInfo.word;
-		ChUnicode chUniStr[bufSize];
-		memset(chUniStr, 0, sizeof(chUniStr));
-		size_t len = utf8ToUnicode(word.c_str(), word.size(), chUniStr);
-		if(0 == len)
+		if(_encoding == UTF8)
 		{
+			return utf8ToUnicode(str);
+		}
+		if(_encoding == GBK)
+		{
+			return utf8ToUnicode(gbkToUtf8(str));
+		}
+		LogFatal(string_format("_encoding[%s] illeage!", _encoding.c_str()));
+		return "";
+	}
+
+	string Trie::encode(const string& str)
+	{
+		if(_encoding == UTF8)
+		{
+			return unicodeToUtf8(str);
+		}
+		if(_encoding == GBK)
+		{
+			return utf8ToGbk(unicodeToUtf8(str));
+		}
+		LogFatal(string_format("_encoding[%s] illeage!", _encoding.c_str()));
+		return "";
+	}
+
+	bool Trie::insert(const TrieNodeInfo& nodeInfo)
+	{
+		if(NULL == _root)
+		{
+			LogError("_root is NULL");
 			return false;
 		}
+
+		const string& word = nodeInfo.word;
+		
+		string uniStr = decode(word);
+		if(uniStr.empty() || uniStr.size() % 2)
+		{
+			LogError("decode error.");
+			return false;
+		}
+		
         TrieNode* p = _root;
-        for(int i = 0; i < len; i++)
+        for(uint i = 0; i < uniStr.size(); i+=2)
         {
-            ChUnicode cu = chUniStr[i];
+			ChUnicode cu = twocharToUint16(uniStr[i], uniStr[i+1]);
 			if(NULL == p)
 			{
 				return false;
@@ -327,7 +361,6 @@ namespace CppJieba
 				{
 					return false;
 				}
-				
                 p->hmap[cu] = next;
                 p = next;
             }
@@ -340,15 +373,16 @@ namespace CppJieba
 		{
 			return false;
 		}
-        p->isLeaf = true;
-		if(!_nodeInfoVec.empty())
+		if(p->isLeaf)
 		{
-			p->nodeInfoVecPos = _nodeInfoVec.size() - 1;
-		}
-		else
-		{
+			LogError("this node already inserted");
 			return false;
 		}
+
+		p->isLeaf = true;
+		_nodeInfoVec.push_back(nodeInfo);
+		p->nodeInfoVecPos = _nodeInfoVec.size() - 1;
+
         return true;
     }
 
@@ -397,7 +431,7 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("dicts/segdict.utf8.v2.1");
+    trie.init("../dicts/segdict.utf8.v2.1");
     //trie.init("dicts/jieba.dict.utf8");
     //trie.init("dict.100");
     //char utf[1024] = "我来到北京清华大学3D电视";

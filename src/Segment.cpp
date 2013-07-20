@@ -6,15 +6,19 @@
 
 namespace CppJieba
 {
-	Segment::Segment():_trie()
+	Segment::Segment()
 	{
+		_encVec.push_back(Trie::UTF8);
+		_encVec.push_back(Trie::GBK);
+		//default encoding : utf8
+		_encoding = Trie::UTF8;
 	}
 	
 	Segment::~Segment()
 	{
 	}
 
-	bool Segment::init(const char* const dictFilePath)
+	bool Segment::init(const string& dictFilePath)
 	{
 		bool retFlag;
 		LogInfo(string_format("_trie.init(%s) start...", dictFilePath));
@@ -28,11 +32,11 @@ namespace CppJieba
 		return _trie.destroy();
 	}
 
-	bool Segment::cutDAG(const string& chStr, vector<string>& res)
+	bool Segment::cutDAG(const string& str, vector<string>& res)
 	{
 		bool retFlag;
 		res.clear();
-		string uniStr = _utf8ToUni(chStr);
+		string uniStr = _utf8ToUni(str;
 		if(uniStr.empty())
 		{
 			LogError("_utf8ToUni failed.");
@@ -79,13 +83,11 @@ namespace CppJieba
 		return _trie.getWeight(word);
 	}
 
-
-
 	string Segment::_utf8ToUni(const string& utfStr)
 	{
 		string uniStr = utf8ToUnicode(utfStr);
 
-		if(uniStr.empty())
+		if(uniStr.empty() || uniStr.size() % 2)
 		{
 			LogError(string_format("utf8ToUnicode [%s] failed!", utfStr.c_str()));
 			return "";
@@ -101,6 +103,7 @@ namespace CppJieba
 			vec.push_back(i/2);
 			for(uint j = i + 4; j <= uniStr.size(); j+=2)
 			{
+				cout<<uniStr.substr(i, j - i)<<endl;
 				if(NULL != _trie.find(uniStr.substr(i, j - i)))
 				{
 					vec.push_back((j - 2)/2);
@@ -136,7 +139,6 @@ namespace CppJieba
 			for(int j = 0; j < dag[i/2].size(); j++)
 			{
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
-				//getchar();
 				int pos = dag[i/2][j];
 				double val = getUniWordWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
 				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
@@ -182,7 +184,6 @@ namespace CppJieba
 		return true;
 	}
 
-
 }
 
 
@@ -205,21 +206,25 @@ int main()
 	res.clear();
 	segment.cutDAG(title, res);
 	PRINT_VECTOR(res);
+	getchar();
 	
 	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
 	res.clear();
 	segment.cutDAG(title, res);
 	PRINT_VECTOR(res);
+	getchar();
 
 	title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
 	res.clear();
 	segment.cutDAG(title, res);
 	PRINT_VECTOR(res);
+	getchar();
 
 	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
 	res.clear();
 	segment.cutDAG(title, res);
 	PRINT_VECTOR(res);
+	getchar();
 
 	segment.destroy();
 	return 0;

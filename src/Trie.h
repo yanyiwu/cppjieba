@@ -29,7 +29,7 @@ namespace CppJieba
 
 	struct TrieNodeInfo
 	{
-		string word;// utf8 string word
+		string word;
 		size_t wLen;// the word's len , not string.size(), eg: "我是中国人" wLen = 5 .
 		size_t count;
 		string tag;
@@ -48,17 +48,20 @@ namespace CppJieba
     {
         TrieNodeMap hmap;
         bool isLeaf;
-		unsigned int nodeInfoVecPos;
-
+		uint nodeInfoVecPos;
         TrieNode()
-        :hmap(), isLeaf(false), nodeInfoVecPos(0)
         {
+			isLeaf = false;
+			nodeInfoVecPos = 0;
         }
     };
 
     class Trie
     {
+
         private:
+			string _encoding;
+			vector<string> _encVec;
             TrieNode* _root;
 			vector<TrieNodeInfo> _nodeInfoVec;
 
@@ -75,30 +78,38 @@ namespace CppJieba
         public:
             Trie();
             ~Trie();
-            bool init(const char* const filePath);
+            bool init(const string& filePath);
+			bool setEncoding(const string& enc);
             bool destroy();
             void display();
 
 		public:
-			const TrieNodeInfo* find(const string& uniStr);
-			const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
+			//const TrieNodeInfo* find(const string& uniStr);
+			//const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
+			const TrieNodeInfo* find(const string& str);
 			const TrieNodeInfo* findPrefix(const string& utf8Str);
 
 		public:
-			double getWeight(const ChUnicode* uniStr, size_t len);
+			//double getWeight(const ChUnicode* uniStr, size_t len);
 			double getWeight(const string& uniStr);
 			double getMinWeight();
 			
 			int64_t getTotalCount();
 
+			bool insert(const TrieNodeInfo& nodeInfo);
+
+			string decode(const string& str);
+			string encode(const string& str);
+
         private:
-			bool _buildTree(const char* const filePath);
+			bool _buildTree(const string& filePath);
 			bool _countWeight();
             bool _destroyNode(TrieNode* node);
-			bool _insert(const TrieNodeInfo& nodeInfo);
+			const TrieNodeInfo* _findUniStr(const string& uniStr);
 
-		private:
-			enum {bufSize = 1024};
+		public:
+			static const string& UTF8;
+			static const string& GBK;
     };
 }
 
