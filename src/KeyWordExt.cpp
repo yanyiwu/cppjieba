@@ -89,7 +89,7 @@ namespace CppJieba
 
 	bool KeyWordExt::_sortWLIDF(vector<WordInfo>& wordInfos)
 	{
-		size_t wLenSum = 0;
+		//size_t wLenSum = 0;
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
 			wordInfos[i].wLen = getUtf8WordLen(wordInfos[i].word);
@@ -98,14 +98,15 @@ namespace CppJieba
 				LogFatal("wLen is 0");
 				return false;
 			}
-			wLenSum += wordInfos[i].wLen;
+			//wLenSum += wordInfos[i].wLen;
 		}
 
+		/*
 		if(0 == wLenSum)
 		{
 			LogFatal("wLenSum == 0.");
 			return false;
-		}
+		}*/
 
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
@@ -117,7 +118,7 @@ namespace CppJieba
 			{
 				LogFatal("getUtf8WordLen(%s) return 0");
 			}
-			wInfo.weight = 1.0 * wLen / wLenSum * wInfo.idf;
+			wInfo.weight = log(double(wLen + 1)) * wInfo.idf;
 		}
 		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
 		return true;
