@@ -2,10 +2,6 @@
  * file enc : utf8
  * author   : wuyanyi09@gmail.com
 ************************************/
-/*
- * file encoding: utf-8
- * author: wuyanyi09@gmail.com
- */
 #ifndef CPPJIEBA_TRIE_H
 #define CPPJIEBA_TRIE_H
 
