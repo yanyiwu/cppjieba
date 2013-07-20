@@ -22,7 +22,8 @@ namespace CppJieba
 			Segment();
 			~Segment();
 		public:
-			bool init(const string& dictFilePath);
+			bool init();
+			bool loadSegDict(const string& filePath);
 			bool destroy();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);

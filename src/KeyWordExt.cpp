@@ -24,8 +24,7 @@ namespace CppJieba
 			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
-		bool retFlag = _segment.init(filePath);
-		LogInfo(string_format("init(%s) end", filePath));
+		bool retFlag = _segment.init();
 		return retFlag;
 
 	}

@@ -18,14 +18,22 @@ namespace CppJieba
 	{
 	}
 
-	bool Segment::init(const string& dictFilePath)
+	bool Segment::init()
 	{
 		bool retFlag;
-		LogInfo(string_format("_trie.init(%s) start...", dictFilePath));
-		retFlag = _trie.init(dictFilePath);
-		LogInfo("_trie.init end.");
+		retFlag = _trie.init();
 		return retFlag;
 	}
+	
+	bool Segment::loadSegDict(const string& filePath)
+	{
+		bool retFlag;
+		retFlag = _trie.loadDict(filePath);
+		LogInfo(string_format("_trie.loadDict(%s) start...", filePath.c_str()));
+		LogInfo("_trie.loadDict end.");
+		return retFlag;
+	}
+
 
 	bool Segment::destroy()
 	{
@@ -36,7 +44,7 @@ namespace CppJieba
 	{
 		bool retFlag;
 		res.clear();
-		string uniStr = _utf8ToUni(str;
+		string uniStr = _utf8ToUni(str);
 		if(uniStr.empty())
 		{
 			LogError("_utf8ToUni failed.");
@@ -103,7 +111,7 @@ namespace CppJieba
 			vec.push_back(i/2);
 			for(uint j = i + 4; j <= uniStr.size(); j+=2)
 			{
-				cout<<uniStr.substr(i, j - i)<<endl;
+				//cout<<uniStr.substr(i, j - i)<<endl;
 				if(NULL != _trie.find(uniStr.substr(i, j - i)))
 				{
 					vec.push_back((j - 2)/2);
@@ -193,11 +201,13 @@ using namespace CppJieba;
 int main()
 {
 	Segment segment;
-	if(!segment.init("../dicts/segdict.utf8.v2.1"))
+	segment.init();
+	if(!segment.loadSegDict("../dicts/segdict.utf8.v2.1"))
 	{
 		cerr<<"1"<<endl;
 		return 1;
 	}
+	getchar();
 	//segment.init("dicts/jieba.dict.utf8");
 	
 	vector<string> res;

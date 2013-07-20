@@ -30,6 +30,7 @@ namespace CppJieba
 		_root = NULL;
 		_totalCount = 0;
 		_minWeight = numeric_limits<double>::max();
+		_initFlag = false;
     }
     
     Trie::~Trie()
@@ -48,8 +49,47 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Trie::init(const string& filePath)
+	bool Trie::_getInitFlag()
 	{
+		return _initFlag;
+	}
+	void Trie::_setInitFlag()
+	{
+		_initFlag = true;
+	}
+
+	bool Trie::init()
+	{
+        if(_getInitFlag())
+        {
+            LogError("already initted!");
+            return false;
+        }
+
+		try
+		{
+			_root = new TrieNode;
+		}
+		catch(const bad_alloc& e)
+		{
+			return false;
+		}
+		if(NULL == _root)
+		{
+			return false;
+		}
+		_setInitFlag();
+		return true;
+	}
+
+	bool Trie::loadDict(const string& filePath)
+	{
+		if(!_getInitFlag())
+		{
+			LogError("not initted.");
+			return false;
+		}
+
 		if(!checkFileExist(filePath.c_str()))
 		{
 			LogError(string_format("cann't find fiel[%s].",filePath.c_str()));
@@ -70,15 +110,9 @@ namespace CppJieba
 		}
 		return true;
 	}
-    
+
     bool Trie::_buildTree(const string& filePath)
     {
-        if(NULL != _root)
-        {
-            LogError("already initted!");
-            return false;
-        }
-        _root = new TrieNode;
 		
         ifstream ifile(filePath.c_str());
         string line;
@@ -246,21 +280,6 @@ namespace CppJieba
 		}
 		return NULL;
 	}
-
-	/*
-	double Trie::getWeight(const ChUnicode* uniStr, size_t len)
-	{
-		const TrieNodeInfo* p = find(uniStr, len);
-		if(NULL != p)
-		{
-			return p->weight;
-		}
-		else
-		{
-			return getMinWeight();
-		}
-	}
-	*/
 
 	double Trie::getWeight(const string& uniStr)
 	{
@@ -431,7 +450,8 @@ using namespace CppJieba;
 int main()
 {
     Trie trie;
-    trie.init("../dicts/segdict.utf8.v2.1");
+    trie.init();
+	trie.loadDict("../dicts/segdict.utf8.v2.1");
     //trie.init("dicts/jieba.dict.utf8");
     //trie.init("dict.100");
     //char utf[1024] = "我来到北京清华大学3D电视";

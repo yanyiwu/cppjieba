@@ -291,7 +291,6 @@ namespace CPPCOMMON
 
 	string utf8ToUnicode(const string& utfStr)
 	{
-		cout<<__FILE__<<__LINE__<<endl;
 		if(utfStr.empty())
 		{
 			return "";

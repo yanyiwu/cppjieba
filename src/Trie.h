@@ -67,6 +67,7 @@ namespace CppJieba
 
 			int64_t _totalCount;
 			double _minWeight;
+			bool _initFlag;
 
         public:
             typedef vector<TrieNodeInfo>::iterator iterator;
@@ -78,10 +79,15 @@ namespace CppJieba
         public:
             Trie();
             ~Trie();
-            bool init(const string& filePath);
+            bool init();
+			bool loadDict(const string& filePath);
 			bool setEncoding(const string& enc);
             bool destroy();
             void display();
+
+		private:
+			void _setInitFlag();
+			bool _getInitFlag();
 
 		public:
 			//const TrieNodeInfo* find(const string& uniStr);
