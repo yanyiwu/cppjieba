@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #include "io_functs.h"
 
 namespace CPPCOMMON

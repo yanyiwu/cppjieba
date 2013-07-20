@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #ifndef CPPCOMMON_STR_FUNCTS_H
 #define CPPCOMMON_STR_FUNCTS_H
 #include <fstream>

@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 
 #ifndef CPPCOMMON_VEC_FUNCTS_TCC
 #define CPPCOMMON_VEC_FUNCTS_TCC

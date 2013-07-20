@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #include "vec_functs.h"
 
 #ifdef TEST_VEC_FUNCTS
