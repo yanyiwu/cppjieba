@@ -216,21 +216,24 @@ namespace CPPCOMMON
 	string unicodeToUtf8(const string& uniStr)
 	{
 		size_t len = uniStr.size();
-		if(len%2)
+		if(uniStr.empty() || len%2)
 		{
 			return "";
 		}
 
-		uint16_t * uniArr = new uint16_t[len>>1];
-		char * utfStr = new char[len<<1];
+		uint16_t * uniArr = new uint16_t[(len>>1) + 1];
+		if(NULL == uniArr)
+		{
+			return "";
+		}
+		char * utfStr = new char[(len<<1) + 1];
+		if(NULL == utfStr)
+		{
+			delete [] uniArr;
+			return "";
+		}
 		for(int i = 0; i < len; i+=2)
 		{
-			//uint16_t tmp1 = uniStr[i];
-			//tmp1 <<= 8;
-			//tmp1 &= 0xff00;
-			//uint16_t tmp2 = uniStr[i+1];
-			//tmp2 &= 0x00ff;
-			//uniArr[i>>1] = tmp1 | tmp2;
 			uniArr[i>>1] = twocharToUint16(uniStr[i], uniStr[i+1]);
 		}
 		
@@ -250,6 +253,7 @@ namespace CPPCOMMON
 	}
 
     /*from: http://www.cppblog.com/lf426/archive/2008/03/31/45796.html */
+	/*if the inutf8 is not utf8 , this function maybe cause core dump!!!*/
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
     {
         int length;
@@ -280,27 +284,31 @@ namespace CPPCOMMON
             length++;
         }
 
-        *unicode = 0;
+
+        //*unicode = 0; !! this may cause out range of array;
         return length;
     }
 
 	string utf8ToUnicode(const string& utfStr)
 	{
-		uint16_t* pUni = new uint16_t[utfStr.size()];
-		size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
-		string res;
-		if(uniLen ==0 )
+		cout<<__FILE__<<__LINE__<<endl;
+		if(utfStr.empty())
 		{
-			res = "";
+			return "";
 		}
-		else
+		uint16_t* pUni = new uint16_t[utfStr.size() + 1];
+		if(NULL == pUni)
 		{
-			for(uint i = 0; i < uniLen; i++)
-			{
-				pair<char, char> char2= uint16ToChar2(pUni[i]);
-				res += char2.first;
-				res += char2.second;
-			}
+			return "";
+		}
+		size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
+		string res("");
+		for(uint i = 0; i < uniLen; i++)
+		{
+			
+			pair<char, char> char2= uint16ToChar2(pUni[i]);
+			res += char2.first;
+			res += char2.second;
 		}
 		delete [] pUni;
 		return res;
@@ -317,7 +325,6 @@ namespace CPPCOMMON
 		cd = iconv_open(to_charset,from_charset);
 		if (cd==NULL) 
 		{
-			//cout<<__FILE__<<__LINE__<<endl;
 			return -1;
 		}
 		memset(outbuf,0,outlen);
@@ -334,14 +341,17 @@ namespace CPPCOMMON
 	//gbk -> utf8
 	string gbkToUtf8(const string& gbk)
 	{
-		//cout<<__FILE__<<__LINE__<<gbk<<endl;
 		if(gbk.empty())
 		{
 			return "";
 		}
 		string res("");
-		size_t maxLen = gbk.size()*4;
+		size_t maxLen = gbk.size()*4 + 1;
 		char * pUtf = new char[maxLen];
+		if(NULL == pUtf)
+		{
+			return "";
+		}
 		int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
 		if(ret == -1)
 		{
@@ -358,8 +368,12 @@ namespace CPPCOMMON
 	{
 		//cout<<__FILE__<<__LINE__<<gbk<<endl;
 		string res;
-		size_t maxLen = utf.size()*4;
+		size_t maxLen = utf.size()*4 + 1;
 		char * pGbk = new char[maxLen];
+		if(NULL == pGbk)
+		{
+			return "";
+		}
 		int ret = code_convert("utf-8", "gbk", (char *)utf.c_str(), utf.size(), pGbk, maxLen);
 		if(ret == -1)
 		{
@@ -429,31 +443,31 @@ int main()
     //    cout<<utf8str<<endl;
     //}
 	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
-	//ifstream ifile("testdata/dict.utf8");
-	//string line;
-	//while(getline(ifile, line))
-	//{
-	//	cout<<line<<endl;
-	//	string uniStr = utf8ToUnicode(line);
-	//	//cout<<uniStr<<endl;
-	//	string utfStr = unicodeToUtf8(uniStr);
-	//	cout<<utfStr<<endl;
-	//}
-	//vector<string> tmp;
-	//tmp.push_back("1");
-	////tmp.push_back("2");
-	////tmp.clear();
-	//cout<<joinStr(tmp, ",")<<endl;
 	ifstream ifile("testdata/dict.gbk");
 	string line;
 	while(getline(ifile, line))
 	{
 		cout<<line<<endl;
-		string s = gbkToUtf8(line);
-		cout<<getUtf8WordLen(s)<<endl;
-		s = utf8ToGbk(s);
-		cout<<s<<endl;
+		string uniStr = utf8ToUnicode(line);
+		cout<<utf8ToUnicode(uniStr)<<endl;// this will core dump
+		string utfStr = unicodeToUtf8(uniStr);
+		cout<<utfStr<<endl;
 	}
+	//vector<string> tmp;
+	//tmp.push_back("1");
+	////tmp.push_back("2");
+	////tmp.clear();
+	//cout<<joinStr(tmp, ",")<<endl;
+	//ifstream ifile("testdata/dict.gbk");
+	//string line;
+	//while(getline(ifile, line))
+	//{
+	//	cout<<line<<endl;
+	//	string s = gbkToUtf8(line);
+	//	cout<<getUtf8WordLen(s)<<endl;
+	//	s = utf8ToGbk(s);
+	//	cout<<s<<endl;
+	//}
 	return 0;
 }
 #endif
