@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #ifndef CPPJIEBA_GLOBALS_H
 #define CPPJIEBA_GLOBALS_H
 

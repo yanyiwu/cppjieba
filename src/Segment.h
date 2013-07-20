@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #ifndef CPPJIEBA_SEGMENT_H
 #define CPPJIEBA_SEGMENT_H
 
