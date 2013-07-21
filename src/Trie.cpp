@@ -452,11 +452,6 @@ int main()
     Trie trie;
     trie.init();
 	trie.loadDict("../dicts/segdict.utf8.v2.1");
-    //trie.init("dicts/jieba.dict.utf8");
-    //trie.init("dict.100");
-    //char utf[1024] = "我来到北京清华大学3D电视";
-	//trie.display();
-	//getchar();
 	cout<<trie.getMinWeight()<<endl;
 	cout<<trie.getTotalCount()<<endl;
     trie.destroy();
