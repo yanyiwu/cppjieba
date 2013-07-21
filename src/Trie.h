@@ -82,11 +82,10 @@ namespace CppJieba
             bool init();
 			bool loadDict(const string& filePath);
 			bool setEncoding(const string& enc);
-            bool destroy();
-            void display();
+            bool dispose();
 
 		private:
-			void _setInitFlag();
+			void _setInitFlag(bool on);
 			bool _getInitFlag();
 
 		public:
@@ -110,7 +109,7 @@ namespace CppJieba
         private:
 			bool _buildTree(const string& filePath);
 			bool _countWeight();
-            bool _destroyNode(TrieNode* node);
+            bool _deleteNode(TrieNode* node);
 			const TrieNodeInfo* _findUniStr(const string& uniStr);
 
 		public:

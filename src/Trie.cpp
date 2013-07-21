@@ -35,7 +35,7 @@ namespace CppJieba
     
     Trie::~Trie()
     {
-        destroy();
+        dispose();
     }
 	
 	bool Trie::setEncoding(const string& enc)
@@ -53,14 +53,14 @@ namespace CppJieba
 	{
 		return _initFlag;
 	}
-	void Trie::_setInitFlag()
+	void Trie::_setInitFlag(bool on)
 	{
-		_initFlag = true;
+		_initFlag = on;
 	}
 
 	bool Trie::init()
 	{
-        if(!_getInitFlag())
+        if(_getInitFlag())
         {
             LogError("already initted!");
             return false;
@@ -78,7 +78,7 @@ namespace CppJieba
 		{
 			return false;
 		}
-		_setInitFlag();
+		_setInitFlag(true);
 		return true;
 	}
 
@@ -155,29 +155,23 @@ namespace CppJieba
         return true;
     }
 
-    bool Trie::destroy()
+    bool Trie::dispose()
     {
         if(!_getInitFlag())
         {
             return false;
         }
-        else
-        {
-            bool ret = _destroyNode(_root);
-            _root = NULL;
-            return ret;
-        }
-		_nodeInfoVec.clear();
-    }
-
-    void Trie::display()
-    {
-		for(uint i = 0; i < _nodeInfoVec.size(); i++)
+		bool ret = _deleteNode(_root);
+		if(!ret)
 		{
-			cout<<_nodeInfoVec[i].word<<","
-				<<_nodeInfoVec[i].count<<","
-				<<endl;
+			LogFatal("_deleteNode failed!");
+			return false;
 		}
+		_root = NULL;
+		_nodeInfoVec.clear();
+
+		_setInitFlag(false);
+		return ret;
     }
 
 	const TrieNodeInfo* Trie::findPrefix(const string& str)
@@ -304,12 +298,12 @@ namespace CppJieba
 		return _totalCount;
 	}
 
-    bool Trie::_destroyNode(TrieNode* node)
+    bool Trie::_deleteNode(TrieNode* node)
     {
         for(TrieNodeMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
         {
             TrieNode* next = it->second;
-            _destroyNode(next);
+            _deleteNode(next);
         }
         
         delete node;
@@ -454,7 +448,7 @@ int main()
 	trie.loadDict("../dicts/segdict.utf8.v2.1");
 	cout<<trie.getMinWeight()<<endl;
 	cout<<trie.getTotalCount()<<endl;
-    trie.destroy();
+    trie.dispose();
     return 0;
 }
 #endif

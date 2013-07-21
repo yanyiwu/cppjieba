@@ -24,7 +24,7 @@ namespace CppJieba
 		public:
 			bool init();
 			bool loadSegDict(const string& filePath);
-			bool destroy();
+			bool dispose();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
 			double getUtf8WordWeight(const string& word);

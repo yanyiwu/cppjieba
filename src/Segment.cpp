@@ -35,9 +35,9 @@ namespace CppJieba
 	}
 
 
-	bool Segment::destroy()
+	bool Segment::dispose()
 	{
-		return _trie.destroy();
+		return _trie.dispose();
 	}
 
 	bool Segment::cutDAG(const string& str, vector<string>& res)
@@ -207,36 +207,20 @@ int main()
 		cerr<<"1"<<endl;
 		return 1;
 	}
-	getchar();
 	//segment.init("dicts/jieba.dict.utf8");
-	
+	ifstream ifile("testtitle");
 	vector<string> res;
-	string title;
-	title = "我来到北京清华大学";
-	res.clear();
-	segment.cutDAG(title, res);
-	PRINT_VECTOR(res);
-	getchar();
-	
-	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
-	res.clear();
-	segment.cutDAG(title, res);
-	PRINT_VECTOR(res);
-	getchar();
+	string line;
+	while(getline(ifile, line))
+	{
+		res.clear();
+		segment.cutDAG(line, res);
+		PRINT_VECTOR(res);
+		getchar();
+	}
+	cout<<__FILE__<<__LINE__<<endl;
 
-	title = "包邮拉菲草18cm大檐进口草帽子超强遮阳防晒欧美日韩新款夏天 女";
-	res.clear();
-	segment.cutDAG(title, res);
-	PRINT_VECTOR(res);
-	getchar();
-
-	title = "2013新款19CM超大檐帽 遮阳草帽子 沙滩帽防晒大檐欧美新款夏天女";
-	res.clear();
-	segment.cutDAG(title, res);
-	PRINT_VECTOR(res);
-	getchar();
-
-	segment.destroy();
+	segment.dispose();
 	return 0;
 }
 
