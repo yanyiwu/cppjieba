@@ -60,7 +60,7 @@ namespace CppJieba
 
 	bool Trie::init()
 	{
-        if(_getInitFlag())
+        if(!_getInitFlag())
         {
             LogError("already initted!");
             return false;
@@ -157,7 +157,7 @@ namespace CppJieba
 
     bool Trie::destroy()
     {
-        if(NULL == _root)
+        if(!_getInitFlag())
         {
             return false;
         }
@@ -180,19 +180,19 @@ namespace CppJieba
 		}
     }
 
-	const TrieNodeInfo* Trie::findPrefix(const string& utf8Str)
+	const TrieNodeInfo* Trie::findPrefix(const string& str)
 	{
-		if(NULL == _root)
+		if(!_getInitFlag())
 		{
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		if(utf8Str.empty())
+		if(str.empty())
 		{
-			LogError("utf8Str is empty");
+			LogError("str is empty");
 			return NULL;
 		}
-		string uniStr = utf8ToUnicode(utf8Str);
+		string uniStr = decode(str);
 		if(uniStr.empty())
 		{
 			LogError("utf8ToUnicode return empty star");
@@ -243,7 +243,7 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::_findUniStr(const string& uniStr)
 	{
-		if(NULL == _root)
+		if(!_getInitFlag())
 		{
 			LogFatal("trie not initted!");
 			return NULL;
@@ -346,9 +346,9 @@ namespace CppJieba
 
 	bool Trie::insert(const TrieNodeInfo& nodeInfo)
 	{
-		if(NULL == _root)
+		if(!_getInitFlag())
 		{
-			LogError("_root is NULL");
+			LogFatal("not initted!");
 			return false;
 		}
 

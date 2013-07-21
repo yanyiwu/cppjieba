@@ -93,7 +93,7 @@ namespace CppJieba
 			//const TrieNodeInfo* find(const string& uniStr);
 			//const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
 			const TrieNodeInfo* find(const string& str);
-			const TrieNodeInfo* findPrefix(const string& utf8Str);
+			const TrieNodeInfo* findPrefix(const string& str);
 
 		public:
 			//double getWeight(const ChUnicode* uniStr, size_t len);
