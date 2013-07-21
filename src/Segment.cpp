@@ -22,7 +22,22 @@ namespace CppJieba
 	{
 		bool retFlag;
 		retFlag = _trie.init();
-		return retFlag;
+		if(!retFlag)
+		{
+			LogError("_trie.init failed.");
+			return false;
+		}
+		return true;
+	}
+	
+	bool Segment::setEncoding(const string& enc)
+	{
+		if(!isInVec<string>(_encVec, enc))
+		{
+			LogError(string_format("%s illegal: not in [\"%s\"]", enc.c_str(), joinStr(_encVec, ",").c_str()));
+			return false;
+		}
+		return _trie.setEncoding(enc);
 	}
 	
 	bool Segment::loadSegDict(const string& filePath)
@@ -59,7 +74,6 @@ namespace CppJieba
 			LogError("_calcDAG failed.");
 			return false;
 		}
-		//LogDebug("_calcDAG finished.");
 
 		vector<pair<int, double> > dp;
 		retFlag = _calcDP(uniStr, dag, dp);
@@ -68,7 +82,6 @@ namespace CppJieba
 			LogError("_calcDP failed.");
 			return false;
 		}
-		//LogDebug("_calcDP finished.");
 
 		retFlag = _cutDAG(uniStr, dp, res);
 		if(!retFlag)
@@ -76,31 +89,13 @@ namespace CppJieba
 			LogError("_cutDAG failed.");
 			return false;
 		}
-		//LogDebug("_cutDAG finished.");
 		
 		return true;
 	}
 
-	double Segment::getUtf8WordWeight(const string& word)
-	{
-		return _trie.getWeight(utf8ToUnicode(word));
-	}
-
-	double Segment::getUniWordWeight(const string& word)
+	double Segment::getWordWeight(const string& word)
 	{
 		return _trie.getWeight(word);
-	}
-
-	string Segment::_utf8ToUni(const string& utfStr)
-	{
-		string uniStr = utf8ToUnicode(utfStr);
-
-		if(uniStr.empty() || uniStr.size() % 2)
-		{
-			LogError(string_format("utf8ToUnicode [%s] failed!", utfStr.c_str()));
-			return "";
-		}
-		return uniStr;
 	}
 
 	bool Segment::_calcDAG(const string& uniStr, vector<vector<uint> >& dag)
@@ -218,7 +213,6 @@ int main()
 		PRINT_VECTOR(res);
 		getchar();
 	}
-	cout<<__FILE__<<__LINE__<<endl;
 
 	segment.dispose();
 	return 0;

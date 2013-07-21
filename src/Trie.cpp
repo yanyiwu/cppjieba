@@ -275,8 +275,9 @@ namespace CppJieba
 		return NULL;
 	}
 
-	double Trie::getWeight(const string& uniStr)
+	double Trie::getWeight(const string& str)
 	{
+		string uniStr = decode(str);
 		const TrieNodeInfo * p = _findUniStr(uniStr);
 		if(NULL != p)
 		{
