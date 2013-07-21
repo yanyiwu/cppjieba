@@ -452,6 +452,8 @@ int main()
 		string utfStr = unicodeToUtf8(uniStr);
 		cout<<utfStr<<endl;
 	}
+	cout<<utf8ToGbk("")<<endl;
+	cout<<gbkToUtf8("")<<endl;
 	//vector<string> tmp;
 	//tmp.push_back("1");
 	////tmp.push_back("2");
