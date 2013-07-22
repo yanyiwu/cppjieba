@@ -136,7 +136,7 @@ namespace CppJieba
 		}
 		
 		_sortWLIDF(wordInfos);
-		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
+		//LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
 		
 		_prioritizeSubWords(wordInfos);
 		//LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
@@ -150,7 +150,7 @@ namespace CppJieba
 
 	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
 	{
-		LogDebug(string_format("title:[%s]",title.c_str()));
+		//LogDebug(string_format("title:[%s]",title.c_str()));
 
 		bool retFlag;
 		vector<string> words;
@@ -160,7 +160,7 @@ namespace CppJieba
 			LogError(string_format("cutDAG(%s) failed.", title.c_str()));
 			return false;
 		}
-		LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
+		//LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
 
 		retFlag = _filter(words);
 		if(!retFlag)
@@ -168,7 +168,7 @@ namespace CppJieba
 			LogError("_filter failed.");
 			return false;
 		}
-		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
+		//LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
 
 		retFlag = _extractTopN(words, keywords, topN);
 		if(!retFlag)
@@ -178,7 +178,7 @@ namespace CppJieba
 		}
 		//LogDebug("_extractTopN finished.");
 
-		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
+		//LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
 		return true;
 	}
 
@@ -297,7 +297,7 @@ namespace CppJieba
 		{
 			if(subs.end() != subs.find(*it))
 			{
-				LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
+				//LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
 				it =  strs.erase(it);
 			}
 			else
