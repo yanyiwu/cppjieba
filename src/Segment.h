@@ -23,6 +23,7 @@ namespace CppJieba
 			bool init();
 			bool loadSegDict(const string& filePath);
 			bool dispose();
+			double getWordWeight(const string& str);
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
 

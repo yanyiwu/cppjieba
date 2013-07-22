@@ -29,7 +29,8 @@ namespace CPPCOMMON
 			string encode(const Unicode& unicode);
 			string encode(UnicodeConstIterator begin, UnicodeConstIterator end);
 			bool decode(const string& str, Unicode& unicode);
-			
+		public:
+			size_t getWordLength(const string& str);
 	};
 }
 

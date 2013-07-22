@@ -95,7 +95,7 @@ namespace CppJieba
 		//size_t wLenSum = 0;
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
-			wordInfos[i].wLen = getUtf8WordLen(wordInfos[i].word);
+			wordInfos[i].wLen = gEncoding.getWordLength(wordInfos[i].word);
 			if(0 == wordInfos[i].wLen)
 			{
 				LogFatal("wLen is 0");
@@ -116,7 +116,7 @@ namespace CppJieba
 			WordInfo& wInfo = wordInfos[i];
 			double logWordFreq = _segment.getWordWeight(wInfo.word);
 			wInfo.idf = -logWordFreq;
-			size_t wLen = getUtf8WordLen(wInfo.word);
+			size_t wLen = gEncoding.getWordLength(wInfo.word);
 			if(0 == wLen)
 			{
 				LogFatal("getUtf8WordLen(%s) return 0");
@@ -185,55 +185,55 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_filter(vector<string>& utf8Strs)
+	bool KeyWordExt::_filter(vector<string>& strs)
 	{
 		bool retFlag;
-		retFlag = _filterDuplicate(utf8Strs);
+		retFlag = _filterDuplicate(strs);
 		if(!retFlag)
 		{
 			LogError("_filterDuplicate failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterSingleWord(utf8Strs);
+		retFlag = _filterSingleWord(strs);
 		if(!retFlag)
 		{
 			LogError("_filterSingleWord failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterStopWords(utf8Strs);
+		retFlag = _filterStopWords(strs);
 		if(!retFlag)
 		{
 			LogError("_filterStopWords failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterStopWords res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterStopWords res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterSubstr(utf8Strs);
+		retFlag = _filterSubstr(strs);
 		if(!retFlag)
 		{
 			LogError("_filterSubstr failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterSubstr res:[%s]", joinStr(utf8Strs, ",").c_str()));
+		//LogDebug(string_format("_filterSubstr res:[%s]", joinStr(strs, ",").c_str()));
 
 		return true;
 	}
 
-	bool KeyWordExt::_filterStopWords(vector<string>& utf8Strs)
+	bool KeyWordExt::_filterStopWords(vector<string>& strs)
 	{
 		if(_stopWords.empty())
 		{
 			return true;
 		}
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end();)
+		for(VSI it = strs.begin(); it != strs.end();)
 		{
 			if(_stopWords.find(*it) != _stopWords.end())
 			{
-				it = utf8Strs.erase(it);
+				it = strs.erase(it);
 			}
 			else
 			{
@@ -244,14 +244,14 @@ namespace CppJieba
 	}
 
 
-	bool KeyWordExt::_filterDuplicate(vector<string>& utf8Strs)
+	bool KeyWordExt::_filterDuplicate(vector<string>& strs)
 	{
 		set<string> st;
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
+		for(VSI it = strs.begin(); it != strs.end(); )
 		{
 			if(st.find(*it) != st.end())
 			{
-				it = utf8Strs.erase(it);
+				it = strs.erase(it);
 			}
 			else
 			{
@@ -262,21 +262,15 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_filterSingleWord(vector<string>& utf8Strs)
+	bool KeyWordExt::_filterSingleWord(vector<string>& strs)
 	{
-		for(vector<string>::iterator it = utf8Strs.begin(); it != utf8Strs.end();)
+		for(vector<string>::iterator it = strs.begin(); it != strs.end();)
 		{
-			string uniStr = utf8ToUnicode(*it);
-			if(uniStr.empty() || uniStr.size()%2)
-			{
-				LogError("utf8ToUnicode error");
-				return false;
-			}
 
 			// filter single word
-			if(uniStr.size() == 2) 
+			if(1 == gEncoding.getWordLength(*it)) 
 			{
-				it = utf8Strs.erase(it);
+				it = strs.erase(it);
 			}
 			else
 			{
@@ -286,11 +280,11 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_filterSubstr(vector<string>& utf8Strs)
+	bool KeyWordExt::_filterSubstr(vector<string>& strs)
 	{
-		vector<string> tmp = utf8Strs;
+		vector<string> tmp = strs;
 		set<string> subs;
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); it ++)
+		for(VSI it = strs.begin(); it != strs.end(); it ++)
 		{
 			for(uint j = 0; j < tmp.size(); j++)
 			{
@@ -301,13 +295,13 @@ namespace CppJieba
 			}
 		}
 
-		//erase subs from utf8Strs
-		for(VSI it = utf8Strs.begin(); it != utf8Strs.end(); )
+		//erase subs from strs
+		for(VSI it = strs.begin(); it != strs.end(); )
 		{
 			if(subs.end() != subs.find(*it))
 			{
 				LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
-				it =  utf8Strs.erase(it);
+				it =  strs.erase(it);
 			}
 			else
 			{

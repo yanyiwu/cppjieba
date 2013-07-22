@@ -82,6 +82,13 @@ namespace CPPCOMMON
 		return false;
 	}
 
+	size_t UnicodeEncoding::getWordLength(const string& str)
+	{
+		Unicode unicode;
+		decode(str, unicode);
+		return unicode.size();
+	}
+
 }
 
 #ifdef ENCODING_UT
@@ -97,6 +104,7 @@ int main()
 		
 		cout<<line<<endl;
 		cout<<line.size()<<endl;
+		cout<<enc.getWordLength(line)<<endl;
 		enc.decode(line, unicode);
 		printUnicode(unicode);
 		cout<<enc.encode(unicode)<<endl;

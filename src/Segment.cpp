@@ -39,6 +39,11 @@ namespace CppJieba
 		return _trie.dispose();
 	}
 
+	double Segment::getWordWeight(const string& str)
+	{
+		return _trie.getWeight(str);
+	}
+
 	bool Segment::cutDAG(const string& str, vector<string>& res)
 	{
 		res.clear();
@@ -130,7 +135,7 @@ namespace CppJieba
 			// calc max
 			res[i].first = -1;
 			res[i].second = -(numeric_limits<double>::max());
-			for(int j = 0; j < dag[i].size(); j++)
+			for(uint j = 0; j < dag[i].size(); j++)
 			{
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
 				int pos = dag[i][j];
@@ -197,7 +202,7 @@ int main()
 		return 1;
 	}
 	//segment.init("dicts/jieba.dict.utf8");
-	ifstream ifile("testtitle");
+	ifstream ifile("testtitle.utf8");
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))

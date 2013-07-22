@@ -68,11 +68,11 @@ namespace CppJieba
 			//sort by word len - idf
 			bool _sortWLIDF(vector<WordInfo>& wordInfos);
 		private:
-			bool _filter(vector<string>& utf8Strs);
-			bool _filterDuplicate(vector<string>& utf8Strs);
-			bool _filterSingleWord(vector<string>& utf8Strs);
-			bool _filterSubstr(vector<string>& utf8Strs);
-			bool _filterStopWords(vector<string>& utf8Strs);
+			bool _filter(vector<string>& strs);
+			bool _filterDuplicate(vector<string>& strs);
+			bool _filterSingleWord(vector<string>& strs);
+			bool _filterSubstr(vector<string>& strs);
+			bool _filterStopWords(vector<string>& strs);
 		private:
 			bool _prioritizeSubWords(vector<WordInfo>& wordInfos);
 			bool _isContainSubWords(const string& word);
