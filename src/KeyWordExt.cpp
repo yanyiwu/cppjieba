@@ -358,21 +358,22 @@ using namespace CppJieba;
 
 int main()
 {
+	gEncoding.setEncoding(GBKENC);
 	KeyWordExt ext;
 	ext.init();
-	if(!ext.loadSegDict("../dicts/segdict.utf8.v2.1"))
+	if(!ext.loadSegDict("../dicts/segdict.gbk.v2.1"))
 	{
 		return 1;
 	}
 	ext.loadStopWords("stopwords.tmp");
 
-	if(!ext.loadPriorSubWords("prior.utf8"))
+	if(!ext.loadPriorSubWords("prior.gbk"))
 	{
 		cerr<<"err"<<endl;
 		return 1;
 	}
 
-	ifstream ifile("testtitle.utf8");
+	ifstream ifile("testtitle.gbk");
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
