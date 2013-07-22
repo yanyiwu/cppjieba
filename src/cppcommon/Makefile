@@ -7,8 +7,8 @@ PACKOPT = rc
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-DOPACK = $(PACK) $(PACKOPT) $@ $?
-DOLINK = $(LINK) $(LINKOPT) -o $@ $?
+DOPACK = $(PACK) $(PACKOPT) $@ $^
+DOLINK = $(LINK) $(LINKOPT) -o $@ $^
 
 CMLIB = libcm.a
 

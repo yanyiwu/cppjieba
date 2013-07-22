@@ -12,11 +12,12 @@
 namespace CPPCOMMON
 {
 	using namespace std;
+
+	const char* const  UTF8ENC = "utf-8";
+	const char* const  GBKENC = "gbk";
+
 	class UnicodeEncoding
 	{
-		public:
-			static const string& UTF8ENC;
-			static const string& GBKENC;
 		private:
 			string _encoding;
 			vector<string> _encVec;

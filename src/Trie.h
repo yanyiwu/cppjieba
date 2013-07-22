@@ -87,8 +87,6 @@ namespace CppJieba
 			bool _getInitFlag();
 
 		public:
-			//const TrieNodeInfo* find(const string& uniStr);
-			//const TrieNodeInfo* find(const ChUnicode* const chUniStr, size_t len);
 			const TrieNodeInfo* find(const string& str);
 			const TrieNodeInfo* findPrefix(const string& str);
 

@@ -181,8 +181,12 @@ using namespace CppJieba;
 
 int main()
 {
+	/*
+	cout<<__FILE__<<__LINE__<<endl;
 	Segment segment;
+	cout<<__FILE__<<__LINE__<<endl;
 	segment.init();
+	cout<<__FILE__<<__LINE__<<endl;
 	if(!segment.loadSegDict("../dicts/segdict.utf8.v2.1"))
 	{
 		cerr<<"1"<<endl;
@@ -195,12 +199,14 @@ int main()
 	while(getline(ifile, line))
 	{
 		res.clear();
+		cout<<__FILE__<<__LINE__<<endl;
 		segment.cutDAG(line, res);
 		PRINT_VECTOR(res);
 		getchar();
 	}
 
 	segment.dispose();
+	*/
 	return 0;
 }
 

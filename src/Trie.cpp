@@ -398,6 +398,7 @@ namespace CppJieba
 using namespace CppJieba;
 int main()
 {
+	cout<<__FILE__<<__FILE__<<endl;
     Trie trie;
     trie.init();
 	trie.loadDict("../dicts/segdict.utf8.v2.1");
