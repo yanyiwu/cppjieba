@@ -1,5 +1,5 @@
 /************************************
- * file enc : utf8
+ * file enc : ASCII
  * author   : wuyanyi09@gmail.com
 ************************************/
 #ifndef CPPJIEBA_SEGMENT_H

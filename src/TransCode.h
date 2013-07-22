@@ -1,3 +1,7 @@
+/************************************
+ * file enc : ASCII
+ * author   : wuyanyi09@gmail.com
+************************************/
 #ifndef CPPJIEBA_TRANSCODE_H
 #define CPPJIEBA_TRANSCODE_H
 

@@ -1,3 +1,7 @@
+/************************************
+ * file enc : ASCII
+ * author   : wuyanyi09@gmail.com
+************************************/
 #include "TransCode.h"
 
 namespace CppJieba
