@@ -37,14 +37,14 @@ namespace CPPCOMMON
 	unsigned int countStrSimilarity(const string& A, const string& B);
 
     //encode
-    size_t unicodeToUtf8(uint16_t *in, size_t len, char * out);
-	string unicodeToUtf8(const Unicode& unicode);
-    int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
-	bool utf8ToUnicode(const string& utfStr, Unicode& unicode);
+    //size_t unicodeToUtf8(uint16_t *in, size_t len, char * out);
+	//string unicodeToUtf8(const Unicode& unicode);
+    //int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
+	//bool utf8ToUnicode(const string& utfStr, Unicode& unicode);
 
-	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
-	string gbkToUtf8(const string& gbk);
-	string utf8ToGbk(const string& utf);
+	//int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
+	//string gbkToUtf8(const string& gbk);
+	//string utf8ToGbk(const string& utf);
 
 	bool uniStrToVec(const string& str, Unicode& vec);
 	string uniVecToStr(const Unicode& vec);

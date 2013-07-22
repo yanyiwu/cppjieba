@@ -34,8 +34,8 @@ encoding.ut: encoding.cpp str_functs.cpp str_functs.h encoding.h
 vec_functs.test: vec_functs.cpp vec_functs.h vec_functs.tcc
 	g++ -o $@ $< -DTEST_VEC_FUNCTS
 
-logger.ut: logger.cpp logger.h file_functs.cpp file_functs.h
-	g++ -o $@ $< file_functs.cpp -DLOGGER_UT
+logger.ut: logger.cpp logger.h file_functs.cpp file_functs.h str_functs.cpp str_functs.h
+	g++ -o $@ $< file_functs.cpp str_functs.cpp -DLOGGER_UT -liconv
 config.ut: config.cpp config.h 
 	g++ -o $@ $< -DCONFIG_UT $(CMLIB)
 

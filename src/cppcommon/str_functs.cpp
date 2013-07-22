@@ -59,9 +59,9 @@ namespace CPPCOMMON
 		}
 		string s = source + pattern;
 		string::size_type pos;
-		int length = s.size();
+		uint length = s.size();
 
-		for(int i = 0; i < length; i++)
+		for(uint i = 0; i < length; i++)
 		{
 			pos = s.find(pattern, i);
 			if(pos < length)
@@ -99,7 +99,7 @@ namespace CPPCOMMON
 				)
 	{
 		char transChar = '#';
-		int transLenThreshold = 10;
+		uint transLenThreshold = 10;
 		string transStr;
 		transStr += transChar;
 		while(strSrc.find(transStr) != string::npos)
@@ -109,7 +109,7 @@ namespace CPPCOMMON
 			  return false;
 		}
 		string strSrcMutable = strSrc;
-		for(int i = 0; i < patterns.size(); i++)
+		for(uint i = 0; i < patterns.size(); i++)
 		{
 			strSrcMutable = replaceStr(strSrcMutable, patterns[i], transStr);
 		}
@@ -176,6 +176,7 @@ namespace CPPCOMMON
 		return res;
 	}
 
+	/*
     //unicode utf8 transform
     size_t unicodeToUtf8(uint16_t *in, size_t len, char * out)
     {
@@ -246,134 +247,136 @@ namespace CPPCOMMON
 		delete [] utfStr;
 		return res;
 	}
+	*/
 
     /*from: http://www.cppblog.com/lf426/archive/2008/03/31/45796.html */
-    int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
-    {
-        int length;
-        const unsigned char* utf8 = (const unsigned char*) inutf8;
-        const unsigned char* t = (const unsigned char*) inutf8;
+    //int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
+    //{
+    //    int length;
+    //    const unsigned char* utf8 = (const unsigned char*) inutf8;
+    //    const unsigned char* t = (const unsigned char*) inutf8;
 
-        length = 0;
-        while (utf8 - t < len)
-        {
-            if ( *(unsigned char *) utf8 <= 0x7f ) 
-            {
-                //expand with 0s.
-                *unicode++ = *utf8++;
-            }
-            //2 byte.
-            else if ( *(unsigned char *) utf8 <= 0xdf ) 
-            {
-                *unicode++ = ((*(unsigned char *) utf8 & 0x1f) << 6) + ((*(unsigned char *) (utf8 + 1)) & 0x3f);
-                utf8 += 2;
-            }
-            //3 byte.Chinese may use 3 byte.
-            else {
-                *unicode++ = ((int) (*(unsigned char *) utf8 & 0x0f) << 12) +
-                    ((*(unsigned char *) (utf8 + 1) & 0x3f) << 6) +
-                    (*(unsigned char *) (utf8 + 2) & 0x3f);
-                utf8 += 3;
-            }
-            length++;
-        }
+    //    length = 0;
+    //    while (utf8 - t < len)
+    //    {
+    //        if ( *(unsigned char *) utf8 <= 0x7f ) 
+    //        {
+    //            //expand with 0s.
+    //            *unicode++ = *utf8++;
+    //        }
+    //        //2 byte.
+    //        else if ( *(unsigned char *) utf8 <= 0xdf ) 
+    //        {
+    //            *unicode++ = ((*(unsigned char *) utf8 & 0x1f) << 6) + ((*(unsigned char *) (utf8 + 1)) & 0x3f);
+    //            utf8 += 2;
+    //        }
+    //        //3 byte.Chinese may use 3 byte.
+    //        else {
+    //            *unicode++ = ((int) (*(unsigned char *) utf8 & 0x0f) << 12) +
+    //                ((*(unsigned char *) (utf8 + 1) & 0x3f) << 6) +
+    //                (*(unsigned char *) (utf8 + 2) & 0x3f);
+    //            utf8 += 3;
+    //        }
+    //        length++;
+    //    }
 
 
-        //*unicode = 0; !! this may cause out range of array;
-        return length;
-    }
+    //    //*unicode = 0; !! this may cause out range of array;
+    //    return length;
+    //}
 
-	bool utf8ToUnicode(const string& utfStr, Unicode& unicode)
-	{
-		unicode.clear();
-		if(utfStr.empty())
-		{
-			return false;
-		}
-		uint16_t* pUni = new uint16_t[utfStr.size() + 1];
-		if(NULL == pUni)
-		{
-			return false;
-		}
-		size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
-		for(uint i = 0; i < uniLen; i++)
-		{
-			unicode.push_back(pUni[i]);
-		}
-		delete [] pUni;
-		return true;
-	}
+	//bool utf8ToUnicode(const string& utfStr, Unicode& unicode)
+	//{
+	//	unicode.clear();
+	//	if(utfStr.empty())
+	//	{
+	//		return false;
+	//	}
+	//	uint16_t* pUni = new uint16_t[utfStr.size() + 1];
+	//	if(NULL == pUni)
+	//	{
+	//		return false;
+	//	}
+	//	size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
+	//	for(uint i = 0; i < uniLen; i++)
+	//	{
+	//		unicode.push_back(pUni[i]);
+	//	}
+	//	delete [] pUni;
+	//	return true;
+	//}
 
-	//iconv
-	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen)
-	{
-		iconv_t cd;
+	////iconv
+	//int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen)
+	//{
+	//	iconv_t cd;
 
-		char **pin = &inbuf;
-		char **pout = &outbuf;
+	//	char **pin = &inbuf;
+	//	char **pout = &outbuf;
 
-		cd = iconv_open(to_charset,from_charset);
-		if (cd==NULL) 
-		{
-			return -1;
-		}
-		memset(outbuf,0,outlen);
-		size_t ret = iconv(cd,pin,&inlen,pout,&outlen);
-		if (ret == -1)
-		{
-			//cout<<__FILE__<<__LINE__<<endl;
-			return -1;
-		}
-		iconv_close(cd);
-		return 0;
-	}
+	//	cd = iconv_open(to_charset,from_charset);
+	//	if (cd==NULL) 
+	//	{
+	//		return -1;
+	//	}
+	//	memset(outbuf,0,outlen);
+	//	size_t ret = iconv(cd,pin,&inlen,pout,&outlen);
+	//	if (ret == -1)
+	//	{
+	//		//cout<<__FILE__<<__LINE__<<endl;
+	//		return -1;
+	//	}
+	//	iconv_close(cd);
+	//	return 0;
+	//}
 
-	//gbk -> utf8
-	string gbkToUtf8(const string& gbk)
-	{
-		if(gbk.empty())
-		{
-			return "";
-		}
-		string res("");
-		size_t maxLen = gbk.size()*4 + 1;
-		char * pUtf = new char[maxLen];
-		if(NULL == pUtf)
-		{
-			return "";
-		}
-		int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
-		if(ret == -1)
-		{
-			delete [] pUtf;
-			return res;
-		}
-		res = pUtf;
-		delete [] pUtf;
-		return res;
-	}
+	////gbk -> utf8
+	//string gbkToUtf8(const string& gbk)
+	//{
+	//	if(gbk.empty())
+	//	{
+	//		return "";
+	//	}
+	//	string res("");
+	//	size_t maxLen = gbk.size()*4 + 1;
+	//	char * pUtf = new char[maxLen];
+	//	if(NULL == pUtf)
+	//	{
+	//		return "";
+	//	}
+	//	int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
+	//	if(ret == -1)
+	//	{
+	//		delete [] pUtf;
+	//		return res;
+	//	}
+	//	res = pUtf;
+	//	delete [] pUtf;
+	//	return res;
+	//}
 
-	//utf8 -> gbk
-	string utf8ToGbk(const string& utf)
-	{
-		//cout<<__FILE__<<__LINE__<<gbk<<endl;
-		string res;
-		size_t maxLen = utf.size()*4 + 1;
-		char * pGbk = new char[maxLen];
-		if(NULL == pGbk)
-		{
-			return "";
-		}
-		int ret = code_convert("utf-8", "gbk", (char *)utf.c_str(), utf.size(), pGbk, maxLen);
-		if(ret == -1)
-		{
-			delete [] pGbk;
-			return "";
-		}
-		res = pGbk;
-		delete [] pGbk;
-		return res;
-	}
+	////utf8 -> gbk
+	//string utf8ToGbk(const string& utf)
+	//{
+	//	//cout<<__FILE__<<__LINE__<<gbk<<endl;
+	//	string res;
+	//	size_t maxLen = utf.size()*4 + 1;
+	//	char * pGbk = new char[maxLen];
+	//	if(NULL == pGbk)
+	//	{
+	//		return "";
+	//	}
+	//	int ret = code_convert("utf-8", "gbk", (char *)utf.c_str(), utf.size(), pGbk, maxLen);
+	//	if(ret == -1)
+	//	{
+	//		delete [] pGbk;
+	//		return "";
+	//	}
+	//	res = pGbk;
+	//	delete [] pGbk;
+	//	return res;
+	//}
+	//
 
 	//unicode str to vec
 	bool uniStrToVec(const string& str, Unicode& vec)

@@ -11,13 +11,15 @@
 #include <string>
 #include <stdio.h>
 #include "file_functs.h"
+#include "str_functs.h"
+#include "typedefs.h"
 
-#define LL_DEBUG 1
-#define LL_INFO 2
-#define LL_WARN 3
-#define LL_ERROR 4
-#define LL_FATAL 5
-#define LEVEL_ARRAY_SIZE 6
+#define LL_DEBUG 0
+#define LL_INFO 1
+#define LL_WARN 2
+#define LL_ERROR 3
+#define LL_FATAL 4
+#define LEVEL_ARRAY_SIZE 5
 #define CSTR_BUFFER_SIZE 1024
 
 
@@ -38,19 +40,12 @@ namespace CPPCOMMON
 			Logger();
 			~Logger();
 		public:
-			void InitDefault();
-			bool Logging(unsigned int level, const string& msg, const string& fileName, const int& lineNo);
+			bool Logging(uint level, const string& msg, const char* fileName, int lineNo);
 		private:
-			bool _isCoutOpen;
 			char _cStrBuf[CSTR_BUFFER_SIZE];
 			const char * _logLevel[LEVEL_ARRAY_SIZE];
-			ofstream _logFile;
 			static const char * _logFormat;
 			static const char * _timeFormat;
-			static const char * _logDir;
-			static const char * _logName;
-			unsigned int _logCoutLevel;
-			unsigned int _logFileLevel;
 			time_t _timeNow;
 	};
 }
