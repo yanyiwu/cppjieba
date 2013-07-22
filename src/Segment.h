@@ -25,12 +25,11 @@ namespace CppJieba
 			bool dispose();
 		public:
 			bool cutDAG(const string& chStr, vector<string>& res);
-			double getWordWeight(const string& word);
 
 		private:
-			bool _calcDAG(const string& uniStr, vector<vector<uint> >& dag);
-			bool _calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
-			bool _cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res);
+			bool _calcDAG(const Unicode& unicode, vector<vector<uint> >& dag);
+			bool _calcDP(const Unicode& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
+			bool _cutDAG(const Unicode& unicode, const vector<pair<int, double> >& dp, vector<string>& res);
 
 	};
 }

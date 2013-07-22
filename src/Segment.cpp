@@ -41,10 +41,12 @@ namespace CppJieba
 
 	bool Segment::cutDAG(const string& str, vector<string>& res)
 	{
-		bool retFlag;
 		res.clear();
-		string uniStr = gEncoding.decode(str);
-		if(uniStr.empty())
+
+		bool retFlag;
+		Unicode unicode;
+		retFlag = gEncoding.decode(str, unicode);
+		if(!retFlag)
 		{
 			LogError("gEncoding.decode failed.");
 			return false;
@@ -52,7 +54,7 @@ namespace CppJieba
 		
 		//calc DAG
 		vector<vector<uint> > dag;
-		retFlag = _calcDAG(uniStr, dag);
+		retFlag = _calcDAG(unicode, dag);
 		if(!retFlag)
 		{
 			LogError("_calcDAG failed.");
@@ -60,14 +62,14 @@ namespace CppJieba
 		}
 
 		vector<pair<int, double> > dp;
-		retFlag = _calcDP(uniStr, dag, dp);
+		retFlag = _calcDP(unicode, dag, dp);
 		if(!retFlag)
 		{
 			LogError("_calcDP failed.");
 			return false;
 		}
 
-		retFlag = _cutDAG(uniStr, dp, res);
+		retFlag = _cutDAG(unicode, dp, res);
 		if(!retFlag)
 		{
 			LogError("_cutDAG failed.");
@@ -77,23 +79,24 @@ namespace CppJieba
 		return true;
 	}
 
-	double Segment::getWordWeight(const string& word)
+	bool Segment::_calcDAG(const Unicode& unicode, vector<vector<uint> >& dag)
 	{
-		return _trie.getWeight(word);
-	}
-
-	bool Segment::_calcDAG(const string& uniStr, vector<vector<uint> >& dag)
-	{
-		for(uint i = 0; i < uniStr.size(); i+=2)
+		if(unicode.empty())
+		{
+			return false;
+		}
+		typedef UnicodeConstIterator UCI;
+		UCI beginIter = unicode.begin();
+		for(UCI iterI = unicode.begin(); iterI != unicode.end(); iterI++)
 		{
 			vector<uint> vec;
-			vec.push_back(i/2);
-			for(uint j = i + 4; j <= uniStr.size(); j+=2)
+			vec.push_back(iterI - beginIter);
+			for(UCI iterJ = iterI + 1;  iterJ != unicode.end(); iterJ++)
 			{
-				//cout<<uniStr.substr(i, j - i)<<endl;
-				if(NULL != _trie.find(uniStr.substr(i, j - i)))
+				//care: the iterJ exceed iterEnd
+				if(NULL != _trie.find(iterI, iterJ + 1))
 				{
-					vec.push_back((j - 2)/2);
+					vec.push_back(iterJ - beginIter);
 				}
 			}
 			dag.push_back(vec);
@@ -101,68 +104,75 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_calcDP(const string& uniStr, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
+	bool Segment::_calcDP(const Unicode& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
 	{
-		if(uniStr.size() / 2 != dag.size())
+		if(unicode.empty())
+		{
+			LogError("unicode illegal");
+			return false;
+		}
+
+		if(unicode.size() != dag.size())
 		{
 			LogError("dag is illegal!");
 			return false;
 		}
-		if(uniStr.size() < 2)
-		{
-			LogError("uniStr illegal");
-			return false;
-		}
 
 		res.clear();
-		res.assign(uniStr.size()/2 + 1, pair<int, double>(-1, 0.0));
-		res[uniStr.size()/2].first = -1;
-		res[uniStr.size()/2].second = 0.0;
-		for(int i = uniStr.size() - 2; i >= 0; i-=2)
+		res.assign(unicode.size() + 1, pair<int, double>(-1, 0.0));
+		res[unicode.size()].first = -1;
+		res[unicode.size()].second = 0.0;
+
+		UnicodeConstIterator iterBegin = unicode.begin();
+
+		for(int i = unicode.size() - 1; i >= 0; i--)
 		{
 			// calc max
-			res[i/2].first = -1;
-			res[i/2].second = -(numeric_limits<double>::max());
-			for(int j = 0; j < dag[i/2].size(); j++)
+			res[i].first = -1;
+			res[i].second = -(numeric_limits<double>::max());
+			for(int j = 0; j < dag[i].size(); j++)
 			{
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
-				int pos = dag[i/2][j];
-				double val = getWordWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
+				int pos = dag[i][j];
+				double val = _trie.getWeight(iterBegin + i, iterBegin + pos + 1) + res[pos + 1].second;
+				//double val = _trie.getWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
 				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
-				if(val > res[i/2].second)
+				if(val > res[i].second)
 				{
-					res[i/2].first = pos;
-					res[i/2].second = val;
+					res[i].first = pos;
+					res[i].second = val;
 				}
 			}
 		}
 		res.pop_back();
 		return true;
 	}
-	bool Segment::_cutDAG(const string& uniStr, const vector<pair<int, double> >& dp, vector<string>& res)
+	bool Segment::_cutDAG(const Unicode& unicode, const vector<pair<int, double> >& dp, vector<string>& res)
 	{
-		if(dp.size() != uniStr.size()/2)
+		if(dp.size() != unicode.size())
 		{
-			LogError("dp or uniStr illegal!");
+			LogError("dp or unicode illegal!");
 			return false;
 		}
 
 		res.clear();
 
 		uint begin = 0;
+		UnicodeConstIterator iterBegin = unicode.begin();
 		for(uint i = 0; i < dp.size(); i++)
 		{
 			//cout<<dp[i].first<<","
 			//	<<dp[i].second<<endl;
-			uint end = dp[i].first * 2 + 2;
+			uint end = dp[i].first + 1;
 			if(end <= begin)
 			{
 				continue;
 			}
-			string tmp = unicodeToUtf8(uniStr.substr(begin, end - begin));
+			//string tmp = gEncoding.encode(uniStr.substr(begin, end - begin));
+			string tmp = gEncoding.encode(iterBegin + begin, iterBegin + end);
 			if(tmp.empty())
 			{
-				LogError("unicodeToUtf8 failed.");
+				LogError("gEncoding.encode failed.");
 				return false;
 			}
 			res.push_back(tmp);

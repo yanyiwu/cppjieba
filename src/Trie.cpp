@@ -156,7 +156,7 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		vector<uint16_t> unicode;
+		Unicode unicode;
 		
 		bool retFlag = gEncoding.decode(str, unicode);
 		if(retFlag)
@@ -199,7 +199,7 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		vector<uint16_t> unicode;
+		Unicode unicode;
 		bool retFlag = gEncoding.decode(str, unicode);
 		if(!retFlag)
 		{
@@ -208,7 +208,16 @@ namespace CppJieba
 		return find(unicode);
 	}
 
-	const TrieNodeInfo* Trie::find(const vector<uint16_t>& unicode)
+	const TrieNodeInfo* Trie::find(const Unicode& unicode)
+	{
+		if(unicode.empty())
+		{
+			return NULL;
+		}
+		return find(unicode.begin(), unicode.end());
+	}
+
+	const TrieNodeInfo* Trie::find(UnicodeConstIterator begin, UnicodeConstIterator end)
 	{
 		
 		if(!_getInitFlag())
@@ -216,15 +225,14 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		if(unicode.empty())
+		if(begin >= end)
 		{
-			LogError("unicode empty");
 			return NULL;
 		}
 		TrieNode* p = _root;
-		for(uint i = 0; i < unicode.size(); i++)
+		for(UnicodeConstIterator it = begin; it != end; it++)
 		{
-			uint16_t chUni = unicode[i];
+			uint16_t chUni = *it;
 			if(p->hmap.find(chUni) == p-> hmap.end())
 			{
 				return NULL;
@@ -253,9 +261,32 @@ namespace CppJieba
 	double Trie::getWeight(const string& str)
 	{
 
-		vector<uint16_t> unicode;
+		Unicode unicode;
 		gEncoding.decode(str, unicode);
+		return getWeight(unicode);
+	}
+
+	double Trie::getWeight(const Unicode& unicode)
+	{
+		if(unicode.empty())
+		{
+			return getMinWeight();
+		}
 		const TrieNodeInfo * p = find(unicode);
+		if(NULL != p)
+		{
+			return p->weight;
+		}
+		else
+		{
+			return getMinWeight();
+		}
+		
+	}
+
+	double Trie::getWeight(UnicodeConstIterator begin, UnicodeConstIterator end)
+	{
+		const TrieNodeInfo * p = find(begin, end);
 		if(NULL != p)
 		{
 			return p->weight;
@@ -299,7 +330,7 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		vector<uint16_t> unicode;
+		Unicode unicode;
 		bool retFlag = gEncoding.decode(word, unicode);
 		if(!retFlag)
 		{

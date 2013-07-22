@@ -26,8 +26,9 @@ namespace CPPCOMMON
 			~UnicodeEncoding();
 		public:
 			bool setEncoding(const string& enc);
-			string encode(const vector<uint16_t>& unicode);
-			bool decode(const string& str, vector<uint16_t>& unicode);
+			string encode(const Unicode& unicode);
+			string encode(UnicodeConstIterator begin, UnicodeConstIterator end);
+			bool decode(const string& str, Unicode& unicode);
 			
 	};
 }

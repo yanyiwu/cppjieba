@@ -8,6 +8,8 @@
 namespace CPPCOMMON
 {
 	typedef unsigned int uint;
+	typedef std::vector<uint16_t> Unicode;
+	typedef std::vector<uint16_t>::const_iterator UnicodeConstIterator;
 }
 
 

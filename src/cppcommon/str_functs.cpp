@@ -213,7 +213,7 @@ namespace CPPCOMMON
         return res;
     }
 
-	string unicodeToUtf8(const vector<uint16_t>& unicode)
+	string unicodeToUtf8(const Unicode& unicode)
 	{
 		if(unicode.empty())
 		{
@@ -283,7 +283,7 @@ namespace CPPCOMMON
         return length;
     }
 
-	bool utf8ToUnicode(const string& utfStr, vector<uint16_t>& unicode)
+	bool utf8ToUnicode(const string& utfStr, Unicode& unicode)
 	{
 		unicode.clear();
 		if(utfStr.empty())
@@ -376,7 +376,7 @@ namespace CPPCOMMON
 	}
 
 	//unicode str to vec
-	bool uniStrToVec(const string& str, vector<uint16_t>& vec)
+	bool uniStrToVec(const string& str, Unicode& vec)
 	{
 		vec.clear();
 		if(str.empty() || str.size() % 2)
@@ -392,7 +392,7 @@ namespace CPPCOMMON
 	}
 
 	//unicode vec to str
-	string uniVecToStr(const vector<uint16_t>& vec)
+	string uniVecToStr(const Unicode& vec)
 	{
 		string res("");
 		for(uint i = 0; i < vec.size(); i++)
@@ -451,7 +451,7 @@ int main()
 	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
 	ifstream ifile("testdata/dict.gbk");
 	string line;
-	vector<uint16_t> unicode;
+	Unicode unicode;
 	while(getline(ifile, line))
 	{
 		cout<<line<<endl;
