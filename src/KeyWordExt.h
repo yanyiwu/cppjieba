@@ -56,7 +56,7 @@ namespace CppJieba
 			//load prior words' prefix
 			bool loadPriorSubWords( const char * const filePath);
 
-			bool destroy();
+			bool dispose();
 
 		public:
 			bool extract(const string& utf8Str, vector<string>& keywords, uint topN);

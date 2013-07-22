@@ -21,7 +21,7 @@ namespace CPPCOMMON
 			string _encoding;
 			vector<string> _encVec;
 		public:
-			UnicodeEncoding();
+			UnicodeEncoding(const string& enc);
 			~UnicodeEncoding();
 		public:
 			bool setEncoding(const string& enc);

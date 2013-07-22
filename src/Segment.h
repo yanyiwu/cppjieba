@@ -15,15 +15,12 @@ namespace CppJieba
 	class Segment
 	{
 		private:
-			string _encoding;
-			vector<string> _encVec;
 			Trie _trie;
 		public:
 			Segment();
 			~Segment();
 		public:
 			bool init();
-			bool setEncoding(const string& enc);
 			bool loadSegDict(const string& filePath);
 			bool dispose();
 		public:

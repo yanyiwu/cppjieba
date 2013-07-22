@@ -8,10 +8,6 @@ namespace CppJieba
 {
 	Segment::Segment()
 	{
-		_encVec.push_back(Trie::UTF8);
-		_encVec.push_back(Trie::GBK);
-		//default encoding : utf8
-		_encoding = Trie::UTF8;
 	}
 	
 	Segment::~Segment()
@@ -28,16 +24,6 @@ namespace CppJieba
 			return false;
 		}
 		return true;
-	}
-	
-	bool Segment::setEncoding(const string& enc)
-	{
-		if(!isInVec<string>(_encVec, enc))
-		{
-			LogError(string_format("%s illegal: not in [\"%s\"]", enc.c_str(), joinStr(_encVec, ",").c_str()));
-			return false;
-		}
-		return _trie.setEncoding(enc);
 	}
 	
 	bool Segment::loadSegDict(const string& filePath)
@@ -59,7 +45,7 @@ namespace CppJieba
 	{
 		bool retFlag;
 		res.clear();
-		string uniStr = _utf8ToUni(str);
+		string uniStr = gEncoding.decode(str);
 		if(uniStr.empty())
 		{
 			LogError("_utf8ToUni failed.");
@@ -143,7 +129,7 @@ namespace CppJieba
 			{
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
 				int pos = dag[i/2][j];
-				double val = getUniWordWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
+				double val = getWordWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
 				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
 				if(val > res[i/2].second)
 				{

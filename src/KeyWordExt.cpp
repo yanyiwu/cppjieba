@@ -79,9 +79,9 @@ namespace CppJieba
 		return true;
 	}
 	
-	bool KeyWordExt::destroy()
+	bool KeyWordExt::dispose()
 	{
-		_segment.destroy();
+		_segment.dispose();
 		return true;
 	}
 
@@ -114,7 +114,7 @@ namespace CppJieba
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
 			WordInfo& wInfo = wordInfos[i];
-			double logWordFreq = _segment.getUtf8WordWeight(wInfo.word);
+			double logWordFreq = _segment.getWordWeight(wInfo.word);
 			wInfo.idf = -logWordFreq;
 			size_t wLen = getUtf8WordLen(wInfo.word);
 			if(0 == wLen)
@@ -401,7 +401,7 @@ int main()
 	ext.extract(title, res, 5);
 	PRINT_VECTOR(res);
 
-	ext.destroy();
+	ext.dispose();
 	return 0;
 }
 

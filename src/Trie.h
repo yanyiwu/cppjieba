@@ -18,6 +18,7 @@
 #include "cppcommon/file_functs.h"
 #include "cppcommon/logger.h"
 #include "globals.h"
+#include "tools.h"
 
 
 namespace CppJieba
@@ -60,8 +61,6 @@ namespace CppJieba
     {
 
         private:
-			string _encoding;
-			vector<string> _encVec;
             TrieNode* _root;
 			vector<TrieNodeInfo> _nodeInfoVec;
 
@@ -81,7 +80,6 @@ namespace CppJieba
             ~Trie();
             bool init();
 			bool loadDict(const string& filePath);
-			bool setEncoding(const string& enc);
             bool dispose();
 
 		private:
@@ -102,18 +100,12 @@ namespace CppJieba
 
 			bool insert(const TrieNodeInfo& nodeInfo);
 
-			string decode(const string& str);
-			string encode(const string& str);
-
         private:
 			bool _buildTree(const string& filePath);
 			bool _countWeight();
             bool _deleteNode(TrieNode* node);
 			const TrieNodeInfo* _findUniStr(const string& uniStr);
 
-		public:
-			static const string& UTF8;
-			static const string& GBK;
     };
 }
 

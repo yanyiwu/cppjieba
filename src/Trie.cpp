@@ -6,9 +6,6 @@
 
 namespace CppJieba
 {
-	const string& Trie::UTF8 = "utf-8";
-	const string& Trie::GBK = "gbk";
-
     Trie::iterator Trie::begin()
     {
         return _nodeInfoVec.begin();
@@ -21,11 +18,6 @@ namespace CppJieba
 
     Trie::Trie()
     {
-		//encodings : utf-8, gbk
-		_encVec.push_back(UTF8);
-		_encVec.push_back(GBK);
-		//default encoding : utf-8
-		_encoding = UTF8;
 
 		_root = NULL;
 		_totalCount = 0;
@@ -38,17 +30,6 @@ namespace CppJieba
         dispose();
     }
 	
-	bool Trie::setEncoding(const string& enc)
-	{
-		if(!isInVec<string>(_encVec, enc))
-		{
-			LogError(string_format("%s illegal : not in [%s]", enc.c_str(), joinStr(_encVec, ",").c_str()));
-			return false;
-		}
-		_encoding = enc;
-		return true;
-	}
-
 	bool Trie::_getInitFlag()
 	{
 		return _initFlag;
@@ -186,10 +167,10 @@ namespace CppJieba
 			LogError("str is empty");
 			return NULL;
 		}
-		string uniStr = decode(str);
+		string uniStr = gEncoding.decode(str);
 		if(uniStr.empty())
 		{
-			LogError("utf8ToUnicode return empty star");
+			LogError("gEncoding.decode failed.");
 			return NULL;
 		}
 		if(uniStr.size() % 2)
@@ -231,7 +212,7 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		string uniStr = decode(str);
+		string uniStr = gEncoding.decode(str);
 		return _findUniStr(uniStr);
 	}
 
@@ -277,7 +258,7 @@ namespace CppJieba
 
 	double Trie::getWeight(const string& str)
 	{
-		string uniStr = decode(str);
+		string uniStr = gEncoding.decode(str);
 		const TrieNodeInfo * p = _findUniStr(uniStr);
 		if(NULL != p)
 		{
@@ -311,33 +292,6 @@ namespace CppJieba
         return true;
     }
 
-	string Trie::decode(const string& str)
-	{
-		if(_encoding == UTF8)
-		{
-			return utf8ToUnicode(str);
-		}
-		if(_encoding == GBK)
-		{
-			return utf8ToUnicode(gbkToUtf8(str));
-		}
-		LogFatal(string_format("_encoding[%s] illeage!", _encoding.c_str()));
-		return "";
-	}
-
-	string Trie::encode(const string& str)
-	{
-		if(_encoding == UTF8)
-		{
-			return unicodeToUtf8(str);
-		}
-		if(_encoding == GBK)
-		{
-			return utf8ToGbk(unicodeToUtf8(str));
-		}
-		LogFatal(string_format("_encoding[%s] illeage!", _encoding.c_str()));
-		return "";
-	}
 
 	bool Trie::insert(const TrieNodeInfo& nodeInfo)
 	{
@@ -349,10 +303,10 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		string uniStr = decode(word);
-		if(uniStr.empty() || uniStr.size() % 2)
+		string uniStr = gEncoding.decode(word);
+		if(uniStr.empty())
 		{
-			LogError("decode error.");
+			LogError("gEncoding.decode error.");
 			return false;
 		}
 		

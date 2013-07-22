@@ -1,3 +1,7 @@
+/************************************
+ * file enc : utf8
+ * author   : wuyanyi09@gmail.com
+************************************/
 #include "encoding.h"
 
 namespace CPPCOMMON
@@ -5,11 +9,19 @@ namespace CPPCOMMON
 	const string& UnicodeEncoding::UTF8ENC = "utf-8";
 	const string& UnicodeEncoding::GBKENC = "gbk";
 	
-	UnicodeEncoding::UnicodeEncoding()
+	UnicodeEncoding::UnicodeEncoding(const string& enc)
 	{
 		_encVec.push_back(UTF8ENC);
 		_encVec.push_back(GBKENC);
-		_encoding = UTF8ENC;
+		if(!isInVec<string>(_encVec, enc))
+		{
+			//default
+			_encoding = UTF8ENC;
+		}
+		else
+		{
+			_encoding = enc;
+		}
 	}
 
 	UnicodeEncoding::~UnicodeEncoding()
@@ -29,7 +41,6 @@ namespace CPPCOMMON
 	{
 		if(!isUniStrValid(str))
 		{
-			cout<<__FILE__<<__LINE__<<endl;
 			return "";
 		}
 		if(UTF8ENC == _encoding)
@@ -40,14 +51,12 @@ namespace CPPCOMMON
 		{
 			return utf8ToGbk(unicodeToUtf8(str));
 		}
-		cout<<__FILE__<<__LINE__<<endl;
 		return "";
 	}
 	string UnicodeEncoding::decode(const string& str)
 	{
 		if(str.empty())
 		{
-			cout<<__FILE__<<__LINE__<<endl;
 			return "";
 		}
 		string res;
@@ -68,7 +77,6 @@ namespace CPPCOMMON
 				return res;
 			}
 		}
-		cout<<__FILE__<<__LINE__<<endl;
 		return "";
 	}
 }
