@@ -156,12 +156,12 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		Unicode unicode;
+		VUINT16 unicode;
 		
-		bool retFlag = gEncoding.decode(str, unicode);
+		bool retFlag = TransCode::strToVec(str, unicode);
 		if(retFlag)
 		{
-			LogError("gEncoding.decode failed.");
+			LogError("TransCode::strToVec failed.");
 			return NULL;
 		}
 
@@ -199,8 +199,8 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		Unicode unicode;
-		bool retFlag = gEncoding.decode(str, unicode);
+		VUINT16 unicode;
+		bool retFlag = TransCode::strToVec(str, unicode);
 		if(!retFlag)
 		{
 			return NULL;
@@ -208,7 +208,7 @@ namespace CppJieba
 		return find(unicode);
 	}
 
-	const TrieNodeInfo* Trie::find(const Unicode& unicode)
+	const TrieNodeInfo* Trie::find(const VUINT16& unicode)
 	{
 		if(unicode.empty())
 		{
@@ -217,7 +217,7 @@ namespace CppJieba
 		return find(unicode.begin(), unicode.end());
 	}
 
-	const TrieNodeInfo* Trie::find(UnicodeConstIterator begin, UnicodeConstIterator end)
+	const TrieNodeInfo* Trie::find(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
 	{
 		
 		if(!_getInitFlag())
@@ -230,7 +230,7 @@ namespace CppJieba
 			return NULL;
 		}
 		TrieNode* p = _root;
-		for(UnicodeConstIterator it = begin; it != end; it++)
+		for(VUINT16_CONST_ITER it = begin; it != end; it++)
 		{
 			uint16_t chUni = *it;
 			if(p->hmap.find(chUni) == p-> hmap.end())
@@ -261,12 +261,12 @@ namespace CppJieba
 	double Trie::getWeight(const string& str)
 	{
 
-		Unicode unicode;
-		gEncoding.decode(str, unicode);
+		VUINT16 unicode;
+		TransCode::strToVec(str, unicode);
 		return getWeight(unicode);
 	}
 
-	double Trie::getWeight(const Unicode& unicode)
+	double Trie::getWeight(const VUINT16& unicode)
 	{
 		if(unicode.empty())
 		{
@@ -284,7 +284,7 @@ namespace CppJieba
 		
 	}
 
-	double Trie::getWeight(UnicodeConstIterator begin, UnicodeConstIterator end)
+	double Trie::getWeight(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
 	{
 		const TrieNodeInfo * p = find(begin, end);
 		if(NULL != p)
@@ -330,11 +330,11 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		Unicode unicode;
-		bool retFlag = gEncoding.decode(word, unicode);
+		VUINT16 unicode;
+		bool retFlag = TransCode::strToVec(word, unicode);
 		if(!retFlag)
 		{
-			LogError("gEncoding.decode error.");
+			LogError("TransCode::strToVec error.");
 			return false;
 		}
 		
@@ -428,7 +428,8 @@ int main()
 {
     Trie trie;
     trie.init();
-	trie.loadDict("../dicts/segdict.utf8.v2.1");
+	trie.loadDict("../dicts/segdict.gbk.v2.1");
+	//trie.loadDict("tmp");
 	cout<<trie.getMinWeight()<<endl;
 	cout<<trie.getTotalCount()<<endl;
     trie.dispose();

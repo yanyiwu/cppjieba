@@ -26,7 +26,7 @@ namespace CppJieba
 			}
 			else
 			{
-				if(i + 1 < str.size() && (str[i+1] & 0x80))
+				if(i + 1 < str.size()) //&& (str[i+1] & 0x80))
 				{
 					vec.push_back(twocharToUint16(str[i], str[i + 1]));
 					i += 2;

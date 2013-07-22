@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <fstream>
-//#include <ext/hash_map>
 #include <map>
 #include <cstring>
 #include <stdint.h>
@@ -17,21 +16,20 @@
 #include "cppcommon/vec_functs.h"
 #include "cppcommon/file_functs.h"
 #include "cppcommon/logger.h"
+#include "TransCode.h"
 #include "globals.h"
-#include "tools.h"
 
 
 namespace CppJieba
 {
     using namespace CPPCOMMON;
     using namespace std;
-    //using __gnu_cxx::hash_map;
 	typedef map<uint16_t, struct TrieNode*> TrieNodeMap;
 
 	struct TrieNodeInfo
 	{
 		string word;
-		size_t wLen;// the word's len , not string.size(), eg: "我是中国人" wLen = 5 .
+		size_t wLen;// the word's len , not string.size(), 
 		size_t count;
 		string tag;
 		double weight;
@@ -88,14 +86,14 @@ namespace CppJieba
 
 		public:
 			const TrieNodeInfo* find(const string& str);
-			const TrieNodeInfo* find(const Unicode& unicode);
-			const TrieNodeInfo* find(UnicodeConstIterator begin, UnicodeConstIterator end);
+			const TrieNodeInfo* find(const VUINT16& unicode);
+			const TrieNodeInfo* find(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
 			const TrieNodeInfo* findPrefix(const string& str);
 
 		public:
 			double getWeight(const string& str);
-			double getWeight(const Unicode& unicode);
-			double getWeight(UnicodeConstIterator begin, UnicodeConstIterator end);
+			double getWeight(const VUINT16& unicode);
+			double getWeight(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
 			double getMinWeight();
 			
 			int64_t getTotalCount();

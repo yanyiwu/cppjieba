@@ -39,8 +39,8 @@ $(CMLIB):
 	cd $(CMDIR) && $(MAKE)
 
 #unit test
-Trie.ut: Trie.cpp Trie.h globals.h tools.h tools.cpp $(CMLIB)
-	$(CC) -o $@ Trie.cpp tools.cpp  -DTRIE_UT $(CMLIB)  -liconv
+Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
+	$(CC) -o $@ Trie.cpp TransCode.cpp  -DTRIE_UT $(CMLIB)
 
 Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h tools.h tools.cpp $(CMLIB)
 	$(CC) -o $@ Segment.cpp Trie.cpp tools.cpp -DSEGMENT_UT $(CMLIB) -liconv
