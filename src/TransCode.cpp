@@ -39,13 +39,17 @@ namespace CppJieba
 		}
 		return true;
 	}
-
-	string TransCode::vecToStr(const vector<uint16_t>& vec)
+	
+	string TransCode::vecToStr(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
 	{
-		string res("");
-		for(uint i = 0; i < vec.size(); i++)
+		if(begin >= end)
 		{
-			pair<char, char> pa = uint16ToChar2(vec[i]);
+			return "";
+		}
+		string res("");
+		while(begin != end)
+		{
+			pair<char, char> pa = uint16ToChar2(*begin);
 			if(pa.first & 0x80)
 			{
 				res += pa.first;
@@ -55,8 +59,18 @@ namespace CppJieba
 			{
 				res += pa.second;
 			}
+			begin++;
 		}
 		return res;
+	}
+
+	string TransCode::vecToStr(const vector<uint16_t>& vec)
+	{
+		if(vec.empty())
+		{
+			return "";
+		}
+		return vecToStr(vec.begin(), vec.end());
 	}
 }
 

@@ -17,6 +17,7 @@ namespace CppJieba
 		public:
 			static bool strToVec(const string& str, vector<uint16_t>& vec);
 			static string vecToStr(const vector<uint16_t>& vec);
+			static string vecToStr(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
 
 	};
 }

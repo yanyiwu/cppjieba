@@ -1,5 +1,5 @@
 /************************************
- * file enc : utf8
+ * file enc : AISCII
  * author   : wuyanyi09@gmail.com
 ************************************/
 #include "Segment.h"
@@ -49,11 +49,11 @@ namespace CppJieba
 		res.clear();
 
 		bool retFlag;
-		Unicode unicode;
-		retFlag = gEncoding.decode(str, unicode);
+		VUINT16 unicode;
+		retFlag = TransCode::strToVec(str, unicode);
 		if(!retFlag)
 		{
-			LogError("gEncoding.decode failed.");
+			LogError("TransCode::strToVec failed.");
 			return false;
 		}
 		
@@ -84,13 +84,13 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_calcDAG(const Unicode& unicode, vector<vector<uint> >& dag)
+	bool Segment::_calcDAG(const VUINT16& unicode, vector<vector<uint> >& dag)
 	{
 		if(unicode.empty())
 		{
 			return false;
 		}
-		typedef UnicodeConstIterator UCI;
+		typedef VUINT16_CONST_ITER UCI;
 		UCI beginIter = unicode.begin();
 		for(UCI iterI = unicode.begin(); iterI != unicode.end(); iterI++)
 		{
@@ -109,7 +109,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_calcDP(const Unicode& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
+	bool Segment::_calcDP(const VUINT16& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res)
 	{
 		if(unicode.empty())
 		{
@@ -128,7 +128,7 @@ namespace CppJieba
 		res[unicode.size()].first = -1;
 		res[unicode.size()].second = 0.0;
 
-		UnicodeConstIterator iterBegin = unicode.begin();
+		VUINT16_CONST_ITER iterBegin = unicode.begin();
 
 		for(int i = unicode.size() - 1; i >= 0; i--)
 		{
@@ -152,7 +152,7 @@ namespace CppJieba
 		res.pop_back();
 		return true;
 	}
-	bool Segment::_cutDAG(const Unicode& unicode, const vector<pair<int, double> >& dp, vector<string>& res)
+	bool Segment::_cutDAG(const VUINT16& unicode, const vector<pair<int, double> >& dp, vector<string>& res)
 	{
 		if(dp.size() != unicode.size())
 		{
@@ -163,7 +163,7 @@ namespace CppJieba
 		res.clear();
 
 		uint begin = 0;
-		UnicodeConstIterator iterBegin = unicode.begin();
+		VUINT16_CONST_ITER iterBegin = unicode.begin();
 		for(uint i = 0; i < dp.size(); i++)
 		{
 			//cout<<dp[i].first<<","
@@ -173,11 +173,11 @@ namespace CppJieba
 			{
 				continue;
 			}
-			//string tmp = gEncoding.encode(uniStr.substr(begin, end - begin));
-			string tmp = gEncoding.encode(iterBegin + begin, iterBegin + end);
+			//string tmp = TransCode::vecToStr(uniStr.substr(begin, end - begin));
+			string tmp = TransCode::vecToStr(iterBegin + begin, iterBegin + end);
 			if(tmp.empty())
 			{
-				LogError("gEncoding.encode failed.");
+				LogError("TransCode::vecToStr failed.");
 				return false;
 			}
 			res.push_back(tmp);
@@ -196,13 +196,13 @@ int main()
 {
 	Segment segment;
 	segment.init();
-	if(!segment.loadSegDict("../dicts/segdict.utf8.v2.1"))
+	if(!segment.loadSegDict("../dicts/segdict.gbk.v2.1"))
 	{
 		cerr<<"1"<<endl;
 		return 1;
 	}
 	//segment.init("dicts/jieba.dict.utf8");
-	ifstream ifile("testtitle.utf8");
+	ifstream ifile("testtitle.gbk");
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))

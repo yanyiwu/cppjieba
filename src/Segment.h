@@ -28,9 +28,9 @@ namespace CppJieba
 			bool cutDAG(const string& chStr, vector<string>& res);
 
 		private:
-			bool _calcDAG(const Unicode& unicode, vector<vector<uint> >& dag);
-			bool _calcDP(const Unicode& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
-			bool _cutDAG(const Unicode& unicode, const vector<pair<int, double> >& dp, vector<string>& res);
+			bool _calcDAG(const VUINT16& unicode, vector<vector<uint> >& dag);
+			bool _calcDP(const VUINT16& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
+			bool _cutDAG(const VUINT16& unicode, const vector<pair<int, double> >& dp, vector<string>& res);
 
 	};
 }
