@@ -92,7 +92,7 @@ namespace CppJieba
 		//size_t wLenSum = 0;
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
-			wordInfos[i].wLen = gEncoding.getWordLength(wordInfos[i].word);
+			wordInfos[i].wLen = TransCode::getWordLength(wordInfos[i].word);
 			if(0 == wordInfos[i].wLen)
 			{
 				LogFatal("wLen is 0");
@@ -113,7 +113,7 @@ namespace CppJieba
 			WordInfo& wInfo = wordInfos[i];
 			double logWordFreq = _segment.getWordWeight(wInfo.word);
 			wInfo.idf = -logWordFreq;
-			size_t wLen = gEncoding.getWordLength(wInfo.word);
+			size_t wLen = TransCode::getWordLength(wInfo.word);
 			if(0 == wLen)
 			{
 				LogFatal("getUtf8WordLen(%s) return 0");
@@ -265,7 +265,7 @@ namespace CppJieba
 		{
 
 			// filter single word
-			if(1 == gEncoding.getWordLength(*it)) 
+			if(1 == TransCode::getWordLength(*it)) 
 			{
 				it = strs.erase(it);
 			}
@@ -358,16 +358,15 @@ using namespace CppJieba;
 
 int main()
 {
-	gEncoding.setEncoding(GBKENC);
 	KeyWordExt ext;
 	ext.init();
 	if(!ext.loadSegDict("../dicts/segdict.gbk.v2.1"))
 	{
 		return 1;
 	}
-	ext.loadStopWords("stopwords.tmp");
+	ext.loadStopWords("../dicts/stopwords.gbk.v1.0");
 
-	if(!ext.loadPriorSubWords("prior.gbk"))
+	if(!ext.loadPriorSubWords("../dicts/prior.gbk"))
 	{
 		cerr<<"err"<<endl;
 		return 1;

@@ -72,6 +72,20 @@ namespace CppJieba
 		}
 		return vecToStr(vec.begin(), vec.end());
 	}
+
+	size_t TransCode::getWordLength(const string& str)
+	{
+		vector<uint16_t> vec;
+		bool ret = strToVec(str, vec);
+		if(!ret)
+		{
+			return 0;
+		}
+		else
+		{
+			return vec.size();
+		}
+	}
 }
 
 
