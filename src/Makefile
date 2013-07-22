@@ -48,6 +48,9 @@ Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h tools.h tools.cpp $(
 KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h Segment.h Trie.h globals.h tools.h tools.cpp $(CMLIB)
 	$(CC) -o $@ KeyWordExt.cpp Segment.cpp Trie.cpp tools.cpp -DKEYWORDEXT_UT $(CMLIB) -liconv
 
+TransCode.ut: TransCode.cpp TransCode.h globals.h $(CMLIB)
+	$(CC) -o $@ TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 
+
 clean:
 	rm -f *.o *.d *.ut $(LIBA) 
 	rm -rf $(TMPDIR)
