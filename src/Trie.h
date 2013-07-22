@@ -26,7 +26,7 @@ namespace CppJieba
     using namespace CPPCOMMON;
     using namespace std;
     //using __gnu_cxx::hash_map;
-	typedef map<ChUnicode, struct TrieNode*> TrieNodeMap;
+	typedef map<uint16_t, struct TrieNode*> TrieNodeMap;
 
 	struct TrieNodeInfo
 	{
@@ -88,6 +88,7 @@ namespace CppJieba
 
 		public:
 			const TrieNodeInfo* find(const string& str);
+			const TrieNodeInfo* find(const vector<uint16_t>& unicode);
 			const TrieNodeInfo* findPrefix(const string& str);
 
 		public:
@@ -102,7 +103,6 @@ namespace CppJieba
 			bool _buildTree(const string& filePath);
 			bool _countWeight();
             bool _deleteNode(TrieNode* node);
-			const TrieNodeInfo* _findUniStr(const string& uniStr);
 
     };
 }

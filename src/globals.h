@@ -13,7 +13,6 @@ namespace CppJieba
 {
 
 	//typedefs
-	typedef uint16_t ChUnicode;
 	typedef unsigned int uint;
 	typedef std::vector<std::string>::iterator VSI;
 

@@ -114,13 +114,7 @@ namespace CppJieba
 			//insert node
 			TrieNodeInfo nodeInfo;
 			nodeInfo.word = chWord;
-			size_t wLen = getUtf8WordLen(chWord);
-			if(0 == wLen)
-			{
-				LogFatal(string_format("getUtf8WordLen(%s) return 0", chWord.c_str()));
-				return false;
-			}
-			nodeInfo.wLen = wLen;
+			nodeInfo.wLen = 0;
 			nodeInfo.count = count;
 			nodeInfo.tag = tag;
 
@@ -162,28 +156,21 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		if(str.empty())
-		{
-			LogError("str is empty");
-			return NULL;
-		}
-		string uniStr = gEncoding.decode(str);
-		if(uniStr.empty())
+		vector<uint16_t> unicode;
+		
+		bool retFlag = gEncoding.decode(str, unicode);
+		if(retFlag)
 		{
 			LogError("gEncoding.decode failed.");
 			return NULL;
 		}
-		if(uniStr.size() % 2)
-		{
-			LogError("utf8ToUnicode return uniStr illegal");
-			return NULL;
-		}
+
 		//find
 		TrieNode* p = _root;
 		TrieNodeInfo * res = NULL;
-		for(uint i = 0; i < uniStr.size(); i+=2)
+		for(uint i = 0; i < unicode.size(); i++)
 		{
-			ChUnicode chUni = twocharToUint16(uniStr[0], uniStr[i+1]);
+			uint16_t chUni = unicode[i];
 			if(p->isLeaf)
 			{
 				uint pos = p->nodeInfoVecPos;
@@ -212,25 +199,32 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		string uniStr = gEncoding.decode(str);
-		return _findUniStr(uniStr);
+		vector<uint16_t> unicode;
+		bool retFlag = gEncoding.decode(str, unicode);
+		if(!retFlag)
+		{
+			return NULL;
+		}
+		return find(unicode);
 	}
 
-	const TrieNodeInfo* Trie::_findUniStr(const string& uniStr)
+	const TrieNodeInfo* Trie::find(const vector<uint16_t>& unicode)
 	{
+		
 		if(!_getInitFlag())
 		{
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		if(uniStr.empty() || uniStr.size() % 2)
+		if(unicode.empty())
 		{
-			LogError("uniStr illegal");
+			LogError("unicode empty");
+			return NULL;
 		}
 		TrieNode* p = _root;
-		for(uint i = 0; i < uniStr.size(); i+=2)
+		for(uint i = 0; i < unicode.size(); i++)
 		{
-			ChUnicode chUni = twocharToUint16(uniStr[i], uniStr[i+1]);
+			uint16_t chUni = unicode[i];
 			if(p->hmap.find(chUni) == p-> hmap.end())
 			{
 				return NULL;
@@ -258,8 +252,10 @@ namespace CppJieba
 
 	double Trie::getWeight(const string& str)
 	{
-		string uniStr = gEncoding.decode(str);
-		const TrieNodeInfo * p = _findUniStr(uniStr);
+
+		vector<uint16_t> unicode;
+		gEncoding.decode(str, unicode);
+		const TrieNodeInfo * p = find(unicode);
 		if(NULL != p)
 		{
 			return p->weight;
@@ -303,17 +299,18 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		string uniStr = gEncoding.decode(word);
-		if(uniStr.empty())
+		vector<uint16_t> unicode;
+		bool retFlag = gEncoding.decode(word, unicode);
+		if(!retFlag)
 		{
 			LogError("gEncoding.decode error.");
 			return false;
 		}
 		
         TrieNode* p = _root;
-        for(uint i = 0; i < uniStr.size(); i+=2)
+        for(uint i = 0; i < unicode.size(); i++)
         {
-			ChUnicode cu = twocharToUint16(uniStr[i], uniStr[i+1]);
+			uint16_t cu = unicode[i];
 			if(NULL == p)
 			{
 				return false;
@@ -398,7 +395,6 @@ namespace CppJieba
 using namespace CppJieba;
 int main()
 {
-	cout<<__FILE__<<__FILE__<<endl;
     Trie trie;
     trie.init();
 	trie.loadDict("../dicts/segdict.utf8.v2.1");
