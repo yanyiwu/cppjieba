@@ -16,25 +16,22 @@ namespace CppJieba
 	{
 	}
 
-	bool KeyWordExt::init(const char * const filePath)
+	bool KeyWordExt::init()
 	{
-		LogInfo(string_format("init(%s) start", filePath));
-		if(!checkFileExist(filePath))
-		{
-			LogError(string_format("cann't find file[%s].",filePath));
-			return false;
-		}
-		bool retFlag = _segment.init();
-		return retFlag;
-
+		return _segment.init();
 	}
 
-	bool KeyWordExt::loadPriorSubWords(const char * const filePath)
+	bool KeyWordExt::loadSegDict(const string& filePath)
 	{
-		LogInfo(string_format("loadPriorSubWords(%s) start", filePath));
-		if(!checkFileExist(filePath))
+		return _segment.loadSegDict(filePath);
+	}
+
+	bool KeyWordExt::loadPriorSubWords(const string& filePath)
+	{
+		LogInfo(string_format("loadPriorSubWords(%s) start", filePath.c_str()));
+		if(!checkFileExist(filePath.c_str()))
 		{
-			LogError(string_format("cann't find file[%s].",filePath));
+			LogError(string_format("cann't find file[%s].",filePath.c_str()));
 			return false;
 		}
 		if(!_priorSubWords.empty())
@@ -42,33 +39,33 @@ namespace CppJieba
 			LogError("_priorSubWords has been initted before");
 			return false;
 		}
-		ifstream infile(filePath);
+		ifstream infile(filePath.c_str());
 		string subword;
 		while(getline(infile, subword))
 		{
 			_priorSubWords.push_back(subword);
 		}
-		LogInfo(string_format("loadPriorSubWords(%s) end", filePath));
+		LogInfo(string_format("loadPriorSubWords(%s) end", filePath.c_str()));
 		infile.close();
 		return true;
 	}
 
-	bool KeyWordExt::loadStopWords(const char * const filePath)
+	bool KeyWordExt::loadStopWords(const string& filePath)
 	{
 
-		LogInfo(string_format("loadStopWords(%s) start", filePath));
+		LogInfo(string_format("loadStopWords(%s) start", filePath.c_str()));
 		if(!_stopWords.empty())
 		{
 			LogError("_stopWords has been loaded before! ");
 			return false;
 		}
-		if(!checkFileExist(filePath))
+		if(!checkFileExist(filePath.c_str()))
 		{
-			LogError(string_format("cann't find file[%s].",filePath));
+			LogError(string_format("cann't find file[%s].",filePath.c_str()));
 			return false;
 		}
 
-		ifstream ifile(filePath);
+		ifstream ifile(filePath.c_str());
 		string line;
 		while(getline(ifile, line))
 		{
@@ -151,16 +148,16 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::extract(const string& utf8Str, vector<string>& keywords, uint topN)
+	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
 	{
-		LogDebug(string_format("title:[%s]",utf8Str.c_str()));
+		LogDebug(string_format("title:[%s]",title.c_str()));
 
 		bool retFlag;
 		vector<string> words;
-		retFlag = _segment.cutDAG(utf8Str, words);
+		retFlag = _segment.cutDAG(title, words);
 		if(!retFlag)
 		{
-			LogError(string_format("cutDAG(%s) failed.", utf8Str.c_str()));
+			LogError(string_format("cutDAG(%s) failed.", title.c_str()));
 			return false;
 		}
 		LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
@@ -362,7 +359,8 @@ using namespace CppJieba;
 int main()
 {
 	KeyWordExt ext;
-	if(!ext.init("../dicts/segdict.utf8.v2.1"))
+	ext.init();
+	if(!ext.loadSegDict("../dicts/segdict.utf8.v2.1"))
 	{
 		return 1;
 	}
@@ -373,27 +371,17 @@ int main()
 		cerr<<"err"<<endl;
 		return 1;
 	}
-	//segment.init("dicts/jieba.dict.utf8");
-	
+
+	ifstream ifile("testtitle.utf8");
 	vector<string> res;
-	string title;
-	/*title = "我来到北京清华大学";
-	res.clear();
-	ext.extract(title, res, 5);
-	PRINT_VECTOR(res);
-	
-	
-	title = "特价！camel骆驼 柔软舒适头层牛皮平底凉鞋女 休闲平跟妈妈鞋夏";
-	res.clear();
-	ext.extract(title, res, 5);
-	PRINT_VECTOR(res);
-	*/
-
-
-	title = "韩国MAGGIC 爆花石水晶飞机 锁骨链短款项链 女 进口韩国饰品";
-	res.clear();
-	ext.extract(title, res, 5);
-	PRINT_VECTOR(res);
+	string line;
+	while(getline(ifile, line))
+	{
+		cout<<line<<endl;
+		res.clear();
+		ext.extract(line, res, 20);
+		PRINT_VECTOR(res);
+	}
 
 	ext.dispose();
 	return 0;
