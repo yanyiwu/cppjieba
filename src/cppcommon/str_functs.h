@@ -38,15 +38,17 @@ namespace CPPCOMMON
 
     //encode
     size_t unicodeToUtf8(uint16_t *in, size_t len, char * out);
-	string unicodeToUtf8(const string& uniStr);
+	string unicodeToUtf8(const vector<uint16_t>& unicode);
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
-	string utf8ToUnicode(const string& utfStr);
+	bool utf8ToUnicode(const string& utfStr, vector<uint16_t>& unicode);
+
 	int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
 	string gbkToUtf8(const string& gbk);
 	string utf8ToGbk(const string& utf);
 
-	size_t getUtf8WordLen(const string& utf);
-	
+	bool uniStrToVec(const string& str, vector<uint16_t>& vec);
+	string uniVecToStr(const vector<uint16_t>& vec);
+
 	inline uint16_t twocharToUint16(char high, char low)
 	{
 		return (((uint16_t(high) & 0x00ff ) << 8) | (uint16_t(low) & 0x00ff));
@@ -58,6 +60,11 @@ namespace CPPCOMMON
 		res.first = (in>>8) & 0x00ff; //high
 		res.second = (in) & 0x00ff; //low
 		return res;
+	}
+
+	inline void printUnicode(const vector<uint16_t>& unicode)
+	{
+		cout<<uniVecToStr(unicode)<<endl;
 	}
 
 	

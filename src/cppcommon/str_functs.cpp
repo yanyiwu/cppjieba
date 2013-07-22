@@ -213,37 +213,32 @@ namespace CPPCOMMON
         return res;
     }
 
-	string unicodeToUtf8(const string& uniStr)
+	string unicodeToUtf8(const vector<uint16_t>& unicode)
 	{
-		size_t len = uniStr.size();
-		if(uniStr.empty() || len%2)
+		if(unicode.empty())
 		{
 			return "";
 		}
 
-		uint16_t * uniArr = new uint16_t[(len>>1) + 1];
+		uint16_t * uniArr = new uint16_t[unicode.size() + 1];
 		if(NULL == uniArr)
 		{
 			return "";
 		}
-		char * utfStr = new char[(len<<1) + 1];
+		char * utfStr = new char[unicode.size() * 4 + 1];
 		if(NULL == utfStr)
 		{
 			delete [] uniArr;
 			return "";
 		}
-		for(int i = 0; i < len; i+=2)
+		for(uint i = 0; i < unicode.size(); i++)
 		{
-			uniArr[i>>1] = twocharToUint16(uniStr[i], uniStr[i+1]);
+			uniArr[i] = unicode[i];
 		}
 		
-		string res;
-		size_t utfLen = unicodeToUtf8(uniArr, len>>1, utfStr);
-		if(0 == utfLen)
-		{
-			res = "";
-		}
-		else
+		string res("");
+		size_t utfLen = unicodeToUtf8(uniArr, unicode.size(), utfStr);
+		if(0 != utfLen)
 		{
 			res = utfStr;
 		}
@@ -253,7 +248,6 @@ namespace CPPCOMMON
 	}
 
     /*from: http://www.cppblog.com/lf426/archive/2008/03/31/45796.html */
-	/*if the inutf8 is not utf8 , this function maybe cause core dump!!!*/
     int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
     {
         int length;
@@ -289,28 +283,25 @@ namespace CPPCOMMON
         return length;
     }
 
-	string utf8ToUnicode(const string& utfStr)
+	bool utf8ToUnicode(const string& utfStr, vector<uint16_t>& unicode)
 	{
+		unicode.clear();
 		if(utfStr.empty())
 		{
-			return "";
+			return false;
 		}
 		uint16_t* pUni = new uint16_t[utfStr.size() + 1];
 		if(NULL == pUni)
 		{
-			return "";
+			return false;
 		}
 		size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
-		string res("");
 		for(uint i = 0; i < uniLen; i++)
 		{
-			
-			pair<char, char> char2= uint16ToChar2(pUni[i]);
-			res += char2.first;
-			res += char2.second;
+			unicode.push_back(pUni[i]);
 		}
 		delete [] pUni;
-		return res;
+		return true;
 	}
 
 	//iconv
@@ -384,17 +375,33 @@ namespace CPPCOMMON
 		return res;
 	}
 
-	size_t getUtf8WordLen(const string& utf)
+	//unicode str to vec
+	bool uniStrToVec(const string& str, vector<uint16_t>& vec)
 	{
-		string uni = utf8ToUnicode(utf);
-		if(uni.empty()||uni.size()%2)
+		vec.clear();
+		if(str.empty() || str.size() % 2)
 		{
-			return 0;
+			return false;
 		}
-		else
+		for(uint i = 0; i < str.size(); i+=2)
 		{
-			return uni.size()/2;
+			vec.push_back(twocharToUint16(str[i], str[i + 1]));
 		}
+
+		return true;
+	}
+
+	//unicode vec to str
+	string uniVecToStr(const vector<uint16_t>& vec)
+	{
+		string res("");
+		for(uint i = 0; i < vec.size(); i++)
+		{
+			pair<char,char> pa = uint16ToChar2(vec[i]);
+			res += pa.first;
+			res += pa.second;
+		}
+		return res;
 	}
 
 }
@@ -444,16 +451,14 @@ int main()
 	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
 	ifstream ifile("testdata/dict.gbk");
 	string line;
+	vector<uint16_t> unicode;
 	while(getline(ifile, line))
 	{
 		cout<<line<<endl;
-		string uniStr = utf8ToUnicode(line);
-		cout<<utf8ToUnicode(uniStr)<<endl;// this will core dump
-		string utfStr = unicodeToUtf8(uniStr);
-		cout<<utfStr<<endl;
+		utf8ToUnicode(line, unicode);
+		printUnicode(unicode);
+		cout<<unicodeToUtf8(unicode)<<endl;;
 	}
-	cout<<utf8ToGbk("")<<endl;
-	cout<<gbkToUtf8("")<<endl;
 	//vector<string> tmp;
 	//tmp.push_back("1");
 	////tmp.push_back("2");
@@ -465,7 +470,6 @@ int main()
 	//{
 	//	cout<<line<<endl;
 	//	string s = gbkToUtf8(line);
-	//	cout<<getUtf8WordLen(s)<<endl;
 	//	s = utf8ToGbk(s);
 	//	cout<<s<<endl;
 	//}
