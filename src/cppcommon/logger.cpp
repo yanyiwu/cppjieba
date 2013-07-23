@@ -35,7 +35,14 @@ namespace CPPCOMMON
 			cerr<<"strftime failed."<<endl;
 			return false;
 		}
-		cout<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<"\n";
+		if(level >= LL_WARN)
+		{
+			cerr<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<"\n";
+		}
+		else
+		{
+			cout<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<"\n";
+		}
 		return true;
 	}
 }
