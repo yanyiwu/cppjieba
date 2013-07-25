@@ -37,11 +37,11 @@ namespace CPPCOMMON
 		}
 		if(level >= LL_WARN)
 		{
-			cerr<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<"\n";
+			cerr<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<endl;
 		}
 		else
 		{
-			cout<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<"\n";
+			cout<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<endl;
 		}
 		return true;
 	}

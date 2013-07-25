@@ -5,6 +5,9 @@
 #ifndef CPPCOMMON_TYPEDEFS_H
 #define CPPCOMMON_TYPEDEFS_H
 
+#include <stdint.h>
+#include <vector>
+
 namespace CPPCOMMON
 {
 	typedef unsigned int uint;
