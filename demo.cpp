@@ -8,8 +8,13 @@ using namespace std;
 
 using namespace CppJieba;
 
-int main()
+int main(int argc, char ** argv)
 {
+	if(argc < 2)
+	{
+		cerr<<"usage: "<<argv[0]<<" filename"<<endl;
+		return 1;
+	}
 	KeyWordExt ext;
 	ext.init();
 	
