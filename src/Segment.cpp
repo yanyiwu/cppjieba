@@ -158,6 +158,7 @@ namespace CppJieba
 				//cout<<(i/2)<<","<<dag[i/2].size()<<","<<j<<endl;
 				int pos = dag[i][j];
 				double val = _trie.getWeight(iterBegin + i, iterBegin + pos + 1) + res[pos + 1].second;
+				//cout<<i<<","<<pos<<","<<val<<endl;
 				//double val = _trie.getWeight(uniStr.substr(i, pos * 2 - i + 2)) + res[pos + 1].second;
 				//cout<<pos<<","<<pos * 2 - i + 2<<","<<val<<endl;
 				if(val > res[i].second)
@@ -167,6 +168,10 @@ namespace CppJieba
 				}
 			}
 		}
+		//FOR_VECTOR(res, i)
+		//{
+		//	cout<<i<<","<<res[i].first<<","<<res[i].second<<endl;
+		//}
 		res.pop_back();
 		return true;
 	}
@@ -180,17 +185,21 @@ namespace CppJieba
 
 		res.clear();
 
-		uint begin = 0;
+		uint begin = 0, end = 0;
 		VUINT16_CONST_ITER iterBegin = unicode.begin();
-		for(uint i = 0; i < dp.size(); i++)
+		//for(uint i = 0; i < dp.size(); i++)
+		while(begin < dp.size() && end <= dp.size())
 		{
-			//cout<<dp[i].first<<","
+			//cout<<begin<<","
+			//	<<dp[i].first<<","
 			//	<<dp[i].second<<endl;
-			uint end = dp[i].first + 1;
-			if(end <= begin)
-			{
-				continue;
-			}
+			end = dp[begin].first + 1;
+			//cout<<begin<<","<<end<<endl;
+			//if(end <= begin)
+			//{
+		//		continue;
+		//	}
+			//cout<<begin<<","<<end<<endl;
 			//string tmp = TransCode::vecToStr(uniStr.substr(begin, end - begin));
 			string tmp = TransCode::vecToStr(iterBegin + begin, iterBegin + end);
 			if(tmp.empty())
