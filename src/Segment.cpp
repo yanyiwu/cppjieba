@@ -66,6 +66,23 @@ namespace CppJieba
 			return false;
 		}
 
+#ifdef DEBUG
+		{
+			string tmp("{");
+			FOR_VECTOR(dag, i)
+			{
+				tmp += "[";
+				FOR_VECTOR(dag[i], j)
+				{
+					tmp += string_format("%d,", dag[i][j]);
+				}
+				tmp += "],";
+			}
+			tmp += "}";
+			LogDebug(tmp);
+		}
+#endif
+
 		vector<pair<int, double> > dp;
 		retFlag = _calcDP(unicode, dag, dp);
 		if(!retFlag)
@@ -73,6 +90,7 @@ namespace CppJieba
 			LogError("_calcDP failed.");
 			return false;
 		}
+
 
 		retFlag = _cutDAG(unicode, dp, res);
 		if(!retFlag)
