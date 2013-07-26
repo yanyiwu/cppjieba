@@ -214,13 +214,14 @@ int main()
 {
 	Segment segment;
 	segment.init();
-	if(!segment.loadSegDict("../dicts/segdict.gbk.v2.1"))
+	if(!segment.loadSegDict("../dicts/segdict.gbk.v3.0"))
 	{
 		cerr<<"1"<<endl;
 		return 1;
 	}
 	//segment.init("dicts/jieba.dict.utf8");
-	ifstream ifile("testtitle.gbk");
+	//ifstream ifile("testtitle.gbk");
+	ifstream ifile("badcase");
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
