@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
 		cerr<<"1"<<endl;
 		return 1;
 	}
-	ifstream ifile("dress.gbk");
+	ifstream ifile(argv[1]);
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))

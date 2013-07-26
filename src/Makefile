@@ -1,20 +1,32 @@
-CC = g++
-CCOPT = -Wall -c
-LINK = g++
-LINKOPT =
-PACKA = ar
-PACKAOPT = rc
-DOLINK = $(LINK) $(LINKOPT) -o $@ $^
-DOPACK = $(PACKA) $(PACKAOPT) $@ 
+
+CXX    := g++
+LD     := g++
+AR     := ar rc
+
+INCS := -I. -I./cppcommon
+
+DEBUG_CXXFLAGS     := -g -DDEBUG 
+RELEASE_CXXFLAGS   := -Wall
+
+ifeq (YES, ${DEBUG})
+   CXXFLAGS       := ${DEBUG_CXXFLAGS}
+   LDFLAGS      := ${DEBUG_LDFLAGS}
+else
+   CXXFLAGS     := ${RELEASE_CXXFLAGS}
+   LDFLAGS      := ${RELEASE_LDFLAGS}
+endif
+
+DOLINK := $(LD) $(LDFLAGS) -o $@ $^
+DOPACK := $(AR)  
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-CMDIR = ./cppcommon
-CMLIB = $(CMDIR)/libcm.a
+CMDIR := ./cppcommon
+CMLIB := $(CMDIR)/libcm.a
 
-TMPDIR = ./cppjiebatmp
+TMPDIR := ./cppjiebatmp
 
-LIBA = libcppjieba.a
+LIBA := libcppjieba.a
 
 # remove the objs after compilation
 .INTERMEDIATE: 
@@ -25,11 +37,11 @@ all: $(LIBA)
 # This is a suffix rule 
 #.c.o: 
 %.o: %.cpp
-	$(CC) $(CCOPT) $<
+	$(CXX) -c $(CXXFLAGS) $<
 
-$(LIBA): $(TMPDIR) $(OBJS) $(CMLIB) 
+${LIBA}: $(TMPDIR) $(OBJS) $(CMLIB) 
 	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
-	$(DOPACK) $(OBJS) $(TMPDIR)/*.o 
+	$(DOPACK) $@ $(OBJS) $(TMPDIR)/*.o 
 	rm -rf $(TMPDIR)
 
 $(TMPDIR):
@@ -40,16 +52,16 @@ $(CMLIB):
 
 #unit test
 Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
-	$(CC) -o $@ Trie.cpp TransCode.cpp  -DTRIE_UT $(CMLIB)
+	$(CXX) -o $@ Trie.cpp TransCode.cpp  -DTRIE_UT $(CMLIB)
 
 Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
-	$(CC) -o $@ Segment.cpp Trie.cpp TransCode.cpp -DSEGMENT_UT $(CMLIB) 
+	$(CXX) -o $@ Segment.cpp Trie.cpp TransCode.cpp -DSEGMENT_UT $(CMLIB) 
 
 KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h Segment.h Trie.h globals.h TransCode.cpp TransCode.h  $(CMLIB)
-	$(CC) -o $@ KeyWordExt.cpp Segment.cpp Trie.cpp TransCode.cpp -DKEYWORDEXT_UT $(CMLIB)
+	$(CXX) -o $@ KeyWordExt.cpp Segment.cpp Trie.cpp TransCode.cpp -DKEYWORDEXT_UT $(CMLIB)
 
 TransCode.ut: TransCode.cpp TransCode.h globals.h $(CMLIB)
-	$(CC) -o $@ TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 
+	$(CXX) -o $@ TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 
 
 clean:
 	rm -f *.o *.d *.ut $(LIBA) 
@@ -59,6 +71,6 @@ clean:
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp
 	@set -e; rm -f $@; \
-	$(CC) -MM $< > $@.$$$$; \
+	$(CXX) -MM $< > $@.$$$$; \
 	sed 's,\($*\).o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$

@@ -136,10 +136,14 @@ namespace CppJieba
 		}
 		
 		_sortWLIDF(wordInfos);
-		//LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
+#endif
 		
 		_prioritizeSubWords(wordInfos);
-		//LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
+#endif
 		//extract TopN
 		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
 		{
@@ -150,7 +154,9 @@ namespace CppJieba
 
 	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
 	{
-		//LogDebug(string_format("title:[%s]",title.c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("title:[%s]",title.c_str()));
+#endif
 
 		bool retFlag;
 		vector<string> words;
@@ -160,7 +166,9 @@ namespace CppJieba
 			LogError(string_format("cutDAG(%s) failed.", title.c_str()));
 			return false;
 		}
-		//LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
+#endif
 
 		retFlag = _filter(words);
 		if(!retFlag)
@@ -168,7 +176,9 @@ namespace CppJieba
 			LogError("_filter failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
+#endif
 
 		retFlag = _extractTopN(words, keywords, topN);
 		if(!retFlag)
@@ -178,7 +188,9 @@ namespace CppJieba
 		}
 		//LogDebug("_extractTopN finished.");
 
-		//LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
+#ifdef DEBUG
+		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
+#endif
 		return true;
 	}
 
@@ -297,7 +309,6 @@ namespace CppJieba
 		{
 			if(subs.end() != subs.find(*it))
 			{
-				//LogDebug(string_format("_filterSubstr filter [%s].", it->c_str()));
 				it =  strs.erase(it);
 			}
 			else
