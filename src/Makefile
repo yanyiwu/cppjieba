@@ -5,8 +5,8 @@ AR     := ar rc
 
 INCS := -I. -I./cppcommon
 
-DEBUG_CXXFLAGS     := -g -DDEBUG 
-RELEASE_CXXFLAGS   := -Wall
+DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
+RELEASE_CXXFLAGS   := -Wall -O3
 
 ifeq (YES, ${DEBUG})
    CXXFLAGS       := ${DEBUG_CXXFLAGS}

@@ -23,7 +23,7 @@ $(CMLIB): $(OBJS)
 	$(DOPACK) 
 	
 	
-file_functs.test: file_functs.cpp file_functs.h
+file_functs.ut: file_functs.cpp file_functs.h
 	g++ -o $@ $< -DTEST_FILE_FUNCTS
 io_functs.test: io_functs.cpp io_functs.h
 	g++ -o $@ $< -DTEST_IO_FUNCTS

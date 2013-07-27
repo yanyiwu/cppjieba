@@ -11,9 +11,10 @@
 #include <stdlib.h>
 namespace CPPCOMMON
 {
-	bool checkFileExist(const char * filepath);
-	bool createDir(const char * dir_path, bool p = true);
-	bool checkDirExist(const char * dir_path);
+	using namespace std;
+	bool checkFileExist(const string& filePath);
+	bool createDir(const string& dirPath, bool p = true);
+	bool checkDirExist(const string& dirPath);
 
 }
 

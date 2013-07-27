@@ -6,18 +6,17 @@
 
 namespace CPPCOMMON
 {
-	using namespace std;
-	bool checkFileExist(const char * filepath)
+	bool checkFileExist(const string& filePath)
 	{
 		fstream _file;
-		_file.open(filepath, ios::in);
+		_file.open(filePath.c_str(), ios::in);
 		if(_file)
 		  return true;
 		return false;
 	}
-	bool createDir(const char * dir_path, bool p)
+	bool createDir(const string& dirPath, bool p)
 	{
-		string dir_str(dir_path);
+		string dir_str(dirPath);
 		string cmd = "mkdir";
 		if(p)
 		{
@@ -27,9 +26,9 @@ namespace CPPCOMMON
 		int res = system(cmd.c_str());
 		return res;
 	}
-	bool checkDirExist(const char * dir_path)
+	bool checkDirExist(const string& dirPath)
 	{
-		return checkFileExist(dir_path);
+		return checkFileExist(dirPath);
 	}
 }
 
