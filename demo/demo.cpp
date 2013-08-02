@@ -1,10 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "src/KeyWordExt.h"
-#include "src/cppcommon/str_functs.h"
-#include "src/cppcommon/vec_functs.h"
-
-using namespace std;
+#include "../src/headers.h"
 
 using namespace CppJieba;
 
@@ -18,7 +14,7 @@ int main(int argc, char ** argv)
 	KeyWordExt ext;
 	ext.init();
 	
-	if(!ext.loadSegDict("./dicts/segdict.gbk.v3.0"))
+	if(!ext.loadSegDict("../dicts/jieba.dict.utf8"))
 	{
 		cerr<<"1"<<endl;
 		return 1;

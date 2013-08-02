@@ -2,7 +2,7 @@ CXX    := g++
 LD     := g++
 AR     := ar rc
 
-INCS := -I. -I./cppcommon
+INCS := 
 
 DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
 RELEASE_CXXFLAGS   := -Wall -O3
@@ -20,7 +20,7 @@ DOPACK := $(AR)
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-SRCDIR = ./src
+SRCDIR = ../src
 SRCLIB = $(SRCDIR)/libcppjieba.a
 
 # remove the objs after compilation
