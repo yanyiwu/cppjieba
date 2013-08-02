@@ -28,21 +28,24 @@ SRCLIB = $(SRCDIR)/libcppjieba.a
 .PHONY: clean $(SRCLIB)
 
 # Main Targets
-all: demo
+all: keywordext_demo segment_demo
 
 # This is a suffix rule 
 #.c.o: 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $<
 
-demo: $(OBJS) $(SRCLIB)
+keywordext_demo: keywordext_demo.o $(SRCLIB)
+	$(DOLINK) -o $@ $^
+
+segment_demo: segment_demo.o $(SRCLIB)
 	$(DOLINK) -o $@ $^
 
 $(SRCLIB): 
 	cd $(SRCDIR) && $(MAKE)
 
 clean:
-	rm -f *.o *.ut *.d demo
+	rm -f *.o *.ut *.d keywordext_demo segment_demo
 	cd $(SRCDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)

@@ -1,4 +1,3 @@
-*tmp*
 tags
 *swp
 *.out
@@ -8,4 +7,3 @@ tags
 log
 main
 cmlib.a
-demo
