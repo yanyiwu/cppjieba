@@ -46,6 +46,10 @@ namespace CppJieba
 
 	bool Segment::cutDAG(const string& str, vector<string>& res)
 	{
+		if(str.empty())
+		{
+			return false;
+		}
 		res.clear();
 
 		bool retFlag;

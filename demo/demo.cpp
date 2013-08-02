@@ -13,8 +13,8 @@ int main(int argc, char ** argv)
 	}
 	KeyWordExt ext;
 	ext.init();
-	
-	if(!ext.loadSegDict("../dicts/jieba.dict.utf8"))
+
+	if(!ext.loadSegDict("../dicts/jieba.dict.gbk"))
 	{
 		cerr<<"1"<<endl;
 		return 1;
@@ -25,11 +25,14 @@ int main(int argc, char ** argv)
 	while(getline(ifile, line))
 	{
 		res.clear();
-		ext.extract(line, res, 20);
-		cout<<line<<"\n"<<joinStr(res," ")<<endl;
+		if(!line.empty())
+		{
+			ext.extract(line, res, 20);
+			cout<<line<<"\n"<<joinStr(res," ")<<endl;
+		}
+
 	}
-	
+
 	ext.dispose();
-	
-    return 0;
+	return 0;
 }

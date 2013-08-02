@@ -154,6 +154,11 @@ namespace CppJieba
 
 	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
 	{
+		if(title.empty())
+		{
+			return false;
+		}
+
 #ifdef DEBUG
 		LogDebug(string_format("title:[%s]",title.c_str()));
 #endif
