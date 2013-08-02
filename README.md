@@ -5,6 +5,11 @@ cppjieba
 https://github.com/fxsjy/jieba
 
 
+作案动机
+========
 因为个人需求，参照python的jieba分词源码写的。
 
-contact: wuyanyi09@gmail.com
+
+contact
+========
+wuyanyi09@gmail.com
