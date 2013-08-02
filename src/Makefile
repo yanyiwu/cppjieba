@@ -1,4 +1,3 @@
-
 CXX    := g++
 LD     := g++
 AR     := ar rc
