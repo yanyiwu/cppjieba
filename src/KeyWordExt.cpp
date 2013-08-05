@@ -152,6 +152,45 @@ namespace CppJieba
 		return true;
 	}
 
+
+	bool KeyWordExt::extract(const vector<string>& _words, vector<string>& keywords, uint topN)
+	{
+		if(_words.empty())
+		{
+			return false;
+		}
+
+		vector<string> words(_words);
+
+#ifdef DEBUG
+		LogDebug(string_format("words:[%s]", joinStr(words, ",").c_str()));
+#endif
+
+		bool retFlag = _filter(words);
+		if(!retFlag)
+		{
+			LogError("_filter failed.");
+			return false;
+		}
+
+#ifdef DEBUG
+		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
+#endif
+
+		retFlag = _extractTopN(words, keywords, topN);
+		if(!retFlag)
+		{
+			LogError("_extractTopN failed.");
+			return false;
+		}
+		//LogDebug("_extractTopN finished.");
+
+#ifdef DEBUG
+		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
+#endif
+		
+	}
+
 	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
 	{
 		if(title.empty())
@@ -181,6 +220,7 @@ namespace CppJieba
 			LogError("_filter failed.");
 			return false;
 		}
+
 #ifdef DEBUG
 		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
 #endif

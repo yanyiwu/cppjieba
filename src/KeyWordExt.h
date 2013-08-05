@@ -62,6 +62,7 @@ namespace CppJieba
 
 		public:
 			bool extract(const string& title, vector<string>& keywords, uint topN);
+			bool extract(const vector<string>& words, vector<string>& keywords, uint topN);
 		private:
 			static bool _wordInfoCompare(const WordInfo& a, const WordInfo& b);
 		private:

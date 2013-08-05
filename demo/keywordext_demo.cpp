@@ -4,22 +4,18 @@
 
 using namespace CppJieba;
 
-int main(int argc, char ** argv)
+
+void testKeyWordExt(const char * dictPath, const char * filePath)
 {
-	if(argc < 2)
-	{
-		cerr<<"usage: "<<argv[0]<<" filename"<<endl;
-		return 1;
-	}
 	KeyWordExt ext;
 	ext.init();
 
-	if(!ext.loadSegDict("../dicts/jieba.dict.gbk"))
+	if(!ext.loadSegDict(dictPath))
 	{
-		cerr<<"1"<<endl;
-		return 1;
+		cerr<<__FILE__<<__LINE__<<endl;
+		return ;
 	}
-	ifstream ifile(argv[1]);
+	ifstream ifile(filePath);
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
@@ -32,7 +28,53 @@ int main(int argc, char ** argv)
 		}
 
 	}
-
 	ext.dispose();
+}
+
+void testKeyWordExt2(const char * dictPath, const char * filePath)
+{
+	Segment seg;
+	seg.init();
+	KeyWordExt ext;
+	ext.init();
+
+	if(!seg.loadSegDict(dictPath))
+	{
+		cerr<<__FILE__<<__LINE__<<endl;
+		return ;
+	}
+
+	if(!ext.loadSegDict(dictPath));
+	{
+		cerr<<__FILE__<<__LINE__<<endl;
+		return ;
+	}
+
+	ifstream ifile(filePath);
+	vector<string> words;
+	vector<string> keywords;
+	string line;
+	while(getline(ifile, line))
+	{
+		if(!line.empty())
+		{
+			seg.cutDAG(line, words);
+			ext.extract(words, keywords, 20);
+			cout<<line<<"\n"<<joinStr(keywords," ")<<endl;
+		}
+
+	}
+	seg.dispose();
+	ext.dispose();
+}
+
+int main(int argc, char ** argv)
+{
+	if(argc != 3)
+	{
+		cerr<<"usage: "<<argv[0]<<" ../dicts/jieba.dict.gbk filename"<<endl;
+		return -1;
+	}
+	testKeyWordExt(argv[1], argv[2]);
 	return 0;
 }
