@@ -28,14 +28,14 @@ file_functs.ut: file_functs.cpp file_functs.h
 io_functs.test: io_functs.cpp io_functs.h
 	g++ -o $@ $< -DTEST_IO_FUNCTS
 str_functs.ut: str_functs.cpp str_functs.h
-	g++ -o $@ $< -DTEST_STR_FUNCTS -liconv
+	g++ -o $@ $< -DTEST_STR_FUNCTS 
 encoding.ut: encoding.cpp str_functs.cpp str_functs.h encoding.h
-	g++ -o $@ encoding.cpp str_functs.cpp -DENCODING_UT -liconv
+	g++ -o $@ encoding.cpp str_functs.cpp -DENCODING_UT 
 vec_functs.test: vec_functs.cpp vec_functs.h vec_functs.tcc
 	g++ -o $@ $< -DTEST_VEC_FUNCTS
 
 logger.ut: logger.cpp logger.h file_functs.cpp file_functs.h str_functs.cpp str_functs.h
-	g++ -o $@ $< file_functs.cpp str_functs.cpp -DLOGGER_UT -liconv
+	g++ -o $@ $< file_functs.cpp str_functs.cpp -DLOGGER_UT 
 config.ut: config.cpp config.h 
 	g++ -o $@ $< -DCONFIG_UT $(CMLIB)
 

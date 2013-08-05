@@ -5,7 +5,7 @@
 #include "logger.h"
 namespace CPPCOMMON
 {
-	const char * Logger::_logFormat =  "%s [File:%s] [Line:%d] [%s] Msg:%s";
+	const char * Logger::_logFormat =  "%s [File:%s] [Line:%d] [%s] Msg:%s\n";
 	const char * Logger::_timeFormat = "%Y-%m-%d %H:%M:%S";
 	Logger::Logger()
 	{
@@ -21,7 +21,7 @@ namespace CPPCOMMON
 	{
 	}
 
-	bool Logger::Logging(uint level, const string& msg, const char* fileName, int lineNo)
+	bool Logger::Logging(uint level, const char * msg, const char* fileName, int lineNo)
 	{
 		if(level > LL_FATAL)
 		{
@@ -32,16 +32,17 @@ namespace CPPCOMMON
 		size_t ret = strftime(_cStrBuf, sizeof(_cStrBuf), _timeFormat, localtime(&_timeNow));
 		if(0 == ret)
 		{
-			cerr<<"strftime failed."<<endl;
+			fprintf(stderr, "stftime failed.\n");
 			return false;
 		}
 		if(level >= LL_WARN)
 		{
-			cerr<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<endl;
+			fprintf(stderr, _logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg);
 		}
 		else
 		{
-			cout<<string_format(_logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg.c_str())<<endl;
+			fprintf(stdout, _logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg);
+			fflush(stdout);
 		}
 		return true;
 	}

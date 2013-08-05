@@ -40,7 +40,7 @@ namespace CPPCOMMON
 			Logger();
 			~Logger();
 		public:
-			bool Logging(uint level, const string& msg, const char* fileName, int lineNo);
+			bool Logging(uint level, const char * msg, const char* fileName, int lineNo);
 		private:
 			char _cStrBuf[CSTR_BUFFER_SIZE];
 			const char * _logLevel[LEVEL_ARRAY_SIZE];
