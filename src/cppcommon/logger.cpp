@@ -21,6 +21,11 @@ namespace CPPCOMMON
 	{
 	}
 
+	bool Logger::Logging(uint level, const string& msg,  const char * fileName, int lineNo)
+	{
+		return Logging(level, msg.c_str(), fileName, lineNo);
+	}
+
 	bool Logger::Logging(uint level, const char * msg, const char* fileName, int lineNo)
 	{
 		if(level > LL_FATAL)
