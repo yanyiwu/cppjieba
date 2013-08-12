@@ -1,5 +1,5 @@
 /************************************
- * file enc : utf8
+ * file enc : ascii
  * author   : wuyanyi09@gmail.com
 ************************************/
 #ifndef CPPCOMMON_VEC_FUNCTS_H

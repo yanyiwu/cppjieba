@@ -29,6 +29,8 @@ io_functs.test: io_functs.cpp io_functs.h
 	g++ -o $@ $< -DTEST_IO_FUNCTS
 str_functs.ut: str_functs.cpp str_functs.h
 	g++ -o $@ $< -DTEST_STR_FUNCTS 
+argv_functs.ut: argv_functs.cpp str_functs.cpp argv_functs.h
+	g++ -o $@ argv_functs.cpp str_functs.cpp -DARGV_FUNCTS_UT
 encoding.ut: encoding.cpp str_functs.cpp str_functs.h encoding.h
 	g++ -o $@ encoding.cpp str_functs.cpp -DENCODING_UT 
 vec_functs.test: vec_functs.cpp vec_functs.h vec_functs.tcc

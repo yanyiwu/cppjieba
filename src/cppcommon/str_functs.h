@@ -1,5 +1,5 @@
 /************************************
- * file enc : utf8
+ * file enc : ascii
  * author   : wuyanyi09@gmail.com
 ************************************/
 #ifndef CPPCOMMON_STR_FUNCTS_H
@@ -20,7 +20,7 @@
 namespace CPPCOMMON
 {
 	using namespace std;
-	std::string string_format(const std::string fmt, ...) ;
+	string string_format(const string fmt, ...) ;
 	string joinStr(const vector<string>& source, const string& connector);
 	vector<string> splitStr(const string& source, const string& pattern = " \t\n");
 	void splitStr(const string& source, vector<string>& out_vec, const string& pattern = " \t\n");
@@ -67,6 +67,7 @@ namespace CPPCOMMON
 		cout<<uniVecToStr(unicode)<<endl;
 	}
 
+	bool strStartsWith(const string& str, const string& prefix);
 	
 }
 #endif

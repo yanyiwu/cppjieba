@@ -9,5 +9,7 @@
 #include "config.h"
 #include "typedefs.h"
 #include "str_functs.h"
+#include "map_functs.h"
+#include "arfv_functs.h"
 
 #endif

@@ -7,7 +7,7 @@
 namespace CPPCOMMON
 {
 	//http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
-	std::string string_format(const std::string fmt, ...) 
+	string string_format(const string fmt, ...) 
 	{
 		int size = 100;
 		std::string str;
@@ -407,6 +407,11 @@ namespace CPPCOMMON
 		return res;
 	}
 
+	bool strStartsWith(const string& str, const string& prefix)
+	{
+		return str.substr(0, prefix.size()) == prefix;
+	}
+
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -452,16 +457,16 @@ int main()
     //    cout<<utf8str<<endl;
     //}
 	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
-	ifstream ifile("testdata/dict.gbk");
-	string line;
-	Unicode unicode;
-	while(getline(ifile, line))
-	{
-		cout<<line<<endl;
-		utf8ToUnicode(line, unicode);
-		printUnicode(unicode);
-		cout<<unicodeToUtf8(unicode)<<endl;;
-	}
+	//ifstream ifile("testdata/dict.gbk");
+	//string line;
+	//Unicode unicode;
+	//while(getline(ifile, line))
+	//{
+	//	cout<<line<<endl;
+	//	utf8ToUnicode(line, unicode);
+	//	printUnicode(unicode);
+	//	cout<<unicodeToUtf8(unicode)<<endl;;
+	//}
 	//vector<string> tmp;
 	//tmp.push_back("1");
 	////tmp.push_back("2");
@@ -476,6 +481,12 @@ int main()
 	//	s = utf8ToGbk(s);
 	//	cout<<s<<endl;
 	//}
+	cout<<strStartsWith("--help","--")<<endl;
+	cout<<strStartsWith("--help","-")<<endl;
+	cout<<strStartsWith("--help","he")<<endl;
+	cout<<strStartsWith("help","help")<<endl;
+	cout<<strStartsWith("","help")<<endl;
+	cout<<strStartsWith("hel","")<<endl;
 	return 0;
 }
 #endif

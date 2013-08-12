@@ -15,6 +15,11 @@ void testKeyWordExt(const char * dictPath, const char * filePath)
 		cerr<<__FILE__<<__LINE__<<endl;
 		return ;
 	}
+	if(!ext.loadStopWords("../dicts/stopwords.gbk.v1.0"))
+	{
+		cerr<<__FILE__<<__LINE__<<endl;
+		return ;
+	}
 	ifstream ifile(filePath);
 	vector<string> res;
 	string line;
