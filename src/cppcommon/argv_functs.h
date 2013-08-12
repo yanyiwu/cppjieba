@@ -12,7 +12,7 @@
 namespace CPPCOMMON
 {
 	using namespace std;
-	bool getArgvMap(int argc,  char** argv, map<string, string>& mpss);
+	bool getArgvMap(int argc, const char* const* argv, map<string, string>& mpss);
 }
 
 #endif

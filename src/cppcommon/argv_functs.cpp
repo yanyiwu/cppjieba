@@ -2,7 +2,7 @@
 
 namespace CPPCOMMON
 {
-	bool getArgvMap(int argc, char** argv, map<string,string>& mpss)
+	bool getArgvMap(int argc, const char* const * argv, map<string,string>& mpss)
 	{
 		mpss.clear();
 		for(int i = 0; i < argc; i++)
