@@ -8,7 +8,7 @@ namespace CPPCOMMON
 {
 	string loadFile2Str(const char * const filepath)
 	{
-		ifstream in(filepath, ios::in);
+		ifstream in(filepath);
 		istreambuf_iterator<char> beg(in), end;
 		string str(beg, end);
 		in.close();
