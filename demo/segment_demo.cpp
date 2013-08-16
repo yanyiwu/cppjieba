@@ -4,28 +4,26 @@
 
 using namespace CppJieba;
 
-
-int main(int argc, char ** argv)
+Segment seg;
+bool init()
 {
-	if(argc < 2)
-	{
-		cout<<"usage: "<<argv[0]<<" <filename>"<<endl;
-		return -1;
-	}
-	Segment seg;
 	if(!seg.init())
 	{
-		cerr<<"seg init failed."<<endl;
-		return 1;
+		cout<<"seg init failed."<<endl;
+		return false;
 	}
 
 	if(!seg.loadSegDict("../dicts/jieba.dict.gbk"))
 	{
-		cerr<<"seg loadDict failed."<<endl;
-		return 1;
+		cout<<"seg loadDict failed."<<endl;
+		return false;
 	}
+	return true;
+}
 
-	ifstream ifile(argv[1]);
+void run(const char * const filePath)
+{
+	ifstream ifile(filePath);
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
@@ -37,7 +35,31 @@ int main(int argc, char ** argv)
 			cout<<line<<"\n"<<joinStr(res,"/")<<endl;
 		}
 	}
+}
 
-	seg.dispose();
+bool dispose()
+{
+	if(!seg.dispose())
+	{
+		cout<<"seg dispose failed."<<endl;
+		return false;
+	}
+	return true;
+}
+
+int main(int argc, char ** argv)
+{
+	//map<string, string> mpss;
+	//getArgvMap(argc, argv, mpss);
+	//string enc = getMap<string, string>(mpss, "--encoding", "");
+	
+	if( argc < 2)
+	{
+		cout<<"usage: "<<"\n\t"<<argv[0]<<" <filename>"<<endl;
+		return -1;
+	}
+	init();
+	run(argv[1]);
+	dispose();
 	return 0;
 }
