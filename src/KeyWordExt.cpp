@@ -189,6 +189,7 @@ namespace CppJieba
 		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
 #endif
 		
+		return true;
 	}
 
 	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
