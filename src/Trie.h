@@ -35,10 +35,8 @@ namespace CppJieba
 		double weight;
 		TrieNodeInfo()
 		{
-			word = "";
 			wLen = 0;
 			count = 0;
-			tag = "";
 			weight = 0.0;
 		}
 	};
@@ -101,7 +99,7 @@ namespace CppJieba
 			bool insert(const TrieNodeInfo& nodeInfo);
 
         private:
-			bool _buildTree(const char * const filePath);
+			bool _trieInsert(const char * const filePath);
 			bool _countWeight();
             bool _deleteNode(TrieNode* node);
 

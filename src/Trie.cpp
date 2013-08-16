@@ -77,10 +77,10 @@ namespace CppJieba
 			return false;
 		}
 		bool res = false;
-		res = _buildTree(filePath);
+		res = _trieInsert(filePath);
 		if(!res)
 		{
-			LogError("_buildTree failed.");
+			LogError("_trieInsert failed.");
 			return false;
 		}
 		res = _countWeight();
@@ -92,40 +92,35 @@ namespace CppJieba
 		return true;
 	}
 
-    bool Trie::_buildTree(const char * const filePath)
+    bool Trie::_trieInsert(const char * const filePath)
     {
 		
         ifstream ifile(filePath);
         string line;
         vector<string> vecBuf;
+		
+		TrieNodeInfo nodeInfo;
         while(getline(ifile, line))
         {
             vecBuf.clear();
             splitStr(line, vecBuf, " ");
-            if(3 != vecBuf.size())
+            if(3 < vecBuf.size())
             {
                 LogError(string_format("line[%s] illegal.", line.c_str()));
                 return false;
             }
-            string chWord = vecBuf[0];
-            uint count = atoi(vecBuf[1].c_str());
-            const string& tag = vecBuf[2];
+			nodeInfo.word = vecBuf[0];
+			nodeInfo.count = atoi(vecBuf[1].c_str());
+			if(3 == vecBuf.size())
+			{
+				nodeInfo.tag = vecBuf[2];
+			}
 
 			//insert node
-			TrieNodeInfo nodeInfo;
-			nodeInfo.word = chWord;
-			nodeInfo.wLen = 0;
-			nodeInfo.count = count;
-			nodeInfo.tag = tag;
-
-			bool flag = insert(nodeInfo);
-			if(!flag)
+			if(!insert(nodeInfo))
 			{
 				LogError("insert node failed!");
-				return false;
 			}
-			
-
         }
         return true;
     }

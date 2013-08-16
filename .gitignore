@@ -6,4 +6,4 @@ tags
 *.ut
 log
 main
-cmlib.a
+lib*.a
