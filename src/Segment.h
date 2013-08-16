@@ -21,7 +21,7 @@ namespace CppJieba
 			~Segment();
 		public:
 			bool init();
-			bool loadSegDict(const string& filePath);
+			bool loadSegDict(const char * const filePath);
 			bool dispose();
 			double getWordWeight(const string& str);
 		public:

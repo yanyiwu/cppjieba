@@ -63,7 +63,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Trie::loadDict(const string& filePath)
+	bool Trie::loadDict(const char * const filePath)
 	{
 		if(!_getInitFlag())
 		{
@@ -71,9 +71,9 @@ namespace CppJieba
 			return false;
 		}
 
-		if(!checkFileExist(filePath.c_str()))
+		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find fiel[%s].",filePath.c_str()));
+			LogError(string_format("cann't find fiel[%s].",filePath));
 			return false;
 		}
 		bool res = false;
@@ -92,10 +92,10 @@ namespace CppJieba
 		return true;
 	}
 
-    bool Trie::_buildTree(const string& filePath)
+    bool Trie::_buildTree(const char * const filePath)
     {
 		
-        ifstream ifile(filePath.c_str());
+        ifstream ifile(filePath);
         string line;
         vector<string> vecBuf;
         while(getline(ifile, line))

@@ -50,13 +50,13 @@ namespace CppJieba
 			~KeyWordExt();
 			bool init();
 
-			bool loadSegDict(const string& filePath);
+			bool loadSegDict(const char * const filePath);
 
 			//load stopwords
-			bool loadStopWords(const string& filePath);
+			bool loadStopWords(const char * const filePath);
 
 			//load prior words' prefix
-			bool loadPriorSubWords(const string& filePath);
+			bool loadPriorSubWords(const char * const filePath);
 
 			bool dispose();
 

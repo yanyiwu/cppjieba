@@ -21,17 +21,17 @@ namespace CppJieba
 		return _segment.init();
 	}
 
-	bool KeyWordExt::loadSegDict(const string& filePath)
+	bool KeyWordExt::loadSegDict(const char * const filePath)
 	{
 		return _segment.loadSegDict(filePath);
 	}
 
-	bool KeyWordExt::loadPriorSubWords(const string& filePath)
+	bool KeyWordExt::loadPriorSubWords(const char * const filePath)
 	{
-		LogInfo(string_format("loadPriorSubWords(%s) start", filePath.c_str()));
-		if(!checkFileExist(filePath.c_str()))
+		LogInfo(string_format("loadPriorSubWords(%s) start", filePath));
+		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find file[%s].",filePath.c_str()));
+			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
 		if(!_priorSubWords.empty())
@@ -39,33 +39,33 @@ namespace CppJieba
 			LogError("_priorSubWords has been initted before");
 			return false;
 		}
-		ifstream infile(filePath.c_str());
+		ifstream infile(filePath);
 		string subword;
 		while(getline(infile, subword))
 		{
 			_priorSubWords.push_back(subword);
 		}
-		LogInfo(string_format("loadPriorSubWords(%s) end", filePath.c_str()));
+		LogInfo(string_format("loadPriorSubWords(%s) end", filePath));
 		infile.close();
 		return true;
 	}
 
-	bool KeyWordExt::loadStopWords(const string& filePath)
+	bool KeyWordExt::loadStopWords(const char * const filePath)
 	{
 
-		LogInfo(string_format("loadStopWords(%s) start", filePath.c_str()));
+		LogInfo(string_format("loadStopWords(%s) start", filePath));
 		if(!_stopWords.empty())
 		{
 			LogError("_stopWords has been loaded before! ");
 			return false;
 		}
-		if(!checkFileExist(filePath.c_str()))
+		if(!checkFileExist(filePath))
 		{
-			LogError(string_format("cann't find file[%s].",filePath.c_str()));
+			LogError(string_format("cann't find file[%s].",filePath));
 			return false;
 		}
 
-		ifstream ifile(filePath.c_str());
+		ifstream ifile(filePath);
 		string line;
 		while(getline(ifile, line))
 		{

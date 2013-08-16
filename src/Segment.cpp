@@ -25,9 +25,9 @@ namespace CppJieba
 		return true;
 	}
 	
-	bool Segment::loadSegDict(const string& filePath)
+	bool Segment::loadSegDict(const char * const filePath)
 	{
-		LogInfo(string_format("_trie.loadDict(%s) start...", filePath.c_str()));
+		LogInfo(string_format("_trie.loadDict(%s) start...", filePath));
 		bool retFlag = _trie.loadDict(filePath);
 		LogInfo("_trie.loadDict end.");
 		return retFlag;

@@ -77,7 +77,7 @@ namespace CppJieba
             Trie();
             ~Trie();
             bool init();
-			bool loadDict(const string& filePath);
+			bool loadDict(const char * const filePath);
             bool dispose();
 
 		private:
@@ -101,7 +101,7 @@ namespace CppJieba
 			bool insert(const TrieNodeInfo& nodeInfo);
 
         private:
-			bool _buildTree(const string& filePath);
+			bool _buildTree(const char * const filePath);
 			bool _countWeight();
             bool _deleteNode(TrieNode* node);
 
