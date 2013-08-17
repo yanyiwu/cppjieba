@@ -14,6 +14,29 @@ namespace CPPCOMMON
 {
 	using namespace std;
 
+	inline string jsonMPSS(const map<string, string>& mpss)
+	{
+		if(mpss.empty())
+		{
+			return "{}";
+		}
+		string res("{");
+		map<string, string>::const_iterator it = mpss.begin();
+		res += it->first;
+		res += ": ";
+		res += it->second;
+		it++;
+		while(it != mpss.end())
+		{
+			res += ", ";
+			res += it->first;
+			res += ": ";
+			res += it->second;
+			it++;
+		}
+		res += "}";
+		return res;
+	}
 	
 	template<class kT, class vT>
 		void printMap(const map<kT, vT>& mp)

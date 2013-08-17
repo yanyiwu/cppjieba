@@ -23,6 +23,59 @@ namespace CPPCOMMON
 		return true;
 	}
 
+	ArgvContext::ArgvContext(int argc, const char* const * argv)
+	{
+		for(int i = 0; i < argc; i++)
+		{
+			if(strStartsWith(argv[i], "--"))
+			{
+				if(i + 1 < argc && !strStartsWith(argv[i+1], "--"))
+				{
+					_mpss[argv[i]] = argv[i+1];
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				_args.push_back(argv[i]);
+			}
+		}
+	}
+
+	ArgvContext::~ArgvContext()
+	{
+	}
+
+	string ArgvContext::toString()
+	{
+		string res;
+		res += string_format("[%s]\n", joinStr(_args, ", ").c_str());
+		res += jsonMPSS(_mpss);
+		return res;
+	}
+
+	string ArgvContext::operator [](int i)
+	{
+		if(i < _args.size())
+		{
+			return _args[i];
+		}
+		return "";
+	}
+	
+	string ArgvContext::operator [](const string& key)
+	{
+		map<string, string>::const_iterator it = _mpss.find(key);
+		if(it != _mpss.end())
+		{
+			return it->second;
+		}
+		return "";
+	}
 	
 }
 
@@ -33,9 +86,13 @@ using namespace CPPCOMMON;
 
 int main(int argc, char** argv)
 {
-	map<string,string> argvMap;
-	getArgvMap(argc, argv, argvMap);
-	PRINT_MAPSS(argvMap);
+	//map<string,string> argvMap;
+	//getArgvMap(argc, argv, argvMap);
+	//PRINT_MAPSS(argvMap);
+	ArgvContext arg(argc, argv);
+	cout<<arg.toString()<<endl;
+	cout<<arg[1]<<endl;
+	cout<<arg["--hehe"]<<endl;
 	return 0;
 }
 

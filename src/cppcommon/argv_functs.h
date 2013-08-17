@@ -13,6 +13,20 @@ namespace CPPCOMMON
 {
 	using namespace std;
 	bool getArgvMap(int argc, const char* const* argv, map<string, string>& mpss);
+	class ArgvContext
+	{
+		public :
+			ArgvContext(int argc, const char* const * argv);
+			~ArgvContext();
+		public:
+			string toString();
+			string operator [](int i);
+			string operator [](const string& key);
+		private:
+			vector<string> _args;
+			map<string, string> _mpss;
+
+	};
 }
 
 #endif

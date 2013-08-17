@@ -15,9 +15,19 @@ namespace CppJieba
 	using namespace CPPCOMMON;
 	class TransCode
 	{
+		private:
+			static string _enc;
+			static vector<string> _encVec;
+			static bool _isInitted;
+			
+		public:
+			static bool setEnc(const string& enc);
+			
 		public:
 			TransCode();
 			~TransCode();
+		public:
+			static bool init();
 		public:
 			static bool strToVec(const string& str, vector<uint16_t>& vec);
 			static string vecToStr(const vector<uint16_t>& vec);

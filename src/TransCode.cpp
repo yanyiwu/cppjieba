@@ -1,16 +1,43 @@
-/************************************
- * file enc : ASCII
- * author   : wuyanyi09@gmail.com
-************************************/
 #include "TransCode.h"
 
 namespace CppJieba
 {
+	string TransCode::_enc;
+	vector<string> TransCode::_encVec;
+	bool TransCode::_isInitted = TransCode::init();
+
+	bool TransCode::init()
+	{
+		_encVec.push_back("utf-8");
+		_encVec.push_back("gbk");
+		_enc = _encVec[0];
+		return true;
+	}
+
 	TransCode::TransCode()
 	{
+		
 	}
 	TransCode::~TransCode()
 	{
+	}
+
+	bool TransCode::setEnc(const string& enc)
+	{
+		if(_encVec.empty())
+		{
+			return false;
+		}
+		
+		if(isInVec<string>(_encVec, enc))
+		{
+			_enc = enc;
+		}
+		else
+		{
+			return false;
+		}
+		return true;
 	}
 
 	bool TransCode::strToVec(const string& str, vector<uint16_t>& vec)
