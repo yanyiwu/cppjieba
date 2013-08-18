@@ -89,25 +89,6 @@ namespace CppJieba
 
 	bool KeyWordExt::_sortWLIDF(vector<WordInfo>& wordInfos)
 	{
-		//size_t wLenSum = 0;
-		for(uint i = 0; i < wordInfos.size(); i++)
-		{
-			wordInfos[i].wLen = TransCode::getWordLength(wordInfos[i].word);
-			if(0 == wordInfos[i].wLen)
-			{
-				LogFatal("wLen is 0");
-				return false;
-			}
-			//wLenSum += wordInfos[i].wLen;
-		}
-
-		/*
-		if(0 == wLenSum)
-		{
-			LogFatal("wLenSum == 0.");
-			return false;
-		}*/
-
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
 			WordInfo& wInfo = wordInfos[i];

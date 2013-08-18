@@ -6,38 +6,10 @@
 #define CPPJIEBA_KEYWORDEXT_H
 
 #include "Segment.h"
+#include "structs.h"
 
 namespace CppJieba
 {
-
-	struct WordInfo
-	{
-		string word;
-		size_t wLen;
-		double weight;
-		double idf;
-		WordInfo()
-		{
-			word = "";
-			wLen = 0;
-			weight = 0.0;
-			idf = 0.0;
-		}
-		string getInfoStr() const
-		{
-			return string_format("{word:%s,wLen:%d weight:%lf, idf:%lf}", word.c_str(), wLen, weight, idf);
-		}
-	};
-
-	inline string joinWordInfos(const vector<WordInfo>& vec)
-	{
-		vector<string> tmp;
-		for(uint i = 0; i < vec.size(); i++)
-		{
-			tmp.push_back(vec[i].getInfoStr());
-		}
-		return joinStr(tmp, ",");
-	}
 
 	class KeyWordExt
 	{

@@ -112,13 +112,12 @@ namespace CppJieba
 		{
 			return false;
 		}
-		typedef VUINT16_CONST_ITER UCI;
-		UCI beginIter = unicode.begin();
-		for(UCI iterI = unicode.begin(); iterI != unicode.end(); iterI++)
+		VUINT16_CONST_ITER beginIter = unicode.begin();
+		for(VUINT16_CONST_ITER iterI = unicode.begin(); iterI != unicode.end(); iterI++)
 		{
 			vector<uint> vec;
 			vec.push_back(iterI - beginIter);
-			for(UCI iterJ = iterI + 1;  iterJ != unicode.end(); iterJ++)
+			for(VUINT16_CONST_ITER iterJ = iterI + 1;  iterJ != unicode.end(); iterJ++)
 			{
 				//care: the iterJ exceed iterEnd
 				if(NULL != _trie.find(iterI, iterJ + 1))

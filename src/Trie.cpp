@@ -20,8 +20,8 @@ namespace CppJieba
     {
 
 		_root = NULL;
-		_totalCount = 0;
-		_minWeight = numeric_limits<double>::max();
+		_freqSum = 0;
+		_minLogFreq = numeric_limits<double>::max();
 		_initFlag = false;
     }
     
@@ -110,7 +110,8 @@ namespace CppJieba
                 return false;
             }
 			nodeInfo.word = vecBuf[0];
-			nodeInfo.count = atoi(vecBuf[1].c_str());
+			nodeInfo.freq = atoi(vecBuf[1].c_str());
+			nodeInfo.wLen = TransCode::getWordLength(nodeInfo.word);
 			if(3 == vecBuf.size())
 			{
 				nodeInfo.tag = vecBuf[2];
@@ -270,7 +271,7 @@ namespace CppJieba
 		const TrieNodeInfo * p = find(unicode);
 		if(NULL != p)
 		{
-			return p->weight;
+			return p->logFreq;
 		}
 		else
 		{
@@ -284,7 +285,7 @@ namespace CppJieba
 		const TrieNodeInfo * p = find(begin, end);
 		if(NULL != p)
 		{
-			return p->weight;
+			return p->logFreq;
 		}
 		else
 		{
@@ -294,12 +295,12 @@ namespace CppJieba
 
 	double Trie::getMinWeight()
 	{
-		return _minWeight;
+		return _minLogFreq;
 	}
 
 	int64_t Trie::getTotalCount()
 	{
-		return _totalCount;
+		return _freqSum;
 	}
 
     bool Trie::_deleteNode(TrieNode* node)
@@ -379,21 +380,21 @@ namespace CppJieba
 
 	bool Trie::_countWeight()
 	{
-		if(_nodeInfoVec.empty() || 0 != _totalCount)
+		if(_nodeInfoVec.empty() || 0 != _freqSum)
 		{
-			LogError("_nodeInfoVec is empty or _totalCount has been counted already.");
+			LogError("_nodeInfoVec is empty or _freqSum has been counted already.");
 			return false;
 		}
 		
-		//count total freq
+		//freq total freq
 		for(size_t i = 0; i < _nodeInfoVec.size(); i++)
 		{
-			_totalCount += _nodeInfoVec[i].count;
+			_freqSum += _nodeInfoVec[i].freq;
 		}
 
-		if(0 == _totalCount)
+		if(0 == _freqSum)
 		{
-			LogError("_totalCount == 0 .");
+			LogError("_freqSum == 0 .");
 			return false;
 		}
 		
@@ -401,15 +402,15 @@ namespace CppJieba
 		for(uint i = 0; i < _nodeInfoVec.size(); i++)
 		{
 			TrieNodeInfo& nodeInfo = _nodeInfoVec[i];
-			if(0 == nodeInfo.count)
+			if(0 == nodeInfo.freq)
 			{
-				LogFatal("nodeInfo.count == 0!");
+				LogFatal("nodeInfo.freq == 0!");
 				return false;
 			}
-			nodeInfo.weight = log(double(nodeInfo.count)/double(_totalCount));
-			if(_minWeight > nodeInfo.weight)
+			nodeInfo.logFreq = log(double(nodeInfo.freq)/double(_freqSum));
+			if(_minLogFreq > nodeInfo.logFreq)
 			{
-				_minWeight = nodeInfo.weight;
+				_minLogFreq = nodeInfo.logFreq;
 			}
 		}
 		

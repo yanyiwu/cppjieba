@@ -18,29 +18,12 @@
 #include "cppcommon/logger.h"
 #include "TransCode.h"
 #include "globals.h"
+#include "structs.h"
 
 
 namespace CppJieba
 {
     using namespace CPPCOMMON;
-    using namespace std;
-	typedef map<uint16_t, struct TrieNode*> TrieNodeMap;
-
-	struct TrieNodeInfo
-	{
-		string word;
-		size_t wLen;// the word's len , not string.size(), 
-		size_t count;
-		string tag;
-		double weight;
-		TrieNodeInfo()
-		{
-			wLen = 0;
-			count = 0;
-			weight = 0.0;
-		}
-	};
-
 	struct TrieNode
     {
         TrieNodeMap hmap;
@@ -60,8 +43,8 @@ namespace CppJieba
             TrieNode* _root;
 			vector<TrieNodeInfo> _nodeInfoVec;
 
-			int64_t _totalCount;
-			double _minWeight;
+			int64_t _freqSum;
+			double _minLogFreq;
 			bool _initFlag;
 
         public:
