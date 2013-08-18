@@ -44,11 +44,6 @@ namespace CppJieba
 		return true;
 	}
 	
-	bool TransCode::a(const string& str, vector<uint16_t>& vec)
-	{
-		return true;
-	}
-
 	bool TransCode::strToVec(const string& str, vector<uint16_t>& vec)
 	{
 		if(NULL == _pf_strToVec)

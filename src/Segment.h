@@ -23,14 +23,16 @@ namespace CppJieba
 			bool init();
 			bool loadSegDict(const char * const filePath);
 			bool dispose();
-			double getWordWeight(const string& str);
 		public:
-			bool cutDAG(const string& chStr, vector<string>& res);
+			bool cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos);
+			bool cutDAG(const string& str, vector<string>& res);
 
 		private:
-			bool _calcDAG(const VUINT16& unicode, vector<vector<uint> >& dag);
-			bool _calcDP(const VUINT16& unicode, const vector<vector<uint> >& dag, vector<pair<int, double> >& res);
-			bool _cutDAG(const VUINT16& unicode, const vector<pair<int, double> >& dp, vector<string>& res);
+			bool _calcDAG(SegmentContext& segContext);
+			bool _calcDP(SegmentContext& segContext);
+			bool _cutDAG(SegmentContext& segContext, vector<TrieNodeInfo>& res);
+
+			//bool _fill(const string& )
 
 	};
 }

@@ -152,9 +152,9 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		VUINT16 unicode;
+		VUINT16 uintVec;
 		
-		bool retFlag = TransCode::strToVec(str, unicode);
+		bool retFlag = TransCode::strToVec(str, uintVec);
 		if(retFlag)
 		{
 			LogError("TransCode::strToVec failed.");
@@ -164,9 +164,9 @@ namespace CppJieba
 		//find
 		TrieNode* p = _root;
 		TrieNodeInfo * res = NULL;
-		for(uint i = 0; i < unicode.size(); i++)
+		for(uint i = 0; i < uintVec.size(); i++)
 		{
-			uint16_t chUni = unicode[i];
+			uint16_t chUni = uintVec[i];
 			if(p->isLeaf)
 			{
 				uint pos = p->nodeInfoVecPos;
@@ -195,22 +195,22 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		VUINT16 unicode;
-		bool retFlag = TransCode::strToVec(str, unicode);
+		VUINT16 uintVec;
+		bool retFlag = TransCode::strToVec(str, uintVec);
 		if(!retFlag)
 		{
 			return NULL;
 		}
-		return find(unicode);
+		return find(uintVec);
 	}
 
-	const TrieNodeInfo* Trie::find(const VUINT16& unicode)
+	const TrieNodeInfo* Trie::find(const VUINT16& uintVec)
 	{
-		if(unicode.empty())
+		if(uintVec.empty())
 		{
 			return NULL;
 		}
-		return find(unicode.begin(), unicode.end());
+		return find(uintVec.begin(), uintVec.end());
 	}
 
 	const TrieNodeInfo* Trie::find(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
@@ -257,25 +257,25 @@ namespace CppJieba
 	double Trie::getWeight(const string& str)
 	{
 
-		VUINT16 unicode;
-		TransCode::strToVec(str, unicode);
-		return getWeight(unicode);
+		VUINT16 uintVec;
+		TransCode::strToVec(str, uintVec);
+		return getWeight(uintVec);
 	}
 
-	double Trie::getWeight(const VUINT16& unicode)
+	double Trie::getWeight(const VUINT16& uintVec)
 	{
-		if(unicode.empty())
+		if(uintVec.empty())
 		{
-			return getMinWeight();
+			return getMinLogFreq();
 		}
-		const TrieNodeInfo * p = find(unicode);
+		const TrieNodeInfo * p = find(uintVec);
 		if(NULL != p)
 		{
 			return p->logFreq;
 		}
 		else
 		{
-			return getMinWeight();
+			return getMinLogFreq();
 		}
 		
 	}
@@ -289,11 +289,11 @@ namespace CppJieba
 		}
 		else
 		{
-			return getMinWeight();
+			return getMinLogFreq();
 		}
 	}
 
-	double Trie::getMinWeight()
+	double Trie::getMinLogFreq()
 	{
 		return _minLogFreq;
 	}
@@ -326,8 +326,8 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		VUINT16 unicode;
-		bool retFlag = TransCode::strToVec(word, unicode);
+		VUINT16 uintVec;
+		bool retFlag = TransCode::strToVec(word, uintVec);
 		if(!retFlag)
 		{
 			LogError("TransCode::strToVec error.");
@@ -335,9 +335,9 @@ namespace CppJieba
 		}
 		
         TrieNode* p = _root;
-        for(uint i = 0; i < unicode.size(); i++)
+        for(uint i = 0; i < uintVec.size(); i++)
         {
-			uint16_t cu = unicode[i];
+			uint16_t cu = uintVec[i];
 			if(NULL == p)
 			{
 				return false;
@@ -426,7 +426,7 @@ int main()
     trie.init();
 	trie.loadDict("../dicts/segdict.gbk.v2.1");
 	//trie.loadDict("tmp");
-	cout<<trie.getMinWeight()<<endl;
+	cout<<trie.getMinLogFreq()<<endl;
 	cout<<trie.getTotalCount()<<endl;
     trie.dispose();
     return 0;

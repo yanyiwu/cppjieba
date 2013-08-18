@@ -12,7 +12,7 @@ namespace CppJieba
 		size_t wLen;// the word's len , not string.length(), 
 		size_t freq;
 		string tag;
-		double logFreq;//log(freq/sum(freq));
+		double logFreq; //logFreq = log(freq/sum(freq));
 		TrieNodeInfo()
 		{
 			wLen = 0;
@@ -20,12 +20,29 @@ namespace CppJieba
 			logFreq = 0.0;
 		}
 	};
+	
+	
+	struct SegmentContext//: public TrieNodeInfo
+	{
+		vector<uint16_t> uintVec;
+		vector< vector<pair<uint, const TrieNodeInfo*> > > dag;
+		vector< pair<const TrieNodeInfo*, double> > dp;
+		//vector<string> words;
+	};
+	
+	/*
+	struct SegmentWordInfo: public TrieNodeInfo
+	{
+		
+	};
+	*/
+	
 
-	struct WordInfo: public TrieNodeInfo
+	struct KeyWordInfo: public TrieNodeInfo
 	{
 		double idf;
 		double weight;// log(wLen+1)*logFreq;
-		WordInfo()
+		KeyWordInfo()
 		{
 			idf = 0.0;
 			weight = 0.0;
@@ -36,7 +53,7 @@ namespace CppJieba
 		}
 	};
 
-	inline string joinWordInfos(const vector<WordInfo>& vec)
+	inline string joinWordInfos(const vector<KeyWordInfo>& vec)
 	{
 		vector<string> tmp;
 		for(uint i = 0; i < vec.size(); i++)

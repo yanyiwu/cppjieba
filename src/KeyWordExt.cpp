@@ -82,17 +82,17 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_wordInfoCompare(const WordInfo& a, const WordInfo& b)
+	bool KeyWordExt::_wordInfoCompare(const KeyWordInfo& a, const KeyWordInfo& b)
 	{
 		return a.weight > b.weight;
 	}
 
-	bool KeyWordExt::_sortWLIDF(vector<WordInfo>& wordInfos)
+	bool KeyWordExt::_sortWLIDF(vector<KeyWordInfo>& wordInfos)
 	{
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
-			WordInfo& wInfo = wordInfos[i];
-			double logWordFreq = _segment.getWordWeight(wInfo.word);
+			KeyWordInfo& wInfo = wordInfos[i];
+			double logWordFreq = 1.0;//_segment.getWordWeight(wInfo.word);
 			wInfo.idf = -logWordFreq;
 			size_t wLen = TransCode::getWordLength(wInfo.word);
 			if(0 == wLen)
@@ -108,10 +108,10 @@ namespace CppJieba
 	bool KeyWordExt::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
 	{
 		keywords.clear();
-		vector<WordInfo> wordInfos;
+		vector<KeyWordInfo> wordInfos;
 		for(uint i = 0; i < words.size(); i++)
 		{
-			WordInfo wInfo;
+			KeyWordInfo wInfo;
 			wInfo.word = words[i];
 			wordInfos.push_back(wInfo);
 		}
@@ -358,16 +358,16 @@ namespace CppJieba
 		return false;
 	}
 
-	bool KeyWordExt::_prioritizeSubWords(vector<WordInfo>& wordInfos)
+	bool KeyWordExt::_prioritizeSubWords(vector<KeyWordInfo>& wordInfos)
 	{
 		if(2 > wordInfos.size())
 		{
 			return true;
 		}
 
-		WordInfo prior;
+		KeyWordInfo prior;
 		bool flag = false;
-		for(vector<WordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
 			if(_isContainSubWords(it->word))
 			{
