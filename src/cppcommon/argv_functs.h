@@ -20,7 +20,7 @@ namespace CPPCOMMON
 			~ArgvContext();
 		public:
 			string toString();
-			string operator [](int i);
+			string operator [](uint i);
 			string operator [](const string& key);
 		private:
 			vector<string> _args;

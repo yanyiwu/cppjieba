@@ -54,11 +54,11 @@ namespace CPPCOMMON
 	{
 		string res;
 		res += string_format("[%s]\n", joinStr(_args, ", ").c_str());
-		res += jsonMPSS(_mpss);
+		res += mapToString<string, string>(_mpss);
 		return res;
 	}
 
-	string ArgvContext::operator [](int i)
+	string ArgvContext::operator [](uint i)
 	{
 		if(i < _args.size())
 		{
@@ -93,6 +93,7 @@ int main(int argc, char** argv)
 	cout<<arg.toString()<<endl;
 	cout<<arg[1]<<endl;
 	cout<<arg["--hehe"]<<endl;
+	cout<<pairToString<int,double>(pair<int, double>(1,1.2))<<endl;
 	return 0;
 }
 

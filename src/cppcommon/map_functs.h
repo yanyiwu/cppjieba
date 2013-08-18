@@ -9,35 +9,41 @@
 
 #include <map>
 #include <iostream>
+#include <sstream>
 
 namespace CPPCOMMON
 {
 	using namespace std;
 
-	inline string jsonMPSS(const map<string, string>& mpss)
-	{
-		if(mpss.empty())
+	template<typename T1, typename T2>
+		string mapToString(const map<T1, T2>& mp)
 		{
-			return "{}";
-		}
-		string res("{");
-		map<string, string>::const_iterator it = mpss.begin();
-		res += it->first;
-		res += ": ";
-		res += it->second;
-		it++;
-		while(it != mpss.end())
-		{
-			res += ", ";
-			res += it->first;
-			res += ": ";
-			res += it->second;
+			if(mp.empty())
+			{
+				return "{}";
+			}
+			stringstream ss;
+			ss<<'{';
+			typename map<T1, T2>::const_iterator it = mp.begin();
+			ss<<it->first<<": "<<it->second;
 			it++;
+			while(it != mp.end())
+			{
+				ss<<", "<<it->first<<": "<<it->second;
+				it++;
+			}
+			ss<<"}";
+			return ss.str();
 		}
-		res += "}";
-		return res;
-	}
-	
+
+	template<typename T1, typename T2>
+		string pairToString(const pair<T1, T2>& p)
+		{
+			stringstream ss;
+			ss<<p.first<<":"<<p.second;
+			return ss.str();
+		}
+
 	template<class kT, class vT>
 		void printMap(const map<kT, vT>& mp)
 		{
