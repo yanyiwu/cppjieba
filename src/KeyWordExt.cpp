@@ -92,184 +92,144 @@ namespace CppJieba
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
 			KeyWordInfo& wInfo = wordInfos[i];
-			double logWordFreq = 1.0;//_segment.getWordWeight(wInfo.word);
-			wInfo.idf = -logWordFreq;
-			size_t wLen = TransCode::getWordLength(wInfo.word);
-			if(0 == wLen)
+			wInfo.idf = - wInfo.logFreq;
+			if(0 == wInfo.wLen)
 			{
-				LogFatal("getUtf8WordLen(%s) return 0");
+				LogFatal("wLen is 0!");
+				return false;
 			}
-			wInfo.weight = log(double(wLen + 1)) * wInfo.idf;
+			wInfo.weight = log(double(wInfo.wLen + 1)) * wInfo.idf;
 		}
 		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
 		return true;
 	}
 
-	bool KeyWordExt::_extractTopN(const vector<string>& words, vector<string>& keywords, uint topN)
+	bool KeyWordExt::_extTopN(vector<KeyWordInfo>& wordInfos, uint topN)
 	{
-		keywords.clear();
-		vector<KeyWordInfo> wordInfos;
-		for(uint i = 0; i < words.size(); i++)
+		int dis = wordInfos.size() - topN;
+		if(dis <= 0)
 		{
-			KeyWordInfo wInfo;
-			wInfo.word = words[i];
-			wordInfos.push_back(wInfo);
+			return true;
 		}
 		
-		_sortWLIDF(wordInfos);
-#ifdef DEBUG
-		LogDebug(string_format("calc weight & sorted:%s",joinWordInfos(wordInfos).c_str()));
-#endif
-		
-		_prioritizeSubWords(wordInfos);
-#ifdef DEBUG
-		LogDebug(string_format("_prioritizeSubWords res:%s", joinWordInfos(wordInfos).c_str()));
-#endif
-		//extract TopN
-		for(uint i = 0; i < topN && i < wordInfos.size(); i++)
+		if(uint(dis) <= topN)
 		{
-			keywords.push_back(wordInfos[i].word);
+			for(int i = 0; i< dis; i++)
+			{
+				wordInfos.pop_back();
+			}
+		}
+		else// in case that topN << size;
+		{
+			
+			vector<KeyWordInfo> tmp(wordInfos.begin(), wordInfos.begin() + topN);
+			wordInfos.swap(tmp);
 		}
 		return true;
 	}
 
 
-	bool KeyWordExt::extract(const vector<string>& _words, vector<string>& keywords, uint topN)
+	bool KeyWordExt::extract(const vector<string>& words, vector<KeyWordInfo>& keyWordInfos, uint topN)
 	{
-		if(_words.empty())
+		if(words.empty())
 		{
 			return false;
 		}
 
-		vector<string> words(_words);
-
-#ifdef DEBUG
+#ifdef DEBU
 		LogDebug(string_format("words:[%s]", joinStr(words, ",").c_str()));
 #endif
 
-		bool retFlag = _filter(words);
-		if(!retFlag)
+		keyWordInfos.clear();
+		for(uint i = 0; i < words.size(); i++)
 		{
-			LogError("_filter failed.");
-			return false;
+			keyWordInfos.push_back(words[i]);
 		}
 
-#ifdef DEBUG
-		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
-#endif
-
-		retFlag = _extractTopN(words, keywords, topN);
-		if(!retFlag)
-		{
-			LogError("_extractTopN failed.");
-			return false;
-		}
-		//LogDebug("_extractTopN finished.");
-
-#ifdef DEBUG
-		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
-#endif
-		
-		return true;
+		return _extract(keyWordInfos, topN);
 	}
 
-	bool KeyWordExt::extract(const string& title, vector<string>& keywords, uint topN)
+	bool KeyWordExt::extract(const string& title, vector<KeyWordInfo>& keyWordInfos, uint topN)
 	{
 		if(title.empty())
 		{
 			return false;
 		}
+		
+		vector<TrieNodeInfo> trieNodeInfos; 
+		_segment.cutDAG(title, trieNodeInfos);
 
-#ifdef DEBUG
-		LogDebug(string_format("title:[%s]",title.c_str()));
-#endif
-
-		bool retFlag;
-		vector<string> words;
-		retFlag = _segment.cutDAG(title, words);
-		if(!retFlag)
+		keyWordInfos.clear();
+		for(uint i = 0; i < trieNodeInfos.size(); i++)
 		{
-			LogError(string_format("cutDAG(%s) failed.", title.c_str()));
-			return false;
+			keyWordInfos.push_back(trieNodeInfos[i]);
 		}
-#ifdef DEBUG
-		LogDebug(string_format("cutDAG result:[%s]", joinStr(words, ",").c_str()));
-#endif
+		return _extract(keyWordInfos, topN);
+	}
 
-		retFlag = _filter(words);
-		if(!retFlag)
+	bool KeyWordExt::_extract(vector<KeyWordInfo>& keyWordInfos, uint topN)
+	{
+		if(!_filter(keyWordInfos))
 		{
 			LogError("_filter failed.");
 			return false;
 		}
 
-#ifdef DEBUG
-		LogDebug(string_format("_filter res:[%s]", joinStr(words, ",").c_str()));
-#endif
-
-		retFlag = _extractTopN(words, keywords, topN);
-		if(!retFlag)
+		if(!_sortWLIDF(keyWordInfos))
 		{
-			LogError("_extractTopN failed.");
+			LogError("_sortWLIDF failed.");
 			return false;
 		}
-		//LogDebug("_extractTopN finished.");
 
-#ifdef DEBUG
-		LogDebug(string_format("ext res:[%s]", joinStr(keywords, ",").c_str()));
-#endif
+		if(!_extTopN(keyWordInfos, topN))
+		{
+			LogError("_extTopN failed.");
+			return false;
+		}
+
 		return true;
 	}
 
-	bool KeyWordExt::_filter(vector<string>& strs)
+	bool KeyWordExt::_filter(vector<KeyWordInfo>& wordInfos)
 	{
-		bool retFlag;
-		retFlag = _filterDuplicate(strs);
-		if(!retFlag)
+		if(!_filterDuplicate(wordInfos))
 		{
 			LogError("_filterDuplicate failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterDuplicate res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterSingleWord(strs);
-		if(!retFlag)
+		if(!_filterSingleWord(wordInfos))
 		{
 			LogError("_filterSingleWord failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterSingleWord res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterStopWords(strs);
-		if(!retFlag)
+		if(!_filterStopWords(wordInfos))
 		{
 			LogError("_filterStopWords failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterStopWords res:[%s]", joinStr(strs, ",").c_str()));
 
-		retFlag = _filterSubstr(strs);
-		if(!retFlag)
+		if(!_filterSubstr(wordInfos))
 		{
 			LogError("_filterSubstr failed.");
 			return false;
 		}
-		//LogDebug(string_format("_filterSubstr res:[%s]", joinStr(strs, ",").c_str()));
 
 		return true;
 	}
 
-	bool KeyWordExt::_filterStopWords(vector<string>& strs)
+	bool KeyWordExt::_filterStopWords(vector<KeyWordInfo>& wordInfos)
 	{
 		if(_stopWords.empty())
 		{
 			return true;
 		}
-		for(VSI it = strs.begin(); it != strs.end();)
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end();)
 		{
-			if(_stopWords.find(*it) != _stopWords.end())
+			if(_stopWords.find(it->word) != _stopWords.end())
 			{
-				it = strs.erase(it);
+				it = wordInfos.erase(it);
 			}
 			else
 			{
@@ -280,33 +240,33 @@ namespace CppJieba
 	}
 
 
-	bool KeyWordExt::_filterDuplicate(vector<string>& strs)
+	bool KeyWordExt::_filterDuplicate(vector<KeyWordInfo>& wordInfos)
 	{
 		set<string> st;
-		for(VSI it = strs.begin(); it != strs.end(); )
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
-			if(st.find(*it) != st.end())
+			if(st.find(it->word) != st.end())
 			{
-				it = strs.erase(it);
+				it = wordInfos.erase(it);
 			}
 			else
 			{
-				st.insert(*it);
+				st.insert(it->word);
 				it++;
 			}
 		}
 		return true;
 	}
 
-	bool KeyWordExt::_filterSingleWord(vector<string>& strs)
+	bool KeyWordExt::_filterSingleWord(vector<KeyWordInfo>& wordInfos)
 	{
-		for(vector<string>::iterator it = strs.begin(); it != strs.end();)
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end();)
 		{
 
 			// filter single word
-			if(1 == TransCode::getWordLength(*it)) 
+			if(1 == it->wLen)
 			{
-				it = strs.erase(it);
+				it = wordInfos.erase(it);
 			}
 			else
 			{
@@ -316,27 +276,31 @@ namespace CppJieba
 		return true;
 	}
 
-	bool KeyWordExt::_filterSubstr(vector<string>& strs)
+	bool KeyWordExt::_filterSubstr(vector<KeyWordInfo>& wordInfos)
 	{
-		vector<string> tmp = strs;
+		vector<string> tmp ;
+		for(uint i = 0; i < wordInfos.size(); i++)
+		{
+			tmp.push_back(wordInfos[i].word);
+		}
 		set<string> subs;
-		for(VSI it = strs.begin(); it != strs.end(); it ++)
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); it ++)
 		{
 			for(uint j = 0; j < tmp.size(); j++)
 			{
-				if(*it != tmp[j] && string::npos != tmp[j].find(*it, 0))
+				if(it->word != tmp[j] && string::npos != tmp[j].find(it->word, 0))
 				{
-					subs.insert(*it);
+					subs.insert(it->word);
 				}
 			}
 		}
 
 		//erase subs from strs
-		for(VSI it = strs.begin(); it != strs.end(); )
+		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
-			if(subs.end() != subs.find(*it))
+			if(subs.end() != subs.find(it->word))
 			{
-				it =  strs.erase(it);
+				it =  wordInfos.erase(it);
 			}
 			else
 			{

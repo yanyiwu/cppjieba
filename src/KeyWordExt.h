@@ -33,21 +33,22 @@ namespace CppJieba
 			bool dispose();
 
 		public:
-			bool extract(const string& title, vector<string>& keywords, uint topN);
-			bool extract(const vector<string>& words, vector<string>& keywords, uint topN);
+			bool extract(const string& title, vector<KeyWordInfo>& keyWordInfos, uint topN);
+			bool extract(const vector<string>& words, vector<KeyWordInfo>& keyWordInfos, uint topN);
 		private:
 			static bool _wordInfoCompare(const KeyWordInfo& a, const KeyWordInfo& b);
 		private:
-			bool _extractTopN(const vector<string>& words, vector<string>& keywords, uint topN);
+			bool _extract(vector<KeyWordInfo>& keyWordInfos, uint topN);
+			bool _extTopN(vector<KeyWordInfo>& wordInfos, uint topN);
 		private:
 			//sort by word len - idf
 			bool _sortWLIDF(vector<KeyWordInfo>& wordInfos);
 		private:
-			bool _filter(vector<string>& strs);
-			bool _filterDuplicate(vector<string>& strs);
-			bool _filterSingleWord(vector<string>& strs);
-			bool _filterSubstr(vector<string>& strs);
-			bool _filterStopWords(vector<string>& strs);
+			bool _filter(vector<KeyWordInfo>& );
+			bool _filterDuplicate(vector<KeyWordInfo>& );
+			bool _filterSingleWord(vector<KeyWordInfo>& );
+			bool _filterSubstr(vector<KeyWordInfo>& );
+			bool _filterStopWords(vector<KeyWordInfo>& );
 		private:
 			bool _prioritizeSubWords(vector<KeyWordInfo>& wordInfos);
 			bool _isContainSubWords(const string& word);

@@ -1,7 +1,9 @@
 #ifndef CPPJIEBA_STRUCTS_H
 #define CPPJIEBA_STRUCTS_H
 
+#include <limits>
 #include "globals.h"
+#include "Trie.h"
 
 namespace CppJieba
 {
@@ -18,6 +20,13 @@ namespace CppJieba
 			wLen = 0;
 			freq = 0;
 			logFreq = 0.0;
+		}
+		TrieNodeInfo(const string& _word)
+		{
+			word = _word;
+			wLen = TransCode::getWordLength(_word);
+			freq = 0;
+			logFreq = -numeric_limits<double>::max();
 		}
 	};
 	
@@ -36,7 +45,6 @@ namespace CppJieba
 		
 	};
 	*/
-	
 
 	struct KeyWordInfo: public TrieNodeInfo
 	{
@@ -47,9 +55,33 @@ namespace CppJieba
 			idf = 0.0;
 			weight = 0.0;
 		}
+		KeyWordInfo(const string& _word):TrieNodeInfo(_word)
+		{ 
+			idf = 0.0;
+			weight = 0.0;
+		}
+		KeyWordInfo(const TrieNodeInfo& trieNodeInfo)
+		{
+			word = trieNodeInfo.word;
+			freq = trieNodeInfo.freq;
+			wLen = trieNodeInfo.wLen;
+			tag = trieNodeInfo.tag;
+			logFreq = trieNodeInfo.logFreq;
+			idf = 0.0;
+			weight = 0.0;
+		}
 		string toString() const
 		{
 			return string_format("{word:%s,wLen:%d weight:%lf, idf:%lf}", word.c_str(), wLen, weight, idf);
+		}
+		KeyWordInfo& operator = (const TrieNodeInfo& trieNodeInfo)
+		{
+			word = trieNodeInfo.word;
+			freq = trieNodeInfo.freq;
+			wLen = trieNodeInfo.wLen;
+			tag = trieNodeInfo.tag;
+			logFreq = trieNodeInfo.logFreq;
+			return *this;
 		}
 	};
 

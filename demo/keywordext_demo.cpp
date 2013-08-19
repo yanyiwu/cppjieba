@@ -21,7 +21,7 @@ void testKeyWordExt(const char * dictPath, const char * filePath)
 		return ;
 	}
 	ifstream ifile(filePath);
-	vector<string> res;
+	vector<KeyWordInfo> res;
 	string line;
 	while(getline(ifile, line))
 	{
@@ -29,7 +29,7 @@ void testKeyWordExt(const char * dictPath, const char * filePath)
 		if(!line.empty())
 		{
 			ext.extract(line, res, 20);
-			cout<<line<<"\n"<<joinStr(res,",")<<endl;
+			cout<<line<<'\n'<<joinWordInfos(res)<<endl;
 		}
 
 	}
@@ -57,15 +57,15 @@ void testKeyWordExt2(const char * dictPath, const char * filePath)
 
 	ifstream ifile(filePath);
 	vector<string> words;
-	vector<string> keywords;
+	vector<KeyWordInfo> res;
 	string line;
 	while(getline(ifile, line))
 	{
 		if(!line.empty())
 		{
 			seg.cutDAG(line, words);
-			ext.extract(words, keywords, 20);
-			cout<<line<<"\n"<<joinStr(keywords," ")<<endl;
+			ext.extract(words, res, 20);
+			cout<<line<<"\n"<<joinWordInfos(res)<<endl;
 		}
 
 	}
@@ -73,13 +73,26 @@ void testKeyWordExt2(const char * dictPath, const char * filePath)
 	ext.dispose();
 }
 
+const char * const DEFAULT_DICTPATH = "../dicts/jieba.dict.gbk";
+
 int main(int argc, char ** argv)
 {
-	if(argc != 3)
+	ArgvContext arg(argc, argv);
+	string dictPath = arg["--dictpath"];
+	if("" == dictPath)
 	{
-		cerr<<"usage: "<<argv[0]<<" ../dicts/jieba.dict.gbk filename"<<endl;
+		dictPath = DEFAULT_DICTPATH;
+	}
+	if("" == arg[1])
+	{
+		cout<<"usage: \n\t"<<argv[0]<<" [options] <filename>\n"
+		    <<"options:\n"
+		    <<"\t--dictpath\tIf is not specified, the default is "<<DEFAULT_DICTPATH<<"\n"
+		    <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf is not specified, the default is gbk."
+			<<endl;
 		return -1;
 	}
-	testKeyWordExt(argv[1], argv[2]);
+	
+	testKeyWordExt(dictPath.c_str(), arg[1].c_str());
 	return 0;
 }
