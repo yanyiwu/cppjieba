@@ -5,16 +5,16 @@
 #include "logger.h"
 namespace CPPCOMMON
 {
-	const char * Logger::_logFormat =  "%s [File:%s] [Line:%d] [%s] Msg:%s\n";
+	char Logger::_cStrBuf[CSTR_BUFFER_SIZE];
+    const char * Logger::_logLevel[LEVEL_ARRAY_SIZE] = {
+		"DEBUG","INFO","WARN","ERROR","FATAL"
+	};
+
+	const char * Logger::_logFormat = "%s [File:%s] [Line:%d] [%s] Msg:%s\n";
 	const char * Logger::_timeFormat = "%Y-%m-%d %H:%M:%S";
+	time_t Logger::_timeNow;
 	Logger::Logger()
 	{
-		_logLevel[LL_DEBUG] = "DEBUG";
-		_logLevel[LL_INFO] = "INFO";
-		_logLevel[LL_WARN] = "WARN";
-		_logLevel[LL_ERROR] = "ERROR";
-		_logLevel[LL_FATAL] = "FATAL";
-
 	}
 
 	Logger::~Logger()
@@ -51,10 +51,6 @@ namespace CPPCOMMON
 		}
 		return true;
 	}
-}
-namespace CPPCOMMON
-{
-	Logger loggerSingleTon;
 }
 
 
