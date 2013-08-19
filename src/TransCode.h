@@ -1,5 +1,5 @@
 /************************************
- * file enc : ASCII
+ * file enc : utf-8
  * author   : wuyanyi09@gmail.com
 ************************************/
 #ifndef CPPJIEBA_TRANSCODE_H
@@ -20,7 +20,6 @@ namespace CppJieba
 			typedef string (*pf_vecToStr_t)(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
 			typedef size_t (*pf_getWordLength_t)(const string& str);
 		private:
-			static string _enc;
 			static vector<string> _encVec;
 			static bool _isInitted;
 			static pf_strToVec_t _pf_strToVec;
@@ -28,7 +27,8 @@ namespace CppJieba
 			static pf_getWordLength_t _pf_getWordLength;
 			
 		public:
-			static bool setEnc(const string& enc);
+			static void setGbkEnc();
+			static void setUtf8Enc();
 			
 		public:
 			TransCode();

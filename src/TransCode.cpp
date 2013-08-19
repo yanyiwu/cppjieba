@@ -2,7 +2,6 @@
 
 namespace CppJieba
 {
-	string TransCode::_enc;
 	vector<string> TransCode::_encVec;
 	bool TransCode::_isInitted = TransCode::init();
 	TransCode::pf_strToVec_t TransCode::_pf_strToVec = NULL;
@@ -10,9 +9,6 @@ namespace CppJieba
 
 	bool TransCode::init()
 	{
-		_encVec.push_back("utf-8");
-		_encVec.push_back("gbk");
-		_enc = _encVec[1];
 		_pf_strToVec = gbkToVec;
 		_pf_vecToStr = vecToGbk;
 		return true;
@@ -26,22 +22,16 @@ namespace CppJieba
 	{
 	}
 
-	bool TransCode::setEnc(const string& enc)
+	void TransCode::setGbkEnc()
 	{
-		if(_encVec.empty())
-		{
-			return false;
-		}
-		
-		if(isInVec<string>(_encVec, enc))
-		{
-			_enc = enc;
-		}
-		else
-		{
-			return false;
-		}
-		return true;
+		_pf_strToVec = gbkToVec;
+		_pf_vecToStr = vecToGbk;
+	}
+
+	void TransCode::setUtf8Enc()
+	{
+		_pf_strToVec = utf8ToVec;
+		_pf_vecToStr = vecToUtf8;
 	}
 	
 	bool TransCode::strToVec(const string& str, vector<uint16_t>& vec)
@@ -234,10 +224,11 @@ int main()
 
 	string a("严");
 	vector<uint16_t> vec;
-	cout<<TransCode::utf8ToVec(a, vec)<<endl;
+	//TransCode::setUtf8Enc();
+	cout<<TransCode::strToVec(a, vec)<<endl;
 	PRINT_VECTOR(vec);
 
-	cout<<TransCode::vecToUtf8(vec.begin(), vec.end())<<endl;
+	cout<<TransCode::vecToStr(vec.begin(), vec.end())<<endl;
 	
 	return 0;
 }
