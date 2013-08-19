@@ -55,6 +55,38 @@ namespace CppJieba
 
 	bool TransCode::utf8ToVec(const string& str, vector<uint16_t>& vec)
 	{
+		char ch1, ch2;
+		if(str.empty())
+		{
+			return false;
+		}
+		vec.clear();
+		for(uint i = 0;i < str.size();)
+		{
+			if((unsigned char)str[i] <= 0x7f) // 0xxxxxxx
+			{
+				vec.push_back(str[i]);
+				i++;
+			}
+			else if ((unsigned char)str[i] <= 0xdf && i + 1 < str.size()) // 110xxxxxx
+			{
+				ch1 = ((unsigned char)str[i] >> 2) & 0x07;
+				ch2 = (str[i+1] & 0x3f) | ((str[i] & 0x03) << 6 );
+				vec.push_back(twocharToUint16(ch1, ch2));
+				i += 2;
+			}
+			else if((unsigned char)str[i] <= 0xef && i + 2 < str.size())
+			{
+				ch1 = ((unsigned char)str[i] << 4) | (((unsigned char)str[i+1] >> 2) & 0x0f );
+				ch2 = ((str[i+1]<<6) & 0xc0) | (str[i+2] & 0x3f); 
+				vec.push_back(twocharToUint16(ch1, ch2));
+				i += 3;
+			}
+			else
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -100,7 +132,33 @@ namespace CppJieba
 
 	string TransCode::vecToUtf8(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
 	{
-		return "";
+		if(begin >= end)
+		{
+			return "";
+		}
+		string res;
+		uint16_t ui;
+		while(begin != end)
+		{
+			ui = *begin;
+			if(ui <= 0x7f)
+			{
+				res += char(ui);
+			}
+			else if(ui <= 0x7ff)
+			{
+				res += char(((ui>>6) & 0x1f) | 0xc0);
+				res += char((ui & 0x3f) | 0x80);
+			}
+			else
+			{
+				res += char(((ui >> 12) & 0x0f )| 0xe0);
+				res += char(((ui>>6) & 0x3f )| 0x80 );
+				res += char((ui & 0x3f) | 0x80);
+			}
+			begin ++;
+		}
+		return res;
 	}
 
 	string TransCode::vecToGbk(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
@@ -109,10 +167,11 @@ namespace CppJieba
 		{
 			return "";
 		}
-		string res("");
+		pair<char, char> pa;
+		string res;
 		while(begin != end)
 		{
-			pair<char, char> pa = uint16ToChar2(*begin);
+			pa = uint16ToChar2(*begin);
 			if(pa.first & 0x80)
 			{
 				res += pa.first;
@@ -168,10 +227,18 @@ int main()
 	//	cout<<TransCode::vecToStr(vec)<<endl;
 	//}
 	//ifile.close();
-	typedef bool (* pf)(const string& , vector<uint16_t>&);
-	pf tmp = TransCode::a;
+	//typedef bool (* pf)(const string& , vector<uint16_t>&);
+	//pf tmp = TransCode::a;
+	//vector<uint16_t> vec;
+	//tmp("1",vec);
+
+	string a("严");
 	vector<uint16_t> vec;
-	tmp("1",vec);
+	cout<<TransCode::utf8ToVec(a, vec)<<endl;
+	PRINT_VECTOR(vec);
+
+	cout<<TransCode::vecToUtf8(vec.begin(), vec.end())<<endl;
+	
 	return 0;
 }
 #endif
