@@ -86,7 +86,7 @@ int main(int argc, char ** argv)
 	}
 
 	init(dictPath.c_str());
-	run(argv[1]);
+	run(arg[1].c_str());
 	dispose();
 	return 0;
 }

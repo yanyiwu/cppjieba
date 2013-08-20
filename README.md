@@ -23,3 +23,10 @@ run `./segment_demo` to get help.
 
 #Contact
 wuyanyi09@gmail.com
+
+#Thanks
+>"结巴中文"分词作者: SunJunyi
+
+>https://github.com/fxsjy/jieba
+
+
