@@ -7,3 +7,8 @@ tags
 log
 main
 lib*.a
+*_demo
+segdict*
+prior.gbk
+tmp
+t.*

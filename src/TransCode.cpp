@@ -51,23 +51,24 @@ namespace CppJieba
 			return false;
 		}
 		vec.clear();
-		for(uint i = 0;i < str.size();)
+		size_t siz = str.size();
+		for(uint i = 0;i < siz;)
 		{
-			if((unsigned char)str[i] <= 0x7f) // 0xxxxxxx
+			if(!(str[i] & 0x80)) // 0xxxxxxx
 			{
 				vec.push_back(str[i]);
 				i++;
 			}
-			else if ((unsigned char)str[i] <= 0xdf && i + 1 < str.size()) // 110xxxxxx
+			else if ((unsigned char)str[i] <= 0xdf && i + 1 < siz) // 110xxxxxx
 			{
-				ch1 = ((unsigned char)str[i] >> 2) & 0x07;
+				ch1 = (str[i] >> 2) & 0x07;
 				ch2 = (str[i+1] & 0x3f) | ((str[i] & 0x03) << 6 );
 				vec.push_back(twocharToUint16(ch1, ch2));
 				i += 2;
 			}
-			else if((unsigned char)str[i] <= 0xef && i + 2 < str.size())
+			else if((unsigned char)str[i] <= 0xef && i + 2 < siz)
 			{
-				ch1 = ((unsigned char)str[i] << 4) | (((unsigned char)str[i+1] >> 2) & 0x0f );
+				ch1 = (str[i] << 4) | ((str[i+1] >> 2) & 0x0f );
 				ch2 = ((str[i+1]<<6) & 0xc0) | (str[i+2] & 0x3f); 
 				vec.push_back(twocharToUint16(ch1, ch2));
 				i += 3;
@@ -178,13 +179,8 @@ namespace CppJieba
 
 	size_t TransCode::getWordLength(const string& str)
 	{
-		if(NULL == _pf_strToVec)
-		{
-			return 0;
-		}
 		vector<uint16_t> vec;
-		bool ret = strToVec(str, vec);
-		if(!ret)
+		if(!strToVec(str, vec))
 		{
 			return 0;
 		}
@@ -222,7 +218,7 @@ int main()
 	//vector<uint16_t> vec;
 	//tmp("1",vec);
 
-	string a("严");
+	string a("abd你好世界!a");
 	vector<uint16_t> vec;
 	//TransCode::setUtf8Enc();
 	cout<<TransCode::strToVec(a, vec)<<endl;
