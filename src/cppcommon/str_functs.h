@@ -17,6 +17,8 @@
 #include <iconv.h>
 #include <memory.h>
 #include "typedefs.h"
+#include <functional> 
+#include <locale>
 namespace CPPCOMMON
 {
 	using namespace std;
@@ -33,18 +35,12 @@ namespace CPPCOMMON
 	string lowerStr(const string& str);
 	string replaceStr(const string& strSrc, const string& oldStr, const string& newStr, int count = -1);
 	string stripStr(const string& str, const string& patternstr = " \n\t");
+	std::string &ltrim(std::string &s) ;
+	std::string &rtrim(std::string &s) ;
+	std::string &trim(std::string &s) ;
 	unsigned int countStrDistance(const string& A, const string& B);
 	unsigned int countStrSimilarity(const string& A, const string& B);
 
-    //encode
-    //size_t unicodeToUtf8(uint16_t *in, size_t len, char * out);
-	//string unicodeToUtf8(const Unicode& unicode);
-    //int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode);
-	//bool utf8ToUnicode(const string& utfStr, Unicode& unicode);
-
-	//int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen);
-	//string gbkToUtf8(const string& gbk);
-	//string utf8ToGbk(const string& utf);
 
 	bool uniStrToVec(const string& str, Unicode& vec);
 	string uniVecToStr(const Unicode& vec);

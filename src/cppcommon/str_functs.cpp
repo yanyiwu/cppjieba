@@ -1,7 +1,7 @@
 /************************************
  * file enc : utf8
  * author   : wuyanyi09@gmail.com
-************************************/
+ ************************************/
 #include "str_functs.h"
 
 namespace CPPCOMMON
@@ -22,9 +22,9 @@ namespace CPPCOMMON
 				return str;
 			}
 			if (n > -1)
-				size = n + 1;
+			  size = n + 1;
 			else
-				size *= 2;
+			  size *= 2;
 		}
 		return str;
 	}
@@ -91,7 +91,29 @@ namespace CPPCOMMON
 		return str.substr(posL, posR - posL + 1);
 
 	}
-	
+
+
+	//http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+	// trim from start
+	std::string &ltrim(std::string &s) 
+	{
+		s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+		return s;
+	}
+
+	// trim from end
+	std::string &rtrim(std::string &s) 
+	{
+		s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+		return s;
+	}
+
+	// trim from both ends
+	std::string &trim(std::string &s) 
+	{
+		return ltrim(rtrim(s));
+	}
+
 	bool splitStrMultiPatterns(
 				const string& strSrc, 
 				vector<string>& outVec, 
@@ -176,208 +198,6 @@ namespace CPPCOMMON
 		return res;
 	}
 
-	/*
-    //unicode utf8 transform
-    size_t unicodeToUtf8(uint16_t *in, size_t len, char * out)
-    {
-        size_t res = 0;
-        for (int i = 0; i < len; i++)
-        {
-            uint16_t unicode = in[i];
-            if (unicode >= 0x0000 && unicode <= 0x007f)
-            {
-                *out = (uint8_t)unicode;
-                out += 1;
-                res += 1;
-            }
-            else if (unicode >= 0x0080 && unicode <= 0x07ff)
-            {
-                *out = 0xc0 | (unicode >> 6);
-                out += 1;
-                *out = 0x80 | (unicode & (0xff >> 2));
-                out += 1;
-                res += 2;
-            }
-            else if (unicode >= 0x0800 && unicode <= 0xffff)
-            {
-                *out = 0xe0 | (unicode >> 12);
-                out += 1;
-                *out = 0x80 | ((unicode >> 6) & 0x3f);
-                out += 1;
-                *out = 0x80 | (unicode & 0x3f);
-                out += 1;
-                res += 3;
-            }
-
-        }
-        *out = '\0';
-        return res;
-    }
-
-	string unicodeToUtf8(const Unicode& unicode)
-	{
-		if(unicode.empty())
-		{
-			return "";
-		}
-
-		uint16_t * uniArr = new uint16_t[unicode.size() + 1];
-		if(NULL == uniArr)
-		{
-			return "";
-		}
-		char * utfStr = new char[unicode.size() * 4 + 1];
-		if(NULL == utfStr)
-		{
-			delete [] uniArr;
-			return "";
-		}
-		for(uint i = 0; i < unicode.size(); i++)
-		{
-			uniArr[i] = unicode[i];
-		}
-		
-		string res("");
-		size_t utfLen = unicodeToUtf8(uniArr, unicode.size(), utfStr);
-		if(0 != utfLen)
-		{
-			res = utfStr;
-		}
-		delete [] uniArr;
-		delete [] utfStr;
-		return res;
-	}
-	*/
-
-    /*from: http://www.cppblog.com/lf426/archive/2008/03/31/45796.html */
-    //int utf8ToUnicode(const char* inutf8, int len, uint16_t* unicode)
-    //{
-    //    int length;
-    //    const unsigned char* utf8 = (const unsigned char*) inutf8;
-    //    const unsigned char* t = (const unsigned char*) inutf8;
-
-    //    length = 0;
-    //    while (utf8 - t < len)
-    //    {
-    //        if ( *(unsigned char *) utf8 <= 0x7f ) 
-    //        {
-    //            //expand with 0s.
-    //            *unicode++ = *utf8++;
-    //        }
-    //        //2 byte.
-    //        else if ( *(unsigned char *) utf8 <= 0xdf ) 
-    //        {
-    //            *unicode++ = ((*(unsigned char *) utf8 & 0x1f) << 6) + ((*(unsigned char *) (utf8 + 1)) & 0x3f);
-    //            utf8 += 2;
-    //        }
-    //        //3 byte.Chinese may use 3 byte.
-    //        else {
-    //            *unicode++ = ((int) (*(unsigned char *) utf8 & 0x0f) << 12) +
-    //                ((*(unsigned char *) (utf8 + 1) & 0x3f) << 6) +
-    //                (*(unsigned char *) (utf8 + 2) & 0x3f);
-    //            utf8 += 3;
-    //        }
-    //        length++;
-    //    }
-
-
-    //    //*unicode = 0; !! this may cause out range of array;
-    //    return length;
-    //}
-
-	//bool utf8ToUnicode(const string& utfStr, Unicode& unicode)
-	//{
-	//	unicode.clear();
-	//	if(utfStr.empty())
-	//	{
-	//		return false;
-	//	}
-	//	uint16_t* pUni = new uint16_t[utfStr.size() + 1];
-	//	if(NULL == pUni)
-	//	{
-	//		return false;
-	//	}
-	//	size_t uniLen = utf8ToUnicode(utfStr.c_str(), utfStr.size(), pUni);
-	//	for(uint i = 0; i < uniLen; i++)
-	//	{
-	//		unicode.push_back(pUni[i]);
-	//	}
-	//	delete [] pUni;
-	//	return true;
-	//}
-
-	////iconv
-	//int code_convert(const char *from_charset,const char *to_charset,char *inbuf,size_t inlen,char *outbuf,size_t outlen)
-	//{
-	//	iconv_t cd;
-
-	//	char **pin = &inbuf;
-	//	char **pout = &outbuf;
-
-	//	cd = iconv_open(to_charset,from_charset);
-	//	if (cd==NULL) 
-	//	{
-	//		return -1;
-	//	}
-	//	memset(outbuf,0,outlen);
-	//	size_t ret = iconv(cd,pin,&inlen,pout,&outlen);
-	//	if (ret == -1)
-	//	{
-	//		//cout<<__FILE__<<__LINE__<<endl;
-	//		return -1;
-	//	}
-	//	iconv_close(cd);
-	//	return 0;
-	//}
-
-	////gbk -> utf8
-	//string gbkToUtf8(const string& gbk)
-	//{
-	//	if(gbk.empty())
-	//	{
-	//		return "";
-	//	}
-	//	string res("");
-	//	size_t maxLen = gbk.size()*4 + 1;
-	//	char * pUtf = new char[maxLen];
-	//	if(NULL == pUtf)
-	//	{
-	//		return "";
-	//	}
-	//	int ret = code_convert("gbk", "utf-8", (char *)gbk.c_str(), gbk.size(), pUtf, maxLen);
-	//	if(ret == -1)
-	//	{
-	//		delete [] pUtf;
-	//		return res;
-	//	}
-	//	res = pUtf;
-	//	delete [] pUtf;
-	//	return res;
-	//}
-
-	////utf8 -> gbk
-	//string utf8ToGbk(const string& utf)
-	//{
-	//	//cout<<__FILE__<<__LINE__<<gbk<<endl;
-	//	string res;
-	//	size_t maxLen = utf.size()*4 + 1;
-	//	char * pGbk = new char[maxLen];
-	//	if(NULL == pGbk)
-	//	{
-	//		return "";
-	//	}
-	//	int ret = code_convert("utf-8", "gbk", (char *)utf.c_str(), utf.size(), pGbk, maxLen);
-	//	if(ret == -1)
-	//	{
-	//		delete [] pGbk;
-	//		return "";
-	//	}
-	//	res = pGbk;
-	//	delete [] pGbk;
-	//	return res;
-	//}
-	//
-
 	//unicode str to vec
 	bool uniStrToVec(const string& str, Unicode& vec)
 	{
@@ -440,22 +260,22 @@ int main()
 	//
 	//s = "ab1ba2ab3";
 	//cout<<replaceStr(s,"ab","###")<<endl;
-    //ifstream ifile("testdata/dict.txt");
-    //string line;
-    //while(getline(ifile, line))
-    //{
-    //    uint16_t strbuf[1024];
+	//ifstream ifile("testdata/dict.txt");
+	//string line;
+	//while(getline(ifile, line))
+	//{
+	//    uint16_t strbuf[1024];
 
-    //    size_t unilen = utf8ToUnicode(line.c_str(), line.size(), strbuf);
-    //    for(int i = 0; i < unilen; i++)
-    //    {
-    //        // printf("%x\n", strbuf[i]);
-    //    }
-    //    char utf8str[512]={0};
-    //    unicodeToUtf8(strbuf, unilen, utf8str);
-    //    //cout<<strlen(utf8str);
-    //    cout<<utf8str<<endl;
-    //}
+	//    size_t unilen = utf8ToUnicode(line.c_str(), line.size(), strbuf);
+	//    for(int i = 0; i < unilen; i++)
+	//    {
+	//        // printf("%x\n", strbuf[i]);
+	//    }
+	//    char utf8str[512]={0};
+	//    unicodeToUtf8(strbuf, unilen, utf8str);
+	//    //cout<<strlen(utf8str);
+	//    cout<<utf8str<<endl;
+	//}
 	//cout<<string_format("hehe%s11asd%dasf","[here]",2);
 	//ifstream ifile("testdata/dict.gbk");
 	//string line;
@@ -481,12 +301,15 @@ int main()
 	//	s = utf8ToGbk(s);
 	//	cout<<s<<endl;
 	//}
-	cout<<strStartsWith("--help","--")<<endl;
-	cout<<strStartsWith("--help","-")<<endl;
-	cout<<strStartsWith("--help","he")<<endl;
-	cout<<strStartsWith("help","help")<<endl;
-	cout<<strStartsWith("","help")<<endl;
-	cout<<strStartsWith("hel","")<<endl;
+	//cout<<strStartsWith("--help","--")<<endl;
+	//cout<<strStartsWith("--help","-")<<endl;
+	//cout<<strStartsWith("--help","he")<<endl;
+	//cout<<strStartsWith("help","help")<<endl;
+	//cout<<strStartsWith("","help")<<endl;
+	//cout<<strStartsWith("hel","")<<endl;
+	string s("  helloword heh\t");
+	string b;
+	cout<<trim(b)<<"11"<<endl;
 	return 0;
 }
 #endif
