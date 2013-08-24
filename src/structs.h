@@ -26,7 +26,7 @@ namespace CppJieba
 			word = _word;
 			wLen = TransCode::getWordLength(_word);
 			freq = 0;
-			logFreq = -numeric_limits<double>::max();
+			logFreq = MIN_DOUBLE;
 		}
 	};
 	

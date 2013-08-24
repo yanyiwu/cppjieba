@@ -21,7 +21,7 @@ namespace CppJieba
 
 		_root = NULL;
 		_freqSum = 0;
-		_minLogFreq = numeric_limits<double>::max();
+		_minLogFreq = MAX_DOUBLE;
 		_initFlag = false;
     }
     

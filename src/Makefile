@@ -61,6 +61,8 @@ KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h Segment.h Trie.h globals.h TransCode.
 
 TransCode.ut: TransCode.cpp TransCode.h globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 
+HMMSegment.ut: HMMSegment.cpp TransCode.cpp TransCode.h HMMSegment.h $(CMLIB)
+	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp HMMSegment.cpp -DHMMSEGMENT_UT $(CMLIB) 
 
 clean:
 	rm -f *.o *.d *.ut $(LIBA) 

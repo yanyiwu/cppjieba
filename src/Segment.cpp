@@ -138,7 +138,7 @@ namespace CppJieba
 		{
 			// calc max
 			segContext.dp[i].first = NULL;
-			segContext.dp[i].second = -(numeric_limits<double>::max());
+			segContext.dp[i].second = MIN_DOUBLE;
 			for(uint j = 0; j < segContext.dag[i].size(); j++)
 			{
 				const pair<uint , const TrieNodeInfo*>& p = segContext.dag[i][j];

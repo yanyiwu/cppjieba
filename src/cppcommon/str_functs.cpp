@@ -53,10 +53,11 @@ namespace CPPCOMMON
 	}
 	void splitStr(const string& source, vector<string>& out_vec, const string& pattern)
 	{
-		if(0 == pattern.size())
+		if(source.empty())
 		{
 			return;
 		}
+		out_vec.clear();
 		string s = source + pattern;
 		string::size_type pos;
 		uint length = s.size();
