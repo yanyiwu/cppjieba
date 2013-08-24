@@ -26,6 +26,11 @@ namespace CppJieba
 	typedef std::vector<uint16_t>::const_iterator VUINT16_CONST_ITER;
 	typedef hash_map<uint16_t, struct TrieNode*> TrieNodeMap;
 
+	namespace HMMDict
+	{
+		
+	}
+
 }
 
 #endif
