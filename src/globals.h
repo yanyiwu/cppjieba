@@ -10,26 +10,28 @@
 #include <string>
 #include <sys/types.h>
 #include <stdint.h>
-#include <hash_map>
+//#include <hash_map>
+#include <tr1/unordered_map>
 //#include <ext/hash_map>
 
 namespace CppJieba
 {
 
 	using namespace std;
-	using __gnu_cxx::hash_map;
+	using std::tr1::unordered_map;
+	//using __gnu_cxx::hash_map;
 	//using namespace stdext;
 	//typedefs
-	const double MIN_DOUBLE = -3.14e+100;
-	const double MAX_DOUBLE = 3.14e+100;
 	typedef unsigned int uint;
 	typedef std::vector<std::string>::iterator VSI;
 	typedef std::vector<uint16_t> VUINT16;
 	typedef std::vector<uint16_t>::const_iterator VUINT16_CONST_ITER;
-	typedef hash_map<uint16_t, struct TrieNode*> TrieNodeMap;
-	typedef hash_map<uint16_t, double> EmitProbMap;
+	typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
+	typedef unordered_map<uint16_t, double> EmitProbMap;
 
 
+	const double MIN_DOUBLE = -3.14e+100;
+	const double MAX_DOUBLE = 3.14e+100;
 }
 
 #endif
