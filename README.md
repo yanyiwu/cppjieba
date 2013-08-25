@@ -16,14 +16,28 @@ TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk都转换成`u
 HMMSegment.cpp/HMMSegment.h
 是根据HMM模型来进行分词，主要算法思路是根据(B,E,M,S)四个状态来代表每个字的隐藏状态。
 HMM模型由dicts/下面的`hmm_model.utf8`提供。
+分词算法即viterbi算法。
 
 ##Demo
 
 ### Segment's demo
+运行方法示例:
 ```
 cd ./demo;
 make;
 ./segment_demo testlines.gbk
+```
+
+Output:
+```
+我来到北京清华大学
+我/来到/北京/清华大学
+
+他来到了网易杭研大厦
+他/来到/了/网易/杭/研/大厦
+
+小明硕士毕业于中国科学院计算所，后在日本京都大学深造
+小/明/硕士/毕业/于/中国科学院/计算所/，/后/在/日本京都大学/深造
 ```
 
 run `./segment_demo` to get help.

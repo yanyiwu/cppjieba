@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
 	*/
 	if(argc < 2)
 	{
-		cout<<"usage: \n\t"<<argv[0]<<" <filename> [options]\n"
+		cout<<"usage: \n\t"<<argv[0]<<"[options] <filename>\n"
 		    <<"options:\n"
 		    <<"\t--dictpath\tIf is not specified, the default is ../dicts/jieba.dict.utf8\n"
 		    <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf is not specified, the default is utf8.\n"
