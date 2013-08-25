@@ -67,14 +67,14 @@ namespace CppJieba
 
 		public:
 			const TrieNodeInfo* find(const string& str);
-			const TrieNodeInfo* find(const VUINT16& uintVec);
-			const TrieNodeInfo* find(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
+			const TrieNodeInfo* find(const Unicode& uintVec);
+			const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end);
 			const TrieNodeInfo* findPrefix(const string& str);
 
 		public:
 			double getWeight(const string& str);
-			double getWeight(const VUINT16& uintVec);
-			double getWeight(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end);
+			double getWeight(const Unicode& uintVec);
+			double getWeight(Unicode::const_iterator begin, Unicode::const_iterator end);
 			double getMinLogFreq();
 			
 			int64_t getTotalCount();

@@ -97,12 +97,12 @@ namespace CppJieba
 			return false;
 		}
 		vector<pair<uint, const TrieNodeInfo*> > vec;
-		VUINT16_CONST_ITER beginIter = segContext.uintVec.begin();
-		for(VUINT16_CONST_ITER iterI = segContext.uintVec.begin(); iterI != segContext.uintVec.end(); iterI++)
+		Unicode::const_iterator beginIter = segContext.uintVec.begin();
+		for(Unicode::const_iterator iterI = segContext.uintVec.begin(); iterI != segContext.uintVec.end(); iterI++)
 		{
 			vec.clear();
 			vec.push_back(pair<uint, const TrieNodeInfo*>(iterI - beginIter, NULL));
-			for(VUINT16_CONST_ITER iterJ = iterI + 1;  iterJ != segContext.uintVec.end(); iterJ++)
+			for(Unicode::const_iterator iterJ = iterI + 1;  iterJ != segContext.uintVec.end(); iterJ++)
 			{
 				//care: the iterJ exceed iterEnd
 				const TrieNodeInfo* ptNodeInfo = _trie.find(iterI, iterJ + 1);
@@ -173,7 +173,7 @@ namespace CppJieba
 		}
 		res.clear();
 
-		VUINT16_CONST_ITER iterBegin = segContext.uintVec.begin();
+		Unicode::const_iterator iterBegin = segContext.uintVec.begin();
 		uint i = 0;
 		while(i < segContext.dp.size())
 		{

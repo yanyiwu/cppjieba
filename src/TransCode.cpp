@@ -112,7 +112,7 @@ namespace CppJieba
 		return true;
 	}
 	
-	string TransCode::vecToStr(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
+	string TransCode::vecToStr(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		if(NULL == _pf_vecToStr)
 		{
@@ -121,7 +121,7 @@ namespace CppJieba
 		return _pf_vecToStr(begin, end);
 	}
 
-	string TransCode::vecToUtf8(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
+	string TransCode::vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		if(begin >= end)
 		{
@@ -152,7 +152,7 @@ namespace CppJieba
 		return res;
 	}
 
-	string TransCode::vecToGbk(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
+	string TransCode::vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		if(begin >= end)
 		{
@@ -199,7 +199,7 @@ int main()
 {
 	//ifstream ifile("/home/wuyanyi/code/SevKeyword/log.2.txt");
 	//string line;
-	//VUINT16 vec;
+	//Unicode vec;
 	//while(getline(ifile, line))
 	//{
 	//	

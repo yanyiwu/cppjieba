@@ -152,7 +152,7 @@ namespace CppJieba
 			LogFatal("trie not initted!");
 			return NULL;
 		}
-		VUINT16 uintVec;
+		Unicode uintVec;
 		
 		bool retFlag = TransCode::strToVec(str, uintVec);
 		if(retFlag)
@@ -195,7 +195,7 @@ namespace CppJieba
 
 	const TrieNodeInfo* Trie::find(const string& str)
 	{
-		VUINT16 uintVec;
+		Unicode uintVec;
 		bool retFlag = TransCode::strToVec(str, uintVec);
 		if(!retFlag)
 		{
@@ -204,7 +204,7 @@ namespace CppJieba
 		return find(uintVec);
 	}
 
-	const TrieNodeInfo* Trie::find(const VUINT16& uintVec)
+	const TrieNodeInfo* Trie::find(const Unicode& uintVec)
 	{
 		if(uintVec.empty())
 		{
@@ -213,7 +213,7 @@ namespace CppJieba
 		return find(uintVec.begin(), uintVec.end());
 	}
 
-	const TrieNodeInfo* Trie::find(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
+	const TrieNodeInfo* Trie::find(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		
 		if(!_getInitFlag())
@@ -226,7 +226,7 @@ namespace CppJieba
 			return NULL;
 		}
 		TrieNode* p = _root;
-		for(VUINT16_CONST_ITER it = begin; it != end; it++)
+		for(Unicode::const_iterator it = begin; it != end; it++)
 		{
 			uint16_t chUni = *it;
 			if(p->hmap.find(chUni) == p-> hmap.end())
@@ -257,12 +257,12 @@ namespace CppJieba
 	double Trie::getWeight(const string& str)
 	{
 
-		VUINT16 uintVec;
+		Unicode uintVec;
 		TransCode::strToVec(str, uintVec);
 		return getWeight(uintVec);
 	}
 
-	double Trie::getWeight(const VUINT16& uintVec)
+	double Trie::getWeight(const Unicode& uintVec)
 	{
 		if(uintVec.empty())
 		{
@@ -280,7 +280,7 @@ namespace CppJieba
 		
 	}
 
-	double Trie::getWeight(VUINT16_CONST_ITER begin, VUINT16_CONST_ITER end)
+	double Trie::getWeight(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		const TrieNodeInfo * p = find(begin, end);
 		if(NULL != p)
@@ -326,7 +326,7 @@ namespace CppJieba
 
 		const string& word = nodeInfo.word;
 		
-		VUINT16 uintVec;
+		Unicode uintVec;
 		bool retFlag = TransCode::strToVec(word, uintVec);
 		if(!retFlag)
 		{
