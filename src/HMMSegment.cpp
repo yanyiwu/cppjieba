@@ -33,6 +33,7 @@ namespace CppJieba
 
 	bool HMMSegment::loadModel(const char* const filePath)
 	{
+		LogInfo(string_format("loadModel [%s] start ...", filePath));
 		ifstream ifile(filePath);
 		string line;
 		vector<string> tmp;
@@ -98,6 +99,8 @@ namespace CppJieba
 			return false;
 		}
 
+		LogInfo(string_format("loadModel [%s] end.", filePath));
+
 		return true;
 	}
 
@@ -117,6 +120,7 @@ namespace CppJieba
 			return false;
 		}
 
+		cout<<__FILE__<<__LINE__<<endl;
 		if(!viterbi(unico, status))
 		{
 			LogError("viterbi failed.");
@@ -183,6 +187,7 @@ namespace CppJieba
 			weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], unico[0], MIN_DOUBLE);
 			path[0 + y * X] = -1;
 		}
+		cout<<__FILE__<<__LINE__<<endl;
 
 		//process
 		for(uint x = 1; x < X; x++)
@@ -191,6 +196,7 @@ namespace CppJieba
 			{
 				now = x + y*X;
 				weight[now] = MIN_DOUBLE;
+				path[now] = E;
 				for(uint preY = 0; preY < Y; preY++)
 				{
 					old = x - 1 + preY * X;
@@ -209,8 +215,6 @@ namespace CppJieba
 				//cout<<x<<":"<<y<<":"<<weight[now]<<endl;
 				//getchar();
 			}
-			//cout<<_getEmitProb(_emitProbB, unico[x], MIN_DOUBLE)<<endl;
-			//getchar();
 		}
 
 		endE = weight[X-1+E*X];
@@ -224,14 +228,19 @@ namespace CppJieba
 		{
 			stat = S;
 		}
+		cout<<__FILE__<<__LINE__<<endl;
 		
 		status.assign(X, 0);
+		cout<<__FILE__<<__LINE__<<endl;
 		for(int x = X -1 ; x >= 0; x--)
 		{
 			status[x] = stat;
+		cout<<__FILE__<<__LINE__<<endl;
+		cout<<stat<<endl;
 			stat = path[x + stat*X];
 		}
 
+		cout<<__FILE__<<__LINE__<<endl;
 		delete [] path;
 		delete [] weight;
 		return true;
@@ -330,7 +339,7 @@ int main()
 	HMMSegment hmm;
 	hmm.loadModel("../dicts/hmm_model.utf8");
 	vector<string> res;
-	hmm.cut("小明硕士毕业于北邮网络研究院", res);
+	hmm.cut("小明硕士毕业于北邮网络研究院，然", res);
 	cout<<joinStr(res, "/")<<endl;
 	
 	
