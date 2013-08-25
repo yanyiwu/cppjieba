@@ -21,7 +21,6 @@ HMM模型由dicts/下面的`hmm_model.utf8`提供。
 ##Demo
 
 ### Segment's demo
-运行方法示例:
 ```
 cd ./demo;
 make;
@@ -40,17 +39,38 @@ Output:
 小/明/硕士/毕业/于/中国科学院/计算所/，/后/在/日本京都大学/深造
 ```
 
+### HMMSegment's demo
+```
+cd ./demo;
+make;
+./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM
+```
+
+Output:
+```
+我来到北京清华大学
+我来/到/到北京/清华大学
+他来到了网易杭研大厦
+他来/到/了/到了网易/杭/杭研大厦
+小明硕士毕业于中国科学院计算所，后在日本京都大学深造
+小明/硕士/毕业于/中国/科学院/计算所/，/后/在/日/本/京/都/大/学/深/造
+```
+
 run `./segment_demo` to get help.
 
 ```
 usage:
-        ./segment_demo <filename> [options]
+        ./segment_demo[options] <filename>
 options:
+        --algorithm     Supported encoding methods are [cutDAG, cutHMM] for now.
+                        If is not specified, the default is cutDAG
         --dictpath      If is not specified, the default is ../dicts/jieba.dict.utf8
+        --modelpath     If is not specified, the default is ../dicts/hmm_model.utf8
         --encoding      Supported encoding methods are [gbk, utf-8] for now.
                         If is not specified, the default is utf8.
 example:
         ./segment_demo testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8
+        ./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM
         ./segment_demo testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk
 
 ```
