@@ -120,24 +120,22 @@ namespace CppJieba
 			return false;
 		}
 
-		cout<<__FILE__<<__LINE__<<endl;
 		if(!viterbi(unico, status))
 		{
 			LogError("viterbi failed.");
 			return false;
 		}
 		begin = unico.begin();
+		left = begin;
 		res.clear();
 		for(uint i =0; i< status.size(); i++)
 		{
 			switch(status[i])
 			{
-				case B:
-					left = begin + i;
-					break;
 				case E:
 					right = begin + i + 1;
 					res.push_back(TransCode::vecToStr(left, right));
+					left = right;
 					break;
 				case S:
 					res.push_back(TransCode::vecToStr(begin + i, begin + i +1));
@@ -187,7 +185,6 @@ namespace CppJieba
 			weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], unico[0], MIN_DOUBLE);
 			path[0 + y * X] = -1;
 		}
-		cout<<__FILE__<<__LINE__<<endl;
 
 		//process
 		for(uint x = 1; x < X; x++)
@@ -196,12 +193,11 @@ namespace CppJieba
 			{
 				now = x + y*X;
 				weight[now] = MIN_DOUBLE;
-				path[now] = E;
+				path[now] = E; // warning
 				for(uint preY = 0; preY < Y; preY++)
 				{
 					old = x - 1 + preY * X;
 					tmp = weight[old] + _transProb[preY][y] + _getEmitProb(_emitProbVec[y], unico[x], MIN_DOUBLE);
-					//cout<<__FILE__<<__LINE__<<endl;
 					//cout<<MIN_DOUBLE+MIN_DOUBLE+MIN_DOUBLE<<endl;
 					//cout<<weight[old]<<":"<<_transProb[preY][y]<<":"<<_getEmitProb(_emitProbVec[y], unico[x], MIN_DOUBLE)<<endl;
 					//cout<<tmp<<endl;
@@ -211,7 +207,6 @@ namespace CppJieba
 						path[now] = preY;
 					}
 				}
-				//cout<<__FILE__<<__LINE__<<endl;
 				//cout<<x<<":"<<y<<":"<<weight[now]<<endl;
 				//getchar();
 			}
@@ -228,19 +223,14 @@ namespace CppJieba
 		{
 			stat = S;
 		}
-		cout<<__FILE__<<__LINE__<<endl;
 		
 		status.assign(X, 0);
-		cout<<__FILE__<<__LINE__<<endl;
 		for(int x = X -1 ; x >= 0; x--)
 		{
 			status[x] = stat;
-		cout<<__FILE__<<__LINE__<<endl;
-		cout<<stat<<endl;
 			stat = path[x + stat*X];
 		}
 
-		cout<<__FILE__<<__LINE__<<endl;
 		delete [] path;
 		delete [] weight;
 		return true;
@@ -302,6 +292,7 @@ namespace CppJieba
 		return true;
 	}
 
+	/*
 	double HMMSegment::_getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal)
 	{
 		EmitProbMap::const_iterator cit = mp.find(key);
@@ -311,6 +302,7 @@ namespace CppJieba
 		}
 		return cit->second;
 	}
+	*/
 
 	double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)
 	{
@@ -339,7 +331,7 @@ int main()
 	HMMSegment hmm;
 	hmm.loadModel("../dicts/hmm_model.utf8");
 	vector<string> res;
-	hmm.cut("小明硕士毕业于北邮网络研究院，然", res);
+	hmm.cut("小明硕士毕业于北邮网络研究院。。.", res);
 	cout<<joinStr(res, "/")<<endl;
 	
 	
