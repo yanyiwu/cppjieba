@@ -22,7 +22,6 @@ namespace CppJieba
 	//using __gnu_cxx::hash_map;
 	//using namespace stdext;
 	//typedefs
-	typedef unsigned int uint;
 	typedef std::vector<std::string>::iterator VSI;
 	typedef std::vector<uint16_t> Unicode;
 	typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
