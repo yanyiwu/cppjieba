@@ -228,11 +228,6 @@ namespace CPPCOMMON
 		return res;
 	}
 
-	bool strStartsWith(const string& str, const string& prefix)
-	{
-		return str.substr(0, prefix.size()) == prefix;
-	}
-
 }
 
 #ifdef TEST_STR_FUNCTS
@@ -302,15 +297,17 @@ int main()
 	//	s = utf8ToGbk(s);
 	//	cout<<s<<endl;
 	//}
-	//cout<<strStartsWith("--help","--")<<endl;
-	//cout<<strStartsWith("--help","-")<<endl;
-	//cout<<strStartsWith("--help","he")<<endl;
-	//cout<<strStartsWith("help","help")<<endl;
-	//cout<<strStartsWith("","help")<<endl;
-	//cout<<strStartsWith("hel","")<<endl;
-	string s("  helloword heh\t");
-	string b;
-	cout<<trim(b)<<"11"<<endl;
+	cout<<strStartsWith("--help","--")<<endl;
+	cout<<strStartsWith("--help","-")<<endl;
+	cout<<strStartsWith("--help","he")<<endl;
+	cout<<strStartsWith("help","help")<<endl;
+	cout<<strStartsWith("","help")<<endl;
+	cout<<strStartsWith("hel","")<<endl;
+	cout<<strEndsWith("hel","")<<endl;
+	cout<<strEndsWith("hel","el")<<endl;
+	//string s("  helloword heh\t");
+	//string b;
+	//cout<<trim(b)<<"11"<<endl;
 	return 0;
 }
 #endif

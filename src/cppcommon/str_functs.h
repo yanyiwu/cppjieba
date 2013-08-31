@@ -63,7 +63,24 @@ namespace CPPCOMMON
 		cout<<uniVecToStr(unicode)<<endl;
 	}
 
-	bool strStartsWith(const string& str, const string& prefix);
+	inline bool strStartsWith(const string& str, const string& prefix)
+	{
+		//return str.substr(0, prefix.size()) == prefix;
+		if(prefix.length() > str.length())
+		{
+			return false;
+		}
+		return 0 == str.compare(0, prefix.length(), prefix);
+	}
+
+	inline bool strEndsWith(const string& str, const string& suffix)
+	{
+		if(suffix.length() > str.length())
+		{
+			return false;
+		}
+		return 0 == str.compare(str.length() -  suffix.length(), suffix.length(), suffix);
+	}
 	
 }
 #endif
