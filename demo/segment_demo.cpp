@@ -78,10 +78,10 @@ int main(int argc, char ** argv)
 	{
 		cout<<"usage: \n\t"<<argv[0]<<"[options] <filename>\n"
 		    <<"options:\n"
-			<<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM] for now. \n\t\t\tIf is not specified, the default is cutDAG\n"
-		    <<"\t--dictpath\tIf is not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
-		    <<"\t--modelpath\tIf is not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
-		    <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf is not specified, the default is utf8.\n"
+			<<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
+		    <<"\t--dictpath\tIf not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
+		    <<"\t--modelpath\tIf not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
+		    <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf not specified, the default is utf8.\n"
 			<<"example:\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
