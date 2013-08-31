@@ -11,9 +11,26 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <sstream>
 namespace CPPCOMMON
 {
 	using namespace std;
+	template<typename T>
+		string vecToString(const vector<T>& vec)
+		{
+			if(vec.empty())
+			{
+				return "[]";
+			}
+			stringstream ss;
+			ss<<"["<<vec[0];
+			for(unsigned int i = 1; i < vec.size(); i++)
+			{
+				ss<<","<<vec[i];
+			}
+			ss<<"]";
+			return ss.str();
+		}
 	template<typename T>
 		bool isInVec(const vector<T>& vec, const T& item)
 		{

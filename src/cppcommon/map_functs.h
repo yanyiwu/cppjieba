@@ -8,12 +8,34 @@
 #define CPPCOMMON_MAP_FUNCTS_H
 
 #include <map>
+#include <set>
 #include <iostream>
 #include <sstream>
 
 namespace CPPCOMMON
 {
 	using namespace std;
+
+	template <typename T>
+		string setToString(const set<T>& st)
+		{
+			if(st.empty())
+			{
+				return "{}";
+			}
+			stringstream ss;
+			ss<<'{';
+			typename set<T>::const_iterator it = st.begin();
+			ss<<*it;
+			it++;
+			while(it != st.end())
+			{
+				ss<<", "<<*it;
+				it++;
+			}
+			ss<<'}';
+			return ss.str();
+		}
 
 	template<typename T1, typename T2>
 		string mapToString(const map<T1, T2>& mp)
@@ -32,7 +54,7 @@ namespace CPPCOMMON
 				ss<<", "<<it->first<<": "<<it->second;
 				it++;
 			}
-			ss<<"}";
+			ss<<'}';
 			return ss.str();
 		}
 

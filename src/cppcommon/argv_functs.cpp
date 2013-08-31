@@ -1,5 +1,6 @@
 #include "argv_functs.h"
 
+
 namespace CPPCOMMON
 {
 	bool getArgvMap(int argc, const char* const * argv, map<string,string>& mpss)
@@ -27,16 +28,16 @@ namespace CPPCOMMON
 	{
 		for(int i = 0; i < argc; i++)
 		{
-			if(strStartsWith(argv[i], "--"))
+			if(strStartsWith(argv[i], "-"))
 			{
-				if(i + 1 < argc && !strStartsWith(argv[i+1], "--"))
+				if(i + 1 < argc && !strStartsWith(argv[i + 1], "-"))
 				{
 					_mpss[argv[i]] = argv[i+1];
 					i++;
 				}
 				else
 				{
-					break;
+					_sset.insert(argv[i]);
 				}
 			}
 			else
@@ -52,10 +53,9 @@ namespace CPPCOMMON
 
 	string ArgvContext::toString()
 	{
-		string res;
-		res += string_format("[%s]\n", joinStr(_args, ", ").c_str());
-		res += mapToString<string, string>(_mpss);
-		return res;
+		stringstream ss;
+		ss<<vecToString<string>(_args)<<mapToString<string, string>(_mpss)<<setToString<string>(_sset);
+		return ss.str();
 	}
 
 	string ArgvContext::operator [](uint i)
@@ -77,6 +77,14 @@ namespace CPPCOMMON
 		return "";
 	}
 	
+	bool ArgvContext::isKeyExist(const string& key)
+	{
+		if(_mpss.find(key) != _mpss.end() || _sset.find(key) != _sset.end())
+		{
+			return true;
+		}
+		return false;
+	}
 }
 
 
@@ -94,6 +102,7 @@ int main(int argc, char** argv)
 	cout<<arg[1]<<endl;
 	cout<<arg["--hehe"]<<endl;
 	cout<<pairToString<int,double>(pair<int, double>(1,1.2))<<endl;
+	cout<<arg.isKeyExist("-help")<<endl;
 	return 0;
 }
 
