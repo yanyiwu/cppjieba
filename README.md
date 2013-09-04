@@ -21,6 +21,9 @@ HMM模型由dicts/下面的`hmm_model.utf8`提供。
 ##Demo
 
 ### Segment's demo
+
+__这部分的功能经过线上考验，一直稳定运行，暂时没有发现什么bug。__
+
 ```
 cd ./demo;
 make;
@@ -40,6 +43,9 @@ Output:
 ```
 
 ### HMMSegment's demo
+
+___有待完善_
+
 ```
 cd ./demo;
 make;
@@ -55,6 +61,8 @@ Output:
 小明硕士毕业于中国科学院计算所，后在日本京都大学深造
 小明/硕士/毕业于/中国/科学院/计算所/，/后/在/日/本/京/都/大/学/深/造
 ```
+
+##Help
 
 run `./segment_demo` to get help.
 
