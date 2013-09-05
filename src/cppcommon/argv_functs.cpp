@@ -85,6 +85,11 @@ namespace CPPCOMMON
 		}
 		return false;
 	}
+
+	uint ArgvContext::getSize() const
+	{
+		return _args.size();
+	}
 }
 
 
@@ -94,15 +99,6 @@ using namespace CPPCOMMON;
 
 int main(int argc, char** argv)
 {
-	//map<string,string> argvMap;
-	//getArgvMap(argc, argv, argvMap);
-	//PRINT_MAPSS(argvMap);
-	ArgvContext arg(argc, argv);
-	cout<<arg.toString()<<endl;
-	cout<<arg[1]<<endl;
-	cout<<arg["--hehe"]<<endl;
-	cout<<pairToString<int,double>(pair<int, double>(1,1.2))<<endl;
-	cout<<arg.isKeyExist("-help")<<endl;
 	return 0;
 }
 

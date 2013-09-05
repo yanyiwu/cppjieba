@@ -8,18 +8,11 @@ using namespace CppJieba;
 void testKeyWordExt(const char * dictPath, const char * filePath)
 {
 	KeyWordExt ext;
-	ext.init();
+	if(!ext.init(dictPath, "../dicts/stopwords.gbk.v1.0"))
+	{
+		return;
+	}
 
-	if(!ext.loadSegDict(dictPath))
-	{
-		cerr<<__FILE__<<__LINE__<<endl;
-		return ;
-	}
-	if(!ext.loadStopWords("../dicts/stopwords.gbk.v1.0"))
-	{
-		cerr<<__FILE__<<__LINE__<<endl;
-		return ;
-	}
 	ifstream ifile(filePath);
 	vector<KeyWordInfo> res;
 	string line;
@@ -33,43 +26,6 @@ void testKeyWordExt(const char * dictPath, const char * filePath)
 		}
 
 	}
-	ext.dispose();
-}
-
-void testKeyWordExt2(const char * dictPath, const char * filePath)
-{
-	Segment seg;
-	seg.init();
-	KeyWordExt ext;
-	ext.init();
-
-	if(!seg.loadSegDict(dictPath))
-	{
-		cerr<<__FILE__<<__LINE__<<endl;
-		return ;
-	}
-
-	if(!ext.loadSegDict(dictPath));
-	{
-		cerr<<__FILE__<<__LINE__<<endl;
-		return ;
-	}
-
-	ifstream ifile(filePath);
-	vector<string> words;
-	vector<KeyWordInfo> res;
-	string line;
-	while(getline(ifile, line))
-	{
-		if(!line.empty())
-		{
-			seg.cutDAG(line, words);
-			ext.extract(words, res, 20);
-			cout<<line<<"\n"<<joinWordInfos(res)<<endl;
-		}
-
-	}
-	seg.dispose();
 	ext.dispose();
 }
 

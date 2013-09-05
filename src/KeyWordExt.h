@@ -20,17 +20,13 @@ namespace CppJieba
 		public:
 			KeyWordExt();
 			~KeyWordExt();
-			bool init();
-
-			bool loadSegDict(const char * const filePath);
-
-			//load stopwords
-			bool loadStopWords(const char * const filePath);
-
-			//load prior words' prefix
-			bool loadPriorSubWords(const char * const filePath);
-
+			bool init(const char* const segDictFile, const char* const stopWordDictFile);
 			bool dispose();
+
+		private:
+			bool _loadStopWords(const char * const filePath);
+			bool _loadPriorSubWords(const char * const filePath);
+
 
 		public:
 			bool extract(const string& title, vector<KeyWordInfo>& keyWordInfos, uint topN);

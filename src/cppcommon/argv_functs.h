@@ -18,7 +18,7 @@ namespace CPPCOMMON
 	bool getArgvMap(int argc, const char* const* argv, map<string, string>& mpss);
 	class ArgvContext
 	{
-		public :
+		public:
 			ArgvContext(int argc, const char* const * argv);
 			~ArgvContext();
 		public:
@@ -27,6 +27,7 @@ namespace CPPCOMMON
 			string operator [](const string& key);
 		public:
 			bool isKeyExist(const string& key);
+			uint getSize() const;
 		private:
 			vector<string> _args;
 			map<string, string> _mpss;
