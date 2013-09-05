@@ -21,9 +21,9 @@ namespace CppJieba
 		
 	}
 
-	bool HMMSegment::init()
+	bool HMMSegment::init(const char* const modelPath)
 	{
-		return true;
+		return _loadModel(modelPath);
 	}
 	
 	bool HMMSegment::dispose()
@@ -31,7 +31,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool HMMSegment::loadModel(const char* const filePath)
+	bool HMMSegment::_loadModel(const char* const filePath)
 	{
 		LogInfo(string_format("loadModel [%s] start ...", filePath));
 		ifstream ifile(filePath);

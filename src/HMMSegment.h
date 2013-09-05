@@ -32,13 +32,13 @@ namespace CppJieba
 			HMMSegment();
 			~HMMSegment();
 		public:
-			bool init();
+			bool init(const char* const modelPath);
 			bool dispose();
 		public:
-			bool loadModel(const char* const filePath);
 			bool cut(const string& str, vector<string>& res);
 			bool viterbi(const vector<uint16_t>& unico, vector<uint>& status);
 		private:
+			bool _loadModel(const char* const filePath);
 			bool _getLine(ifstream& ifile, string& line);
 			bool _loadEmitProb(const string& line, EmitProbMap& mp);
 			bool _decodeOne(const string& str, uint16_t& res);

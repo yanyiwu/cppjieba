@@ -9,6 +9,7 @@
 #include <set>
 #include "Trie.h"
 #include "globals.h"
+#include "HMMSegment.h"
 
 namespace CppJieba
 {
@@ -16,12 +17,12 @@ namespace CppJieba
 	{
 		private:
 			Trie _trie;
+			
 		public:
 			Segment();
 			~Segment();
 		public:
-			bool init();
-			bool loadSegDict(const char * const filePath);
+			bool init(const char* const filePath);
 			bool dispose();
 		public:
 			bool cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos);

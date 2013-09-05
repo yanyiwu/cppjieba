@@ -14,25 +14,23 @@ namespace CppJieba
 	{
 	}
 
-	bool Segment::init()
+	bool Segment::init(const char* const filePath)
 	{
 		if(!_trie.init())
 		{
 			LogError("_trie.init failed.");
 			return false;
 		}
+		LogInfo(string_format("_trie.loadDict(%s) start...", filePath));
+		if(!_trie.loadDict(filePath))
+		{
+			LogError("_trie.loadDict faield.");
+			return false;
+		}
+		LogInfo("_trie.loadDict end.");
 		return true;
 	}
 	
-	bool Segment::loadSegDict(const char * const filePath)
-	{
-		LogInfo(string_format("_trie.loadDict(%s) start...", filePath));
-		bool retFlag = _trie.loadDict(filePath);
-		LogInfo("_trie.loadDict end.");
-		return retFlag;
-	}
-
-
 	bool Segment::dispose()
 	{
 		return _trie.dispose();
@@ -212,7 +210,7 @@ int main()
 {
 	Segment segment;
 	segment.init();
-	if(!segment.loadSegDict("../dicts/segdict.gbk.v3.0"))
+	if(!segment._loadSegDict("../dicts/segdict.gbk.v3.0"))
 	{
 		cerr<<"1"<<endl;
 		return 1;

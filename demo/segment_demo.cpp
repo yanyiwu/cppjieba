@@ -8,22 +8,18 @@ Segment seg;
 HMMSegment hmmseg;
 bool init(const char * const dictPath, const char * const modelPath)
 {
-	if(!seg.init())
+	if(!seg.init(dictPath))
 	{
 		cout<<"seg init failed."<<endl;
 		return false;
 	}
 
-	if(!seg.loadSegDict(dictPath))
+	if(!hmmseg.init(modelPath))
 	{
-		cout<<"seg loadDict failed."<<endl;
+		cout<<"hmmseg init failed."<<endl;
 		return false;
 	}
-	if(!hmmseg.loadModel(modelPath))
-	{
-		cout<<"hmmseg loadModel failed."<<endl;
-		return false;
-	}
+
 	return true;
 }
 
@@ -62,6 +58,11 @@ void hmmrun(const char * const filePath)
 bool dispose()
 {
 	if(!seg.dispose())
+	{
+		cout<<"seg dispose failed."<<endl;
+		return false;
+	}
+	if(!hmmseg.dispose())
 	{
 		cout<<"seg dispose failed."<<endl;
 		return false;
