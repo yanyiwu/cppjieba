@@ -27,7 +27,7 @@ __这部分的功能经过线上考验，一直稳定运行，暂时没有发现
 ```
 cd ./demo;
 make;
-./segment_demo testlines.gbk
+./segment_demo testlines.utf8
 ```
 
 Output:
