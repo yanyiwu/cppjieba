@@ -125,24 +125,19 @@ namespace CppJieba
 			LogError("viterbi failed.");
 			return false;
 		}
+		//cout<<vecToString(status)<<endl;
 		begin = unico.begin();
 		left = begin;
 		res.clear();
 		for(uint i =0; i< status.size(); i++)
 		{
-			switch(status[i])
+			if(status[i] % 2) //if(E == status[i] || S == status[i])
 			{
-				case E:
-					right = begin + i + 1;
-					res.push_back(TransCode::vecToStr(left, right));
-					left = right;
-					break;
-				case S:
-					res.push_back(TransCode::vecToStr(begin + i, begin + i +1));
-					
-					break;
-					
+				right = begin + i + 1;
+				res.push_back(TransCode::vecToStr(left, right));
+				left = right;
 			}
+
 		}
 		
 		return true;
