@@ -256,7 +256,7 @@ namespace CppJieba
 			return false;
 		}
 		vector<string> tmp, tmp2;
-		uint16_t unico;
+		uint16_t unico = 0;
 		splitStr(line, tmp, ",");
 		for(uint i = 0; i < tmp.size(); i++)
 		{
