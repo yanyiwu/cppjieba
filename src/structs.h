@@ -15,28 +15,23 @@ namespace CppJieba
 		size_t freq;
 		string tag;
 		double logFreq; //logFreq = log(freq/sum(freq));
-		TrieNodeInfo()
+		TrieNodeInfo():wLen(0),freq(0),logFreq(0.0)
 		{
-			wLen = 0;
-			freq = 0;
-			logFreq = 0.0;
 		}
-		TrieNodeInfo(const string& _word)
+		TrieNodeInfo(const TrieNodeInfo& nodeInfo):word(nodeInfo.word), wLen(nodeInfo.wLen), freq(nodeInfo.freq), tag(nodeInfo.tag), logFreq(nodeInfo.logFreq)
 		{
-			word = _word;
+		}
+		TrieNodeInfo(const string& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
+		{
 			wLen = TransCode::getWordLength(_word);
-			freq = 0;
-			logFreq = MIN_DOUBLE;
 		}
 	};
-	
 	
 	struct SegmentContext//: public TrieNodeInfo
 	{
 		vector<uint16_t> uintVec;
 		vector< vector<pair<uint, const TrieNodeInfo*> > > dag;
 		vector< pair<const TrieNodeInfo*, double> > dp;
-		//vector<string> words;
 	};
 	
 	/*
@@ -50,25 +45,14 @@ namespace CppJieba
 	{
 		double idf;
 		double weight;// log(wLen+1)*logFreq;
-		KeyWordInfo()
+		KeyWordInfo():idf(0.0),weight(0.0)
 		{
-			idf = 0.0;
-			weight = 0.0;
 		}
-		KeyWordInfo(const string& _word):TrieNodeInfo(_word)
+		KeyWordInfo(const string& _word):TrieNodeInfo(_word),idf(0.0),weight(0.0)
 		{ 
-			idf = 0.0;
-			weight = 0.0;
 		}
-		KeyWordInfo(const TrieNodeInfo& trieNodeInfo)
+		KeyWordInfo(const TrieNodeInfo& trieNodeInfo):TrieNodeInfo(trieNodeInfo)
 		{
-			word = trieNodeInfo.word;
-			freq = trieNodeInfo.freq;
-			wLen = trieNodeInfo.wLen;
-			tag = trieNodeInfo.tag;
-			logFreq = trieNodeInfo.logFreq;
-			idf = 0.0;
-			weight = 0.0;
 		}
 		string toString() const
 		{

@@ -23,14 +23,13 @@ bool init(const char * const dictPath, const char * const modelPath)
 	return true;
 }
 
-void run(const char * const filePath)
+void cut(const char * const filePath)
 {
 	ifstream ifile(filePath);
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
 	{
-		res.clear();
 		if(!line.empty())
 		{
 			seg.cutDAG(line, res);
@@ -39,19 +38,29 @@ void run(const char * const filePath)
 	}
 }
 
-void hmmrun(const char * const filePath)
+void cutHMM(const char * const filePath)
 {
 	ifstream ifile(filePath);
 	vector<string> res;
 	string line;
 	while(getline(ifile, line))
 	{
-		res.clear();
 		if(!line.empty())
 		{
 			hmmseg.cut(line, res);
 			cout<<line<<"\n"<<joinStr(res,"/")<<endl;
 		}
+	}
+}
+
+void cutAll(const char* const filePath)
+{
+	ifstream ifs(filePath);
+	vector<TrieNodeInfo> res;
+	string line;
+	while(getline(ifs, line))
+	{
+		seg.cutDAG(line, res);
 	}
 }
 
@@ -120,11 +129,11 @@ int main(int argc, char ** argv)
 	}
 	if("cutHMM" == algorithm)
 	{
-		hmmrun(arg[1].c_str());
+		cutHMM(arg[1].c_str());
 	}
 	else
 	{
-		run(arg[1].c_str());
+		cut(arg[1].c_str());
 	}
 	dispose();
 	return 0;
