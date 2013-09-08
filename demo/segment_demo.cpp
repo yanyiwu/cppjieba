@@ -4,7 +4,7 @@
 
 using namespace CppJieba;
 
-Segment seg;
+MPSegment seg;
 HMMSegment hmmseg;
 bool init(const char * const dictPath, const char * const modelPath)
 {

@@ -2,19 +2,19 @@
  * file enc : AISCII
  * author   : wuyanyi09@gmail.com
 ************************************/
-#include "Segment.h"
+#include "MPSegment.h"
 
 namespace CppJieba
 {
-	Segment::Segment()
+	MPSegment::MPSegment()
 	{
 	}
 	
-	Segment::~Segment()
+	MPSegment::~MPSegment()
 	{
 	}
 
-	bool Segment::init(const char* const filePath)
+	bool MPSegment::init(const char* const filePath)
 	{
 		if(!_trie.init())
 		{
@@ -31,12 +31,12 @@ namespace CppJieba
 		return true;
 	}
 	
-	bool Segment::dispose()
+	bool MPSegment::dispose()
 	{
 		return _trie.dispose();
 	}
 
-	bool Segment::cutDAG(const string& str, vector<string>& res)
+	bool MPSegment::cutDAG(const string& str, vector<string>& res)
 	{
 		vector<TrieNodeInfo> segWordInfos;
 		if(!cutDAG(str, segWordInfos))
@@ -51,7 +51,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos)
+	bool MPSegment::cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos)
 	{
 		if(str.empty())
 		{
@@ -88,7 +88,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_calcDAG(SegmentContext& segContext)
+	bool MPSegment::_calcDAG(SegmentContext& segContext)
 	{
 		if(segContext.uintVec.empty())
 		{
@@ -114,7 +114,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_calcDP(SegmentContext& segContext)
+	bool MPSegment::_calcDP(SegmentContext& segContext)
 	{
 		if(segContext.uintVec.empty())
 		{
@@ -162,7 +162,7 @@ namespace CppJieba
 		return true;
 	}
 
-	bool Segment::_cutDAG(SegmentContext& segContext, vector<TrieNodeInfo>& res)
+	bool MPSegment::_cutDAG(SegmentContext& segContext, vector<TrieNodeInfo>& res)
 	{
 		if(segContext.dp.empty() || segContext.uintVec.empty() || segContext.dp.size() != segContext.uintVec.size())
 		{
@@ -208,7 +208,7 @@ using namespace CppJieba;
 
 int main()
 {
-	Segment segment;
+	MPSegment segment;
 	segment.init();
 	if(!segment._loadSegDict("../dicts/segdict.gbk.v3.0"))
 	{

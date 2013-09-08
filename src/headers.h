@@ -8,7 +8,7 @@
 #include "cppcommon/headers.h"
 #include "globals.h"
 #include "KeyWordExt.h"
-#include "Segment.h"
+#include "MPSegment.h"
 #include "Trie.h"
 #include "TransCode.h"
 #include "HMMSegment.h"

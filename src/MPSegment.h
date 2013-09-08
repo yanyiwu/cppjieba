@@ -13,14 +13,14 @@
 
 namespace CppJieba
 {
-	class Segment
+	class MPSegment
 	{
 		private:
 			Trie _trie;
 			
 		public:
-			Segment();
-			~Segment();
+			MPSegment();
+			~MPSegment();
 		public:
 			bool init(const char* const filePath);
 			bool dispose();

@@ -5,7 +5,7 @@
 #ifndef CPPJIEBA_KEYWORDEXT_H
 #define CPPJIEBA_KEYWORDEXT_H
 
-#include "Segment.h"
+#include "MPSegment.h"
 #include "structs.h"
 
 namespace CppJieba
@@ -14,7 +14,7 @@ namespace CppJieba
 	class KeyWordExt
 	{
 		private:
-			Segment _segment;
+			MPSegment _segment;
 			vector<string> _priorSubWords;
 			set<string> _stopWords;
 		public:

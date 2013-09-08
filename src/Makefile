@@ -53,11 +53,11 @@ $(CMLIB):
 Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) Trie.cpp TransCode.cpp  -DTRIE_UT $(CMLIB)
 
-Segment.ut: Segment.cpp Trie.cpp Segment.h Trie.h globals.h $(CMLIB)
-	$(CXX) -o $@ $(CXXFLAGS) Segment.cpp Trie.cpp TransCode.cpp -DSEGMENT_UT $(CMLIB) 
+MPSegment.ut: MPSegment.cpp Trie.cpp MPSegment.h Trie.h globals.h $(CMLIB)
+	$(CXX) -o $@ $(CXXFLAGS) MPSegment.cpp Trie.cpp TransCode.cpp -DSEGMENT_UT $(CMLIB) 
 
-KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h Segment.h Trie.h globals.h TransCode.cpp TransCode.h  $(CMLIB)
-	$(CXX) -o $@ $(CXXFLAGS) KeyWordExt.cpp Segment.cpp Trie.cpp TransCode.cpp -DKEYWORDEXT_UT $(CMLIB)
+KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h MPSegment.h Trie.h globals.h TransCode.cpp TransCode.h  $(CMLIB)
+	$(CXX) -o $@ $(CXXFLAGS) KeyWordExt.cpp MPSegment.cpp Trie.cpp TransCode.cpp -DKEYWORDEXT_UT $(CMLIB)
 
 TransCode.ut: TransCode.cpp TransCode.h globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 

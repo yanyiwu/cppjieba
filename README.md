@@ -8,8 +8,8 @@
 ###Trie树
 Trie.cpp/Trie.h 负责载入词典的trie树，主要供Segment模块使用。
 ###Segment模块
-Segment.cpp/Segment.h 
-负责根据Trie树构建有向无环图和进行动态规划算法，是分词算法的核心。
+MPSegment.cpp/MPSegment.h 
+最大概率发:负责根据Trie树构建有向无环图和进行动态规划算法，是分词算法的核心。
 ###TransCode模块
 TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk都转换成`uint16_t`类型，也负责逆转换。
 ###HMMSegment模块
@@ -20,7 +20,7 @@ HMM模型由dicts/下面的`hmm_model.utf8`提供。
 
 ##Demo
 
-### Segment's demo
+### MPSegment's demo
 
 __这部分的功能经过线上考验，一直稳定运行，暂时没有发现什么bug。__
 
