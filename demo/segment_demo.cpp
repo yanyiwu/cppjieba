@@ -68,8 +68,7 @@ void cutMix(const char* const filePath)
 	while(getline(ifs, line))
 	{
 		mixseg.cut(line, res);
-        cout<<line<<endl;
-        cout<<vecToString(res)<<endl;
+        cout<<line<<'\n'<<joinStr(res,"/")<<endl;
 	}
 }
 
@@ -110,7 +109,6 @@ int main(int argc, char ** argv)
 			<<"\t"<<argv[0]<<" testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
-			<<"\t"<<argv[0]<<" testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk\n"
 			<<endl;
 		
 		return -1;
@@ -152,7 +150,7 @@ int main(int argc, char ** argv)
 	}
     else
     {
-		cutMix(arg[1].c_str());
+		cutMP(arg[1].c_str());
     }
 	dispose();
 	return 0;
