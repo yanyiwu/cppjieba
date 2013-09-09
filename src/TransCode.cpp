@@ -111,10 +111,15 @@ namespace CppJieba
 		}
 		return true;
 	}
+    
+    string TransCode::encode(const Unicode& sentence)
+    {
+        return encode(sentence.begin(), sentence.end());
+    }
 	
 	string TransCode::encode(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
-		if(NULL == _pf_encode)
+		if(!_pf_encode)
 		{
 			return "";
 		}

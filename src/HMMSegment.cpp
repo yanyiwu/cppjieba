@@ -104,46 +104,59 @@ namespace CppJieba
 		return true;
 	}
 
-	bool HMMSegment::cut(const string& str, vector<string>& res)
-	{
-		if(str.empty())
-		{
-			return false;
-		}
-		vector<uint16_t> unico;
+
+    bool HMMSegment::cut(const Unicode& unico, vector<Unicode>& res)
+    {
 		vector<uint> status; 
-		vector<uint16_t>::iterator begin, left, right;
-		if(!TransCode::decode(str, unico))
-
-		{
-			LogError("TransCode failed.");
-			return false;
-		}
-
 		if(!viterbi(unico, status))
 		{
 			LogError("viterbi failed.");
 			return false;
 		}
-		//cout<<encodeing(status)<<endl;
-		begin = unico.begin();
-		left = begin;
+
+        Unicode::const_iterator begin = unico.begin();
+        Unicode::const_iterator left = begin;
+        Unicode::const_iterator right;
 		res.clear();
 		for(uint i =0; i< status.size(); i++)
 		{
 			if(status[i] % 2) //if(E == status[i] || S == status[i])
 			{
 				right = begin + i + 1;
-				res.push_back(TransCode::encode(left, right));
+				res.push_back(Unicode(left, right));
 				left = right;
 			}
-
 		}
-		
+        return true;
+    }
+
+	bool HMMSegment::cut(const string& str, vector<string>& res)
+	{
+		if(str.empty())
+		{
+			return false;
+		}
+		Unicode unico;
+		if(!TransCode::decode(str, unico))
+
+		{
+			LogError("TransCode failed.");
+			return false;
+		}
+        vector<Unicode> words;
+        if(!cut(unico, words))
+        {
+            return false;
+        }
+        res.clear();
+        for(uint i = 0; i < words.size(); i++)
+        {
+            res.push_back(TransCode::encode(words[i].begin(), words[i].end()));
+        }
 		return true;
 	}
 
-	bool HMMSegment::viterbi(const vector<uint16_t>& unico, vector<uint>& status)
+	bool HMMSegment::viterbi(const Unicode& unico, vector<uint>& status)
 	{
 		if(unico.empty())
 		{
@@ -193,17 +206,12 @@ namespace CppJieba
 				{
 					old = x - 1 + preY * X;
 					tmp = weight[old] + _transProb[preY][y] + _getEmitProb(_emitProbVec[y], unico[x], MIN_DOUBLE);
-					//cout<<MIN_DOUBLE+MIN_DOUBLE+MIN_DOUBLE<<endl;
-					//cout<<weight[old]<<":"<<_transProb[preY][y]<<":"<<_getEmitProb(_emitProbVec[y], unico[x], MIN_DOUBLE)<<endl;
-					//cout<<tmp<<endl;
 					if(tmp > weight[now])
 					{
 						weight[now] = tmp;
 						path[now] = preY;
 					}
 				}
-				//cout<<x<<":"<<y<<":"<<weight[now]<<endl;
-				//getchar();
 			}
 		}
 
@@ -278,7 +286,7 @@ namespace CppJieba
 
 	bool HMMSegment::_decodeOne(const string& str, uint16_t& res)
 	{
-		vector<uint16_t> ui16;
+		Unicode ui16;
 		if(!TransCode::decode(str, ui16) || ui16.size() != 1)
 		{
 			return false;

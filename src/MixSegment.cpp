@@ -40,10 +40,48 @@ namespace CppJieba
             LogError("_mpSeg cutDAG failed.");
             return false;
         }
+        res.clear();
+        Unicode unico;
+        vector<Unicode> hmmRes;
         for(uint i= 0; i < infos.size(); i++)
         {
+            if(1 == infos[i].word.size())
+            {
+                unico.push_back(infos[i].word[0]);
+            }
+            else
+            {
+                if(!unico.empty())
+                {
+                    if(!_hmmSeg.cut(unico, hmmRes))
+                    {
+                        LogError("_hmmSeg cut failed.");
+                        return false;
+                    }
+                    for(uint j = 0; j < hmmRes.size(); j++)
+                    {
+                        res.push_back(TransCode::encode(hmmRes[j]));
+                    }
+                }
+                unico.clear();
+
+                res.push_back(TransCode::encode(infos[i].word));
+            }
             
         }
+        if(!unico.empty())
+        {
+            if(!_hmmSeg.cut(unico, hmmRes))
+            {
+                LogError("_hmmSeg cut failed.");
+                return false;
+            }
+            for(uint j = 0; j < hmmRes.size(); j++)
+            {
+                res.push_back(TransCode::encode(hmmRes[j]));
+            }
+        }
+        
         return true;
     }
 }

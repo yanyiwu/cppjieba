@@ -6,6 +6,7 @@ using namespace CppJieba;
 
 MPSegment seg;
 HMMSegment hmmseg;
+MixSegment mixseg;
 bool init(const char * const dictPath, const char * const modelPath)
 {
 	if(!seg.init(dictPath))
@@ -20,10 +21,16 @@ bool init(const char * const dictPath, const char * const modelPath)
 		return false;
 	}
 
+    if(!mixseg.init(dictPath, modelPath))
+    {
+        cout<<"mixseg init failed."<<endl;
+        return false;
+    }
+
 	return true;
 }
 
-void cut(const char * const filePath)
+void cutMP(const char * const filePath)
 {
 	ifstream ifile(filePath);
 	vector<string> res;
@@ -53,14 +60,16 @@ void cutHMM(const char * const filePath)
 	}
 }
 
-void cutAll(const char* const filePath)
+void cutMix(const char* const filePath)
 {
 	ifstream ifs(filePath);
-	vector<TrieNodeInfo> res;
+	vector<string> res;
 	string line;
 	while(getline(ifs, line))
 	{
-		seg.cut(line, res);
+		mixseg.cut(line, res);
+        cout<<line<<endl;
+        cout<<vecToString(res)<<endl;
 	}
 }
 
@@ -72,6 +81,11 @@ bool dispose()
 		return false;
 	}
 	if(!hmmseg.dispose())
+	{
+		cout<<"seg dispose failed."<<endl;
+		return false;
+	}
+	if(!mixseg.dispose())
 	{
 		cout<<"seg dispose failed."<<endl;
 		return false;
@@ -88,13 +102,14 @@ int main(int argc, char ** argv)
 	{
 		cout<<"usage: \n\t"<<argv[0]<<"[options] <filename>\n"
 		    <<"options:\n"
-			<<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
+			<<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
 		    <<"\t--dictpath\tIf not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
 		    <<"\t--modelpath\tIf not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
 		    <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf not specified, the default is utf8.\n"
 			<<"example:\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8\n"
 			<<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
+			<<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
 			<<"\t"<<argv[0]<<" testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk\n"
 			<<endl;
 		
@@ -131,10 +146,14 @@ int main(int argc, char ** argv)
 	{
 		cutHMM(arg[1].c_str());
 	}
-	else
+	else if("cutMix" == algorithm)
 	{
-		cut(arg[1].c_str());
+		cutMix(arg[1].c_str());
 	}
+    else
+    {
+		cutMix(arg[1].c_str());
+    }
 	dispose();
 	return 0;
 }

@@ -12,5 +12,6 @@
 #include "Trie.h"
 #include "TransCode.h"
 #include "HMMSegment.h"
+#include "MixSegment.h"
 
 #endif

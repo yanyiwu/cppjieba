@@ -38,6 +38,7 @@ namespace CppJieba
 		public:
 			static bool decode(const string& str, vector<uint16_t>& vec);
 			static string encode(Unicode::const_iterator begin, Unicode::const_iterator end);
+            static string encode(const Unicode& sentence);
 			//static size_t getWordLength(const string& str);
 		public:
 			static bool gbkToVec(const string& str, vector<uint16_t>& vec);
