@@ -35,12 +35,12 @@ namespace CppJieba
     bool MixSegment::cut(const string& str, vector<string>& res)
     {
         vector<TrieNodeInfo> infos;
-        if(!_mpSeg.cutDAG(str, infos))
+        if(!_mpSeg.cut(str, infos))
         {
             LogError("_mpSeg cutDAG failed.");
             return false;
         }
-        for(uint = 0; i < infos.size(); i++)
+        for(uint i= 0; i < infos.size(); i++)
         {
             
         }

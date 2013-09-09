@@ -13,6 +13,9 @@
 
 namespace CppJieba
 {
+
+    typedef vector<SegmentChar> SegmentContext;
+
 	class MPSegment
 	{
 		private:
@@ -25,15 +28,14 @@ namespace CppJieba
 			bool init(const char* const filePath);
 			bool dispose();
 		public:
-			bool cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos);
-			bool cutDAG(const string& str, vector<string>& res);
+			bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos);
+			bool cut(const string& str, vector<string>& res);
 
 		private:
 			bool _calcDAG(SegmentContext& segContext);
 			bool _calcDP(SegmentContext& segContext);
-			bool _cutDAG(SegmentContext& segContext, vector<TrieNodeInfo>& res);
+			bool _cut(SegmentContext& segContext, vector<TrieNodeInfo>& res);
 
-			//bool _fill(const string& )
 
 	};
 }

@@ -16,7 +16,7 @@ namespace CppJieba
 	{
 	}
 
-	bool KeyWordExt::init(const char* const segDictFile, const char* const stopWordDictFile)
+	bool KeyWordExt::init(const char* const segDictFile)
 	{
 		LogInfo("KeyWordExt init start ...");
 		if(!_segment.init(segDictFile))
@@ -24,40 +24,34 @@ namespace CppJieba
 			LogError("_segment.init failed.");
 			return false;
 		}
-		if(!_loadStopWords(stopWordDictFile))
-		{
-			LogError("_loadStopWords failed.");
-			return false;
-		}
-		LogInfo("KeyWordExt init OK.");
 		return true;
 	}
 
-	bool KeyWordExt::_loadPriorSubWords(const char * const filePath)
-	{
-		LogInfo(string_format("_loadPriorSubWords(%s) start", filePath));
-		if(!checkFileExist(filePath))
-		{
-			LogError(string_format("cann't find file[%s].",filePath));
-			return false;
-		}
-		if(!_priorSubWords.empty())
-		{
-			LogError("_priorSubWords has been initted before");
-			return false;
-		}
-		ifstream infile(filePath);
-		string subword;
-		while(getline(infile, subword))
-		{
-			_priorSubWords.push_back(subword);
-		}
-		LogInfo(string_format("_loadPriorSubWords(%s) end", filePath));
-		infile.close();
-		return true;
-	}
+	//bool KeyWordExt::_loadPriorSubWords(const char * const filePath)
+	//{
+	//	LogInfo(string_format("_loadPriorSubWords(%s) start", filePath));
+	//	if(!checkFileExist(filePath))
+	//	{
+	//		LogError(string_format("cann't find file[%s].",filePath));
+	//		return false;
+	//	}
+	//	if(!_priorSubWords.empty())
+	//	{
+	//		LogError("_priorSubWords has been initted before");
+	//		return false;
+	//	}
+	//	ifstream infile(filePath);
+	//	string subword;
+	//	while(getline(infile, subword))
+	//	{
+	//		_priorSubWords.push_back(subword);
+	//	}
+	//	LogInfo(string_format("_loadPriorSubWords(%s) end", filePath));
+	//	infile.close();
+	//	return true;
+	//}
 
-	bool KeyWordExt::_loadStopWords(const char * const filePath)
+	bool KeyWordExt::loadStopWords(const char * const filePath)
 	{
 
 		LogInfo(string_format("_loadStopWords(%s) start", filePath));
@@ -74,9 +68,15 @@ namespace CppJieba
 
 		ifstream ifile(filePath);
 		string line;
+        Unicode word;
 		while(getline(ifile, line))
 		{
-			_stopWords.insert(line);
+            if(!TransCode::strToVec(line, word))
+            {
+                LogError("strToVec failed .");
+                return false;
+            }
+			_stopWords.insert(word);
 		}
 		LogInfo(string_format("load stopwords[%d] finished.", _stopWords.size()));
 		
@@ -100,12 +100,7 @@ namespace CppJieba
 		{
 			KeyWordInfo& wInfo = wordInfos[i];
 			wInfo.idf = - wInfo.logFreq;
-			if(0 == wInfo.wLen)
-			{
-				LogFatal("wLen is 0!");
-				return false;
-			}
-			wInfo.weight = log(double(wInfo.wLen + 1)) * wInfo.idf;
+			wInfo.weight = log(double(wInfo.word.size() + 1)) * wInfo.idf;
 		}
 		sort(wordInfos.begin(), wordInfos.end(), _wordInfoCompare);
 		return true;
@@ -143,14 +138,16 @@ namespace CppJieba
 			return false;
 		}
 
-#ifdef DEBU
-		LogDebug(string_format("words:[%s]", joinStr(words, ",").c_str()));
-#endif
-
 		keyWordInfos.clear();
 		for(uint i = 0; i < words.size(); i++)
 		{
-			keyWordInfos.push_back(words[i]);
+            Unicode uniWord;
+            if(!TransCode::strToVec(words[i], uniWord))
+            {
+                LogError("strToVec failed");
+                return false;
+            }
+			keyWordInfos.push_back(uniWord);
 		}
 
 		return _extract(keyWordInfos, topN);
@@ -164,7 +161,7 @@ namespace CppJieba
 		}
 		
 		vector<TrieNodeInfo> trieNodeInfos; 
-		_segment.cutDAG(title, trieNodeInfos);
+		_segment.cut(title, trieNodeInfos);
 
 		keyWordInfos.clear();
 		for(uint i = 0; i < trieNodeInfos.size(); i++)
@@ -249,7 +246,7 @@ namespace CppJieba
 
 	bool KeyWordExt::_filterDuplicate(vector<KeyWordInfo>& wordInfos)
 	{
-		set<string> st;
+		set<Unicode> st;
 		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
 			if(st.find(it->word) != st.end())
@@ -271,7 +268,7 @@ namespace CppJieba
 		{
 
 			// filter single word
-			if(1 == it->wLen)
+			if(1 == it->word.size())
 			{
 				it = wordInfos.erase(it);
 			}
@@ -285,79 +282,68 @@ namespace CppJieba
 
 	bool KeyWordExt::_filterSubstr(vector<KeyWordInfo>& wordInfos)
 	{
-		vector<string> tmp ;
+		vector<Unicode> tmp ;
 		for(uint i = 0; i < wordInfos.size(); i++)
 		{
 			tmp.push_back(wordInfos[i].word);
 		}
-		set<string> subs;
-		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); it ++)
-		{
-			for(uint j = 0; j < tmp.size(); j++)
-			{
-				if(it->word != tmp[j] && string::npos != tmp[j].find(it->word, 0))
-				{
-					subs.insert(it->word);
-				}
-			}
-		}
 
-		//erase subs from strs
 		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
 		{
-			if(subs.end() != subs.find(it->word))
-			{
-				it =  wordInfos.erase(it);
-			}
-			else
-			{
-				it ++;
-			}
+            if(_isSubIn(tmp, it->word))
+            {
+                it = wordInfos.erase(it);
+            }
+            else
+            {
+                it++;
+            }
 		}
+
 		return true;
 	}
 
-	bool KeyWordExt::_isContainSubWords(const string& word)
-	{
-		for(uint i = 0; i < _priorSubWords.size(); i++)
-		{
-			if(string::npos != word.find(_priorSubWords[i]))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	//bool KeyWordExt::_isContainSubWords(const string& word)
+	//{
+	//	for(uint i = 0; i < _priorSubWords.size(); i++)
+	//	{
+	//		if(string::npos != word.find(_priorSubWords[i]))
+	//		{
+	//			return true;
+	//		}
+	//	}
+	//	return false;
+	//}
 
-	bool KeyWordExt::_prioritizeSubWords(vector<KeyWordInfo>& wordInfos)
-	{
-		if(2 > wordInfos.size())
-		{
-			return true;
-		}
+	//bool KeyWordExt::_prioritizeSubWords(vector<KeyWordInfo>& wordInfos)
+	//{
+	//	if(2 > wordInfos.size())
+	//	{
+	//		return true;
+	//	}
 
-		KeyWordInfo prior;
-		bool flag = false;
-		for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
-		{
-			if(_isContainSubWords(it->word))
-			{
-				prior = *it;
-				it = wordInfos.erase(it);
-				flag = true;
-				break;
-			}
-			else
-			{
-				it ++;
-			}
-		}
-		if(flag)
-		{
-			wordInfos.insert(wordInfos.begin(), prior);
-		}
-		return true;
-	}
+	//	KeyWordInfo prior;
+	//	bool flag = false;
+	//	for(vector<KeyWordInfo>::iterator it = wordInfos.begin(); it != wordInfos.end(); )
+	//	{
+	//		if(_isContainSubWords(it->word))
+	//		{
+	//			prior = *it;
+	//			it = wordInfos.erase(it);
+	//			flag = true;
+	//			break;
+	//		}
+	//		else
+	//		{
+	//			it ++;
+	//		}
+	//	}
+	//	if(flag)
+	//	{
+	//		wordInfos.insert(wordInfos.begin(), prior);
+	//	}
+	//	return true;
+	//}
 }
 
 
@@ -374,12 +360,6 @@ int main()
 		return 1;
 	}
 	ext._loadStopWords("../dicts/stopwords.gbk.v1.0");
-
-	if(!ext._loadPriorSubWords("../dicts/prior.gbk"))
-	{
-		cerr<<"err"<<endl;
-		return 1;
-	}
 
 	ifstream ifile("testtitle.gbk");
 	vector<string> res;

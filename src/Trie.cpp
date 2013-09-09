@@ -109,9 +109,11 @@ namespace CppJieba
                 LogError(string_format("line[%s] illegal.", line.c_str()));
                 return false;
             }
-			nodeInfo.word = vecBuf[0];
+			if(!TransCode::strToVec(vecBuf[0], nodeInfo.word))
+            {
+                return false;
+            }
 			nodeInfo.freq = atoi(vecBuf[1].c_str());
-			nodeInfo.wLen = TransCode::getWordLength(nodeInfo.word);
 			if(3 == vecBuf.size())
 			{
 				nodeInfo.tag = vecBuf[2];
@@ -193,7 +195,7 @@ namespace CppJieba
 		return res;
 	}
 
-	const TrieNodeInfo* Trie::find(const string& str)
+	TrieNodeInfo* Trie::find(const string& str)
 	{
 		Unicode uintVec;
 		bool retFlag = TransCode::strToVec(str, uintVec);
@@ -204,7 +206,7 @@ namespace CppJieba
 		return find(uintVec);
 	}
 
-	const TrieNodeInfo* Trie::find(const Unicode& uintVec)
+	TrieNodeInfo* Trie::find(const Unicode& uintVec)
 	{
 		if(uintVec.empty())
 		{
@@ -213,7 +215,7 @@ namespace CppJieba
 		return find(uintVec.begin(), uintVec.end());
 	}
 
-	const TrieNodeInfo* Trie::find(Unicode::const_iterator begin, Unicode::const_iterator end)
+	TrieNodeInfo* Trie::find(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
 		
 		if(!_getInitFlag())
@@ -324,16 +326,8 @@ namespace CppJieba
 			return false;
 		}
 
-		const string& word = nodeInfo.word;
 		
-		Unicode uintVec;
-		bool retFlag = TransCode::strToVec(word, uintVec);
-		if(!retFlag)
-		{
-			LogError("TransCode::strToVec error.");
-			return false;
-		}
-		
+		const Unicode& uintVec = nodeInfo.word;
         TrieNode* p = _root;
         for(uint i = 0; i < uintVec.size(); i++)
         {

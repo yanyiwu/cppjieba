@@ -27,7 +27,6 @@ namespace CppJieba
 	typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
 	typedef unordered_map<uint16_t, double> EmitProbMap;
 
-
 	const double MIN_DOUBLE = -3.14e+100;
 	const double MAX_DOUBLE = 3.14e+100;
 }

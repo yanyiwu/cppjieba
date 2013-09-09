@@ -36,22 +36,22 @@ namespace CppJieba
 		return _trie.dispose();
 	}
 
-	bool MPSegment::cutDAG(const string& str, vector<string>& res)
+	bool MPSegment::cut(const string& str, vector<string>& res)
 	{
 		vector<TrieNodeInfo> segWordInfos;
-		if(!cutDAG(str, segWordInfos))
+		if(!cut(str, segWordInfos))
 		{
 			return false;
 		}
 		res.clear();
 		for(uint i = 0; i < segWordInfos.size(); i++)
 		{
-			res.push_back(segWordInfos[i].word);
+			res.push_back(TransCode::vecToStr(segWordInfos[i].word.begin(), segWordInfos[i].word.end()));
 		}
 		return true;
 	}
 
-	bool MPSegment::cutDAG(const string& str, vector<TrieNodeInfo>& segWordInfos)
+	bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)
 	{
 		if(str.empty())
 		{
@@ -59,13 +59,19 @@ namespace CppJieba
 		}
 		segWordInfos.clear();
 		SegmentContext segContext;
-		
-		if(!TransCode::strToVec(str, segContext.uintVec))
+        Unicode sentence;
+
+		if(!TransCode::strToVec(str, sentence))
 		{
 			LogError("TransCode::strToVec failed.");
 			return false;
 		}
-		
+
+        for(uint i = 0; i < sentence.size(); i++)
+        {
+            segContext.push_back(SegmentChar(sentence[i]));
+        }
+        
 		//calc DAG
 		if(!_calcDAG(segContext))
 		{
@@ -79,9 +85,9 @@ namespace CppJieba
 			return false;
 		}
 
-		if(!_cutDAG(segContext, segWordInfos))
+		if(!_cut(segContext, segWordInfos))
 		{
-			LogError("_cutDAG failed.");
+			LogError("_cut failed.");
 			return false;
 		}
 
@@ -90,111 +96,150 @@ namespace CppJieba
 
 	bool MPSegment::_calcDAG(SegmentContext& segContext)
 	{
-		if(segContext.uintVec.empty())
+		if(segContext.empty())
 		{
+            LogError("segContext empty.");
 			return false;
 		}
-		vector<pair<uint, const TrieNodeInfo*> > vec;
-		Unicode::const_iterator beginIter = segContext.uintVec.begin();
-		for(Unicode::const_iterator iterI = segContext.uintVec.begin(); iterI != segContext.uintVec.end(); iterI++)
-		{
-			vec.clear();
-			vec.push_back(pair<uint, const TrieNodeInfo*>(iterI - beginIter, NULL));
-			for(Unicode::const_iterator iterJ = iterI + 1;  iterJ != segContext.uintVec.end(); iterJ++)
-			{
-				//care: the iterJ exceed iterEnd
-				const TrieNodeInfo* ptNodeInfo = _trie.find(iterI, iterJ + 1);
-				if(NULL != ptNodeInfo)
-				{
-					vec.push_back(pair<uint, const TrieNodeInfo*>(iterJ - beginIter, ptNodeInfo));
-				}
-			}
-			segContext.dag.push_back(vec);
-		}
-		return true;
+
+        Unicode unicode;
+        for(uint i = 0; i < segContext.size(); i++)
+        {
+            unicode.clear();
+            for(uint j = i ; j < segContext.size(); j++)
+            {
+                unicode.push_back(segContext[j].uniCh);
+                const TrieNodeInfo* pInfo = _trie.find(unicode);
+                if(pInfo)
+                {
+                    segContext[i].dag[j] = pInfo;
+                }
+            }
+            if(segContext[i].dag.end() == segContext[i].dag.find(i))
+            {
+                segContext[i].dag[i] = NULL;
+            }
+        }
+        return true;
+		//vector<pair<uint, const TrieNodeInfo*> > vec;
+		//Unicode::const_iterator beginIter = segContext.uintVec.begin();
+		//for(Unicode::const_iterator iterI = segContext.uintVec.begin(); iterI != segContext.uintVec.end(); iterI++)
+		//{
+		//	vec.clear();
+		//	vec.push_back(pair<uint, const TrieNodeInfo*>(iterI - beginIter, NULL));
+		//	for(Unicode::const_iterator iterJ = iterI + 1;  iterJ != segContext.uintVec.end(); iterJ++)
+		//	{
+		//		//care: the iterJ exceed iterEnd
+		//		const TrieNodeInfo* ptNodeInfo = _trie.find(iterI, iterJ + 1);
+		//		if(NULL != ptNodeInfo)
+		//		{
+		//			vec.push_back(pair<uint, const TrieNodeInfo*>(iterJ - beginIter, ptNodeInfo));
+		//		}
+		//	}
+		//	segContext.dag.push_back(vec);
+		//}
+		//return true;
 	}
 
 	bool MPSegment::_calcDP(SegmentContext& segContext)
 	{
-		if(segContext.uintVec.empty())
+		if(segContext.empty())
 		{
-			LogError("uintVec illegal");
+			LogError("segContext empty");
 			return false;
 		}
+        
+        for(int i = segContext.size() - 1; i >= 0; i--)
+        {
+            segContext[i].pInfo = NULL;
+            segContext[i].weight = MIN_DOUBLE;
+            for(DagType::const_iterator it = segContext[i].dag.begin(); it != segContext[i].dag.end(); it++)
+            {
+                uint nextPos = it->first;
+                const TrieNodeInfo* p = it->second;
+                double val = 0.0;
+                if(nextPos + 1 < segContext.size())
+                {
+                    val += segContext[nextPos + 1].weight;
+                }
 
-		if(segContext.uintVec.size() != segContext.dag.size())
-		{
-			LogError("dag is illegal!");
-			return false;
-		}
-
-		segContext.dp.assign(segContext.uintVec.size() + 1, pair<const TrieNodeInfo*, double>(NULL, 0.0));
-		segContext.dp[segContext.uintVec.size()].first = NULL;
-		segContext.dp[segContext.uintVec.size()].second = 0.0;
-
-		for(int i = segContext.uintVec.size() - 1; i >= 0; i--)
-		{
-			// calc max
-			segContext.dp[i].first = NULL;
-			segContext.dp[i].second = MIN_DOUBLE;
-			for(uint j = 0; j < segContext.dag[i].size(); j++)
-			{
-				const pair<uint , const TrieNodeInfo*>& p = segContext.dag[i][j];
-				int pos = p.first;
-				double val = segContext.dp[pos+1].second;
-				if(NULL != p.second)
-				{
-					val += (p.second)->logFreq; 
-				}
-				else
-				{
+                if(p)
+                {
+					val += p->logFreq; 
+                }
+                else
+                {
 				    val += _trie.getMinLogFreq();
-				}
-
-				if(val > segContext.dp[i].second)
+                }
+				if(val > segContext[i].weight)
 				{
-					segContext.dp[i].first = p.second;
-					segContext.dp[i].second = val;
+					segContext[i].pInfo = p;
+					segContext[i].weight = val;
 				}
-			}
-		}
-		segContext.dp.pop_back();
-		return true;
+            }
+        }
+        return true;
+
+		//segContext.dp.assign(segContext.uintVec.size() + 1, pair<const TrieNodeInfo*, double>(NULL, 0.0));
+		//segContext.dp[segContext.uintVec.size()].first = NULL;
+		//segContext.dp[segContext.uintVec.size()].second = 0.0;
+
+		//for(int i = segContext.uintVec.size() - 1; i >= 0; i--)
+		//{
+		//	// calc max
+		//	segContext.dp[i].first = NULL;
+		//	segContext.dp[i].second = MIN_DOUBLE;
+		//	for(uint j = 0; j < segContext.dag[i].size(); j++)
+		//	{
+		//		const pair<uint , const TrieNodeInfo*>& p = segContext.dag[i][j];
+		//		int pos = p.first;
+		//		double val = segContext.dp[pos+1].second;
+		//		if(NULL != p.second)
+		//		{
+		//			val += (p.second)->logFreq; 
+		//		}
+		//		else
+		//		{
+		//		    val += _trie.getMinLogFreq();
+		//		}
+
+		//		if(val > segContext.dp[i].second)
+		//		{
+		//			segContext.dp[i].first = p.second;
+		//			segContext.dp[i].second = val;
+		//		}
+		//	}
+		//}
+		//segContext.dp.pop_back();
+		//return true;
 	}
 
-	bool MPSegment::_cutDAG(SegmentContext& segContext, vector<TrieNodeInfo>& res)
+	bool MPSegment::_cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)
 	{
-		if(segContext.dp.empty() || segContext.uintVec.empty() || segContext.dp.size() != segContext.uintVec.size())
-		{
-			LogError("dp or uintVec illegal!");
-			return false;
-		}
+		//if(segContext.dp.empty() || segContext.uintVec.empty() || segContext.dp.size() != segContext.uintVec.size())
+		//{
+		//	LogFatal("dp or uintVec illegal!");
+		//	return false;
+		//}
 		res.clear();
 
-		Unicode::const_iterator iterBegin = segContext.uintVec.begin();
 		uint i = 0;
-		while(i < segContext.dp.size())
+		while(i < segContext.size())
 		{
-			const TrieNodeInfo* p = segContext.dp[i].first;
-			if(NULL == p)
+			const TrieNodeInfo* p = segContext[i].pInfo;
+			if(p)
+			{
+				res.push_back(*p);
+				i += p->word.size();
+			}
+			else//single chinese word
 			{
 				TrieNodeInfo nodeInfo;
-				nodeInfo.word = TransCode::vecToStr(iterBegin + i, iterBegin + i +1);
-				nodeInfo.wLen = 1;
+				nodeInfo.word.push_back(segContext[i].uniCh);
 				nodeInfo.freq = 0;
 				nodeInfo.logFreq = _trie.getMinLogFreq();
 				res.push_back(nodeInfo);
-				i ++;
-			}
-			else
-			{
-				res.push_back(*p);
-				if(0 == p->wLen)
-				{
-					LogFatal("TrieNodeInfo's wLen is 0!");
-					return false;
-				}
-				i += p->wLen;
+				i++;
 			}
 		}
 		return true;
@@ -223,7 +268,7 @@ int main()
 	while(getline(ifile, line))
 	{
 		res.clear();
-		segment.cutDAG(line, res);
+		segment.cut(line, res);
 		PRINT_VECTOR(res);
 		getchar();
 	}

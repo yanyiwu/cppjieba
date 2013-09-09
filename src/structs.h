@@ -4,35 +4,63 @@
 #include <limits>
 #include "globals.h"
 #include "Trie.h"
+#include "TransCode.h"
 
 namespace CppJieba
 {
 
 	struct TrieNodeInfo
 	{
-		string word;
-		size_t wLen;// the word's len , not string.length(), 
+		//string word;
+		//size_t wLen;// the word's len , not string.length(), 
+        Unicode word;
 		size_t freq;
 		string tag;
 		double logFreq; //logFreq = log(freq/sum(freq));
-		TrieNodeInfo():wLen(0),freq(0),logFreq(0.0)
+		TrieNodeInfo():freq(0),logFreq(0.0)
 		{
 		}
-		TrieNodeInfo(const TrieNodeInfo& nodeInfo):word(nodeInfo.word), wLen(nodeInfo.wLen), freq(nodeInfo.freq), tag(nodeInfo.tag), logFreq(nodeInfo.logFreq)
+		TrieNodeInfo(const TrieNodeInfo& nodeInfo):word(nodeInfo.word), freq(nodeInfo.freq), tag(nodeInfo.tag), logFreq(nodeInfo.logFreq)
 		{
 		}
-		TrieNodeInfo(const string& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
+		TrieNodeInfo(const Unicode& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
 		{
-			wLen = TransCode::getWordLength(_word);
 		}
 	};
+
+    typedef unordered_map<uint, const TrieNodeInfo*> DagType;
+    struct SegmentChar 
+    {
+        uint16_t uniCh;
+        DagType dag;
+        const TrieNodeInfo * pInfo;
+        double weight;
+        
+        SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
+        {
+        }
+        
+        /*const TrieNodeInfo* pInfo;
+        double weight;
+        SegmentChar(uint16_t unich, const TrieNodeInfo* p, double w):uniCh(unich), pInfo(p), weight(w)
+        {
+        }*/
+    };
+    /*
+    struct SegmentContext
+    {
+        vector<SegmentChar> context;
+        bool getDA
+    };*/
+    typedef vector<SegmentChar> SegmentContext;
 	
-	struct SegmentContext//: public TrieNodeInfo
-	{
-		vector<uint16_t> uintVec;
-		vector< vector<pair<uint, const TrieNodeInfo*> > > dag;
-		vector< pair<const TrieNodeInfo*, double> > dp;
-	};
+	//struct SegmentContext
+	//{
+    //    vector<SegmentChar> context;
+	//	//vector<uint16_t> uintVec;
+	//	//vector< vector<pair<uint, const TrieNodeInfo*> > > dag;
+	//	//vector< pair<const TrieNodeInfo*, double> > dp;
+	//};
 	
 	/*
 	struct SegmentWordInfo: public TrieNodeInfo
@@ -48,7 +76,7 @@ namespace CppJieba
 		KeyWordInfo():idf(0.0),weight(0.0)
 		{
 		}
-		KeyWordInfo(const string& _word):TrieNodeInfo(_word),idf(0.0),weight(0.0)
+		KeyWordInfo(const Unicode& _word):TrieNodeInfo(_word),idf(0.0),weight(0.0)
 		{ 
 		}
 		KeyWordInfo(const TrieNodeInfo& trieNodeInfo):TrieNodeInfo(trieNodeInfo)
@@ -56,13 +84,12 @@ namespace CppJieba
 		}
 		string toString() const
 		{
-			return string_format("{word:%s,wLen:%d weight:%lf, idf:%lf}", word.c_str(), wLen, weight, idf);
+			return string_format("{word:%s,weight:%lf, idf:%lf}", TransCode::vecToStr(word.begin(), word.end()).c_str(), weight, idf);
 		}
 		KeyWordInfo& operator = (const TrieNodeInfo& trieNodeInfo)
 		{
 			word = trieNodeInfo.word;
 			freq = trieNodeInfo.freq;
-			wLen = trieNodeInfo.wLen;
 			tag = trieNodeInfo.tag;
 			logFreq = trieNodeInfo.logFreq;
 			return *this;

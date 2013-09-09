@@ -32,7 +32,7 @@ void cut(const char * const filePath)
 	{
 		if(!line.empty())
 		{
-			seg.cutDAG(line, res);
+			seg.cut(line, res);
 			cout<<line<<"\n"<<joinStr(res,"/")<<endl;
 		}
 	}
@@ -60,7 +60,7 @@ void cutAll(const char* const filePath)
 	string line;
 	while(getline(ifs, line))
 	{
-		seg.cutDAG(line, res);
+		seg.cut(line, res);
 	}
 }
 

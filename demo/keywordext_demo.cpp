@@ -8,7 +8,7 @@ using namespace CppJieba;
 void testKeyWordExt(const char * dictPath, const char * filePath)
 {
 	KeyWordExt ext;
-	if(!ext.init(dictPath, "../dicts/stopwords.gbk.v1.0"))
+	if(!ext.init(dictPath))
 	{
 		return;
 	}
