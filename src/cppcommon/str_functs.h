@@ -14,7 +14,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <iconv.h>
 #include <memory.h>
 #include "typedefs.h"
 #include <functional> 
