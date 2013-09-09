@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory.h>
-#include "cppcommon/headers.h"
+#include "../cppcommon/headers.h"
 #include "globals.h"
 #include "TransCode.h"
 

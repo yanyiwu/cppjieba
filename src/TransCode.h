@@ -7,8 +7,8 @@
 
 
 #include "globals.h"
-#include "cppcommon/str_functs.h"
-#include "cppcommon/vec_functs.h"
+#include "../cppcommon/str_functs.h"
+#include "../cppcommon/vec_functs.h"
 
 namespace CppJieba
 {

@@ -2,8 +2,6 @@ CXX    := g++
 LD     := g++
 AR     := ar rc
 
-INCS := -I. -I./cppcommon
-
 DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
 RELEASE_CXXFLAGS   := -Wall -O3
 
@@ -20,7 +18,7 @@ DOPACK := $(AR)
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-CMDIR := ./cppcommon
+CMDIR := ../cppcommon
 CMLIB := $(CMDIR)/libcm.a
 
 TMPDIR := ./cppjiebatmp

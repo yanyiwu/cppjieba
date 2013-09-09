@@ -12,10 +12,10 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include "cppcommon/str_functs.h"
-#include "cppcommon/vec_functs.h"
-#include "cppcommon/file_functs.h"
-#include "cppcommon/logger.h"
+#include "../cppcommon/str_functs.h"
+#include "../cppcommon/vec_functs.h"
+#include "../cppcommon/file_functs.h"
+#include "../cppcommon/logger.h"
 #include "TransCode.h"
 #include "globals.h"
 #include "structs.h"

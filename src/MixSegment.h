@@ -3,7 +3,7 @@
 
 #include "MPSegment.h"
 #include "HMMSegment.h"
-#include "cppcommon/headers.h"
+#include "../cppcommon/headers.h"
 
 namespace CppJieba
 {
