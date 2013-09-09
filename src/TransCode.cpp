@@ -34,14 +34,6 @@ namespace CppJieba
 		_pf_encode = vecToUtf8;
 	}
 	
-	bool TransCode::decode(const string& str, vector<uint16_t>& vec)
-	{
-		if(NULL == _pf_decode)
-		{
-			return false;
-		}
-		return _pf_decode(str, vec);
-	}
 
 	bool TransCode::utf8ToVec(const string& str, vector<uint16_t>& vec)
 	{
@@ -112,27 +104,14 @@ namespace CppJieba
 		return true;
 	}
     
-    string TransCode::encode(const Unicode& sentence)
-    {
-        return encode(sentence.begin(), sentence.end());
-    }
-	
-	string TransCode::encode(Unicode::const_iterator begin, Unicode::const_iterator end)
-	{
-		if(!_pf_encode)
-		{
-			return "";
-		}
-		return _pf_encode(begin, end);
-	}
 
-	string TransCode::vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end)
+	bool TransCode::vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end, string& res)
 	{
 		if(begin >= end)
 		{
-			return "";
+			return false;
 		}
-		string res;
+        res.clear();
 		uint16_t ui;
 		while(begin != end)
 		{
@@ -154,17 +133,17 @@ namespace CppJieba
 			}
 			begin ++;
 		}
-		return res;
+		return true;
 	}
 
-	string TransCode::vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end)
+	bool TransCode::vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end, string& res)
 	{
 		if(begin >= end)
 		{
-			return "";
+			return false;
 		}
+        res.clear();
 		pair<char, char> pa;
-		string res;
 		while(begin != end)
 		{
 			pa = uint16ToChar2(*begin);
@@ -179,21 +158,8 @@ namespace CppJieba
 			}
 			begin++;
 		}
-		return res;
+		return true;
 	}
-
-	//size_t TransCode::getWordLength(const string& str)
-	//{
-	//	vector<uint16_t> vec;
-	//	if(!decode(str, vec))
-	//	{
-	//		return 0;
-	//	}
-	//	else
-	//	{
-	//		return vec.size();
-	//	}
-	//}
 }
 
 
@@ -202,27 +168,6 @@ using namespace CPPCOMMON;
 using namespace CppJieba;
 int main()
 {
-	//ifstream ifile("/home/wuyanyi/code/SevKeyword/log.2.txt");
-	//string line;
-	//Unicode vec;
-	//while(getline(ifile, line))
-	//{
-	//	
-	//	cout<<line<<endl;
-	//	cout<<line.size()<<endl;
-	//	if(!TransCode::decode(line, vec))
-	//	{
-	//		cout<<"error"<<endl;
-	//	}
-	//	PRINT_VECTOR(vec);
-	//	cout<<TransCode::encode(vec)<<endl;
-	//}
-	//ifile.close();
-	//typedef bool (* pf)(const string& , vector<uint16_t>&);
-	//pf tmp = TransCode::a;
-	//vector<uint16_t> vec;
-	//tmp("1",vec);
-
 	string a("abd你好世界!a");
 	vector<uint16_t> vec;
 	//TransCode::setUtf8Enc();

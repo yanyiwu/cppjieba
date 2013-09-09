@@ -17,38 +17,56 @@ namespace CppJieba
 	{
 		public:
 			typedef bool (*pf_decode_t)(const string&, vector<uint16_t>&);
-			typedef string (*pf_encode_t)(Unicode::const_iterator begin, Unicode::const_iterator end);
-			typedef size_t (*pf_getWordLength_t)(const string& str);
+			typedef bool (*pf_encode_t)(Unicode::const_iterator begin, Unicode::const_iterator end, string& res);
 		private:
 			static vector<string> _encVec;
 			static bool _isInitted;
 			static pf_decode_t _pf_decode;
 			static pf_encode_t _pf_encode;
-			static pf_getWordLength_t _pf_getWordLength;
 			
 		public:
 			static void setGbkEnc();
 			static void setUtf8Enc();
 			
-		public:
+		private:
 			TransCode();
 			~TransCode();
 		public:
 			static bool init();
 		public:
-			static bool decode(const string& str, vector<uint16_t>& vec);
-			static string encode(Unicode::const_iterator begin, Unicode::const_iterator end);
-            static string encode(const Unicode& sentence);
-			//static size_t getWordLength(const string& str);
+			static inline bool decode(const string& str, vector<uint16_t>& vec);
+			static inline bool encode(Unicode::const_iterator begin, Unicode::const_iterator end, string& res);
+            static inline bool encode(const Unicode& sentence, string& res);
+
 		public:
 			static bool gbkToVec(const string& str, vector<uint16_t>& vec);
-			static string vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end);
-			//static size_t getGbkLength(const string& str);
+			static bool vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end, string& res);
 		public:
 			static bool utf8ToVec(const string& str, vector<uint16_t>& vec);
-			static string vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end);
-			//static size_t getUtf8Length(const string& str);
+			static bool vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end, string& res);
 	};
+
+	inline bool TransCode::decode(const string& str, vector<uint16_t>& vec)
+	{
+		if(NULL == _pf_decode)
+		{
+			return false;
+		}
+		return _pf_decode(str, vec);
+	}
+    inline bool TransCode::encode(const Unicode& sentence, string& res)
+    {
+        return encode(sentence.begin(), sentence.end(), res);
+    }
+	
+	inline bool TransCode::encode(Unicode::const_iterator begin, Unicode::const_iterator end, string& res)
+	{
+		if(!_pf_encode)
+		{
+			return false;
+		}
+		return _pf_encode(begin, end, res);
+	}
 }
 
 #endif

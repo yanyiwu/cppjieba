@@ -27,30 +27,6 @@ namespace CppJieba
 		return true;
 	}
 
-	//bool KeyWordExt::_loadPriorSubWords(const char * const filePath)
-	//{
-	//	LogInfo(string_format("_loadPriorSubWords(%s) start", filePath));
-	//	if(!checkFileExist(filePath))
-	//	{
-	//		LogError(string_format("cann't find file[%s].",filePath));
-	//		return false;
-	//	}
-	//	if(!_priorSubWords.empty())
-	//	{
-	//		LogError("_priorSubWords has been initted before");
-	//		return false;
-	//	}
-	//	ifstream infile(filePath);
-	//	string subword;
-	//	while(getline(infile, subword))
-	//	{
-	//		_priorSubWords.push_back(subword);
-	//	}
-	//	LogInfo(string_format("_loadPriorSubWords(%s) end", filePath));
-	//	infile.close();
-	//	return true;
-	//}
-
 	bool KeyWordExt::loadStopWords(const char * const filePath)
 	{
 

@@ -44,9 +44,17 @@ namespace CppJieba
 			return false;
 		}
 		res.clear();
+        string tmp;
 		for(uint i = 0; i < segWordInfos.size(); i++)
 		{
-			res.push_back(TransCode::encode(segWordInfos[i].word.begin(), segWordInfos[i].word.end()));
+			if(TransCode::encode(segWordInfos[i].word, tmp))
+            {
+                res.push_back(tmp);
+            }
+            else
+            {
+                LogError("encode failed.");
+            }
 		}
 		return true;
 	}

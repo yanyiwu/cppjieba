@@ -149,9 +149,13 @@ namespace CppJieba
             return false;
         }
         res.clear();
+        string tmp;
         for(uint i = 0; i < words.size(); i++)
         {
-            res.push_back(TransCode::encode(words[i].begin(), words[i].end()));
+            if(TransCode::encode(words[i], tmp))
+            {
+                res.push_back(tmp);
+            }
         }
 		return true;
 	}

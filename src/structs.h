@@ -82,9 +82,11 @@ namespace CppJieba
 		KeyWordInfo(const TrieNodeInfo& trieNodeInfo):TrieNodeInfo(trieNodeInfo)
 		{
 		}
-		string toString() const
+		inline string toString() const
 		{
-			return string_format("{word:%s,weight:%lf, idf:%lf}", TransCode::encode(word.begin(), word.end()).c_str(), weight, idf);
+            string tmp;
+            TransCode::encode(word, tmp);
+			return string_format("{word:%s,weight:%lf, idf:%lf}", tmp.c_str(), weight, idf);
 		}
 		KeyWordInfo& operator = (const TrieNodeInfo& trieNodeInfo)
 		{

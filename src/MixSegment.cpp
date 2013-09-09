@@ -43,6 +43,7 @@ namespace CppJieba
         res.clear();
         Unicode unico;
         vector<Unicode> hmmRes;
+        string tmp;
         for(uint i= 0; i < infos.size(); i++)
         {
             if(1 == infos[i].word.size())
@@ -60,12 +61,14 @@ namespace CppJieba
                     }
                     for(uint j = 0; j < hmmRes.size(); j++)
                     {
-                        res.push_back(TransCode::encode(hmmRes[j]));
+                        TransCode::encode(hmmRes[j], tmp);
+                        res.push_back(tmp);
                     }
                 }
                 unico.clear();
 
-                res.push_back(TransCode::encode(infos[i].word));
+                TransCode::encode(infos[i].word, tmp);
+                res.push_back(tmp);
             }
             
         }
@@ -78,7 +81,8 @@ namespace CppJieba
             }
             for(uint j = 0; j < hmmRes.size(); j++)
             {
-                res.push_back(TransCode::encode(hmmRes[j]));
+                TransCode::encode(hmmRes[j], tmp);
+                res.push_back(tmp);
             }
         }
         
