@@ -84,7 +84,7 @@ namespace CppJieba
 		}
 		string toString() const
 		{
-			return string_format("{word:%s,weight:%lf, idf:%lf}", TransCode::vecToStr(word.begin(), word.end()).c_str(), weight, idf);
+			return string_format("{word:%s,weight:%lf, idf:%lf}", TransCode::encode(word.begin(), word.end()).c_str(), weight, idf);
 		}
 		KeyWordInfo& operator = (const TrieNodeInfo& trieNodeInfo)
 		{

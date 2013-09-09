@@ -4,13 +4,13 @@ namespace CppJieba
 {
 	vector<string> TransCode::_encVec;
 	bool TransCode::_isInitted = TransCode::init();
-	TransCode::pf_strToVec_t TransCode::_pf_strToVec = NULL;
-	TransCode::pf_vecToStr_t TransCode::_pf_vecToStr = NULL;
+	TransCode::pf_decode_t TransCode::_pf_decode = NULL;
+	TransCode::pf_encode_t TransCode::_pf_encode = NULL;
 
 	bool TransCode::init()
 	{
-		_pf_strToVec = gbkToVec;
-		_pf_vecToStr = vecToGbk;
+		_pf_decode = gbkToVec;
+		_pf_encode = vecToGbk;
 		return true;
 	}
 
@@ -24,23 +24,23 @@ namespace CppJieba
 
 	void TransCode::setGbkEnc()
 	{
-		_pf_strToVec = gbkToVec;
-		_pf_vecToStr = vecToGbk;
+		_pf_decode = gbkToVec;
+		_pf_encode = vecToGbk;
 	}
 
 	void TransCode::setUtf8Enc()
 	{
-		_pf_strToVec = utf8ToVec;
-		_pf_vecToStr = vecToUtf8;
+		_pf_decode = utf8ToVec;
+		_pf_encode = vecToUtf8;
 	}
 	
-	bool TransCode::strToVec(const string& str, vector<uint16_t>& vec)
+	bool TransCode::decode(const string& str, vector<uint16_t>& vec)
 	{
-		if(NULL == _pf_strToVec)
+		if(NULL == _pf_decode)
 		{
 			return false;
 		}
-		return _pf_strToVec(str, vec);
+		return _pf_decode(str, vec);
 	}
 
 	bool TransCode::utf8ToVec(const string& str, vector<uint16_t>& vec)
@@ -112,13 +112,13 @@ namespace CppJieba
 		return true;
 	}
 	
-	string TransCode::vecToStr(Unicode::const_iterator begin, Unicode::const_iterator end)
+	string TransCode::encode(Unicode::const_iterator begin, Unicode::const_iterator end)
 	{
-		if(NULL == _pf_vecToStr)
+		if(NULL == _pf_encode)
 		{
 			return "";
 		}
-		return _pf_vecToStr(begin, end);
+		return _pf_encode(begin, end);
 	}
 
 	string TransCode::vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end)
@@ -177,18 +177,18 @@ namespace CppJieba
 		return res;
 	}
 
-	size_t TransCode::getWordLength(const string& str)
-	{
-		vector<uint16_t> vec;
-		if(!strToVec(str, vec))
-		{
-			return 0;
-		}
-		else
-		{
-			return vec.size();
-		}
-	}
+	//size_t TransCode::getWordLength(const string& str)
+	//{
+	//	vector<uint16_t> vec;
+	//	if(!decode(str, vec))
+	//	{
+	//		return 0;
+	//	}
+	//	else
+	//	{
+	//		return vec.size();
+	//	}
+	//}
 }
 
 
@@ -205,12 +205,12 @@ int main()
 	//	
 	//	cout<<line<<endl;
 	//	cout<<line.size()<<endl;
-	//	if(!TransCode::strToVec(line, vec))
+	//	if(!TransCode::decode(line, vec))
 	//	{
 	//		cout<<"error"<<endl;
 	//	}
 	//	PRINT_VECTOR(vec);
-	//	cout<<TransCode::vecToStr(vec)<<endl;
+	//	cout<<TransCode::encode(vec)<<endl;
 	//}
 	//ifile.close();
 	//typedef bool (* pf)(const string& , vector<uint16_t>&);
@@ -221,10 +221,10 @@ int main()
 	string a("abd你好世界!a");
 	vector<uint16_t> vec;
 	//TransCode::setUtf8Enc();
-	cout<<TransCode::strToVec(a, vec)<<endl;
+	cout<<TransCode::decode(a, vec)<<endl;
 	PRINT_VECTOR(vec);
 
-	cout<<TransCode::vecToStr(vec.begin(), vec.end())<<endl;
+	cout<<TransCode::encode(vec.begin(), vec.end())<<endl;
 	
 	return 0;
 }

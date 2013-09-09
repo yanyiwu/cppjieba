@@ -46,7 +46,7 @@ namespace CppJieba
 		res.clear();
 		for(uint i = 0; i < segWordInfos.size(); i++)
 		{
-			res.push_back(TransCode::vecToStr(segWordInfos[i].word.begin(), segWordInfos[i].word.end()));
+			res.push_back(TransCode::encode(segWordInfos[i].word.begin(), segWordInfos[i].word.end()));
 		}
 		return true;
 	}
@@ -61,9 +61,9 @@ namespace CppJieba
 		SegmentContext segContext;
         Unicode sentence;
 
-		if(!TransCode::strToVec(str, sentence))
+		if(!TransCode::decode(str, sentence))
 		{
-			LogError("TransCode::strToVec failed.");
+			LogError("TransCode::decode failed.");
 			return false;
 		}
 

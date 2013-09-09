@@ -71,9 +71,9 @@ namespace CppJieba
         Unicode word;
 		while(getline(ifile, line))
 		{
-            if(!TransCode::strToVec(line, word))
+            if(!TransCode::decode(line, word))
             {
-                LogError("strToVec failed .");
+                LogError("decode failed .");
                 return false;
             }
 			_stopWords.insert(word);
@@ -142,9 +142,9 @@ namespace CppJieba
 		for(uint i = 0; i < words.size(); i++)
 		{
             Unicode uniWord;
-            if(!TransCode::strToVec(words[i], uniWord))
+            if(!TransCode::decode(words[i], uniWord))
             {
-                LogError("strToVec failed");
+                LogError("decode failed");
                 return false;
             }
 			keyWordInfos.push_back(uniWord);

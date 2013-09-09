@@ -16,14 +16,14 @@ namespace CppJieba
 	class TransCode
 	{
 		public:
-			typedef bool (*pf_strToVec_t)(const string&, vector<uint16_t>&);
-			typedef string (*pf_vecToStr_t)(Unicode::const_iterator begin, Unicode::const_iterator end);
+			typedef bool (*pf_decode_t)(const string&, vector<uint16_t>&);
+			typedef string (*pf_encode_t)(Unicode::const_iterator begin, Unicode::const_iterator end);
 			typedef size_t (*pf_getWordLength_t)(const string& str);
 		private:
 			static vector<string> _encVec;
 			static bool _isInitted;
-			static pf_strToVec_t _pf_strToVec;
-			static pf_vecToStr_t _pf_vecToStr;
+			static pf_decode_t _pf_decode;
+			static pf_encode_t _pf_encode;
 			static pf_getWordLength_t _pf_getWordLength;
 			
 		public:
@@ -36,17 +36,17 @@ namespace CppJieba
 		public:
 			static bool init();
 		public:
-			static bool strToVec(const string& str, vector<uint16_t>& vec);
-			static string vecToStr(Unicode::const_iterator begin, Unicode::const_iterator end);
-			static size_t getWordLength(const string& str);
+			static bool decode(const string& str, vector<uint16_t>& vec);
+			static string encode(Unicode::const_iterator begin, Unicode::const_iterator end);
+			//static size_t getWordLength(const string& str);
 		public:
 			static bool gbkToVec(const string& str, vector<uint16_t>& vec);
 			static string vecToGbk(Unicode::const_iterator begin, Unicode::const_iterator end);
-			static size_t getGbkLength(const string& str);
+			//static size_t getGbkLength(const string& str);
 		public:
 			static bool utf8ToVec(const string& str, vector<uint16_t>& vec);
 			static string vecToUtf8(Unicode::const_iterator begin, Unicode::const_iterator end);
-			static size_t getUtf8Length(const string& str);
+			//static size_t getUtf8Length(const string& str);
 	};
 }
 

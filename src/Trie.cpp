@@ -109,7 +109,7 @@ namespace CppJieba
                 LogError(string_format("line[%s] illegal.", line.c_str()));
                 return false;
             }
-			if(!TransCode::strToVec(vecBuf[0], nodeInfo.word))
+			if(!TransCode::decode(vecBuf[0], nodeInfo.word))
             {
                 return false;
             }
@@ -156,10 +156,10 @@ namespace CppJieba
 		}
 		Unicode uintVec;
 		
-		bool retFlag = TransCode::strToVec(str, uintVec);
+		bool retFlag = TransCode::decode(str, uintVec);
 		if(retFlag)
 		{
-			LogError("TransCode::strToVec failed.");
+			LogError("TransCode::decode failed.");
 			return NULL;
 		}
 
@@ -198,7 +198,7 @@ namespace CppJieba
 	TrieNodeInfo* Trie::find(const string& str)
 	{
 		Unicode uintVec;
-		bool retFlag = TransCode::strToVec(str, uintVec);
+		bool retFlag = TransCode::decode(str, uintVec);
 		if(!retFlag)
 		{
 			return NULL;
@@ -260,7 +260,7 @@ namespace CppJieba
 	{
 
 		Unicode uintVec;
-		TransCode::strToVec(str, uintVec);
+		TransCode::decode(str, uintVec);
 		return getWeight(uintVec);
 	}
 

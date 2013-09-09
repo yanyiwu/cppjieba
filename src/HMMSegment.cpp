@@ -113,7 +113,7 @@ namespace CppJieba
 		vector<uint16_t> unico;
 		vector<uint> status; 
 		vector<uint16_t>::iterator begin, left, right;
-		if(!TransCode::strToVec(str, unico))
+		if(!TransCode::decode(str, unico))
 
 		{
 			LogError("TransCode failed.");
@@ -125,7 +125,7 @@ namespace CppJieba
 			LogError("viterbi failed.");
 			return false;
 		}
-		//cout<<vecToString(status)<<endl;
+		//cout<<encodeing(status)<<endl;
 		begin = unico.begin();
 		left = begin;
 		res.clear();
@@ -134,7 +134,7 @@ namespace CppJieba
 			if(status[i] % 2) //if(E == status[i] || S == status[i])
 			{
 				right = begin + i + 1;
-				res.push_back(TransCode::vecToStr(left, right));
+				res.push_back(TransCode::encode(left, right));
 				left = right;
 			}
 
@@ -279,7 +279,7 @@ namespace CppJieba
 	bool HMMSegment::_decodeOne(const string& str, uint16_t& res)
 	{
 		vector<uint16_t> ui16;
-		if(!TransCode::strToVec(str, ui16) || ui16.size() != 1)
+		if(!TransCode::decode(str, ui16) || ui16.size() != 1)
 		{
 			return false;
 		}
