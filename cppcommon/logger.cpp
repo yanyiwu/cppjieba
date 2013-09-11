@@ -21,10 +21,33 @@ namespace CPPCOMMON
     {
     }
 
+    bool Logger::LoggingF(uint level, const char* fileName, int lineNo, const string& fmt, ...)
+    {
+        int size = 256;
+        string msg;
+        va_list ap;
+        while (1) {
+            msg.resize(size);
+            va_start(ap, fmt);
+            int n = vsnprintf((char *)msg.c_str(), size, fmt.c_str(), ap);
+            va_end(ap);
+            if (n > -1 && n < size) {
+                msg.resize(n);
+                break;
+            }
+            if (n > -1)
+              size = n + 1;
+            else
+              size *= 2;
+        }
+        return Logging(level, msg, fileName, lineNo);
+    }
+
     bool Logger::Logging(uint level, const string& msg,  const char * fileName, int lineNo)
     {
         return Logging(level, msg.c_str(), fileName, lineNo);
     }
+    
 
     bool Logger::Logging(uint level, const char * msg, const char* fileName, int lineNo)
     {
@@ -61,8 +84,13 @@ int main()
     LogDebug("debug log!");
     LogInfo("test info log");
     LogWarn("warning log");
+    LogInfo("str[%s] int[%d]", "str1");
+    LogInfo("str[%s] int[%d]", "str1",15);
     LogError("error log");
     LogFatal("fatal !!!!");
+    LogFatal("str[%s] int[%d]", "str1");
+    LogFatal("str[%s] int[%d]", "str1", 17,16);
+    LogFatal("str");
     return 0;
 }
 #endif

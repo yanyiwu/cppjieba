@@ -21,7 +21,7 @@
 namespace CPPCOMMON
 {
     using namespace std;
-    string string_format(const string fmt, ...) ;
+    string string_format(const char*, ...) ;
     string joinStr(const vector<string>& source, const string& connector);
     vector<string> splitStr(const string& source, const string& pattern = " \t\n");
     bool splitStr(const string& source, vector<string>& res, const string& pattern = " \t\n");
