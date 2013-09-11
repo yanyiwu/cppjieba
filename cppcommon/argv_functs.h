@@ -14,25 +14,25 @@
 
 namespace CPPCOMMON
 {
-	using namespace std;
-	bool getArgvMap(int argc, const char* const* argv, map<string, string>& mpss);
-	class ArgvContext
-	{
-		public :
-			ArgvContext(int argc, const char* const * argv);
-			~ArgvContext();
-		public:
-			string toString();
-			string operator [](uint i);
-			string operator [](const string& key);
-		public:
-			bool isKeyExist(const string& key);
-		private:
-			vector<string> _args;
-			map<string, string> _mpss;
-			set<string> _sset; 
+    using namespace std;
+    bool getArgvMap(int argc, const char* const* argv, map<string, string>& mpss);
+    class ArgvContext
+    {
+        public :
+            ArgvContext(int argc, const char* const * argv);
+            ~ArgvContext();
+        public:
+            string toString();
+            string operator [](uint i);
+            string operator [](const string& key);
+        public:
+            bool isKeyExist(const string& key);
+        private:
+            vector<string> _args;
+            map<string, string> _mpss;
+            set<string> _sset; 
 
-	};
+    };
 }
 
 #endif

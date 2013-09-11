@@ -33,22 +33,22 @@
 
 namespace CPPCOMMON
 {
-	using namespace std;
-	class Logger
-	{
-		public:
-			Logger();
-			~Logger();
-		public:
-			static bool Logging(uint level, const string& msg, const char* fileName, int lineNo);
-			static bool Logging(uint level, const char * msg, const char* fileName, int lineNo);
-		private:
-			static char _cStrBuf[CSTR_BUFFER_SIZE];
-			static const char * _logLevel[LEVEL_ARRAY_SIZE];
-			static const char * _logFormat;
-			static const char * _timeFormat;
-			static time_t _timeNow;
-	};
+    using namespace std;
+    class Logger
+    {
+        public:
+            Logger();
+            ~Logger();
+        public:
+            static bool Logging(uint level, const string& msg, const char* fileName, int lineNo);
+            static bool Logging(uint level, const char * msg, const char* fileName, int lineNo);
+        private:
+            static char _cStrBuf[CSTR_BUFFER_SIZE];
+            static const char * _logLevel[LEVEL_ARRAY_SIZE];
+            static const char * _logFormat;
+            static const char * _timeFormat;
+            static time_t _timeNow;
+    };
 }
 
 #endif

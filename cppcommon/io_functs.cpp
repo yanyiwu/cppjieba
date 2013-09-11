@@ -6,14 +6,14 @@
 
 namespace CPPCOMMON
 {
-	string loadFile2Str(const char * const filepath)
-	{
-		ifstream in(filepath);
-		istreambuf_iterator<char> beg(in), end;
-		string str(beg, end);
-		in.close();
-		return str;
-	}
+    string loadFile2Str(const char * const filepath)
+    {
+        ifstream in(filepath);
+        istreambuf_iterator<char> beg(in), end;
+        string str(beg, end);
+        in.close();
+        return str;
+    }
 }
 
 #ifdef TEST_IO_FUNCTS
@@ -22,8 +22,8 @@ using namespace CPPCOMMON;
 using namespace std;
 int main()
 {
-	char filename[] = "1/2/3";
-	cout<<loadFile2Str("1")<<endl;
-	return 0;
+    char filename[] = "1/2/3";
+    cout<<loadFile2Str("1")<<endl;
+    return 0;
 }
 #endif

@@ -2,16 +2,16 @@
 
 namespace CppJieba
 {
-	MixSegment::MixSegment()
-	{
-	}
-	
-	MixSegment::~MixSegment()
-	{
-	}
+    MixSegment::MixSegment()
+    {
+    }
+    
+    MixSegment::~MixSegment()
+    {
+    }
 
-	bool MixSegment::init(const char* const mpSegDict, const char* const hmmSegDict)
-	{
+    bool MixSegment::init(const char* const mpSegDict, const char* const hmmSegDict)
+    {
         if(!_mpSeg.init(mpSegDict))
         {
             LogError("_mpSeg init");
@@ -22,15 +22,15 @@ namespace CppJieba
             LogError("_hmmSeg init");
             return false;
         }
-		return true;
-	}
-	
-	bool MixSegment::dispose()
-	{
+        return true;
+    }
+    
+    bool MixSegment::dispose()
+    {
         _mpSeg.dispose();
         _hmmSeg.dispose();
-		return true;
-	}
+        return true;
+    }
 
     bool MixSegment::cut(const string& str, vector<string>& res)
     {
@@ -95,7 +95,7 @@ using namespace CppJieba;
 
 int main()
 {
-	return 0;
+    return 0;
 }
 
 #endif

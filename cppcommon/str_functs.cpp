@@ -62,22 +62,22 @@ namespace CPPCOMMON
         res.clear();
 
         size_t start = source.find_first_not_of(pattern);
-		size_t end;
-		if(string::npos == start)
-		{
-			return false;
-		}
-		while(string::npos != start)
-		{
-			end = source.find_first_of(pattern, start);
-			if(string::npos == end)
-			{
-				res.push_back(source.substr(start));
-				return true;
-			}
-			res.push_back(source.substr(start, end - start));
-			start = source.find_first_not_of(pattern,  end);
-		}
+        size_t end;
+        if(string::npos == start)
+        {
+            return false;
+        }
+        while(string::npos != start)
+        {
+            end = source.find_first_of(pattern, start);
+            if(string::npos == end)
+            {
+                res.push_back(source.substr(start));
+                return true;
+            }
+            res.push_back(source.substr(start, end - start));
+            start = source.find_first_not_of(pattern,  end);
+        }
         return true;
     }
 

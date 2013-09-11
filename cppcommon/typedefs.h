@@ -11,8 +11,8 @@
 
 namespace CPPCOMMON
 {
-	typedef std::vector<uint16_t> Unicode;
-	typedef std::vector<uint16_t>::const_iterator UnicodeConstIterator;
+    typedef std::vector<uint16_t> Unicode;
+    typedef std::vector<uint16_t>::const_iterator UnicodeConstIterator;
 }
 
 

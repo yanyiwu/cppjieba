@@ -14,20 +14,20 @@
 
 #define PRINT_VECTOR(vec) FOR_VECTOR(vec, i)\
 {\
-	cout<<vec[i]<<endl;\
+    cout<<vec[i]<<endl;\
 }
 
 #define PRINT_MATRIX(mat) FOR_VECTOR(mat, i) \
 {\
-	FOR_VECTOR(mat[i], j)\
-	{\
-		cout<<"["<<i<<","<<j<<"]:"<<mat[i][j]<<endl;\
-	}\
+    FOR_VECTOR(mat[i], j)\
+    {\
+        cout<<"["<<i<<","<<j<<"]:"<<mat[i][j]<<endl;\
+    }\
 }
 
 namespace CPPCOMMON
 {
-	using namespace std;
+    using namespace std;
 }
 
 #include "vec_functs.tcc"

@@ -8,7 +8,7 @@
 #include <iostream>
 namespace CPPCOMMON
 {
-	using namespace std;
-	string loadFile2Str(const char * const filepath);
+    using namespace std;
+    string loadFile2Str(const char * const filepath);
 }
 #endif

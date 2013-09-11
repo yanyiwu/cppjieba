@@ -16,28 +16,28 @@ namespace CppJieba
 
     typedef vector<SegmentChar> SegmentContext;
 
-	class MPSegment
-	{
-		private:
-			Trie _trie;
-			
-		public:
-			MPSegment();
-			~MPSegment();
-		public:
-			bool init(const char* const filePath);
-			bool dispose();
-		public:
-			bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos);
-			bool cut(const string& str, vector<string>& res);
+    class MPSegment
+    {
+        private:
+            Trie _trie;
+            
+        public:
+            MPSegment();
+            ~MPSegment();
+        public:
+            bool init(const char* const filePath);
+            bool dispose();
+        public:
+            bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos);
+            bool cut(const string& str, vector<string>& res);
 
-		private:
-			bool _calcDAG(SegmentContext& segContext);
-			bool _calcDP(SegmentContext& segContext);
-			bool _cut(SegmentContext& segContext, vector<TrieNodeInfo>& res);
+        private:
+            bool _calcDAG(SegmentContext& segContext);
+            bool _calcDP(SegmentContext& segContext);
+            bool _cut(SegmentContext& segContext, vector<TrieNodeInfo>& res);
 
 
-	};
+    };
 }
 
 #endif
