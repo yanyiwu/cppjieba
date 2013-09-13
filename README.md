@@ -115,15 +115,20 @@ example:
 ## 分词速度
 
 ### MixSegment
+
 分词速度大概是 65M / 78sec = 0.83M/sec
 测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz`
 
 
 ## Contact
+
 如果有运行问题或者任何疑问，欢迎联系 : wuyanyi09@gmail.com
 
 ## Thanks
+
 "结巴中文"分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
+
+顾名思义，之所以叫CppJieba，就是边参照边膜拜SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 
