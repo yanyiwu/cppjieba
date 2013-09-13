@@ -30,15 +30,6 @@ namespace CppJieba
         dispose();
     }
     
-    bool Trie::_getInitFlag()
-    {
-        return _initFlag;
-    }
-    void Trie::_setInitFlag(bool on)
-    {
-        _initFlag = on;
-    }
-
     bool Trie::init()
     {
         if(_getInitFlag())
@@ -256,54 +247,78 @@ namespace CppJieba
         return NULL;
     }
 
-    double Trie::getWeight(const string& str)
-    {
-
-        Unicode uintVec;
-        TransCode::decode(str, uintVec);
-        return getWeight(uintVec);
-    }
-
-    double Trie::getWeight(const Unicode& uintVec)
-    {
-        if(uintVec.empty())
+	bool Trie::find(const Unicode& unico, vector<pair<uint, TrieNodeInfo*> >& res)
+	{
+        if(!_getInitFlag())
         {
-            return getMinLogFreq();
+            LogFatal("trie not initted!");
+            return false;
         }
-        const TrieNodeInfo * p = find(uintVec);
-        if(NULL != p)
+		res.clear();
+        TrieNode* p = _root;
+        //for(Unicode::const_iterator it = begin; it != end; it++)
+        for(uint i = 0; i < unico.size(); i++)
         {
-            return p->logFreq;
+            if(p->hmap.find(unico[i]) == p-> hmap.end())
+            {
+				break;
+            }
+			p = p->hmap[unico[i]];
+			if(p->isLeaf)
+			{
+				uint pos = p->nodeInfoVecPos;
+				if(pos < _nodeInfoVec.size())
+				{
+					res.push_back(make_pair(i, &_nodeInfoVec[pos]));
+				}
+				else
+				{
+					LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+					return false;
+				}
+			}
         }
-        else
-        {
-            return getMinLogFreq();
-        }
-        
-    }
+		return !res.empty();
+	}
 
-    double Trie::getWeight(Unicode::const_iterator begin, Unicode::const_iterator end)
-    {
-        const TrieNodeInfo * p = find(begin, end);
-        if(NULL != p)
-        {
-            return p->logFreq;
-        }
-        else
-        {
-            return getMinLogFreq();
-        }
-    }
+    //double Trie::getWeight(const string& str)
+    //{
 
-    double Trie::getMinLogFreq()
-    {
-        return _minLogFreq;
-    }
+    //    Unicode uintVec;
+    //    TransCode::decode(str, uintVec);
+    //    return getWeight(uintVec);
+    //}
 
-    int64_t Trie::getTotalCount()
-    {
-        return _freqSum;
-    }
+    //double Trie::getWeight(const Unicode& uintVec)
+    //{
+    //    if(uintVec.empty())
+    //    {
+    //        return getMinLogFreq();
+    //    }
+    //    const TrieNodeInfo * p = find(uintVec);
+    //    if(NULL != p)
+    //    {
+    //        return p->logFreq;
+    //    }
+    //    else
+    //    {
+    //        return getMinLogFreq();
+    //    }
+    //    
+    //}
+
+    //double Trie::getWeight(Unicode::const_iterator begin, Unicode::const_iterator end)
+    //{
+    //    const TrieNodeInfo * p = find(begin, end);
+    //    if(NULL != p)
+    //    {
+    //        return p->logFreq;
+    //    }
+    //    else
+    //    {
+    //        return getMinLogFreq();
+    //    }
+    //}
 
     bool Trie::_deleteNode(TrieNode* node)
     {

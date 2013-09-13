@@ -43,9 +43,9 @@ namespace CppJieba
             TrieNode* _root;
             vector<TrieNodeInfo> _nodeInfoVec;
 
+            bool _initFlag;
             int64_t _freqSum;
             double _minLogFreq;
-            bool _initFlag;
 
         public:
             typedef vector<TrieNodeInfo>::iterator iterator;
@@ -62,22 +62,24 @@ namespace CppJieba
             bool dispose();
 
         private:
-            void _setInitFlag(bool on);
-            bool _getInitFlag();
+            void _setInitFlag(bool on){_initFlag = on;};
+            bool _getInitFlag(){return _initFlag;};
 
         public:
             TrieNodeInfo* find(const string& str);
             TrieNodeInfo* find(const Unicode& uintVec);
             TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end);
+			bool find(const Unicode& unico, vector<pair<uint, TrieNodeInfo*> >& res);
+
             const TrieNodeInfo* findPrefix(const string& str);
 
         public:
-            double getWeight(const string& str);
-            double getWeight(const Unicode& uintVec);
-            double getWeight(Unicode::const_iterator begin, Unicode::const_iterator end);
-            double getMinLogFreq();
+            //double getWeight(const string& str);
+            //double getWeight(const Unicode& uintVec);
+            //double getWeight(Unicode::const_iterator begin, Unicode::const_iterator end);
+            double getMinLogFreq(){return _minLogFreq;};
             
-            int64_t getTotalCount();
+            int64_t getTotalCount(){return _freqSum;};
 
             bool insert(const TrieNodeInfo& nodeInfo);
 
