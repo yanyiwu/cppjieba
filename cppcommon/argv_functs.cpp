@@ -104,6 +104,7 @@ int main(int argc, char** argv)
     cout<<pairToString<int,double>(pair<int, double>(1,1.2))<<endl;
     cout<<arg.isKeyExist("-help")<<endl;
     return 0;
+>>>>>>> e81a664dae9397a6bf937b6dd6482832f67a6cf6
 }
 
 #endif

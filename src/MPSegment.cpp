@@ -117,12 +117,19 @@ namespace CppJieba
             for(uint j = i ; j < segContext.size(); j++)
             {
                 unicode.push_back(segContext[j].uniCh);
-                const TrieNodeInfo* pInfo = _trie.find(unicode);
-                if(pInfo)
-                {
-                    segContext[i].dag[j] = pInfo;
-                }
             }
+
+			vector<pair<uint, TrieNodeInfo*> > vp;
+			if(_trie.find(unicode, vp))
+			{
+				for(uint j = 0; j < vp.size(); j++)
+				{
+					uint nextp = vp[j].first + i;
+					segContext[i].dag[nextp] = vp[j].second; 
+					//cout<<vp[j].first<<endl;
+					//LogDebug(vp[j].second->toString());
+				}
+			}
             if(segContext[i].dag.end() == segContext[i].dag.find(i))
             {
                 segContext[i].dag[i] = NULL;
