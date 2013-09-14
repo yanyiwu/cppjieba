@@ -69,7 +69,7 @@ MixSegment.ut: MixSegment.cpp MixSegment.h HMMSegment.cpp MPSegment.cpp Trie.cpp
 	$(CXX) -o $@ $(CXXFLAGS) MixSegment.cpp HMMSegment.cpp MPSegment.cpp Trie.cpp TransCode.cpp -DMIXSEGMENT_UT $(CMLIB) 
 
 clean:
-	rm -f *.o *.d *.ut $(LIBA) 
+	rm -f *.o *.d *.d.* *.ut $(LIBA) 
 #	rm -rf $(TMPDIR)
 #	cd $(CMDIR) && make clean
 
