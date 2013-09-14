@@ -18,8 +18,8 @@ DOPACK := $(AR)
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-CMDIR := ../cppcommon
-CMLIB := $(CMDIR)/libcm.a
+#CMDIR := ../cppcommon
+#CMLIB := $(CMDIR)/libcm.a
 
 TMPDIR := ./cppjiebatmp
 
@@ -27,7 +27,8 @@ LIBA := libcppjieba.a
 
 # remove the objs after compilation
 .INTERMEDIATE: 
-.PHONY: clean $(CMLIB) 
+#.PHONY: clean $(CMLIB) 
+.PHONY: clean 
 
 all: $(LIBA)
 
@@ -36,16 +37,19 @@ all: $(LIBA)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $<
 
-${LIBA}: $(TMPDIR) $(OBJS) $(CMLIB) 
-	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
-	$(DOPACK) $@ $(OBJS) $(TMPDIR)/*.o 
-	rm -rf $(TMPDIR)
+#${LIBA}: $(TMPDIR) $(OBJS) $(CMLIB) 
+#	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
+#	$(DOPACK) $@ $(OBJS) $(TMPDIR)/*.o 
+#	rm -rf $(TMPDIR)
 
-$(TMPDIR):
-	mkdir $@
+${LIBA}: $(OBJS)
+	$(DOPACK) $@ $(OBJS) 
 
-$(CMLIB):
-	cd $(CMDIR) && $(MAKE)
+#$(TMPDIR):
+#	mkdir $@
+
+#$(CMLIB):
+#	cd $(CMDIR) && $(MAKE)
 
 #unit test
 Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
@@ -66,8 +70,8 @@ MixSegment.ut: MixSegment.cpp MixSegment.h HMMSegment.cpp MPSegment.cpp Trie.cpp
 
 clean:
 	rm -f *.o *.d *.ut $(LIBA) 
-	rm -rf $(TMPDIR)
-	cd $(CMDIR) && make clean
+#	rm -rf $(TMPDIR)
+#	cd $(CMDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp

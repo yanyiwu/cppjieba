@@ -92,8 +92,30 @@ Output:
 
 ## Help
 
-run `./segment_demo` to get help.
+本项目主要是如下目录组成：
 
+### cppcommon 
+
+主要是一些工具函数，例如字符串操作等。    
+make 之后产生一个libcm.a    
+要使用该libcm.a 只需要在代码里面增加  
+```cpp
+#include "cppcommon/headers.h"  
+using namespace CPPCOMMON;  
+``` 
+在链接时候`-Lcppcommon -lcm` 链接进即可。  
+__详细使用细节请参见demo/目录下的代码__  
+
+### cppjieba
+核心目录，包含主要源代码。
+make 之后产生libcppjieb.a
+使用方法参考如上cppcommon
+
+
+
+### run `./segment_demo` to get help.
+
+如下:
 ```
 usage:
         ./segment_demo[options] <filename>

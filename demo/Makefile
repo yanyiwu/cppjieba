@@ -20,11 +20,14 @@ DOPACK := $(AR)
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-SRCDIR = ../src
-SRCLIB = $(SRCDIR)/libcppjieba.a
+CPPJIEBADIR = ../cppjieba
+LIBCPPJIEBA = $(CPPJIEBADIR)/libcppjieba.a
+
+CPPCOMMONDIR = ../cppcommon
+LIBCPPCM = $(CPPCOMMONDIR)/libcm.a
 
 # remove the objs after compilation
-.PHONY: clean $(SRCLIB)
+.PHONY: clean $(LIBCPPJIEBA) $(LIBCPPCM)
 
 # Main Targets
 all: keywordext_demo segment_demo
@@ -34,18 +37,22 @@ all: keywordext_demo segment_demo
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $<
 
-keywordext_demo: keywordext_demo.o $(SRCLIB)
+keywordext_demo: keywordext_demo.o $(LIBCPPJIEBA) $(LIBCPPCM)
 	$(DOLINK) -o $@ $^
 
-segment_demo: segment_demo.o $(SRCLIB)
+segment_demo: segment_demo.o $(LIBCPPJIEBA) $(LIBCPPCM)
 	$(DOLINK) -o $@ $^
 
-$(SRCLIB): 
-	cd $(SRCDIR) && $(MAKE)
+$(LIBCPPJIEBA): 
+	cd $(CPPJIEBADIR) && $(MAKE)
+
+$(LIBCPPCM): 
+	cd $(CPPCOMMONDIR) && $(MAKE)
 
 clean:
 	rm -f *.o *.ut *.d *.d.* keywordext_demo segment_demo
-	cd $(SRCDIR) && make clean
+	cd $(CPPJIEBADIR) && make clean
+	cd $(CPPCOMMONDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp

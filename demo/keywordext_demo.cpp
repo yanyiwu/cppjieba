@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "../src/headers.h"
+#include "../cppjieba/headers.h"
 
 using namespace CppJieba;
 
