@@ -13,16 +13,17 @@ Trie.cpp/Trie.h 负责载入词典的trie树，主要供Segment模块使用。
 MPSegment.cpp/MPSegment.h 
 (Maximum Probability)最大概率法:负责根据Trie树构建有向无环图和进行动态规划算法，是分词算法的核心。
 
-### TransCode模块
-
-TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk都转换成`uint16_t`类型，也负责逆转换。
-
-### HMMSegment模块
-
 HMMSegment.cpp/HMMSegment.h
 是根据HMM模型来进行分词，主要算法思路是根据(B,E,M,S)四个状态来代表每个字的隐藏状态。
 HMM模型由dicts/下面的`hmm_model.utf8`提供。
 分词算法即viterbi算法。
+
+
+### TransCode模块
+
+TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk都转换成`uint16_t`类型，也负责逆转换。
+
+
 
 ## Demo
 
