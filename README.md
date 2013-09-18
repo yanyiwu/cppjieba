@@ -4,8 +4,8 @@
 
 现在支持utf8,gbk编码的分词。   
 
-- `master`分支支持utf8编码   
-- `gbk`分支支持gbk编码
+- `master`分支支持`utf8`编码   
+- `gbk`分支支持`gbk`编码
 
 
 ## 模块详解
