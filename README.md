@@ -1,7 +1,12 @@
 #CppJieba是"结巴"中文分词的C++库
 
 ## 中文编码
-* 现在支持utf8,gbk编码的分词。默认编码是utf8。  
+
+现在支持utf8,gbk编码的分词。   
+
+- `master`分支支持utf8编码   
+- `gbk`分支支持gbk编码
+
 
 ## 模块详解
 
@@ -120,17 +125,15 @@ make 之后产生libcppjieb.a
 usage:
         ./segment_demo[options] <filename>
 options:
-        --algorithm     Supported encoding methods are [cutDAG, cutHMM, cutMix] for now.
+        --algorithm     Supported methods are [cutDAG, cutHMM, cutMix] for now.
                         If not specified, the default is cutDAG
         --dictpath      If not specified, the default is ../dicts/jieba.dict.utf8
         --modelpath     If not specified, the default is ../dicts/hmm_model.utf8
-        --encoding      Supported encoding methods are [gbk, utf-8] for now.
                         If not specified, the default is utf8.
 example:
-        ./segment_demo testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8
+        ./segment_demo testlines.utf8 --dictpath ../dicts/jieba.dict.utf8
         ./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM
         ./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix
-        ./segment_demo testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk
 
 ```
 

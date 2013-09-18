@@ -101,12 +101,11 @@ int main(int argc, char ** argv)
     {
         cout<<"usage: \n\t"<<argv[0]<<"[options] <filename>\n"
             <<"options:\n"
-            <<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
+            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
             <<"\t--dictpath\tIf not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
             <<"\t--modelpath\tIf not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
-            <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf not specified, the default is utf8.\n"
             <<"example:\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8\n"
+            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath ../dicts/jieba.dict.utf8\n"
             <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
             <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
             <<endl;
@@ -116,7 +115,6 @@ int main(int argc, char ** argv)
     ArgvContext arg(argc, argv);
     string dictPath = arg["--dictpath"];
     string modelPath = arg["--modelpath"];
-    string encoding = arg["--encoding"];
     string algorithm = arg["--algorithm"];
     if(dictPath.empty())
     {
@@ -125,14 +123,6 @@ int main(int argc, char ** argv)
     if(modelPath.empty())
     {
         modelPath = DEFAULT_MODELPATH;
-    }
-    if("gbk" == encoding)
-    {
-        TransCode::setGbkEnc();
-    }
-    else
-    {
-        TransCode::setUtf8Enc();
     }
 
     if(!init(dictPath.c_str(), modelPath.c_str()))
