@@ -1,4 +1,3 @@
-make && \
-./segment_demo testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8 &&\
-./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM &&\
-./segment_demo testlines.utf8 --algorithm cutMix
+./segment_demo testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk
+./segment_demo testlines.gbk --modelpath ../dicts/hmm_model.gbk --algorithm cutHMM
+./segment_demo testlines.gbk --modelpath ../dicts/hmm_model.gbk --algorithm cutMix

@@ -92,8 +92,8 @@ bool dispose()
     return true;
 }
 
-const char * const DEFAULT_DICTPATH = "../dicts/jieba.dict.utf8";
-const char * const DEFAULT_MODELPATH = "../dicts/hmm_model.utf8";
+const char * const DEFAULT_DICTPATH = "../dicts/jieba.dict.gbk";
+const char * const DEFAULT_MODELPATH = "../dicts/hmm_model.gbk";
 
 int main(int argc, char ** argv)
 {
@@ -104,11 +104,10 @@ int main(int argc, char ** argv)
             <<"\t--algorithm\tSupported encoding methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
             <<"\t--dictpath\tIf not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
             <<"\t--modelpath\tIf not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
-            <<"\t--encoding\tSupported encoding methods are [gbk, utf-8] for now. \n\t\t\tIf not specified, the default is utf8.\n"
             <<"example:\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --encoding utf-8 --dictpath ../dicts/jieba.dict.utf8\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
+            <<"\t"<<argv[0]<<" testlines.gbk --encoding gbk --dictpath ../dicts/jieba.dict.gbk\n"
+            <<"\t"<<argv[0]<<" testlines.gbk --modelpath ../dicts/hmm_model.gbk --algorithm cutHMM\n"
+            <<"\t"<<argv[0]<<" testlines.gbk --modelpath ../dicts/hmm_model.gbk --algorithm cutMix\n"
             <<endl;
         
         return -1;
@@ -116,7 +115,7 @@ int main(int argc, char ** argv)
     ArgvContext arg(argc, argv);
     string dictPath = arg["--dictpath"];
     string modelPath = arg["--modelpath"];
-    string encoding = arg["--encoding"];
+    //string encoding = arg["--encoding"];
     string algorithm = arg["--algorithm"];
     if(dictPath.empty())
     {
@@ -126,14 +125,14 @@ int main(int argc, char ** argv)
     {
         modelPath = DEFAULT_MODELPATH;
     }
-    if("gbk" == encoding)
-    {
-        TransCode::setGbkEnc();
-    }
-    else
-    {
-        TransCode::setUtf8Enc();
-    }
+    //if("gbk" == encoding)
+    //{
+    //    TransCode::setGbkEnc();
+    //}
+    //else
+    //{
+    //    TransCode::setUtf8Enc();
+    //}
 
     if(!init(dictPath.c_str(), modelPath.c_str()))
     {

@@ -9,6 +9,7 @@
 namespace CppJieba
 {
 
+    using namespace CPPCOMMON;
     struct TrieNodeInfo
     {
         //string word;
