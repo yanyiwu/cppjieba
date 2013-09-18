@@ -32,7 +32,7 @@ namespace CppJieba
         return true;
     }
 
-    bool MixSegment::cut(const string& str, vector<string>& res)
+    bool MixSegment::cut(const string& str, vector<string>& res)const
     {
 		if(str.empty())
 		{
@@ -41,7 +41,7 @@ namespace CppJieba
         vector<TrieNodeInfo> infos;
         if(!_mpSeg.cut(str, infos))
         {
-            LogError("_mpSeg cutDAG [%s] failed.", str.c_str());
+            LogError("mpSeg cutDAG [%s] failed.", str.c_str());
             return false;
         }
         res.clear();

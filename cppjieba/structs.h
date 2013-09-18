@@ -60,20 +60,6 @@ namespace CppJieba
     };*/
     typedef vector<SegmentChar> SegmentContext;
     
-    //struct SegmentContext
-    //{
-    //    vector<SegmentChar> context;
-    //    //vector<uint16_t> uintVec;
-    //    //vector< vector<pair<uint, const TrieNodeInfo*> > > dag;
-    //    //vector< pair<const TrieNodeInfo*, double> > dp;
-    //};
-    
-    /*
-    struct SegmentWordInfo: public TrieNodeInfo
-    {
-        
-    };
-    */
 
     struct KeyWordInfo: public TrieNodeInfo
     {

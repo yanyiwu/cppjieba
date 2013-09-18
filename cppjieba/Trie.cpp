@@ -6,15 +6,6 @@
 
 namespace CppJieba
 {
-    Trie::iterator Trie::begin()
-    {
-        return _nodeInfoVec.begin();
-    }
-
-    Trie::iterator Trie::end()
-    {
-        return _nodeInfoVec.end();
-    }
 
     Trie::Trie()
     {
@@ -138,7 +129,7 @@ namespace CppJieba
         return ret;
     }
 
-    const TrieNodeInfo* Trie::findPrefix(const string& str)
+    const TrieNodeInfo* Trie::findPrefix(const string& str)const
     {
         if(!_getInitFlag())
         {
@@ -147,8 +138,7 @@ namespace CppJieba
         }
         Unicode uintVec;
         
-        bool retFlag = TransCode::decode(str, uintVec);
-        if(retFlag)
+        if(!TransCode::decode(str, uintVec))
         {
             LogError("TransCode::decode failed.");
             return NULL;
@@ -156,22 +146,21 @@ namespace CppJieba
 
         //find
         TrieNode* p = _root;
-        TrieNodeInfo * res = NULL;
+        uint pos = 0;
+        uint16_t chUni = 0;
+        const TrieNodeInfo * res = NULL;
         for(uint i = 0; i < uintVec.size(); i++)
         {
-            uint16_t chUni = uintVec[i];
+            chUni = uintVec[i];
             if(p->isLeaf)
             {
-                uint pos = p->nodeInfoVecPos;
-                if(pos < _nodeInfoVec.size())
-                {
-                    res = &(_nodeInfoVec[pos]);
-                }
-                else
+                pos = p->nodeInfoVecPos;
+                if(pos >= _nodeInfoVec.size())
                 {
                     LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
                     return NULL;
                 }
+                res = &(_nodeInfoVec[pos]);
                 
             }
             if(p->hmap.find(chUni) == p->hmap.end())
@@ -186,18 +175,17 @@ namespace CppJieba
         return res;
     }
 
-    TrieNodeInfo* Trie::find(const string& str)
+    const TrieNodeInfo* Trie::find(const string& str)const
     {
         Unicode uintVec;
-        bool retFlag = TransCode::decode(str, uintVec);
-        if(!retFlag)
+        if(!TransCode::decode(str, uintVec))
         {
             return NULL;
         }
         return find(uintVec);
     }
 
-    TrieNodeInfo* Trie::find(const Unicode& uintVec)
+    const TrieNodeInfo* Trie::find(const Unicode& uintVec)const
     {
         if(uintVec.empty())
         {
@@ -206,7 +194,7 @@ namespace CppJieba
         return find(uintVec.begin(), uintVec.end());
     }
 
-    TrieNodeInfo* Trie::find(Unicode::const_iterator begin, Unicode::const_iterator end)
+    const TrieNodeInfo* Trie::find(Unicode::const_iterator begin, Unicode::const_iterator end)const
     {
         
         if(!_getInitFlag())
@@ -247,7 +235,7 @@ namespace CppJieba
         return NULL;
     }
 
-	bool Trie::find(const Unicode& unico, vector<pair<uint, TrieNodeInfo*> >& res)
+	bool Trie::find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
 	{
         if(!_getInitFlag())
         {
@@ -280,45 +268,6 @@ namespace CppJieba
         }
 		return !res.empty();
 	}
-
-    //double Trie::getWeight(const string& str)
-    //{
-
-    //    Unicode uintVec;
-    //    TransCode::decode(str, uintVec);
-    //    return getWeight(uintVec);
-    //}
-
-    //double Trie::getWeight(const Unicode& uintVec)
-    //{
-    //    if(uintVec.empty())
-    //    {
-    //        return getMinLogFreq();
-    //    }
-    //    const TrieNodeInfo * p = find(uintVec);
-    //    if(NULL != p)
-    //    {
-    //        return p->logFreq;
-    //    }
-    //    else
-    //    {
-    //        return getMinLogFreq();
-    //    }
-    //    
-    //}
-
-    //double Trie::getWeight(Unicode::const_iterator begin, Unicode::const_iterator end)
-    //{
-    //    const TrieNodeInfo * p = find(begin, end);
-    //    if(NULL != p)
-    //    {
-    //        return p->logFreq;
-    //    }
-    //    else
-    //    {
-    //        return getMinLogFreq();
-    //    }
-    //}
 
     bool Trie::_deleteNode(TrieNode* node)
     {
@@ -436,7 +385,6 @@ int main()
     trie.loadDict("../dicts/segdict.gbk.v2.1");
     //trie.loadDict("tmp");
     cout<<trie.getMinLogFreq()<<endl;
-    cout<<trie.getTotalCount()<<endl;
     trie.dispose();
     return 0;
 }

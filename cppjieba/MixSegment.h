@@ -7,19 +7,19 @@
 
 namespace CppJieba
 {
-    class MixSegment
+    class MixSegment: public ISegment
     {
         private:
             MPSegment _mpSeg;
             HMMSegment _hmmSeg;
         public:
             MixSegment();
-            ~MixSegment();
+            virtual ~MixSegment();
         public:
             bool init(const char* const _mpSegDict, const char* const _hmmSegDict);
             bool dispose();
         public:
-            bool cut(const string& str, vector<string>& res);
+            virtual bool cut(const string& str, vector<string>& res) const;
     };
 }
 
