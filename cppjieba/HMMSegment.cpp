@@ -33,7 +33,7 @@ namespace CppJieba
 
     bool HMMSegment::_loadModel(const char* const filePath)
     {
-        LogInfo(string_format("loadModel [%s] start ...", filePath));
+        LogInfo("loadModel [%s] start ...", filePath);
         ifstream ifile(filePath);
         string line;
         vector<string> tmp;
@@ -99,7 +99,7 @@ namespace CppJieba
             return false;
         }
 
-        LogInfo(string_format("loadModel [%s] end.", filePath));
+        LogInfo("loadModel [%s] end.", filePath);
 
         return true;
     }

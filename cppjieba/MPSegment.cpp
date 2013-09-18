@@ -21,7 +21,7 @@ namespace CppJieba
             LogError("_trie.init failed.");
             return false;
         }
-        LogInfo(string_format("_trie.loadDict(%s) start...", filePath));
+        LogInfo("_trie.loadDict(%s) start...", filePath);
         if(!_trie.loadDict(filePath))
         {
             LogError("_trie.loadDict faield.");

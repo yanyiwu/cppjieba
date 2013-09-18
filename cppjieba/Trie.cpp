@@ -64,7 +64,7 @@ namespace CppJieba
 
         if(!checkFileExist(filePath))
         {
-            LogError(string_format("cann't find fiel[%s].",filePath));
+            LogError("cann't find fiel[%s].",filePath);
             return false;
         }
         bool res = false;
@@ -97,7 +97,7 @@ namespace CppJieba
             splitStr(line, vecBuf, " ");
             if(3 < vecBuf.size())
             {
-                LogError(string_format("line[%s] illegal.", line.c_str()));
+                LogError("line[%s] illegal.", line.c_str());
                 return false;
             }
             if(!TransCode::decode(vecBuf[0], nodeInfo.word))
