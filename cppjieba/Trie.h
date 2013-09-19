@@ -12,10 +12,7 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include "../cppcommon/str_functs.h"
-#include "../cppcommon/vec_functs.h"
-#include "../cppcommon/file_functs.h"
-#include "../cppcommon/logger.h"
+#include "../cppcommon/headers.h"
 #include "TransCode.h"
 #include "globals.h"
 #include "structs.h"
@@ -48,13 +45,6 @@ namespace CppJieba
             double _minLogFreq;
 
         public:
-            typedef vector<TrieNodeInfo>::iterator iterator;
-
-        public:
-            iterator begin();
-            iterator end();
-
-        public:
             Trie();
             ~Trie();
             bool init();
@@ -63,23 +53,23 @@ namespace CppJieba
 
         private:
             void _setInitFlag(bool on){_initFlag = on;};
-            bool _getInitFlag(){return _initFlag;};
+            bool _getInitFlag()const{return _initFlag;};
 
         public:
-            TrieNodeInfo* find(const string& str);
-            TrieNodeInfo* find(const Unicode& uintVec);
-            TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end);
-			bool find(const Unicode& unico, vector<pair<uint, TrieNodeInfo*> >& res);
+            const TrieNodeInfo* find(const string& str)const;
+            const TrieNodeInfo* find(const Unicode& uintVec)const;
+            const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const;
+			bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const;
 
-            const TrieNodeInfo* findPrefix(const string& str);
+            const TrieNodeInfo* findPrefix(const string& str)const;
 
         public:
             //double getWeight(const string& str);
             //double getWeight(const Unicode& uintVec);
             //double getWeight(Unicode::const_iterator begin, Unicode::const_iterator end);
-            double getMinLogFreq(){return _minLogFreq;};
+            double getMinLogFreq()const{return _minLogFreq;};
             
-            int64_t getTotalCount(){return _freqSum;};
+            //int64_t getTotalCount(){return _freqSum;};
 
             bool insert(const TrieNodeInfo& nodeInfo);
 

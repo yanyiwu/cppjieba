@@ -33,7 +33,7 @@ namespace CppJieba
 
     bool HMMSegment::_loadModel(const char* const filePath)
     {
-        LogInfo(string_format("loadModel [%s] start ...", filePath));
+        LogInfo("loadModel [%s] start ...", filePath);
         ifstream ifile(filePath);
         string line;
         vector<string> tmp;
@@ -99,18 +99,18 @@ namespace CppJieba
             return false;
         }
 
-        LogInfo(string_format("loadModel [%s] end.", filePath));
+        LogInfo("loadModel [%s] end.", filePath);
 
         return true;
     }
 
 
-    bool HMMSegment::cut(const Unicode& unico, vector<Unicode>& res)
+    bool HMMSegment::cut(const Unicode& unico, vector<Unicode>& res)const
     {
         vector<uint> status; 
-        if(!viterbi(unico, status))
+        if(!_viterbi(unico, status))
         {
-            LogError("viterbi failed.");
+            LogError("_viterbi failed.");
             return false;
         }
 
@@ -130,7 +130,7 @@ namespace CppJieba
         return true;
     }
 
-    bool HMMSegment::cut(const string& str, vector<string>& res)
+    bool HMMSegment::cut(const string& str, vector<string>& res) const
     {
         if(str.empty())
         {
@@ -160,7 +160,7 @@ namespace CppJieba
         return true;
     }
 
-    bool HMMSegment::viterbi(const Unicode& unico, vector<uint>& status)
+    bool HMMSegment::_viterbi(const Unicode& unico, vector<uint>& status)const
     {
         if(unico.empty())
         {
@@ -311,7 +311,7 @@ namespace CppJieba
     }
     */
 
-    double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)
+    double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const
     {
         EmitProbMap::const_iterator cit = ptMp->find(key);
         if(cit == ptMp->end())

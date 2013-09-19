@@ -30,7 +30,7 @@ namespace CppJieba
     bool KeyWordExt::loadStopWords(const char * const filePath)
     {
 
-        LogInfo(string_format("_loadStopWords(%s) start", filePath));
+        LogInfo("_loadStopWords(%s) start", filePath);
         if(!_stopWords.empty())
         {
             LogError("_stopWords has been loaded before! ");
@@ -38,7 +38,7 @@ namespace CppJieba
         }
         if(!checkFileExist(filePath))
         {
-            LogError(string_format("cann't find file[%s].",filePath));
+            LogError("cann't find file[%s].",filePath);
             return false;
         }
 
@@ -54,7 +54,7 @@ namespace CppJieba
             }
             _stopWords.insert(word);
         }
-        LogInfo(string_format("load stopwords[%d] finished.", _stopWords.size()));
+        LogInfo("load stopwords[%d] finished.", _stopWords.size());
         
         return true;
     }

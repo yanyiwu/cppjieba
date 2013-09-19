@@ -7,11 +7,12 @@
 #include "../cppcommon/headers.h"
 #include "globals.h"
 #include "TransCode.h"
+#include "ISegment.h"
 
 namespace CppJieba
 {
     using namespace CPPCOMMON;
-    class HMMSegment
+    class HMMSegment: public ISegment
     {
         public:
             /*
@@ -31,22 +32,22 @@ namespace CppJieba
             
         public:
             HMMSegment();
-            ~HMMSegment();
+            virtual ~HMMSegment();
         public:
             bool init(const char* const modelPath);
             bool dispose();
         public:
-            bool cut(const Unicode& unico, vector<Unicode>& res);
-            bool cut(const string& str, vector<string>& res);
-            bool viterbi(const Unicode& unico, vector<uint>& status);
+            bool cut(const Unicode& unico, vector<Unicode>& res)const ;
+            virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
+            bool _viterbi(const Unicode& unico, vector<uint>& status)const;
             bool _loadModel(const char* const filePath);
             bool _getLine(ifstream& ifile, string& line);
             bool _loadEmitProb(const string& line, EmitProbMap& mp);
             bool _decodeOne(const string& str, uint16_t& res);
             //double _getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal);
-            double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal);
+            double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const ;
 
             
     };

@@ -30,7 +30,7 @@ bool init(const char * const dictPath, const char * const modelPath)
     return true;
 }
 
-void cutMP(const char * const filePath)
+void cut(const ISegment * seg, const char * const filePath)
 {
     ifstream ifile(filePath);
     vector<string> res;
@@ -39,36 +39,9 @@ void cutMP(const char * const filePath)
     {
         if(!line.empty())
         {
-            seg.cut(line, res);
+            seg->cut(line, res);
             cout<<line<<"\n"<<joinStr(res,"/")<<endl;
         }
-    }
-}
-
-void cutHMM(const char * const filePath)
-{
-    ifstream ifile(filePath);
-    vector<string> res;
-    string line;
-    while(getline(ifile, line))
-    {
-        if(!line.empty())
-        {
-            hmmseg.cut(line, res);
-            cout<<line<<"\n"<<joinStr(res,"/")<<endl;
-        }
-    }
-}
-
-void cutMix(const char* const filePath)
-{
-    ifstream ifs(filePath);
-    vector<string> res;
-    string line;
-    while(getline(ifs, line))
-    {
-        mixseg.cut(line, res);
-        cout<<line<<'\n'<<joinStr(res,"/")<<endl;
     }
 }
 
@@ -132,15 +105,15 @@ int main(int argc, char ** argv)
     }
     if("cutHMM" == algorithm)
     {
-        cutHMM(arg[1].c_str());
+        cut(&hmmseg, arg[1].c_str());
     }
     else if("cutMix" == algorithm)
     {
-        cutMix(arg[1].c_str());
+        cut(&mixseg, arg[1].c_str());
     }
     else
     {
-        cutMP(arg[1].c_str());
+        cut(&seg, arg[1].c_str());
     }
     dispose();
     return 0;

@@ -12,6 +12,10 @@ namespace CppJieba
     
     MPSegment::~MPSegment()
     {
+        if(!dispose())
+        {
+            LogError("dispose failed.");
+        }
     }
 
     bool MPSegment::init(const char* const filePath)
@@ -21,7 +25,7 @@ namespace CppJieba
             LogError("_trie.init failed.");
             return false;
         }
-        LogInfo(string_format("_trie.loadDict(%s) start...", filePath));
+        LogInfo("_trie.loadDict(%s) start...", filePath);
         if(!_trie.loadDict(filePath))
         {
             LogError("_trie.loadDict faield.");
@@ -36,7 +40,7 @@ namespace CppJieba
         return _trie.dispose();
     }
 
-    bool MPSegment::cut(const string& str, vector<string>& res)
+    bool MPSegment::cut(const string& str, vector<string>& res) const
     {
         vector<TrieNodeInfo> segWordInfos;
         if(!cut(str, segWordInfos))
@@ -59,7 +63,7 @@ namespace CppJieba
         return true;
     }
 
-    bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)
+    bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
     {
         if(str.empty())
         {
@@ -102,7 +106,7 @@ namespace CppJieba
         return true;
     }
 
-    bool MPSegment::_calcDAG(SegmentContext& segContext)
+    bool MPSegment::_calcDAG(SegmentContext& segContext)const
     {
         if(segContext.empty())
         {
@@ -119,7 +123,7 @@ namespace CppJieba
                 unicode.push_back(segContext[j].uniCh);
             }
 
-			vector<pair<uint, TrieNodeInfo*> > vp;
+			vector<pair<uint, const TrieNodeInfo*> > vp;
 			if(_trie.find(unicode, vp))
 			{
 				for(uint j = 0; j < vp.size(); j++)
@@ -136,27 +140,9 @@ namespace CppJieba
             }
         }
         return true;
-        //vector<pair<uint, const TrieNodeInfo*> > vec;
-        //Unicode::const_iterator beginIter = segContext.uintVec.begin();
-        //for(Unicode::const_iterator iterI = segContext.uintVec.begin(); iterI != segContext.uintVec.end(); iterI++)
-        //{
-        //    vec.clear();
-        //    vec.push_back(pair<uint, const TrieNodeInfo*>(iterI - beginIter, NULL));
-        //    for(Unicode::const_iterator iterJ = iterI + 1;  iterJ != segContext.uintVec.end(); iterJ++)
-        //    {
-        //        //care: the iterJ exceed iterEnd
-        //        const TrieNodeInfo* ptNodeInfo = _trie.find(iterI, iterJ + 1);
-        //        if(NULL != ptNodeInfo)
-        //        {
-        //            vec.push_back(pair<uint, const TrieNodeInfo*>(iterJ - beginIter, ptNodeInfo));
-        //        }
-        //    }
-        //    segContext.dag.push_back(vec);
-        //}
-        //return true;
     }
 
-    bool MPSegment::_calcDP(SegmentContext& segContext)
+    bool MPSegment::_calcDP(SegmentContext& segContext)const
     {
         if(segContext.empty())
         {
@@ -195,47 +181,10 @@ namespace CppJieba
         }
         return true;
 
-        //segContext.dp.assign(segContext.uintVec.size() + 1, pair<const TrieNodeInfo*, double>(NULL, 0.0));
-        //segContext.dp[segContext.uintVec.size()].first = NULL;
-        //segContext.dp[segContext.uintVec.size()].second = 0.0;
-
-        //for(int i = segContext.uintVec.size() - 1; i >= 0; i--)
-        //{
-        //    // calc max
-        //    segContext.dp[i].first = NULL;
-        //    segContext.dp[i].second = MIN_DOUBLE;
-        //    for(uint j = 0; j < segContext.dag[i].size(); j++)
-        //    {
-        //        const pair<uint , const TrieNodeInfo*>& p = segContext.dag[i][j];
-        //        int pos = p.first;
-        //        double val = segContext.dp[pos+1].second;
-        //        if(NULL != p.second)
-        //        {
-        //            val += (p.second)->logFreq; 
-        //        }
-        //        else
-        //        {
-        //            val += _trie.getMinLogFreq();
-        //        }
-
-        //        if(val > segContext.dp[i].second)
-        //        {
-        //            segContext.dp[i].first = p.second;
-        //            segContext.dp[i].second = val;
-        //        }
-        //    }
-        //}
-        //segContext.dp.pop_back();
-        //return true;
     }
 
-    bool MPSegment::_cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)
+    bool MPSegment::_cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)const
     {
-        //if(segContext.dp.empty() || segContext.uintVec.empty() || segContext.dp.size() != segContext.uintVec.size())
-        //{
-        //    LogFatal("dp or uintVec illegal!");
-        //    return false;
-        //}
         res.clear();
 
         uint i = 0;
