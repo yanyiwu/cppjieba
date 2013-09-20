@@ -24,6 +24,7 @@ namespace CppJieba
     //typedefs
     typedef std::vector<std::string>::iterator VSI;
     typedef std::vector<uint16_t> Unicode;
+    typedef Unicode::const_iterator UniConIter;
     typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
     typedef unordered_map<uint16_t, double> EmitProbMap;
 
