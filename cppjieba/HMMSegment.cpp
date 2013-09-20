@@ -18,16 +18,17 @@ namespace CppJieba
     
     HMMSegment::~HMMSegment()
     {
-        
+        dispose();
     }
 
     bool HMMSegment::init(const char* const modelPath)
     {
-        return _loadModel(modelPath);
+        return _setInitFlag(_loadModel(modelPath));
     }
     
     bool HMMSegment::dispose()
     {
+        _setInitFlag(false);
         return true;
     }
 
@@ -107,6 +108,11 @@ namespace CppJieba
 
     bool HMMSegment::cut(const Unicode& unico, vector<Unicode>& res)const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         vector<uint> status; 
         if(!_viterbi(unico, status))
         {
@@ -132,6 +138,11 @@ namespace CppJieba
 
     bool HMMSegment::cut(const string& str, vector<string>& res) const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         if(str.empty())
         {
             return false;
@@ -298,18 +309,6 @@ namespace CppJieba
         res = ui16[0];
         return true;
     }
-
-    /*
-    double HMMSegment::_getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal)
-    {
-        EmitProbMap::const_iterator cit = mp.find(key);
-        if(cit == mp.end())
-        {
-            return defVal;
-        }
-        return cit->second;
-    }
-    */
 
     double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const
     {

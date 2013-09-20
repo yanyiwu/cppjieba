@@ -1,14 +1,14 @@
-#ifndef CPPJIEBA_SEGMENTBASE_H
-#define CPPJIEBA_SEGMENTBASE_H
+#ifndef CPPJIEBA_SEGMENTINTERFACE_H
+#define CPPJIEBA_SEGMENTINTERFACE_H
 
 #include "globals.h"
 
 namespace CppJieba
 {
-    class ISegment
+    class SegmentInterface
     {
         public:
-            virtual ~ISegment(){};
+            virtual ~SegmentInterface(){};
         public:
             virtual bool cut(const string& str, vector<string>& res) const = 0;
     };

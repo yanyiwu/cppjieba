@@ -12,14 +12,16 @@ namespace CppJieba
     
     MPSegment::~MPSegment()
     {
-        if(!dispose())
-        {
-            LogError("dispose failed.");
-        }
+        dispose();
     }
 
     bool MPSegment::init(const char* const filePath)
     {
+        if(_getInitFlag())
+        {
+            LogError("already inited before now.");
+            return false;
+        }
         if(!_trie.init())
         {
             LogError("_trie.init failed.");
@@ -32,16 +34,27 @@ namespace CppJieba
             return false;
         }
         LogInfo("_trie.loadDict end.");
-        return true;
+        return _setInitFlag(true);
     }
     
     bool MPSegment::dispose()
     {
-        return _trie.dispose();
+        if(!_getInitFlag())
+        {
+            return true;
+        }
+        _trie.dispose();
+        _setInitFlag(false);
+        return true;
     }
 
     bool MPSegment::cut(const string& str, vector<string>& res) const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         vector<TrieNodeInfo> segWordInfos;
         if(!cut(str, segWordInfos))
         {
@@ -65,6 +78,11 @@ namespace CppJieba
 
     bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         if(str.empty())
         {
             return false;

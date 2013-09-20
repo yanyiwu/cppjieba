@@ -8,10 +8,16 @@ namespace CppJieba
     
     MixSegment::~MixSegment()
     {
+        dispose();
     }
 
     bool MixSegment::init(const char* const mpSegDict, const char* const hmmSegDict)
     {
+        if(_getInitFlag())
+        {
+            LogError("inited.");
+            return false;
+        }
         if(!_mpSeg.init(mpSegDict))
         {
             LogError("_mpSeg init");
@@ -22,18 +28,28 @@ namespace CppJieba
             LogError("_hmmSeg init");
             return false;
         }
-        return true;
+        return _setInitFlag(true);
     }
     
     bool MixSegment::dispose()
     {
+        if(!_getInitFlag())
+        {
+            return true;
+        }
         _mpSeg.dispose();
         _hmmSeg.dispose();
+        _setInitFlag(false);
         return true;
     }
 
     bool MixSegment::cut(const string& str, vector<string>& res)const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
 		if(str.empty())
 		{
 			return false;

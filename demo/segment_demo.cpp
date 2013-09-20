@@ -30,7 +30,7 @@ bool init(const char * const dictPath, const char * const modelPath)
     return true;
 }
 
-void cut(const ISegment * seg, const char * const filePath)
+void cut(const SegmentInterface * seg, const char * const filePath)
 {
     ifstream ifile(filePath);
     vector<string> res;

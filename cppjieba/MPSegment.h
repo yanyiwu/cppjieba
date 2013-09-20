@@ -9,14 +9,15 @@
 #include <set>
 #include "Trie.h"
 #include "globals.h"
-#include "ISegment.h"
+#include "SegmentInterface.h"
+#include "SegmentBase.h"
 
 namespace CppJieba
 {
 
     typedef vector<SegmentChar> SegmentContext;
 
-    class MPSegment: public ISegment
+    class MPSegment: public SegmentBase, public SegmentInterface
     {
         private:
             Trie _trie;

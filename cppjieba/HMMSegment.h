@@ -7,12 +7,13 @@
 #include "../cppcommon/headers.h"
 #include "globals.h"
 #include "TransCode.h"
-#include "ISegment.h"
+#include "SegmentInterface.h"
+#include "SegmentBase.h"
 
 namespace CppJieba
 {
     using namespace CPPCOMMON;
-    class HMMSegment: public ISegment
+    class HMMSegment: public SegmentBase, public SegmentInterface
     {
         public:
             /*
@@ -46,7 +47,6 @@ namespace CppJieba
             bool _getLine(ifstream& ifile, string& line);
             bool _loadEmitProb(const string& line, EmitProbMap& mp);
             bool _decodeOne(const string& str, uint16_t& res);
-            //double _getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal);
             double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const ;
 
             
