@@ -30,6 +30,7 @@ namespace CppJieba
 
     const double MIN_DOUBLE = -3.14e+100;
     const double MAX_DOUBLE = 3.14e+100;
+    enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1, OTHERS = 2};
 }
 
 #endif

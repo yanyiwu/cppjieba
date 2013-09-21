@@ -39,6 +39,7 @@ void cut(const SegmentInterface * seg, const char * const filePath)
     {
         if(!line.empty())
         {
+            res.clear();
             seg->cut(line, res);
             cout<<line<<"\n"<<joinStr(res,"/")<<endl;
         }

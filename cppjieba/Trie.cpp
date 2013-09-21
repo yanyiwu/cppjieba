@@ -242,7 +242,6 @@ namespace CppJieba
             LogFatal("trie not initted!");
             return false;
         }
-		res.clear();
         TrieNode* p = _root;
         //for(Unicode::const_iterator it = begin; it != end; it++)
         for(uint i = 0; i < unico.size(); i++)

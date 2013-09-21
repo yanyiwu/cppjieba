@@ -12,8 +12,7 @@ namespace CppJieba
 
     bool ChineseFilter::feed(const string& str)
     {
-        TransCode::decode(str, _unico);
-        return true;
+        return TransCode::decode(str, _unico);
     }
 
     ChineseFilter::iterator ChineseFilter::begin()
@@ -23,7 +22,7 @@ namespace CppJieba
 
     ChineseFilter::iterator ChineseFilter::end()
     {
-        return iterator(&_unico, _unico.end(), _unico.end(), ChFilterIterator::OTHERS);
+        return iterator(&_unico, _unico.end(), _unico.end(), OTHERS);
     }
     
 }

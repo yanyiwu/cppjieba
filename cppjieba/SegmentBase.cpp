@@ -2,15 +2,6 @@
 
 namespace CppJieba
 {
-    SegmentBase::SegmentBase()
-    {
-        _setInitFlag(false);
-    }
-    
-    SegmentBase::~SegmentBase()
-    {
-    }
-
 }
 
 

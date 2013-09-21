@@ -137,7 +137,12 @@ namespace CppJieba
         }
         
         vector<TrieNodeInfo> trieNodeInfos; 
-        _segment.cut(title, trieNodeInfos);
+        Unicode unico;
+        if(!TransCode::decode(title, unico))
+        {
+            return false;
+        }
+        _segment.cut(unico.begin(), unico.end(), trieNodeInfos);
 
         keyWordInfos.clear();
         for(uint i = 0; i < trieNodeInfos.size(); i++)

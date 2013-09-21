@@ -28,7 +28,6 @@ namespace CppJieba
     class ChFilterIterator
     {
         public:
-            enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1, OTHERS = 2};
         public:
             const Unicode * ptUnico;
             UniConIter begin;
@@ -89,11 +88,8 @@ namespace CppJieba
                 }
                 CHAR_TYPE charType = _charType(*iter);
                 iter ++;
-                //cout<<charType<<endl;
-                //getchar();
                 while(iter != _end &&charType ==  _charType(*iter))
                 {
-                    //cout<<__LINE__<<endl;
                     iter++;
                 }
                 return ChFilterIterator(ptUnico, _begin, iter, charType);
