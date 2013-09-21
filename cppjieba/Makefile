@@ -67,6 +67,8 @@ HMMSegment.ut: HMMSegment.cpp TransCode.cpp TransCode.h HMMSegment.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp HMMSegment.cpp -DHMMSEGMENT_UT $(CMLIB) 
 MixSegment.ut: MixSegment.cpp MixSegment.h HMMSegment.cpp MPSegment.cpp Trie.cpp MPSegment.h Trie.h globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) MixSegment.cpp HMMSegment.cpp MPSegment.cpp Trie.cpp TransCode.cpp -DMIXSEGMENT_UT $(CMLIB) 
+ChineseFilter.ut: ChineseFilter.cpp ChineseFilter.h
+	$(CXX) -o $@ $(CXXFLAGS) ChineseFilter.cpp -DUT
 
 clean:
 	rm -f *.o *.d *.d.* *.ut $(LIBA) 

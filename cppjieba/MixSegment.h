@@ -7,7 +7,7 @@
 
 namespace CppJieba
 {
-    class MixSegment: public ISegment
+    class MixSegment: public SegmentBase
     {
         private:
             MPSegment _mpSeg;
@@ -19,7 +19,9 @@ namespace CppJieba
             bool init(const char* const _mpSegDict, const char* const _hmmSegDict);
             bool dispose();
         public:
-            virtual bool cut(const string& str, vector<string>& res) const;
+            //virtual bool cut(const string& str, vector<string>& res) const;
+            bool cut(const string& str, vector<string>& res)const;
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const;
     };
 }
 

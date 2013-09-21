@@ -9,14 +9,15 @@
 #include <set>
 #include "Trie.h"
 #include "globals.h"
-#include "ISegment.h"
+#include "SegmentInterface.h"
+#include "SegmentBase.h"
 
 namespace CppJieba
 {
 
     typedef vector<SegmentChar> SegmentContext;
 
-    class MPSegment: public ISegment
+    class MPSegment: public SegmentBase
     {
         private:
             Trie _trie;
@@ -28,8 +29,12 @@ namespace CppJieba
             bool init(const char* const filePath);
             bool dispose();
         public:
+            //bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const;
+            bool cut(const string& str, vector<string>& res)const;
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const;
             bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const;
-            virtual bool cut(const string& str, vector<string>& res)const;
+            bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const;
+            //virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
             bool _calcDAG(SegmentContext& segContext)const;

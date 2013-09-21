@@ -7,12 +7,13 @@
 #include "../cppcommon/headers.h"
 #include "globals.h"
 #include "TransCode.h"
-#include "ISegment.h"
+#include "SegmentInterface.h"
+#include "SegmentBase.h"
 
 namespace CppJieba
 {
     using namespace CPPCOMMON;
-    class HMMSegment: public ISegment
+    class HMMSegment: public SegmentBase
     {
         public:
             /*
@@ -37,16 +38,17 @@ namespace CppJieba
             bool init(const char* const modelPath);
             bool dispose();
         public:
-            bool cut(const Unicode& unico, vector<Unicode>& res)const ;
-            virtual bool cut(const string& str, vector<string>& res)const;
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const ;
+            bool cut(const string& str, vector<string>& res)const;
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const;
+            //virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
-            bool _viterbi(const Unicode& unico, vector<uint>& status)const;
+            bool _viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<uint>& status)const;
             bool _loadModel(const char* const filePath);
             bool _getLine(ifstream& ifile, string& line);
             bool _loadEmitProb(const string& line, EmitProbMap& mp);
             bool _decodeOne(const string& str, uint16_t& res);
-            //double _getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal);
             double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const ;
 
             

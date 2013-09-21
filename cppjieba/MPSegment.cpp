@@ -12,14 +12,16 @@ namespace CppJieba
     
     MPSegment::~MPSegment()
     {
-        if(!dispose())
-        {
-            LogError("dispose failed.");
-        }
+        dispose();
     }
 
     bool MPSegment::init(const char* const filePath)
     {
+        if(_getInitFlag())
+        {
+            LogError("already inited before now.");
+            return false;
+        }
         if(!_trie.init())
         {
             LogError("_trie.init failed.");
@@ -32,22 +34,58 @@ namespace CppJieba
             return false;
         }
         LogInfo("_trie.loadDict end.");
-        return true;
+        return _setInitFlag(true);
     }
     
     bool MPSegment::dispose()
     {
-        return _trie.dispose();
+        if(!_getInitFlag())
+        {
+            return true;
+        }
+        _trie.dispose();
+        _setInitFlag(false);
+        return true;
     }
 
-    bool MPSegment::cut(const string& str, vector<string>& res) const
+    bool MPSegment::cut(const string& str, vector<string>& res)const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
+        ChineseFilter filter;
+        filter.feed(str);
+        for(ChineseFilter::iterator it = filter.begin(); it != filter.end(); it++)
+        {
+            if(it.charType == CHWORD)
+            {
+                cut(it.begin, it.end, res);
+            }
+            else
+            {
+                string tmp;
+                if(TransCode::encode(it.begin, it.end, tmp))
+                {
+                    res.push_back(tmp);
+                }
+            }
+        }
+        return true;
+    }
+    bool MPSegment::cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+    {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         vector<TrieNodeInfo> segWordInfos;
-        if(!cut(str, segWordInfos))
+        if(!cut(begin, end, segWordInfos))
         {
             return false;
         }
-        res.clear();
         string tmp;
         for(uint i = 0; i < segWordInfos.size(); i++)
         {
@@ -63,25 +101,17 @@ namespace CppJieba
         return true;
     }
 
-    bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
+    bool MPSegment::cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const
     {
-        if(str.empty())
+        if(!_getInitFlag())
         {
+            LogError("not inited.");
             return false;
         }
-        segWordInfos.clear();
         SegmentContext segContext;
-        Unicode sentence;
-
-        if(!TransCode::decode(str, sentence))
+        for(Unicode::const_iterator it = begin; it != end; it++)
         {
-            LogError("TransCode::decode failed.");
-            return false;
-        }
-
-        for(uint i = 0; i < sentence.size(); i++)
-        {
-            segContext.push_back(SegmentChar(sentence[i]));
+            segContext.push_back(SegmentChar(*it));
         }
         
         //calc DAG
@@ -104,6 +134,28 @@ namespace CppJieba
         }
 
         return true;
+    }
+
+    bool MPSegment::cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
+    {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
+        if(str.empty())
+        {
+            return false;
+        }
+        Unicode sentence;
+
+        if(!TransCode::decode(str, sentence))
+        {
+            LogError("TransCode::decode failed.");
+            return false;
+        }
+        return cut(sentence.begin(), sentence.end(), segWordInfos);
+
     }
 
     bool MPSegment::_calcDAG(SegmentContext& segContext)const
@@ -185,8 +237,6 @@ namespace CppJieba
 
     bool MPSegment::_cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)const
     {
-        res.clear();
-
         uint i = 0;
         while(i < segContext.size())
         {

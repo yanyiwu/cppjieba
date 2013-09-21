@@ -18,16 +18,17 @@ namespace CppJieba
     
     HMMSegment::~HMMSegment()
     {
-        
+        dispose();
     }
 
     bool HMMSegment::init(const char* const modelPath)
     {
-        return _loadModel(modelPath);
+        return _setInitFlag(_loadModel(modelPath));
     }
     
     bool HMMSegment::dispose()
     {
+        _setInitFlag(false);
         return true;
     }
 
@@ -104,20 +105,22 @@ namespace CppJieba
         return true;
     }
 
-
-    bool HMMSegment::cut(const Unicode& unico, vector<Unicode>& res)const
+    bool HMMSegment::cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const
     {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
         vector<uint> status; 
-        if(!_viterbi(unico, status))
+        if(!_viterbi(begin, end, status))
         {
             LogError("_viterbi failed.");
             return false;
         }
 
-        Unicode::const_iterator begin = unico.begin();
         Unicode::const_iterator left = begin;
         Unicode::const_iterator right;
-        res.clear();
         for(uint i =0; i< status.size(); i++)
         {
             if(status[i] % 2) //if(E == status[i] || S == status[i])
@@ -130,25 +133,49 @@ namespace CppJieba
         return true;
     }
 
-    bool HMMSegment::cut(const string& str, vector<string>& res) const
+    bool HMMSegment::cut(const string& str, vector<string>& res)const
     {
-        if(str.empty())
+        if(!_getInitFlag())
         {
+            LogError("not inited.");
             return false;
         }
-        Unicode unico;
-        if(!TransCode::decode(str, unico))
-
+        ChineseFilter filter;
+        filter.feed(str);
+        for(ChineseFilter::iterator it = filter.begin(); it != filter.end(); it++)
         {
-            LogError("TransCode failed.");
+            if(it.charType == CHWORD)
+            {
+                cut(it.begin, it.end, res);
+            }
+            else
+            {
+                string tmp;
+                if(TransCode::encode(it.begin, it.end, tmp))
+                {
+                    res.push_back(tmp);
+                }
+            }
+        }
+        return true;
+    }
+
+    bool HMMSegment::cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
+    {
+        if(!_getInitFlag())
+        {
+            LogError("not inited.");
+            return false;
+        }
+        if(begin == end)
+        {
             return false;
         }
         vector<Unicode> words;
-        if(!cut(unico, words))
+        if(!cut(begin, end, words))
         {
             return false;
         }
-        res.clear();
         string tmp;
         for(uint i = 0; i < words.size(); i++)
         {
@@ -160,15 +187,15 @@ namespace CppJieba
         return true;
     }
 
-    bool HMMSegment::_viterbi(const Unicode& unico, vector<uint>& status)const
+    bool HMMSegment::_viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<uint>& status)const
     {
-        if(unico.empty())
+        if(begin == end)
         {
             return false;
         }
 
         size_t Y = STATUS_SUM;
-        size_t X = unico.size();
+        size_t X = end - begin;
         size_t XYSize = X * Y;
         int * path;
         double * weight;
@@ -194,11 +221,11 @@ namespace CppJieba
         //start
         for(uint y = 0; y < Y; y++)
         {
-            weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], unico[0], MIN_DOUBLE);
+            weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], *begin, MIN_DOUBLE);
             path[0 + y * X] = -1;
         }
-
         //process
+        //for(; begin != end; begin++)
         for(uint x = 1; x < X; x++)
         {
             for(uint y = 0; y < Y; y++)
@@ -209,7 +236,7 @@ namespace CppJieba
                 for(uint preY = 0; preY < Y; preY++)
                 {
                     old = x - 1 + preY * X;
-                    tmp = weight[old] + _transProb[preY][y] + _getEmitProb(_emitProbVec[y], unico[x], MIN_DOUBLE);
+                    tmp = weight[old] + _transProb[preY][y] + _getEmitProb(_emitProbVec[y], *(begin+x), MIN_DOUBLE);
                     if(tmp > weight[now])
                     {
                         weight[now] = tmp;
@@ -298,18 +325,6 @@ namespace CppJieba
         res = ui16[0];
         return true;
     }
-
-    /*
-    double HMMSegment::_getEmitProb(const EmitProbMap& mp, uint16_t key, double defVal)
-    {
-        EmitProbMap::const_iterator cit = mp.find(key);
-        if(cit == mp.end())
-        {
-            return defVal;
-        }
-        return cit->second;
-    }
-    */
 
     double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const
     {

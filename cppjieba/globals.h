@@ -24,11 +24,13 @@ namespace CppJieba
     //typedefs
     typedef std::vector<std::string>::iterator VSI;
     typedef std::vector<uint16_t> Unicode;
+    typedef Unicode::const_iterator UniConIter;
     typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
     typedef unordered_map<uint16_t, double> EmitProbMap;
 
     const double MIN_DOUBLE = -3.14e+100;
     const double MAX_DOUBLE = 3.14e+100;
+    enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1, OTHERS = 2};
 }
 
 #endif
