@@ -18,30 +18,14 @@ namespace CppJieba
 
     ChineseFilter::iterator ChineseFilter::begin()
     {
-        return _get(_unico.begin());
+        return iterator(&_unico);
     }
 
     ChineseFilter::iterator ChineseFilter::end()
     {
-        return iterator(this, _unico.end(), _unico.end(), false);
+        return iterator(&_unico, _unico.end(), _unico.end(), ChFilterIterator::OTHERS);
     }
     
-    ChineseFilter::iterator ChineseFilter::_get(UniConIter iter)
-    {
-        UniConIter begin = iter;
-        const UniConIter& end = _unico.end();
-        if(iter == end)
-        {
-            return this->end();
-        }
-        bool isChWord = _isChWord(*iter);
-        iter ++;
-        while(iter != end && _isChWord(*iter))
-        {
-            iter++;
-        }
-        return ChFilterIterator(this, begin, iter, isChWord);
-    }
 }
 
 #ifdef UT
@@ -51,15 +35,18 @@ using namespace CppJieba;
 int main()
 {
     ChineseFilter chFilter;
-    ifstream ifs("testlines.utf8");
+    ifstream ifs("../demo/testlines.utf8");
     string line;
     while(getline(ifs, line))
     {
         chFilter.feed(line);
     }
-    for(chFilter::iterator it = chFilter.begin(); it != chFilter.end(); it++)
+    for(ChineseFilter::iterator it = chFilter.begin(); it != chFilter.end(); it++)
     {
-        cout<<
+        //cout<<__FILE__<<__LINE__<<endl;
+        string tmp;
+        TransCode::encode(it.begin, it.end, tmp);
+        cout<<tmp<<endl;
     }
     return 0;
 }
