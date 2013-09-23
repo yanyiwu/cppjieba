@@ -69,6 +69,7 @@ namespace CppJieba
         string tmp;
         for(uint i= 0; i < infos.size(); i++)
         {
+            TransCode::encode(infos[i].word,tmp);
             if(1 == infos[i].word.size())
             {
                 unico.push_back(infos[i].word[0]);
@@ -77,6 +78,7 @@ namespace CppJieba
             {
                 if(!unico.empty())
                 {
+                    hmmRes.clear();
                     if(!_hmmSeg.cut(unico.begin(), unico.end(), hmmRes))
                     {
                         LogError("_hmmSeg cut failed.");
@@ -89,11 +91,9 @@ namespace CppJieba
                     }
                 }
                 unico.clear();
-
                 TransCode::encode(infos[i].word, tmp);
                 res.push_back(tmp);
             }
-            
         }
         if(!unico.empty())
         {
