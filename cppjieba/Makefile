@@ -5,12 +5,12 @@ AR     := ar rc
 DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
 RELEASE_CXXFLAGS   := -Wall -O3
 
-ifeq (YES, ${DEBUG})
-   CXXFLAGS       := ${DEBUG_CXXFLAGS}
-   LDFLAGS      := ${DEBUG_LDFLAGS}
-else
+ifeq (YES, ${RELEASE})
    CXXFLAGS     := ${RELEASE_CXXFLAGS}
    LDFLAGS      := ${RELEASE_LDFLAGS}
+else
+   CXXFLAGS       := ${DEBUG_CXXFLAGS}
+   LDFLAGS      := ${DEBUG_LDFLAGS}
 endif
 
 DOLINK := $(LD) $(LDFLAGS) -o $@ $^
