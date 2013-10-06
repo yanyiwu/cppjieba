@@ -12,7 +12,6 @@ namespace CppJieba
     class ChFilterIterator
     {
         public:
-        public:
             const Unicode * ptUnico;
             UniConIter begin;
             UniConIter end;
