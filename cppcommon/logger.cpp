@@ -5,21 +5,12 @@
 #include "logger.h"
 namespace CPPCOMMON
 {
-    char Logger::_cStrBuf[CSTR_BUFFER_SIZE];
     const char * Logger::_logLevel[LEVEL_ARRAY_SIZE] = {
         "DEBUG","INFO","WARN","ERROR","FATAL"
     };
 
-    const char * Logger::_logFormat = "%s [File:%s] [Line:%d] [%s] Msg:%s\n";
+    const char * Logger::_logFormat = "%s %s:%d %s %s\n";
     const char * Logger::_timeFormat = "%Y-%m-%d %H:%M:%S";
-    time_t Logger::_timeNow;
-    Logger::Logger()
-    {
-    }
-
-    Logger::~Logger()
-    {
-    }
 
     bool Logger::LoggingF(uint level, const char* fileName, int lineNo, const string& fmt, ...)
     {
@@ -56,8 +47,10 @@ namespace CPPCOMMON
             cerr<<"level's value is out of range"<<endl;
             return false;
         }
-        time(&_timeNow);
-        size_t ret = strftime(_cStrBuf, sizeof(_cStrBuf), _timeFormat, localtime(&_timeNow));
+		char buf[CSTR_BUFFER_SIZE];
+		time_t timeNow;
+        time(&timeNow);
+        size_t ret = strftime(buf, sizeof(buf), _timeFormat, localtime(&timeNow));
         if(0 == ret)
         {
             fprintf(stderr, "stftime failed.\n");
@@ -65,11 +58,11 @@ namespace CPPCOMMON
         }
         if(level >= LL_WARN)
         {
-            fprintf(stderr, _logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg);
+            fprintf(stderr, _logFormat, buf, fileName, lineNo, _logLevel[level], msg);
         }
         else
         {
-            fprintf(stdout, _logFormat, _cStrBuf, fileName, lineNo, _logLevel[level], msg);
+            fprintf(stdout, _logFormat, buf, fileName, lineNo, _logLevel[level], msg);
             fflush(stdout);
         }
         return true;

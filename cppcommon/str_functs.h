@@ -80,6 +80,11 @@ namespace CPPCOMMON
         }
         return 0 == str.compare(str.length() -  suffix.length(), suffix.length(), suffix);
     }
+
+    inline bool isInStr(const string& str, char ch)
+    {
+        return str.find(ch) != string::npos;
+    }
     
 }
 #endif

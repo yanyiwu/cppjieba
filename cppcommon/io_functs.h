@@ -10,5 +10,8 @@ namespace CPPCOMMON
 {
     using namespace std;
     string loadFile2Str(const char * const filepath);
+    void loadStr2File(const char * const filename, ios_base::openmode mode, const string& str);
+    int ReadFromFile(const char * fileName, char* buf, int maxCount, const char* mode);
+    int WriteStr2File(const char* fileName, const char* buf, const char* mode);
 }
 #endif

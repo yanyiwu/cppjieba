@@ -11,6 +11,7 @@
 #include <set>
 #include <iostream>
 #include <sstream>
+#include "typedefs.h"
 
 namespace CPPCOMMON
 {
@@ -58,6 +59,26 @@ namespace CPPCOMMON
             return ss.str();
         }
 
+    template<typename T1, typename T2>
+        string HashMapToString(const HashMap<T1, T2>& mp)
+        {
+            if(mp.empty())
+            {
+                return "{}";
+            }
+            stringstream ss;
+            ss<<'{';
+            typename HashMap<T1, T2>::const_iterator it = mp.begin();
+            ss<<it->first<<": "<<it->second;
+            it++;
+            while(it != mp.end())
+            {
+                ss<<", "<<it->first<<": "<<it->second;
+                it++;
+            }
+            ss<<'}';
+            return ss.str();
+        }
     template<typename T1, typename T2>
         string pairToString(const pair<T1, T2>& p)
         {

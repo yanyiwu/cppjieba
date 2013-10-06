@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <vector>
 #include <sys/types.h>
+#include <tr1/unordered_map>
+#define HashMap std::tr1::unordered_map
 
 namespace CPPCOMMON
 {

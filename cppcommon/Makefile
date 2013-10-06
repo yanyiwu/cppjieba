@@ -1,27 +1,33 @@
-CC = g++
-CCOPT = -Wall -c
-LINK = g++
-LINKOPT = 
-PACK = ar
-PACKOPT = rc
+CXX    := g++
+LD     := g++
+AR     := ar rc
+
+DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
+RELEASE_CXXFLAGS   := -Wall -O3
+
+ifeq (YES, ${RELEASE})
+   CXXFLAGS     := ${RELEASE_CXXFLAGS}
+   LDFLAGS      := ${RELEASE_LDFLAGS}
+else
+   CXXFLAGS       := ${DEBUG_CXXFLAGS}
+   LDFLAGS      := ${DEBUG_LDFLAGS}
+endif
+
+DOLINK := $(LD) $(LDFLAGS) -o $@ $^
+DOPACK := $(AR)  
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
-
-DOPACK = $(PACK) $(PACKOPT) $@ $^
-DOLINK = $(LINK) $(LINKOPT) -o $@ $^
 
 CMLIB = libcm.a
 
 %.o: %.cpp
-	$(CC) $(CCOPT) $<
-
+	$(CXX) -c $(CXXFLAGS) $<
 
 all: $(CMLIB)
 
 
 $(CMLIB): $(OBJS)
-	$(DOPACK) 
-	
+	$(DOPACK) $@ $(OBJS)
 	
 file_functs.ut: file_functs.cpp file_functs.h
 	g++ -o $@ $< -DTEST_FILE_FUNCTS
@@ -40,6 +46,12 @@ logger.ut: logger.cpp logger.h file_functs.cpp file_functs.h str_functs.cpp str_
 	g++ -o $@ $< file_functs.cpp str_functs.cpp -DLOGGER_UT 
 config.ut: config.cpp config.h 
 	g++ -o $@ $< -DCONFIG_UT $(CMLIB)
+
+http_functs.ut: http_functs.cpp http_functs.h
+	g++ -o $@ $< -DUT -DDEBUG $(CMLIB)
+
+sort_functs.ut: sort_functs.cpp sort_functs.h
+	g++ -o $@ $< -DUT -DDEBUG $(CMLIB)
 
 clean:
 	rm -f *.test *.ut *.o $(CMLIB)
