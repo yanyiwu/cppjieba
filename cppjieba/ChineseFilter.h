@@ -7,23 +7,7 @@
 namespace CppJieba
 {
 
-    class ChFilterIterator;
-    class ChineseFilter
-    {
-        public:
-            typedef ChFilterIterator  iterator;
-        public:
-            ChineseFilter();
-            ~ChineseFilter();
-        public:
-            bool feed(const string& str);
-            iterator begin();
-            iterator end();
-        private:
-            Unicode _unico;
-        private:
-            //friend class ChFilterIterator;
-    };
+    class ChineseFilter;
 
     class ChFilterIterator
     {
@@ -95,6 +79,29 @@ namespace CppJieba
                 return ChFilterIterator(ptUnico, _begin, iter, charType);
             }
 
+    };
+    class ChineseFilter
+    {
+        private:
+            Unicode _unico;
+        public:
+            typedef ChFilterIterator  iterator;
+        public:
+            ChineseFilter(){};
+            ~ChineseFilter(){};
+        public:
+            bool feed(const string& str)
+            {
+                return TransCode::decode(str, _unico);
+            }
+            iterator begin()
+            {
+                return iterator(&_unico);
+            }
+            iterator end()
+            {
+                return iterator(&_unico, _unico.end(), _unico.end(), OTHERS);
+            }
     };
 }
 
