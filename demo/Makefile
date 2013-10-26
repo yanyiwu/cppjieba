@@ -2,7 +2,7 @@ CXX    := g++
 LD     := g++
 AR     := ar rc
 
-INCS := 
+INCS := -I../limonp
 
 DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
 RELEASE_CXXFLAGS   := -Wall -O3
@@ -16,18 +16,14 @@ else
 endif
 
 DOLINK := $(LD) $(LDFLAGS) 
-DOPACK := $(AR)  
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
 CPPJIEBADIR = ../cppjieba
 LIBCPPJIEBA = $(CPPJIEBADIR)/libcppjieba.a
 
-CPPCOMMONDIR = ../cppcommon
-LIBCPPCM = $(CPPCOMMONDIR)/libcm.a
-
 # remove the objs after compilation
-.PHONY: clean $(LIBCPPJIEBA) $(LIBCPPCM)
+.PHONY: clean $(LIBCPPJIEBA) 
 
 # Main Targets
 all: keywordext_demo segment_demo
@@ -37,22 +33,18 @@ all: keywordext_demo segment_demo
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $<
 
-keywordext_demo: keywordext_demo.o $(LIBCPPJIEBA) $(LIBCPPCM)
+keywordext_demo: keywordext_demo.o $(LIBCPPJIEBA)
 	$(DOLINK) -o $@ $^
 
-segment_demo: segment_demo.o $(LIBCPPJIEBA) $(LIBCPPCM)
+segment_demo: segment_demo.o $(LIBCPPJIEBA)
 	$(DOLINK) -o $@ $^
 
 $(LIBCPPJIEBA): 
 	cd $(CPPJIEBADIR) && $(MAKE)
 
-$(LIBCPPCM): 
-	cd $(CPPCOMMONDIR) && $(MAKE)
-
 clean:
 	rm -f *.o *.ut *.d *.d.* keywordext_demo segment_demo
 	cd $(CPPJIEBADIR) && make clean
-	cd $(CPPCOMMONDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp

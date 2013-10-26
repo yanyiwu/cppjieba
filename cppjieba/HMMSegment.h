@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory.h>
-#include "../cppcommon/headers.h"
+#include <str_functs.hpp>
+#include <logger.hpp>
 #include "globals.h"
 #include "TransCode.h"
 #include "SegmentInterface.h"
@@ -12,7 +13,7 @@
 
 namespace CppJieba
 {
-    using namespace CPPCOMMON;
+    using namespace Limonp;
     class HMMSegment: public SegmentBase
     {
         public:

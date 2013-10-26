@@ -12,7 +12,8 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include "../cppcommon/headers.h"
+#include <str_functs.hpp>
+#include <logger.hpp>
 #include "TransCode.h"
 #include "globals.h"
 #include "structs.h"
@@ -20,7 +21,7 @@
 
 namespace CppJieba
 {
-    using namespace CPPCOMMON;
+    using namespace Limonp;
     struct TrieNode
     {
         TrieNodeMap hmap;
