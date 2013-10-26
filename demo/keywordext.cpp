@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <ArgvContext.hpp>
 #include "../cppjieba/headers.h"
 
 using namespace CppJieba;
