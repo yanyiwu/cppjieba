@@ -3,7 +3,7 @@
 
 #include "globals.h"
 #include "ISegment.hpp"
-#include "ChineseFilter.h"
+#include "ChineseFilter.hpp"
 #include <str_functs.hpp>
 #include <logger.hpp>
 
