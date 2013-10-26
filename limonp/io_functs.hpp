@@ -2,11 +2,15 @@
  * file enc : utf8
  * author   : wuyanyi09@gmail.com
 ************************************/
-#include "io_functs.h"
-
-namespace CPPCOMMON
+#ifndef LIMONP_IO_FUNCTS_H
+#define LIMONP_IO_FUNCTS_H
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
+namespace Limonp
 {
-    string loadFile2Str(const char * const filepath)
+    using namespace std;
+    inline string loadFile2Str(const char * const filepath)
     {
         ifstream in(filepath);
         if(!in)
@@ -19,7 +23,7 @@ namespace CPPCOMMON
         return str;
     }
     
-    void loadStr2File(const char * const filename, ios_base::openmode mode, const string& str)
+    inline void loadStr2File(const char * const filename, ios_base::openmode mode, const string& str)
     {
         ofstream out(filename, mode);
         ostreambuf_iterator<char> itr (out);
@@ -27,7 +31,7 @@ namespace CPPCOMMON
         out.close();
     }
 
-    int ReadFromFile(const char * fileName, char* buf, int maxCount, const char* mode)
+    inline int ReadFromFile(const char * fileName, char* buf, int maxCount, const char* mode)
     {                                        
         FILE* fp = fopen(fileName, mode);    
         if (!fp)                             
@@ -38,7 +42,7 @@ namespace CPPCOMMON
         return ret;                          
     }                                        
 
-    int WriteStr2File(const char* fileName, const char* buf, const char* mode)
+    inline int WriteStr2File(const char* fileName, const char* buf, const char* mode)
     {                                          
         FILE* fp = fopen(fileName, mode);      
         if (!fp)                               
@@ -47,20 +51,32 @@ namespace CPPCOMMON
         fclose(fp);                            
         return n;                              
     }                                          
-}
-#ifdef TEST_IO_FUNCTS
-#include <iostream>
-using namespace CPPCOMMON;
-using namespace std;
-int main()
-{
-//    char filename[] = "1/2/3";
-//    cout<<loadFile2Str("1")<<endl;
-    //string s = "hello world";
-    //loadStr2File("testfile", ofstream::app, "hello world\n");
-    //loadStr2File("testfile", ofstream::app, "hello world\n");
-    //loadStr2File("testfile", ofstream::app, "hello world\n");
-    cout<<loadFile2Str("testfile")<<endl;
-    return 0;
+
+    inline bool checkFileExist(const string& filePath)
+    {
+        fstream _file;
+        _file.open(filePath.c_str(), ios::in);
+        if(_file)
+          return true;
+        return false;
+    }
+
+    inline bool createDir(const string& dirPath, bool p = true)
+    {
+        string dir_str(dirPath);
+        string cmd = "mkdir";
+        if(p)
+        {
+            cmd += " -p";
+        }
+        cmd += " " + dir_str; 
+        int res = system(cmd.c_str());
+        return res;
+    }
+
+    inline bool checkDirExist(const string& dirPath)
+    {
+        return checkFileExist(dirPath);
+    }
 }
 #endif

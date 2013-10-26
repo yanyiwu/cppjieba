@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <set>
+#include <logger.hpp>
 #include "Trie.h"
 #include "globals.h"
 #include "SegmentInterface.h"

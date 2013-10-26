@@ -13,15 +13,10 @@ else
    LDFLAGS      := ${DEBUG_LDFLAGS}
 endif
 
-DOLINK := $(LD) $(LDFLAGS) -o $@ $^
-DOPACK := $(AR)  
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 
-#CMDIR := ../cppcommon
-#CMLIB := $(CMDIR)/libcm.a
-
-TMPDIR := ./cppjiebatmp
+INC := -I../limonp
 
 LIBA := libcppjieba.a
 
@@ -35,21 +30,11 @@ all: $(LIBA)
 # This is a suffix rule 
 #.c.o: 
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $<
+	$(CXX) -c $(CXXFLAGS) $< $(INC)
 
-#${LIBA}: $(TMPDIR) $(OBJS) $(CMLIB) 
-#	cp $(CMLIB) $(TMPDIR) && cd $(TMPDIR) && ar x `basename $(CMLIB)`
-#	$(DOPACK) $@ $(OBJS) $(TMPDIR)/*.o 
-#	rm -rf $(TMPDIR)
 
 ${LIBA}: $(OBJS)
-	$(DOPACK) $@ $(OBJS) 
-
-#$(TMPDIR):
-#	mkdir $@
-
-#$(CMLIB):
-#	cd $(CMDIR) && $(MAKE)
+	$(AR) $@ $(OBJS) 
 
 #unit test
 Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
@@ -72,8 +57,6 @@ ChineseFilter.ut: ChineseFilter.cpp ChineseFilter.h
 
 clean:
 	rm -f *.o *.d *.d.* *.ut $(LIBA) 
-#	rm -rf $(TMPDIR)
-#	cd $(CMDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp

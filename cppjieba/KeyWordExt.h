@@ -5,6 +5,7 @@
 #ifndef CPPJIEBA_KEYWORDEXT_H
 #define CPPJIEBA_KEYWORDEXT_H
 
+#include <logger.hpp>
 #include "MPSegment.h"
 #include "structs.h"
 

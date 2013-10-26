@@ -4,11 +4,12 @@
 #include "globals.h"
 #include "SegmentInterface.h"
 #include "ChineseFilter.h"
-#include "../cppcommon/headers.h"
+#include <str_functs.hpp>
+#include <logger.hpp>
 
 namespace CppJieba
 {
-    using namespace CPPCOMMON;
+    using namespace Limonp;
     class SegmentBase: public SegmentInterface
     {
         public:

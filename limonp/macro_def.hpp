@@ -1,5 +1,5 @@
-#ifndef CPPCOMMON_MACRO_DEF_H
-#define CPPCOMMON_MACRO_DEF_H
+#ifndef LIMONP_MACRO_DEF_H
+#define LIMONP_MACRO_DEF_H
 
 #define XX_GET_SET(varType, varName, funName)\
 private: varType varName;\

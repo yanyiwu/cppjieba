@@ -4,8 +4,8 @@
  ************************************/
 
 
-#ifndef CPPCOMMON_MAP_FUNCTS_H
-#define CPPCOMMON_MAP_FUNCTS_H
+#ifndef LIMONP_MAP_FUNCTS_H
+#define LIMONP_MAP_FUNCTS_H
 
 #include <map>
 #include <set>
@@ -13,9 +13,10 @@
 #include <sstream>
 #include "typedefs.h"
 
-namespace CPPCOMMON
+namespace Limonp
 {
     using namespace std;
+
 
     template <typename T>
         string setToString(const set<T>& st)
@@ -108,6 +109,15 @@ namespace CPPCOMMON
             return it->second;
         }
 
+    template<class kT, class vT>
+        void map2Vec(const map<kT, vT>& mp, vector<pair<kT, vT> > & res)
+        {
+            typename map<kT, vT>::const_iterator it = mp.begin();
+            for(; it != mp.end(); it++)
+            {
+                res.push_back(*it);
+            }
+        }
 }
 
 #endif

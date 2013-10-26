@@ -5,7 +5,7 @@
 #ifndef CPPJIEBA_HEADERS_H
 #define CPPJIEBA_HEADERS_H
 
-#include "../cppcommon/headers.h"
+#include <str_functs.hpp>
 #include "globals.h"
 #include "KeyWordExt.h"
 #include "MPSegment.h"

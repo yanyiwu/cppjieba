@@ -7,13 +7,13 @@
 
 
 #include "globals.h"
-#include "../cppcommon/str_functs.h"
-#include "../cppcommon/vec_functs.h"
+#include <str_functs.hpp>
+#include <vec_functs.hpp>
 
 namespace CppJieba
 {
 
-    using namespace CPPCOMMON;
+    using namespace Limonp;
     namespace TransCode
     {
         inline bool decode(const string& str, vector<uint16_t>& vec)

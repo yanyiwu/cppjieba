@@ -1,4 +1,5 @@
 tags
+*.demo
 *swp
 *.out
 *.o
