@@ -9,7 +9,7 @@
 #include "globals.h"
 #include "TransCode.hpp"
 #include "ISegment.hpp"
-#include "SegmentBase.h"
+#include "SegmentBase.hpp"
 
 namespace CppJieba
 {

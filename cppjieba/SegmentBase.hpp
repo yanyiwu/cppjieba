@@ -10,7 +10,7 @@
 namespace CppJieba
 {
     using namespace Limonp;
-    class SegmentBase: public SegmentInterface
+    class SegmentBase: public ISegment
     {
         public:
             SegmentBase(){_setInitFlag(false);};

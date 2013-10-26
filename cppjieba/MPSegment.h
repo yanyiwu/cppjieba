@@ -11,7 +11,7 @@
 #include "Trie.h"
 #include "globals.h"
 #include "ISegment.hpp"
-#include "SegmentBase.h"
+#include "SegmentBase.hpp"
 
 namespace CppJieba
 {

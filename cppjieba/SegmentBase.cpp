@@ -1,4 +1,4 @@
-#include "SegmentBase.h"
+#include "SegmentBase.hpp"
 
 namespace CppJieba
 {
