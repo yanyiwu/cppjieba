@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <ArgvContext.hpp>
-#include "../cppjieba/headers.h"
+#include "../cppjieba/KeyWordExt.h"
 
 using namespace CppJieba;
 
