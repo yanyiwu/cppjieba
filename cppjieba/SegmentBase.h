@@ -2,7 +2,7 @@
 #define CPPJIEBA_SEGMENTBASE_H
 
 #include "globals.h"
-#include "SegmentInterface.h"
+#include "ISegment.hpp"
 #include "ChineseFilter.h"
 #include <str_functs.hpp>
 #include <logger.hpp>

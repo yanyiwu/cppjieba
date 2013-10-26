@@ -10,7 +10,7 @@
 #include <logger.hpp>
 #include "Trie.h"
 #include "globals.h"
-#include "SegmentInterface.h"
+#include "ISegment.hpp"
 #include "SegmentBase.h"
 
 namespace CppJieba

@@ -8,7 +8,7 @@
 #include <logger.hpp>
 #include "globals.h"
 #include "TransCode.hpp"
-#include "SegmentInterface.h"
+#include "ISegment.hpp"
 #include "SegmentBase.h"
 
 namespace CppJieba
