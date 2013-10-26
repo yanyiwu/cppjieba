@@ -37,18 +37,18 @@ ${LIBA}: $(OBJS)
 	$(AR) $@ $(OBJS) 
 
 #unit test
-Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.h $(CMLIB)
+Trie.ut: Trie.cpp Trie.h globals.h  TransCode.cpp TransCode.hpp $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) Trie.cpp TransCode.cpp  -DTRIE_UT $(CMLIB)
 
 MPSegment.ut: MPSegment.cpp Trie.cpp MPSegment.h Trie.h globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) MPSegment.cpp Trie.cpp TransCode.cpp -DSEGMENT_UT $(CMLIB) 
 
-KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h MPSegment.h Trie.h globals.h TransCode.cpp TransCode.h  $(CMLIB)
+KeyWordExt.ut: KeyWordExt.cpp KeyWordExt.h MPSegment.h Trie.h globals.h TransCode.cpp TransCode.hpp  $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) KeyWordExt.cpp MPSegment.cpp Trie.cpp TransCode.cpp -DKEYWORDEXT_UT $(CMLIB)
 
-TransCode.ut: TransCode.cpp TransCode.h globals.h $(CMLIB)
+TransCode.ut: TransCode.cpp TransCode.hpp globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp -DCPPJIEBA_TRANSCODE_UT $(CMLIB) 
-HMMSegment.ut: HMMSegment.cpp TransCode.cpp TransCode.h HMMSegment.h $(CMLIB)
+HMMSegment.ut: HMMSegment.cpp TransCode.cpp TransCode.hpp HMMSegment.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) TransCode.cpp HMMSegment.cpp -DHMMSEGMENT_UT $(CMLIB) 
 MixSegment.ut: MixSegment.cpp MixSegment.h HMMSegment.cpp MPSegment.cpp Trie.cpp MPSegment.h Trie.h globals.h $(CMLIB)
 	$(CXX) -o $@ $(CXXFLAGS) MixSegment.cpp HMMSegment.cpp MPSegment.cpp Trie.cpp TransCode.cpp -DMIXSEGMENT_UT $(CMLIB) 

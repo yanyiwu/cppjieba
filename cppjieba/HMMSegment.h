@@ -7,7 +7,7 @@
 #include <str_functs.hpp>
 #include <logger.hpp>
 #include "globals.h"
-#include "TransCode.h"
+#include "TransCode.hpp"
 #include "SegmentInterface.h"
 #include "SegmentBase.h"
 

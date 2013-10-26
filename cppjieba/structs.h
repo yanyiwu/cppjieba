@@ -4,7 +4,7 @@
 #include <limits>
 #include "globals.h"
 #include "Trie.h"
-#include "TransCode.h"
+#include "TransCode.hpp"
 
 namespace CppJieba
 {

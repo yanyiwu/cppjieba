@@ -10,7 +10,7 @@
 #include "KeyWordExt.h"
 #include "MPSegment.h"
 #include "Trie.h"
-#include "TransCode.h"
+#include "TransCode.hpp"
 #include "HMMSegment.h"
 #include "MixSegment.h"
 
