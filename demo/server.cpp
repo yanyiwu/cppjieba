@@ -26,8 +26,12 @@ class ServerDemo: public IRequestHandler
 	public:
         virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd)
         {
-            //HttpReqInfo info = httpReq;
-            strSnd = httpReq.toString();
+            string sentence, tmp;
+            vector<string> words;
+            httpReq.GET("key", tmp); 
+            URLDecode(tmp, sentence);
+            _segment.cut(sentence, words);
+            vecToString(words, strSnd);
             return true;
         }
     private:
