@@ -98,6 +98,23 @@ Output:
 我/来自/北京邮电大学/。。。/学号/091111xx/。。。
 ```
 
+### Server's demo
+
+引入了husky这个文件夹，husky是一个简单的http服务框架。    
+```
+cd ./demo;
+make;
+./start.sh #启动一个服务，监听11258这个端口(在start.sh里面指定)。
+```
+
+关闭和重启分别是`stop.sh`和`restart.sh`
+
+然后用chrome浏览器打开`http://127.0.0.1:11258/?key=我来自北京邮电大学`
+(用chrome的原因是chrome的默认编码就是utf-8)
+
+或者用命令 `curl "http://127.0.0.1:11258/?key=我来自北京邮电大学"`
+
+
 ### 效果分析
 
 以上依次是MP,HMM,Mix三种方法的效果。  
@@ -155,6 +172,6 @@ example:
 "结巴中文"分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
 
-顾名思义，之所以叫CppJieba，就是边参照边膜拜SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
+顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 
