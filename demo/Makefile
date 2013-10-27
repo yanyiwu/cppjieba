@@ -2,7 +2,6 @@ CXX    := g++
 LD     := g++
 AR     := ar rc
 
-INCS := -I../limonp
 
 DEBUG_CXXFLAGS     := -g -Wall -DDEBUG 
 RELEASE_CXXFLAGS   := -Wall -O3
@@ -15,7 +14,9 @@ else
    LDFLAGS      := ${RELEASE_LDFLAGS}
 endif
 
-DOLINK := $(LD) $(LDFLAGS) 
+INCS := -I../limonp
+LINK := -lpthread
+
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SOURCES))
 DEMOS := $(patsubst %.cpp,%.demo,$(SOURCES))
@@ -23,19 +24,26 @@ DEMOS := $(patsubst %.cpp,%.demo,$(SOURCES))
 CPPJIEBADIR := ../cppjieba
 LIBCPPJIEBA := $(CPPJIEBADIR)/libcppjieba.a
 
+HUSKYDIR := ../husky
+LIBHUSKYA := $(HUSKYDIR)/libhusky.a
+
 .PHONY: clean $(LIBCPPJIEBA) 
 
 all: $(DEMOS)
 
-%.demo: %.cpp $(LIBCPPJIEBA)
-	$(CXX) -o $@ $(CXXFLAGS) $^ $(INCS)
+%.demo: %.cpp $(LIBCPPJIEBA) $(LIBHUSKYA)
+	$(CXX) -o $@ $(CXXFLAGS) $^ $(INCS) $(LINK)
 
 $(LIBCPPJIEBA): 
 	cd $(CPPJIEBADIR) && $(MAKE)
 
+$(LIBHUSKYA): 
+	cd $(HUSKYDIR) && $(MAKE)
+
 clean:
 	rm -f *.o *.ut *.d *.d.* $(DEMOS)
 	cd $(CPPJIEBADIR) && make clean
+	cd $(HUSKYDIR) && make clean
 
 sinclude $(SOURCES:.cpp=.d)
 %.d:%.cpp
