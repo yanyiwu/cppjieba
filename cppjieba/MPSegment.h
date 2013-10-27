@@ -24,8 +24,8 @@ namespace CppJieba
             Trie _trie;
             
         public:
-            MPSegment();
-            virtual ~MPSegment();
+            MPSegment(){};
+            virtual ~MPSegment(){dispose();};
         public:
             bool init(const char* const filePath);
             bool dispose();

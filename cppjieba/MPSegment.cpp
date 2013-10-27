@@ -6,14 +6,6 @@
 
 namespace CppJieba
 {
-    MPSegment::MPSegment()
-    {
-    }
-    
-    MPSegment::~MPSegment()
-    {
-        dispose();
-    }
 
     bool MPSegment::init(const char* const filePath)
     {
