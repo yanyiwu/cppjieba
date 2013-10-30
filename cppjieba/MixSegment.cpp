@@ -97,6 +97,7 @@ namespace CppJieba
         }
         if(!unico.empty())
         {
+            hmmRes.clear();
             if(!_hmmSeg.cut(unico.begin(), unico.end(), hmmRes))
             {
                 LogError("_hmmSeg cut failed.");
