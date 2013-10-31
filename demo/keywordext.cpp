@@ -23,7 +23,7 @@ void testKeyWordExt(const char * dictPath, const char * filePath)
         if(!line.empty())
         {
             ext.extract(line, res, 20);
-            cout<<line<<'\n'<<joinWordInfos(res)<<endl;
+            cout<<line<<'\n'<<res<<endl;
         }
 
     }

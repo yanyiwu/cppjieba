@@ -8,7 +8,6 @@
 
 #include "globals.h"
 #include <str_functs.hpp>
-#include <vec_functs.hpp>
 
 namespace CppJieba
 {

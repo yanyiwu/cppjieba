@@ -15,9 +15,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <memory.h>
-#include "typedefs.h"
 #include <functional> 
 #include <locale>
+#include <sstream>
+#include <sys/types.h>
+#include <map_functs.hpp>
+
+#define print(x) cout<<(x)<<endl
+
 namespace Limonp
 {
     using namespace std;
@@ -42,7 +47,7 @@ namespace Limonp
         }
         return str;
     }
-    
+
     inline void string_format(string& res, const char* fmt, ...)
     {
         int size = 256;
@@ -63,27 +68,176 @@ namespace Limonp
         }
     }
 
-    inline bool joinStr(const vector<string>& src, string& dest, const string& connectorStr)
-    {
-        if(src.empty())
-        {
-            return false;
-        }
-        for(uint i = 0; i < src.size() - 1; i++)
-        {
-            dest += src[i];
-            dest += connectorStr;
-        }
-        dest += src[src.size() - 1];
-        return true;
-    }
+    //inline bool joinStr(const vector<string>& src, string& dest, const string& connectorStr)
+    //{
+    //    if(src.empty())
+    //    {
+    //        return false;
+    //    }
+    //    for(uint i = 0; i < src.size() - 1; i++)
+    //    {
+    //        dest += src[i];
+    //        dest += connectorStr;
+    //    }
+    //    dest += src[src.size() - 1];
+    //    return true;
+    //}
 
-    inline string joinStr(const vector<string>& source, const string& connector)
-    {
-        string res;
-        joinStr(source, res, connector);
-        return res;
-    }
+    //inline string joinStr(const vector<string>& source, const string& connector)
+    //{
+    //    string res;
+    //    joinStr(source, res, connector);
+    //    return res;
+    //}
+
+    template<class T>
+        void join(T begin, T end, string& res, const string& connector)
+        {
+            if(begin == end)
+            {
+                return;
+            }
+            stringstream ss;
+            ss<<*begin;
+            begin++;
+            while(begin != end)
+            {
+                ss << connector << *begin;
+                begin ++;
+            }
+            res = ss.str();
+        }
+
+    template<class T>
+        string join(T begin, T end, const string& connector)
+        {
+            string res;
+            join(begin ,end, res, connector);
+            return res;
+        }
+
+    template<class T1, class T2>
+        ostream& operator << (ostream& os, const pair<T1, T2>& pr)
+        {
+            os << pr.first << ":" << pr.second ;
+            return os;
+        }
+
+    template<class T>
+        ostream& operator << (ostream& os, const vector<T>& vec)
+        {
+            if(vec.empty())
+            {
+                return os << "[]";
+            }
+            os<<"[\""<<vec[0];
+            for(uint i = 1; i < vec.size(); i++)
+            {
+                os<<"\", \""<<vec[i];
+            }
+            os<<"\"]";
+            return os;
+        }
+
+    template<class T>
+        string& operator << (string& str, const T& obj)
+        {
+            stringstream ss;
+            ss << obj; // call ostream& operator << (ostream& os,
+            return str = ss.str();
+        }
+
+    template<class T1, class T2>
+        ostream& operator << (ostream& os, const map<T1, T2>& mp)
+        {
+            if(mp.empty())
+            {
+                os<<"{}";
+                return os;
+            }
+            os<<'{';
+            typename map<T1, T2>::const_iterator it = mp.begin();
+            os<<*it;
+            it++;
+            while(it != mp.end())
+            {
+                os<<", "<<*it;
+                it++;
+            }
+            os<<'}';
+            return os;
+        }
+    
+
+    //template<class T1, class T2>
+    //    string& operator << (string& str, const map<T1, T2>& mp)
+    //    {
+    //        if(mp.empty())
+    //        {
+    //            str = "{}";
+    //            return str;
+    //        }
+    //        stringstream ss;
+    //        ss<<'{';
+    //        typename map<T1, T2>::const_iterator it = mp.begin();
+    //        ss<<*it;
+    //        it++;
+    //        while(it != mp.end())
+    //        {
+    //            ss<<", "<<*it;
+    //                it++;
+    //        }
+    //        ss<<'}';
+    //        str = ss.str();
+    //        return str;
+    //    }
+
+    template<class T1, class T2>
+        ostream& operator << (ostream& os, const HashMap<T1, T2>& mp)
+        {
+            if(mp.empty())
+            {
+                return os << "{}";
+            }
+            os<<'{';
+            typename map<T1, T2>::const_iterator it = mp.begin();
+            os<<*it;
+            it++;
+            while(it != mp.end())
+            {
+                os<<", "<<*it++;
+            }
+            return os<<'}';
+        }
+
+    //template<class T>
+    //    string& operator << (string& str, const set<T>& st)
+    //    {
+    //        stringstream ss;
+    //        ss << st;
+    //        return str = ss.str();
+    //    }
+
+    template<class T>
+        ostream& operator << (ostream& os, const set<T>& st)
+        {
+            if(st.empty())
+            {
+                os << "{}";
+                return os;
+            }
+            os<<'{';
+            typename set<T>::const_iterator it = st.begin();
+            os<<*it;
+            it++;
+            while(it != st.end())
+            {
+                os<<", "<<*it;
+                it++;
+            }
+            os<<'}';
+            return os;
+        }
 
     inline bool splitStr(const string& src, vector<string>& res, const string& pattern)
     {
@@ -104,26 +258,24 @@ namespace Limonp
                 return true;
             }
             res.push_back(src.substr(start, end - start));
-			if(end == src.size() - 1)
-			{
-				res.push_back("");
-				break;
-			}
+            if(end == src.size() - 1)
+            {
+                res.push_back("");
+                break;
+            }
             start = end + 1;
         }
         return true;
     }
 
-    inline string upperStr(const string& strIn)
+    inline string& upper(string& str)
     {
-        string str = strIn;
         transform(str.begin(), str.end(), str.begin(), (int (*)(int))toupper);
         return str;
     }
 
-    inline string lowerStr(const string& strIn)
+    inline string& lower(string& str)
     {
-        string str = strIn;
         transform(str.begin(), str.end(), str.begin(), (int (*)(int))tolower);
         return str;
     }
@@ -183,40 +335,40 @@ namespace Limonp
         return str.find(ch) != string::npos;
     }
 
-    inline void extractWords(const string& sentence, vector<string>& words)
-    {
-        bool flag = false;
-        uint lhs = 0, len = 0;
-        for(uint i = 0; i < sentence.size(); i++)
-        {
-            char x = sentence[i];
-            if((0x0030 <= x && x<= 0x0039) || (0x0041 <= x && x <= 0x005a ) || (0x0061 <= x && x <= 0x007a))
-            {
-                if(flag)
-                {
-                    len ++;
-                }
-                else
-                {
-                    lhs = i;
-                    len = 1;
-                }
-                flag = true;
-            }
-            else
-            {
-                if(flag)
-                {
-                    words.push_back(string(sentence, lhs, len));
-                }
-                flag = false;
-            }
-        }
-        if(flag)
-        {
-            words.push_back(string(sentence, lhs, len));
-        }
-    }
+    //inline void extractWords(const string& sentence, vector<string>& words)
+    //{
+    //    bool flag = false;
+    //    uint lhs = 0, len = 0;
+    //    for(uint i = 0; i < sentence.size(); i++)
+    //    {
+    //        char x = sentence[i];
+    //        if((0x0030 <= x && x<= 0x0039) || (0x0041 <= x && x <= 0x005a ) || (0x0061 <= x && x <= 0x007a))
+    //        {
+    //            if(flag)
+    //            {
+    //                len ++;
+    //            }
+    //            else
+    //            {
+    //                lhs = i;
+    //                len = 1;
+    //            }
+    //            flag = true;
+    //        }
+    //        else
+    //        {
+    //            if(flag)
+    //            {
+    //                words.push_back(string(sentence, lhs, len));
+    //            }
+    //            flag = false;
+    //        }
+    //    }
+    //    if(flag)
+    //    {
+    //        words.push_back(string(sentence, lhs, len));
+    //    }
+    //}
 
 
 }

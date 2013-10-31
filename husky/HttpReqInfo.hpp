@@ -130,7 +130,8 @@ namespace Husky
                         LogFatal("headerStr illegal.");
                         return false;
                     }
-                    _headerMap[upperStr(k)] = v;
+                    upper(k);
+                    _headerMap[k] = v;
                     lpos = rpos + 1;
                 }
                 //message header end
@@ -173,17 +174,17 @@ namespace Husky
             }
         public:
             //string toString() const;// function for debug because of heavy time consuming
-            string toString() const
-            {
-                string res("{");
-                res += HashMapToString(_headerMap);
-                res += ",";
-                res += HashMapToString(_methodGetMap);
-                res += ",";
-                res += HashMapToString(_methodPostMap);
-                res += "}";
-                return res;
-            }
+            //string toString() const
+            //{
+            //    string res("{");
+            //    res += HashMapToString(_headerMap);
+            //    res += ",";
+            //    res += HashMapToString(_methodGetMap);
+            //    res += ",";
+            //    res += HashMapToString(_methodPostMap);
+            //    res += "}";
+            //    return res;
+            //}
         private:
             bool _parseUrl(const string& url, HashMap<string, string>& mp)
             {

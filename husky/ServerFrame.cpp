@@ -140,7 +140,7 @@ namespace Husky
 
             if(SOCKET_ERROR==nRetCode)
             {
-                LogError("error [%s]", strerror(errno));
+                LogDebug("error [%s]", strerror(errno));
                 closesocket(hClientSock);
                 continue;
             }

@@ -44,7 +44,7 @@ void cut(const ISegment * seg, const char * const filePath)
         {
             res.clear();
             seg->cut(line, res);
-            cout<<line<<"\n"<<joinStr(res,"/")<<endl;
+            cout<<line<<"\n"<<join(res.begin(), res.end(),"/")<<endl;
         }
     }
 }
