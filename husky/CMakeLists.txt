@@ -1,0 +1,3 @@
+SET(LIBHUSKY_SRC Daemon.cpp ServerFrame.cpp)
+INCLUDE_DIRECTORIES(../limonp)
+ADD_LIBRARY(husky SHARED ${LIBHUSKY_SRC})

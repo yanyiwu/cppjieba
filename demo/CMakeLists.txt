@@ -1,0 +1,8 @@
+ADD_EXECUTABLE(segment.demo segment.cpp)
+ADD_EXECUTABLE(server.demo server.cpp)
+ADD_EXECUTABLE(keywordext.demo keywordext.cpp)
+INCLUDE_DIRECTORIES(../limonp ../cppjieba ../husky)
+LINK_DIRECTORIES(../cppjieba ../husky)
+TARGET_LINK_LIBRARIES(segment.demo cppjieba)
+TARGET_LINK_LIBRARIES(server.demo cppjieba husky -lpthread)
+TARGET_LINK_LIBRARIES(keywordext.demo cppjieba)
