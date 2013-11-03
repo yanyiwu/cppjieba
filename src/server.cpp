@@ -4,11 +4,11 @@
 #include <ctype.h>
 #include <string.h>
 #include <ArgvContext.hpp>
-#include "../husky/Daemon.h"
-#include "../husky/ServerFrame.h"
-#include "../cppjieba/MPSegment.h"
-#include "../cppjieba/HMMSegment.h"
-#include "../cppjieba/MixSegment.h"
+#include <Daemon.h>
+#include <ServerFrame.h>
+#include "MPSegment.h"
+#include "HMMSegment.h"
+#include "MixSegment.h"
 
 using namespace Husky;
 using namespace CppJieba;

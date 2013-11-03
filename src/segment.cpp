@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <ArgvContext.hpp>
-#include "../cppjieba/MPSegment.h"
-#include "../cppjieba/HMMSegment.h"
-#include "../cppjieba/MixSegment.h"
+#include "MPSegment.h"
+#include "HMMSegment.h"
+#include "MixSegment.h"
 
 using namespace CppJieba;
 
