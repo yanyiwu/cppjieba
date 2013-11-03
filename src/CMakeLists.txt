@@ -4,7 +4,7 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 INCLUDE_DIRECTORIES(./limonp ./husky)
 
 SET(LIBCPPJIEBA_SRC HMMSegment.cpp MixSegment.cpp  MPSegment.cpp  Trie.cpp)
-ADD_LIBRARY(cppjieba SHARED ${LIBCPPJIEBA_SRC})
+ADD_LIBRARY(cppjieba STATIC ${LIBCPPJIEBA_SRC})
 ADD_EXECUTABLE(segment segment.cpp)
 ADD_EXECUTABLE(server server.cpp)
 
@@ -15,7 +15,7 @@ TARGET_LINK_LIBRARIES(server cppjieba husky pthread)
 
 SET_TARGET_PROPERTIES(cppjieba PROPERTIES VERSION 1.2 SOVERSION 1)
 
-INSTALL(TARGETS cppjieba LIBRARY DESTINATION lib/CppJieba)
+INSTALL(TARGETS cppjieba ARCHIVE DESTINATION lib/CppJieba)
 INSTALL(TARGETS segment RUNTIME DESTINATION bin/CppJieba)
 INSTALL(TARGETS server RUNTIME DESTINATION bin/CppJieba)
 INSTALL(FILES ChineseFilter.hpp HMMSegment.h MPSegment.h structs.h Trie.h globals.h ISegment.hpp  MixSegment.h  SegmentBase.hpp  TransCode.hpp  DESTINATION include/CppJieba)
