@@ -31,7 +31,7 @@ class ServerDemo: public IRequestHandler
             httpReq.GET("key", tmp); 
             URLDecode(tmp, sentence);
             _segment.cut(sentence, words);
-            vecToString(words, strSnd);
+            strSnd << words;
             return true;
         }
     private:

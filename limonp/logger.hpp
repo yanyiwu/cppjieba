@@ -13,7 +13,6 @@
 #include <stdarg.h>
 #include "io_functs.hpp"
 #include "str_functs.hpp"
-#include "typedefs.h"
 
 #define LogDebug(fmt, ...) Logger::LoggingF(LL_DEBUG, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
 #define LogInfo(fmt, ...) Logger::LoggingF(LL_INFO, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
