@@ -3,9 +3,9 @@
 #include <string>
 #include <ctype.h>
 #include <string.h>
-#include <ArgvContext.hpp>
-#include <Daemon.h>
-#include <ServerFrame.h>
+#include "Husky/Limonp/ArgvContext.hpp"
+#include "Husky/Daemon.h"
+#include "Husky/ServerFrame.h"
 #include "MPSegment.h"
 #include "HMMSegment.h"
 #include "MixSegment.h"

@@ -20,3 +20,6 @@ INSTALL(TARGETS segment RUNTIME DESTINATION bin/CppJieba)
 INSTALL(TARGETS server RUNTIME DESTINATION bin/CppJieba)
 INSTALL(FILES ChineseFilter.hpp HMMSegment.h MPSegment.h structs.h Trie.h globals.h ISegment.hpp  MixSegment.h  SegmentBase.hpp  TransCode.hpp  DESTINATION include/CppJieba)
 
+
+ADD_SUBDIRECTORY(Husky)
+ADD_SUBDIRECTORY(Limonp)
