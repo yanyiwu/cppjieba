@@ -3,14 +3,14 @@
 
 #include <iostream>
 #include <string>
+#include "../Limonp/logger.hpp"
+#include "../Limonp/str_functs.hpp"
 #include "globals.h"
-#include <str_functs.hpp>
-#include <logger.hpp>
-#include <map_functs.hpp>
 
 namespace Husky
 {
     using namespace Limonp;
+    using namespace std;
 
     static const char* const KEY_METHOD = "METHOD";
     static const char* const KEY_PATH = "PATH";
@@ -130,7 +130,8 @@ namespace Husky
                         LogFatal("headerStr illegal.");
                         return false;
                     }
-                    _headerMap[upperStr(k)] = v;
+                    upper(k);
+                    _headerMap[k] = v;
                     lpos = rpos + 1;
                 }
                 //message header end
@@ -160,6 +161,8 @@ namespace Husky
             HashMap<string, string> _headerMap;
             HashMap<string, string> _methodGetMap;
             HashMap<string, string> _methodPostMap;
+            //public:
+            friend ostream& operator<<(ostream& os, const HttpReqInfo& obj);
         private:
             bool _find(const HashMap<string, string>& mp, const string& key, string& res)const
             {
@@ -170,19 +173,6 @@ namespace Husky
                 }
                 res = it->second;
                 return true;
-            }
-        public:
-            //string toString() const;// function for debug because of heavy time consuming
-            string toString() const
-            {
-                string res("{");
-                res += HashMapToString(_headerMap);
-                res += ",";
-                res += HashMapToString(_methodGetMap);
-                res += ",";
-                res += HashMapToString(_methodPostMap);
-                res += "}";
-                return res;
             }
         private:
             bool _parseUrl(const string& url, HashMap<string, string>& mp)
@@ -225,6 +215,11 @@ namespace Husky
                 return true;
             }
     };
+
+    inline std::ostream& operator << (std::ostream& os, const Husky::HttpReqInfo& obj)
+    {
+        return os << obj._headerMap << obj._methodGetMap << obj._methodPostMap;
+    }
 
 }
 

@@ -1,14 +1,9 @@
-#include <unistd.h>
-#include <algorithm>
-#include <string>
-#include <ctype.h>
-#include <string.h>
-#include <ArgvContext.hpp>
-#include "../husky/Daemon.h"
-#include "../husky/ServerFrame.h"
-#include "../cppjieba/MPSegment.h"
-#include "../cppjieba/HMMSegment.h"
-#include "../cppjieba/MixSegment.h"
+#include <CppJieba/Husky/ServerFrame.h>
+#include <CppJieba/Husky/Daemon.h>
+#include <CppJieba/Limonp/ArgvContext.hpp>
+#include <CppJieba/MPSegment.h>
+#include <CppJieba/HMMSegment.h>
+#include <CppJieba/MixSegment.h>
 
 using namespace Husky;
 using namespace CppJieba;
@@ -31,7 +26,7 @@ class ServerDemo: public IRequestHandler
             httpReq.GET("key", tmp); 
             URLDecode(tmp, sentence);
             _segment.cut(sentence, words);
-            vecToString(words, strSnd);
+            strSnd << words;
             return true;
         }
     private:

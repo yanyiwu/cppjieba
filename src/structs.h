@@ -74,7 +74,7 @@ namespace CppJieba
         KeyWordInfo(const TrieNodeInfo& trieNodeInfo):TrieNodeInfo(trieNodeInfo)
         {
         }
-        inline string toString() const
+        string toString() const
         {
             string tmp;
             TransCode::encode(word, tmp);
@@ -89,16 +89,23 @@ namespace CppJieba
             return *this;
         }
     };
-
-    inline string joinWordInfos(const vector<KeyWordInfo>& vec)
+    
+    inline ostream& operator << (ostream& os, const KeyWordInfo& info)
     {
-        vector<string> tmp;
-        for(uint i = 0; i < vec.size(); i++)
-        {
-            tmp.push_back(vec[i].toString());
-        }
-        return joinStr(tmp, ",");
+        string tmp;
+        TransCode::encode(info.word, tmp);
+        return os << "{words:" << tmp << ", weight:" << info.weight << ", idf:" << info.idf << "}";
     }
+
+    //inline string joinWordInfos(const vector<KeyWordInfo>& vec)
+    //{
+    //    vector<string> tmp;
+    //    for(uint i = 0; i < vec.size(); i++)
+    //    {
+    //        tmp.push_back(vec[i].toString());
+    //    }
+    //    return joinStr(tmp, ",");
+    //}
 }
 
 #endif

@@ -134,13 +134,13 @@ namespace Husky
             nRetCode = recv(hClientSock, chRecvBuf, RECV_BUFFER, 0);	
             strRec = chRecvBuf;
 
-#ifdef DEBUG
-            LogDebug("response[%s]", strRec.c_str());
+#ifdef HUKSY_DEBUG
+            LogDebug("request[%s]", strRec.c_str());
 #endif
 
             if(SOCKET_ERROR==nRetCode)
             {
-                LogError("error [%s]", strerror(errno));
+                LogDebug("error [%s]", strerror(errno));
                 closesocket(hClientSock);
                 continue;
             }
@@ -160,15 +160,15 @@ namespace Husky
 
             strHttpResp=chHttpHeader;
             strHttpResp+=strSnd;
+#ifdef HUKSY_DEBUG
+            LogDebug("response'body [%s]", strSnd.c_str());
+#endif
 
             if (SOCKET_ERROR==send(hClientSock,strHttpResp.c_str(),strHttpResp.length(),0))
             {
                 LogError("error [%s]", strerror(errno));
             }
 
-#ifdef DEBUG
-            LogDebug("send response [%s] ", strHttpResp.c_str());
-#endif
 
             closesocket(hClientSock);
         }

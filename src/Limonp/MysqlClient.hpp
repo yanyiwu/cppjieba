@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 #include "logger.hpp"
-#include "vec_functs.hpp"
 
 namespace Limonp
 {
@@ -21,8 +20,9 @@ namespace Limonp
             const char * const USER;
             const char * const PASSWD;
             const char * const DB;
+            const char * const CHARSET;
         public:
-            MysqlClient(const char* host, uint port, const char* user, const char* passwd, const char* db): HOST(host), PORT(port), USER(user), PASSWD(passwd), DB(db){ _conn = NULL;};
+            MysqlClient(const char* host, uint port, const char* user, const char* passwd, const char* db, const char* charset = "utf8"): HOST(host), PORT(port), USER(user), PASSWD(passwd), DB(db), CHARSET(charset){ _conn = NULL;};
             ~MysqlClient(){dispose();};
         public:
             bool init()
@@ -42,10 +42,17 @@ namespace Limonp
                     return false;
                 }  
 
+                if(mysql_set_character_set(_conn, CHARSET))
+                {
+                    LogError("mysql_set_character_set [%s] failed.", CHARSET);
+                    return false;
+                }
+
                 //set reconenct
                 char value = 1;
                 mysql_options(_conn, MYSQL_OPT_RECONNECT, &value);
 
+                LogInfo("MysqlClient {host: %s, port:%d, database:%s, charset:%s}", HOST, PORT, DB, CHARSET);
                 return true;
             }
             bool dispose()
@@ -70,6 +77,18 @@ namespace Limonp
                     return false;
                 }
                 return true;
+            }
+            uint insert(const char* tb_name, const char* keys, const vector<string>& vals)
+            {
+                uint retn = 0;
+                string sql;
+                for(uint i = 0; i < vals.size(); i ++)
+                {
+                    sql.clear();
+                    string_format(sql, "insert into %s (%s) values %s", tb_name, keys, vals[i].c_str());
+                    retn += executeSql(sql.c_str());
+                }
+                return retn;
             }
             bool select(const char* sql, RowsType& rows)
             {

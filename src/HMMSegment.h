@@ -4,8 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory.h>
-#include <str_functs.hpp>
-#include <logger.hpp>
+#include "Limonp/str_functs.hpp"
+#include "Limonp/logger.hpp"
 #include "globals.h"
 #include "TransCode.hpp"
 #include "ISegment.hpp"
