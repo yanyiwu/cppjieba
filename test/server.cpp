@@ -1,14 +1,9 @@
-#include <unistd.h>
-#include <algorithm>
-#include <string>
-#include <ctype.h>
-#include <string.h>
-#include <ArgvContext.hpp>
-#include <Daemon.h>
-#include <ServerFrame.h>
-#include "MPSegment.h"
-#include "HMMSegment.h"
-#include "MixSegment.h"
+#include <CppJieba/Husky/ServerFrame.h>
+#include <CppJieba/Husky/Daemon.h>
+#include <CppJieba/Limonp/ArgvContext.hpp>
+#include <CppJieba/MPSegment.h>
+#include <CppJieba/HMMSegment.h>
+#include <CppJieba/MixSegment.h>
 
 using namespace Husky;
 using namespace CppJieba;
