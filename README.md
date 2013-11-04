@@ -33,7 +33,7 @@ cat install_manifest.txt | sudo xargs rm -rf
 ```sh
 cd test/
 g++ -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba
-./segment # you will see the demo.
+./segment.demo # you will see the demo.
 ```
 
 运行一下 `./server` 或 `./segment` 都会有对应的帮助文档显示。
@@ -49,8 +49,8 @@ g++ -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba
 ```
 cd ./test
 g++ -o server server.cpp -L/usr/lib/CppJieba/ -L/usr/lib/CppJieba/Husky -lcppjieba -lhusky -lpthread
-./server -n 4 -p 11258 -k start #启动服务，监听11258这个端口。
-./server -n 4 -p 11258 -k stop #停止服务
+./server -n 4 -p 11258 -k start >> run.log 2>&1 #启动服务，监听11258这个端口。
+./server -n 4 -p 11258 -k stop  #停止服务
 ```
 
 #### 验证服务
@@ -155,27 +155,6 @@ TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk转换成`uint
 
 详见：  https://github.com/aszxqw/limonp
 
-## Help
-
-### run `./segment_demo` to get help.
-
-如下:
-```
-usage:
-        ./segment_demo[options] <filename>
-options:
-        --algorithm     Supported methods are [cutDAG, cutHMM, cutMix] for now.
-                        If not specified, the default is cutDAG
-        --dictpath      If not specified, the default is ../dicts/jieba.dict.utf8
-        --modelpath     If not specified, the default is ../dicts/hmm_model.utf8
-                        If not specified, the default is utf8.
-example:
-        ./segment_demo testlines.utf8 --dictpath ../dicts/jieba.dict.utf8
-        ./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM
-        ./segment_demo testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix
-
-```
-
 ## 分词速度
 
 ### MixSegment
@@ -184,11 +163,11 @@ example:
 测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz`
 
 
-## Contact
+## 联系客服
 
 如果有运行问题或者任何疑问，欢迎联系 : wuyanyi09@gmail.com
 
-## Thanks
+## 鸣谢
 
 "结巴中文"分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
