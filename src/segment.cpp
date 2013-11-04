@@ -18,7 +18,7 @@ void cut(const ISegment * seg, const char * const filePath)
         {
             res.clear();
             seg->cut(line, res);
-            cout<<line<<"\n"<<join(res.begin(), res.end(),"/")<<endl;
+            cout<<join(res.begin(), res.end(),"/")<<endl;
         }
     }
 }
@@ -44,14 +44,6 @@ int main(int argc, char ** argv)
     string dictPath = arg["--dictpath"];
     string modelPath = arg["--modelpath"];
     string algorithm = arg["--algorithm"];
-    if(dictPath.empty())
-    {
-        return EXIT_FAILURE;
-    }
-    if(modelPath.empty())
-    {
-        return EXIT_FAILURE;
-    }
 
     if("cutHMM" == algorithm)
     {
