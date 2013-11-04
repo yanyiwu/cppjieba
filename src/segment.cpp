@@ -7,32 +7,6 @@
 
 using namespace CppJieba;
 
-MPSegment seg;
-HMMSegment hmmseg;
-MixSegment mixseg;
-bool init(const char * const dictPath, const char * const modelPath)
-{
-    if(!seg.init(dictPath))
-    {
-        cout<<"seg init failed."<<endl;
-        return false;
-    }
-
-    if(!hmmseg.init(modelPath))
-    {
-        cout<<"hmmseg init failed."<<endl;
-        return false;
-    }
-
-    if(!mixseg.init(dictPath, modelPath))
-    {
-        cout<<"mixseg init failed."<<endl;
-        return false;
-    }
-
-    return true;
-}
-
 void cut(const ISegment * seg, const char * const filePath)
 {
     ifstream ifile(filePath);
@@ -49,45 +23,22 @@ void cut(const ISegment * seg, const char * const filePath)
     }
 }
 
-bool dispose()
-{
-    if(!seg.dispose())
-    {
-        cout<<"seg dispose failed."<<endl;
-        return false;
-    }
-    if(!hmmseg.dispose())
-    {
-        cout<<"seg dispose failed."<<endl;
-        return false;
-    }
-    if(!mixseg.dispose())
-    {
-        cout<<"seg dispose failed."<<endl;
-        return false;
-    }
-    return true;
-}
-
-const char * const DEFAULT_DICTPATH = "../dicts/jieba.dict.utf8";
-const char * const DEFAULT_MODELPATH = "../dicts/hmm_model.utf8";
-
 int main(int argc, char ** argv)
 {
     if(argc < 2)
     {
-        cout<<"usage: \n\t"<<argv[0]<<"[options] <filename>\n"
+        cout<<"usage: \n\t"<<argv[0]<<" [options] <filename>\n"
             <<"options:\n"
             <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
-            <<"\t--dictpath\tIf not specified, the default is "<<DEFAULT_DICTPATH<<'\n'
-            <<"\t--modelpath\tIf not specified, the default is "<<DEFAULT_MODELPATH<<'\n'
+            <<"\t--dictpath\tsee example\n"
+            <<"\t--modelpath\tsee example\n"
             <<"example:\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath ../dicts/jieba.dict.utf8\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
+            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath dicts/jieba.dict.utf8\n"
+            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath dicts/hmm_model.utf8 --algorithm cutHMM\n"
+            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath dicts/jieba.dict.utf8 --modelpath dicts/hmm_model.utf8 --algorithm cutMix\n"
             <<endl;
         
-        return -1;
+        return EXIT_FAILURE;
     }
     ArgvContext arg(argc, argv);
     string dictPath = arg["--dictpath"];
@@ -95,30 +46,45 @@ int main(int argc, char ** argv)
     string algorithm = arg["--algorithm"];
     if(dictPath.empty())
     {
-        dictPath = DEFAULT_DICTPATH;
+        return EXIT_FAILURE;
     }
     if(modelPath.empty())
     {
-        modelPath = DEFAULT_MODELPATH;
+        return EXIT_FAILURE;
     }
 
-    if(!init(dictPath.c_str(), modelPath.c_str()))
-    {
-        LogError("init failed.");
-        return -1;
-    }
     if("cutHMM" == algorithm)
     {
-        cut(&hmmseg, arg[1].c_str());
+        HMMSegment seg;
+        if(!seg.init(modelPath.c_str()))
+        {
+            cout<<"seg init failed."<<endl;
+            return EXIT_FAILURE;
+        }
+        cut(&seg, arg[1].c_str());
+        seg.dispose();
     }
     else if("cutMix" == algorithm)
     {
-        cut(&mixseg, arg[1].c_str());
+        MixSegment seg;
+        if(!seg.init(dictPath.c_str(), modelPath.c_str()))
+        {
+            cout<<"seg init failed."<<endl;
+            return EXIT_FAILURE;
+        }
+        cut(&seg, arg[1].c_str());
+        seg.dispose();
     }
     else
     {
+        MPSegment seg;
+        if(!seg.init(dictPath.c_str()))
+        {
+            cout<<"seg init failed."<<endl;
+            return false;
+        }
         cut(&seg, arg[1].c_str());
+        seg.dispose();
     }
-    dispose();
-    return 0;
+    return EXIT_SUCCESS;
 }
