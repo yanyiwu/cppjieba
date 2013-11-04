@@ -1,2 +1,0 @@
-FILE(GLOB HEAD_HPP_LIST "*.hpp")
-INSTALL(FILES ${HEAD_HPP_LIST} DESTINATION include/CppJieba/Husky/Limonp)
