@@ -6,4 +6,3 @@ ADD_LIBRARY(husky STATIC ${LIBHUSKY_SRC})
 
 INSTALL(TARGETS husky ARCHIVE DESTINATION lib/CppJieba/Husky)
 INSTALL(FILES Daemon.h globals.h HttpReqInfo.hpp ServerFrame.h ThreadManager.hpp DESTINATION include/CppJieba/Husky)
-
