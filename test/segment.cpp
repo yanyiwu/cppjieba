@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
     //demo
     {
         HMMSegment seg;
-        if(!seg.init("../dicts/jieba.dict.utf8"))
+        if(!seg.init("../dicts/hmm_model.utf8"))
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
