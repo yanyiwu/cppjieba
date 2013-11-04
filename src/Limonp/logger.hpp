@@ -14,11 +14,13 @@
 #include "io_functs.hpp"
 #include "str_functs.hpp"
 
-#define LogDebug(fmt, ...) Logger::LoggingF(LL_DEBUG, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
-#define LogInfo(fmt, ...) Logger::LoggingF(LL_INFO, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
-#define LogWarn(fmt, ...) Logger::LoggingF(LL_WARN, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
-#define LogError(fmt, ...) Logger::LoggingF(LL_ERROR, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
-#define LogFatal(fmt, ...) Logger::LoggingF(LL_FATAL, __FILE__, __LINE__, fmt, ## __VA_ARGS__)
+#define FILE_BASENAME strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
+
+#define LogDebug(fmt, ...) Logger::LoggingF(LL_DEBUG, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+#define LogInfo(fmt, ...) Logger::LoggingF(LL_INFO, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+#define LogWarn(fmt, ...) Logger::LoggingF(LL_WARN, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+#define LogError(fmt, ...) Logger::LoggingF(LL_ERROR, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+#define LogFatal(fmt, ...) Logger::LoggingF(LL_FATAL, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 
 
 namespace Limonp
