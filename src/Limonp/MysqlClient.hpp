@@ -78,6 +78,18 @@ namespace Limonp
                 }
                 return true;
             }
+            uint insert(const char* tb_name, const char* keys, const vector<string>& vals)
+            {
+                uint retn = 0;
+                string sql;
+                for(uint i = 0; i < vals.size(); i ++)
+                {
+                    sql.clear();
+                    string_format(sql, "insert into %s (%s) values %s", tb_name, keys, vals[i].c_str());
+                    retn += executeSql(sql.c_str());
+                }
+                return retn;
+            }
             bool select(const char* sql, RowsType& rows)
             {
                 if(!executeSql(sql))

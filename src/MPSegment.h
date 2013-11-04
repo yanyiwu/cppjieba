@@ -7,7 +7,7 @@
 
 #include <algorithm>
 #include <set>
-#include <logger.hpp>
+#include "Limonp/logger.hpp"
 #include "Trie.h"
 #include "globals.h"
 #include "ISegment.hpp"

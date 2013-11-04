@@ -7,7 +7,7 @@
 
 
 #include "globals.h"
-#include <str_functs.hpp>
+#include "Limonp/str_functs.hpp"
 
 namespace CppJieba
 {

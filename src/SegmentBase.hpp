@@ -4,8 +4,8 @@
 #include "globals.h"
 #include "ISegment.hpp"
 #include "ChineseFilter.hpp"
-#include <str_functs.hpp>
-#include <logger.hpp>
+#include "Limonp/str_functs.hpp"
+#include "Limonp/logger.hpp"
 
 namespace CppJieba
 {

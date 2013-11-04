@@ -12,8 +12,8 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include <str_functs.hpp>
-#include <logger.hpp>
+#include "Limonp/str_functs.hpp"
+#include "Limonp/logger.hpp"
 #include "TransCode.hpp"
 #include "globals.h"
 #include "structs.h"
