@@ -1,7 +1,7 @@
 #ifndef LIMONP_STD_OUTBOUND_H
 #define LIMONP_STD_OUTBOUND_H
 
-#include <tr1/unordered_map>
+#include "map_functs.hpp"
 #include <map>
 #include <set>
 
@@ -59,14 +59,14 @@ namespace std
             return os;
         }
     template<class T1, class T2>
-        ostream& operator << (ostream& os, const std::tr1::unordered_map<T1, T2>& mp)
+        ostream& operator << (ostream& os, const HashMap<T1, T2>& mp)
         {
             if(mp.empty())
             {
                 return os << "{}";
             }
             os<<'{';
-            typename std::tr1::unordered_map<T1, T2>::const_iterator it = mp.begin();
+            typename HashMap<T1, T2>::const_iterator it = mp.begin();
             os<<*it;
             it++;
             while(it != mp.end())

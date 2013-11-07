@@ -213,7 +213,7 @@ namespace Husky
         addrSock.sin_port=htons(nPort);
         addrSock.sin_addr.s_addr=htonl(INADDR_ANY);
         int retval;
-        retval=bind(sock,(sockaddr*)&addrSock,sizeof(sockaddr));
+        retval = ::bind(sock,(sockaddr*)&addrSock,sizeof(sockaddr));
         if(SOCKET_ERROR==retval)
         {
             LogError("error [%s]", strerror(errno));
