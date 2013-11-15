@@ -48,7 +48,7 @@ g++ -std=c++0x -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba
 
 ```
 cd ./test
-g++ -o server server.cpp -L/usr/lib/CppJieba/ -L/usr/lib/CppJieba/Husky -lcppjieba -lhusky -lpthread
+g++ -std=c++0x -o server server.cpp -L/usr/lib/CppJieba/ -L/usr/lib/CppJieba/Husky -lcppjieba -lhusky -lpthread
 ./server -n 4 -p 11258 -k start >> run.log 2>&1 #启动服务，监听11258这个端口。
 ./server -n 4 -p 11258 -k stop  #停止服务
 ```
