@@ -32,7 +32,7 @@ cat install_manifest.txt | sudo xargs rm -rf
 
 ```sh
 cd test/
-g++ -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba
+g++ -std=c++0x -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba 
 ./segment.demo # you will see the demo.
 ```
 
