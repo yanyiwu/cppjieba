@@ -6,7 +6,7 @@ ADD_LIBRARY(cppjieba STATIC ${LIBCPPJIEBA_SRC})
 ADD_EXECUTABLE(segment segment.cpp)
 ADD_EXECUTABLE(server server.cpp)
 
-LINK_DIRECTORIES(husky)
+LINK_DIRECTORIES(Husky)
 
 TARGET_LINK_LIBRARIES(segment cppjieba)
 TARGET_LINK_LIBRARIES(server cppjieba husky pthread)

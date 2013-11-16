@@ -156,7 +156,7 @@ namespace Husky
 
             char chHttpHeader[2048];
 
-            sprintf(chHttpHeader, RESPONSE_FORMAT, RESPONSE_CHARSET_UTF8, strSnd.length());
+            sprintf(chHttpHeader, RESPONSE_FORMAT, RESPONSE_CHARSET_UTF8, int(strSnd.length()));
 
             strHttpResp=chHttpHeader;
             strHttpResp+=strSnd;
