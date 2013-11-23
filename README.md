@@ -17,10 +17,26 @@ unzip cppjieba-master.zip
 cd cppjieba-master
 mkdir build
 cd build
-cmake .. -Wno-dev 
+cmake ..
 make
 sudo make install
 ```
+
+### 启动服务
+
+```
+#启动
+/etc/init.d/CppJieba/start.sh
+#停止
+/etc/init.d/CppJieba/stop.sh
+```
+
+#### 验证服务
+
+然后用chrome浏览器打开`http://127.0.0.1:11258/?key=南京市长江大桥`
+(用chrome的原因是chrome的默认编码就是utf-8)
+
+或者用命令 `curl "http://127.0.0.1:11258/?key=南京市长江大桥"` (ubuntu中的curl安装命令`sudo apt-get install curl`)
 
 ### 卸载
 ```sh
@@ -44,21 +60,6 @@ g++ -std=c++0x -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba
 
 若还有其他问题，欢迎`send mail`或者`open issue`。  :)
 
-### 搭建服务
-
-```
-cd ./test
-g++ -std=c++0x -o server server.cpp -L/usr/lib/CppJieba/ -L/usr/lib/CppJieba/Husky -lcppjieba -lhusky -lpthread
-./server -n 4 -p 11258 -k start >> run.log 2>&1 #启动服务，监听11258这个端口。
-./server -n 4 -p 11258 -k stop  #停止服务
-```
-
-#### 验证服务
-
-然后用chrome浏览器打开`http://127.0.0.1:11258/?key=我来自北京邮电大学`
-(用chrome的原因是chrome的默认编码就是utf-8)
-
-或者用命令 `curl "http://127.0.0.1:11258/?key=我来自北京邮电大学"` (ubuntu中的curl安装命令`sudo apt-get install curl`)
 
 ## 分词效果
 

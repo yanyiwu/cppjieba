@@ -1,4 +1,4 @@
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
     echo "usage: $0 <file>"
     exit 1
 fi
