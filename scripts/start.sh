@@ -1,2 +1,2 @@
 #!/bin/sh
-cjserver -n 4 -p 11258 -k start >> run.log 2>&1 &
+cjserver -c /etc/CppJieba/server.conf -k start >> /dev/null 2>&1 

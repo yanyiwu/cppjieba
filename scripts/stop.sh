@@ -1,2 +1,2 @@
 #!/bin/sh
-./server.demo -n 4 -p 11258 -k stop
+cjserver -c /etc/CppJieba/server.conf -k stop
