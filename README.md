@@ -39,10 +39,10 @@ sudo make install
 
 #### 验证服务
 
-然后用chrome浏览器打开`http://127.0.0.1:11258/?key=南京市长江大桥`
+然后用chrome浏览器打开`http://127.0.0.1:11200/?key=南京市长江大桥`
 (用chrome的原因是chrome的默认编码就是utf-8)
 
-或者用命令 `curl "http://127.0.0.1:11258/?key=南京市长江大桥"` (ubuntu中的curl安装命令`sudo apt-get install curl`)
+或者用命令 `curl "http://127.0.0.1:11200/?key=南京市长江大桥"` (ubuntu中的curl安装命令`sudo apt-get install curl`)
 
 ### 卸载
 ```sh
