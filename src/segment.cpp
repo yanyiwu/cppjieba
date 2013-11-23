@@ -29,7 +29,7 @@ int main(int argc, char ** argv)
     {
         cout<<"usage: \n\t"<<argv[0]<<" [options] <filename>\n"
             <<"options:\n"
-            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutDAG\n"
+            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
             <<"\t--dictpath\tsee example\n"
             <<"\t--modelpath\tsee example\n"
             <<"example:\n"
@@ -56,24 +56,24 @@ int main(int argc, char ** argv)
         cut(&seg, arg[1].c_str());
         seg.dispose();
     }
-    else if("cutMix" == algorithm)
-    {
-        MixSegment seg;
-        if(!seg.init(dictPath.c_str(), modelPath.c_str()))
-        {
-            cout<<"seg init failed."<<endl;
-            return EXIT_FAILURE;
-        }
-        cut(&seg, arg[1].c_str());
-        seg.dispose();
-    }
-    else
+    else if("cutDAG" == algorithm)
     {
         MPSegment seg;
         if(!seg.init(dictPath.c_str()))
         {
             cout<<"seg init failed."<<endl;
             return false;
+        }
+        cut(&seg, arg[1].c_str());
+        seg.dispose();
+    }
+    else
+    {
+        MixSegment seg;
+        if(!seg.init(dictPath.c_str(), modelPath.c_str()))
+        {
+            cout<<"seg init failed."<<endl;
+            return EXIT_FAILURE;
         }
         cut(&seg, arg[1].c_str());
         seg.dispose();
