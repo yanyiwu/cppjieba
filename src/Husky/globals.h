@@ -10,8 +10,6 @@
 namespace Husky
 {
 
-    const char* const MASTER_PID_FILE= "masterDaemon.pid";
-
     const char* const RESPONSE_CHARSET_UTF8 = "UTF-8";
     const char* const RESPONSE_CHARSET_GB2312 = "GB2312";
     const char* const CLIENT_IP_K = "CLIENT_IP"; 

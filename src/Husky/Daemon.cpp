@@ -3,9 +3,9 @@
 namespace Husky
 {
 
-    IRequestHandler * Daemon::m_pHandler;
-    ServerFrame Daemon::m_ServerFrame;
+    IWorkHandler * Daemon::m_pHandler;
     int Daemon::m_nChildPid = 0;
+    const char* Daemon::m_pidFile = NULL;
 
     bool Daemon::isAbnormalExit(int pid, int status)
     {
@@ -40,9 +40,9 @@ namespace Husky
         return bRestart;
     }
 
-    bool Daemon::Start(unsigned int port, unsigned int threadNum)
+    bool Daemon::start()
     {
-        string masterPidStr = loadFile2Str(MASTER_PID_FILE);
+        string masterPidStr = loadFile2Str(m_pidFile);
         int masterPid = atoi(masterPidStr.c_str());
         if(masterPid)
         {
@@ -57,7 +57,7 @@ namespace Husky
 
         char buf[64];
         sprintf(buf, "%d", getpid());
-        if (!WriteStr2File(MASTER_PID_FILE,buf ,"w"))
+        if (!WriteStr2File(m_pidFile,buf ,"w"))
         {
             LogFatal("Write master pid fail!");
         }
@@ -80,31 +80,26 @@ namespace Husky
                     LogFatal("m_pHandler init failed!");
                     return false;
                 }
-                if (!m_ServerFrame.CreateServer(port, threadNum, m_pHandler))
-                {    
-                    LogFatal("m_ServerFrame CreateServer(%d, %d, m_pHandler) fail!", port, threadNum);
-                    return false;
-                }
 #ifdef DEBUG
                 LogDebug("Worker init  ok pid = %d",(int)getpid());
 #endif
 
-                if (!m_ServerFrame.RunServer())
+                if (!m_pHandler->run())
                 {
-                    LogError("m_ServerFrame.RunServer finish -fail!");
+                    LogError("m_pHandler run finish with failure!");
                     return false;
                 }
 #ifdef DEBUG
                 LogDebug("run finish -ok!");
 #endif
 
-                if(!m_pHandler->dispose())
-                {
-                    LogError("m_pHandler.dispose -fail!");
-                    return false;
-                }
+                //if(!m_pHandler->dispose())
+                //{
+                //    LogError("m_pHandler dispose with failure!");
+                //    return false;
+                //}
 #ifdef DEBUG
-                LogDebug("Worker dispose -ok!");
+                //LogDebug("Worker dispose -ok!");
 #endif
                 exit(0);
             }
@@ -122,9 +117,9 @@ namespace Husky
     }
 
 
-    bool Daemon::Stop()
+    bool Daemon::stop()
     {
-        string masterPidStr = loadFile2Str(MASTER_PID_FILE);
+        string masterPidStr = loadFile2Str(m_pidFile);
         int masterPid = atoi(masterPidStr.c_str());
         if(masterPid)
         {
@@ -185,7 +180,7 @@ namespace Husky
     {        
         if (sig == SIGUSR1)
         {
-            m_ServerFrame.CloseServer();
+            m_pHandler->dispose();
             LogDebug("master = %d signal accept current pid =%d!",getppid(),getpid());
         }
 

@@ -6,7 +6,7 @@ namespace Husky
     pthread_mutex_t ServerFrame::m_pmAccept; 
     bool ServerFrame::m_bShutdown = false;
 
-    bool ServerFrame::CloseServer()
+    bool ServerFrame::dispose()
     {
         m_bShutdown=true;
         if (SOCKET_ERROR==closesocket(m_lsnSock))
@@ -39,12 +39,14 @@ namespace Husky
             LogError("error [%s]", strerror(errno));
         }
         close(sockfd);
-        LogInfo("CloseServer ok.");
+        if(!m_pHandler->dispose())
+        {
+            LogFatal("m_pHandler dispose failed.");
+        }
         return true;
-
     }
 
-    bool ServerFrame::RunServer()
+    bool ServerFrame::run()
     {
         if(SOCKET_ERROR==listen(m_lsnSock,LISEN_QUEUR_LEN))
         {
@@ -177,18 +179,21 @@ namespace Husky
 
     }
 
-    bool ServerFrame::CreateServer(u_short nPort,u_short nThreadCount,IRequestHandler *pHandler)
+    bool ServerFrame::init()
     {
-        m_nLsnPort=nPort;
-        m_nThreadCount=nThreadCount;
-        m_pHandler=pHandler;
 
         if (!BindToLocalHost(m_lsnSock,m_nLsnPort))
         {
+            LogFatal("BindToLocalHost failed.");
             return false;
         }
-        pthread_mutex_init(&m_pmAccept,NULL);
-        LogInfo("CreatServer ok {port:%d, threadNum:%d}", nPort, nThreadCount);
+        LogInfo("init ok {port:%d, threadNum:%d}", m_nLsnPort, m_nThreadCount);
+
+        if(!m_pHandler->init())
+        {
+            LogFatal("m_pHandler init failed.");
+            return false;
+        }
         return true;
     }
 
@@ -201,7 +206,6 @@ namespace Husky
             return false;
         }
 
-        /* 使地址马上可以重用 */
         int nRet = 1;
         if(SOCKET_ERROR==setsockopt(m_lsnSock, SOL_SOCKET, SO_REUSEADDR, (char*)&nRet, sizeof(nRet)))
         {	

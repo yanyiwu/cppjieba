@@ -16,6 +16,7 @@
 #include "globals.h"
 #include "ThreadManager.hpp"
 #include "HttpReqInfo.hpp"
+#include "Daemon.h"
 
 #define INVALID_SOCKET  -1 
 #define SOCKET_ERROR    -1 
@@ -47,14 +48,20 @@ namespace Husky
         IRequestHandler * pHandler;
     };
 
-    class ServerFrame
+    class ServerFrame: public IWorkHandler
     {
         public:
-            ServerFrame(){};
-            ~ServerFrame(){pthread_mutex_destroy(&m_pmAccept);};
-            bool CreateServer(u_short nPort,u_short nThreadCount,IRequestHandler *pHandler);
-            bool CloseServer();
-            bool RunServer();
+            ServerFrame(unsigned nPort, unsigned nThreadCount, IRequestHandler* pHandler)
+            {
+                m_nLsnPort = nPort;
+                m_nThreadCount = nThreadCount;
+                m_pHandler = pHandler;
+                pthread_mutex_init(&m_pmAccept,NULL);
+            };
+            virtual ~ServerFrame(){pthread_mutex_destroy(&m_pmAccept);};
+            virtual bool init();
+            virtual bool dispose();
+            virtual bool run();
 
         protected:
 
