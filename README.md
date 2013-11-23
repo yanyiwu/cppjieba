@@ -17,7 +17,7 @@ unzip cppjieba-master.zip
 cd cppjieba-master
 mkdir build
 cd build
-cmake .. -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr
+cmake .. -Wno-dev 
 make
 sudo make install
 ```
