@@ -22,6 +22,12 @@ make
 sudo make install
 ```
 
+### 验证
+
+```sh
+/usr/bin/cjseg.sh ../test/testlines.utf8
+```
+
 ### 启动服务
 
 ```
@@ -44,21 +50,6 @@ cd build/
 cat install_manifest.txt | sudo xargs rm -rf
 ```
 
-### 验证
-
-```sh
-cd test/
-g++ -std=c++0x -o segment.demo segment.cpp -L/usr/lib/CppJieba/ -lcppjieba 
-./segment.demo # you will see the demo.
-```
-
-运行一下 `./server` 或 `./segment` 都会有对应的帮助文档显示。
-
-同时，如果想知道开发时如何使用`libcppjieba.a` 请看`test/segment.cpp`源代码即可。
-
-如果想知道如何搭建一个`cppjieba`中文分词的http服务请见 `test/server.cpp`源代码即可。
-
-若还有其他问题，欢迎`send mail`或者`open issue`。  :)
 
 
 ## 分词效果
