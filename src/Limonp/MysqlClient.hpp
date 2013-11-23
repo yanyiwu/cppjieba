@@ -1,7 +1,7 @@
 #ifndef LIMONP_MYSQLCLIENT_H
 #define LIMONP_MYSQLCLIENT_H
 
-#include <mysql/mysql.h>
+#include <mysql.h>
 #include <iostream>
 #include <vector>
 #include <string>
