@@ -21,7 +21,7 @@ namespace CppJieba
         DagType dag;
         const TrieNodeInfo * pInfo;
         double weight;
-        
+
         SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
         {
         }
@@ -102,59 +102,59 @@ namespace CppJieba
             }
             bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
             {
-        if(!_getInitFlag())
-        {
-            LogError("not inited.");
-            return false;
-        }
-        if(str.empty())
-        {
-            return false;
-        }
-        Unicode sentence;
+                if(!_getInitFlag())
+                {
+                    LogError("not inited.");
+                    return false;
+                }
+                if(str.empty())
+                {
+                    return false;
+                }
+                Unicode sentence;
 
-        if(!TransCode::decode(str, sentence))
-        {
-            LogError("TransCode::decode failed.");
-            return false;
-        }
-        return cut(sentence.begin(), sentence.end(), segWordInfos);
+                if(!TransCode::decode(str, sentence))
+                {
+                    LogError("TransCode::decode failed.");
+                    return false;
+                }
+                return cut(sentence.begin(), sentence.end(), segWordInfos);
 
-    }
+            }
             bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const
             {
-        if(!_getInitFlag())
-        {
-            LogError("not inited.");
-            return false;
-        }
-        SegmentContext segContext;
-        for(Unicode::const_iterator it = begin; it != end; it++)
-        {
-            segContext.push_back(SegmentChar(*it));
-        }
-        
-        //calc DAG
-        if(!_calcDAG(segContext))
-        {
-            LogError("_calcDAG failed.");
-            return false;
-        }
+                if(!_getInitFlag())
+                {
+                    LogError("not inited.");
+                    return false;
+                }
+                SegmentContext segContext;
+                for(Unicode::const_iterator it = begin; it != end; it++)
+                {
+                    segContext.push_back(SegmentChar(*it));
+                }
 
-        if(!_calcDP(segContext))
-        {
-            LogError("_calcDP failed.");
-            return false;
-        }
+                //calc DAG
+                if(!_calcDAG(segContext))
+                {
+                    LogError("_calcDAG failed.");
+                    return false;
+                }
 
-        if(!_cut(segContext, segWordInfos))
-        {
-            LogError("_cut failed.");
-            return false;
-        }
+                if(!_calcDP(segContext))
+                {
+                    LogError("_calcDP failed.");
+                    return false;
+                }
 
-        return true;
-    }
+                if(!_cut(segContext, segWordInfos))
+                {
+                    LogError("_cut failed.");
+                    return false;
+                }
+
+                return true;
+            }
             //virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
