@@ -1,5 +1,5 @@
 #ifndef CPPJIEBA_FULLSEGMENT_H
-#define CPPJIEBAi_FULLSEGMENT_H
+#define CPPJIEBA_FULLSEGMENT_H
 
 #include <algorithm>
 #include <set>
@@ -23,11 +23,13 @@ namespace CppJieba
     public:
         bool init()
         {
+#ifndef NO_CODING_LOG
             if(_getInitFlag())
             {
                 LogError("already inited before now.");
                 return false;
             }
+#endif
             if(!_trie.init())
             {
                 LogError("_trie.init failed.");
@@ -44,22 +46,35 @@ namespace CppJieba
         }
         bool dispose()
         {
+#ifndef NO_CODING_LOG
             if(!_getInitFlag())
             {
                 return true;
             }
+#endif
             _trie.dispose();
             _setInitFlag(false);
             return true;
         }
 
-        bool cut(const string& str, vector<string>& res) const 
-        {
-            return SegmentBase::cut(str, res);
-        }
+    public:
+        using SegmentBase::cut;
 
-        bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
+    public:
+        bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
+#ifndef NO_CODING_LOG
+            if (!_getInitFlag())
+            {
+                LogError("not inited.");
+                return false;
+            }
+            if (begin > end)
+            {
+                LogError("begin > end");
+                return false;
+            }
+#endif
             //resut of searching in trie tree
             vector<pair<uint, const TrieNodeInfo*> > tRes;
 
@@ -71,10 +86,9 @@ namespace CppJieba
 
             //tmp variables
             int wordLen = 0;
-            string tmp;
             for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
             {
-                //find word start from itr
+                //find word start from uItr
                 if (_trie.find(uItr, end, tRes))
                 {
                     for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
@@ -82,32 +96,64 @@ namespace CppJieba
                         wordLen = itr->second->word.size();
                         if (wordLen >= 2 || tRes.size() == 1 && maxIdx <= uIdx)
                         {
-                            if (TransCode::encode(itr->second->word, tmp))
-                                res.push_back(tmp);
-                            else
-                                LogError("encode failed.");
-                            tmp.clear();
+                            res.push_back(itr->second->word);
                         }
                         maxIdx = uIdx+wordLen > maxIdx ? uIdx+wordLen : maxIdx;
                     }
                     tRes.clear();
                 }
-                else // not found word start from itr
+                else // not found word start from uItr
                 {
                     if (maxIdx <= uIdx) // never exist in prev results
                     {
                         //put itr itself in res
-                        Unicode uTmp(1, *uItr);
-                        if (TransCode::encode(uTmp, tmp))
-                        {
-                            res.push_back(tmp);
-                        }
-                        tmp.clear();
+                        res.push_back(Unicode(1, *uItr));
+
+                        //mark it exits
                         ++maxIdx;
                     }
                 }
                 ++uIdx;
             }
+
+            return true;
+        }
+
+        bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
+        {
+#ifndef NO_CODING_LOG
+            if (!_getInitFlag())
+            {
+                LogError("not inited.");
+                return false;
+            }
+            if (begin > end)
+            {
+                LogError("begin > end");
+                return false;
+            }
+#endif
+            vector<Unicode> uRes;
+            if (!cut(begin, end, uRes))
+            {
+                LogError("get unicode cut result error.");
+                return false;
+            }
+            string tmp;
+
+            for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++)
+            {
+                if (TransCode::encode(*uItr, tmp))
+                {
+                    res.push_back(tmp);
+                }
+                else
+                {
+                    LogError("encode failed.");
+                }
+            }
+
+            return true;
         }
     };
 }
