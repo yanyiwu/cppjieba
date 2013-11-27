@@ -15,12 +15,13 @@ namespace CppJieba
     {
     private:
         Trie _trie;
+        const string _dictPath;
 
     public:
-        FullSegment(){};
+        FullSegment(const char* dictPath): _dictPath(dictPath){};
         virtual ~FullSegment(){dispose();};
     public:
-        bool init(const char* const filePath)
+        bool init()
         {
             if(_getInitFlag())
             {
@@ -32,8 +33,8 @@ namespace CppJieba
                 LogError("_trie.init failed.");
                 return false;
             }
-            LogInfo("_trie.loadDict(%s) start...", filePath);
-            if(!_trie.loadDict(filePath))
+            LogInfo("_trie.loadDict(%s) start...", _dictPath.c_str());
+            if(!_trie.loadDict(_dictPath.c_str()))
             {
                 LogError("_trie.loadDict faield.");
                 return false;

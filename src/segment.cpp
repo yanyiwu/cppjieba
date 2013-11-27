@@ -19,8 +19,14 @@ void cut(const ISegment * seg, const char * const filePath)
         {
             cout << line << endl;
             res.clear();
-            seg->cut(line, res);
-            cout<<join(res.begin(), res.end(),"/")<<endl;
+            if(!seg->cut(line, res))
+            {
+                LogError("seg cut failed.");
+            }
+            else
+            {
+                print(join(res.begin(), res.end(), "/"));
+            }
         }
     }
 }
@@ -35,9 +41,9 @@ int main(int argc, char ** argv)
             <<"\t--dictpath\tsee example\n"
             <<"\t--modelpath\tsee example\n"
             <<"example:\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath dicts/jieba.dict.utf8\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --modelpath dicts/hmm_model.utf8 --algorithm cutHMM\n"
-            <<"\t"<<argv[0]<<" testlines.utf8 --dictpath dicts/jieba.dict.utf8 --modelpath dicts/hmm_model.utf8 --algorithm cutMix\n"
+            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --algorithm cutDAG\n"
+            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
+            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
             <<endl;
         
         return EXIT_FAILURE;
@@ -49,8 +55,8 @@ int main(int argc, char ** argv)
 
     if("cutHMM" == algorithm)
     {
-        HMMSegment seg;
-        if(!seg.init(modelPath.c_str()))
+        HMMSegment seg(modelPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
@@ -60,8 +66,8 @@ int main(int argc, char ** argv)
     }
     else if("cutDAG" == algorithm)
     {
-        MPSegment seg;
-        if(!seg.init(dictPath.c_str()))
+        MPSegment seg(dictPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return false;
@@ -71,8 +77,8 @@ int main(int argc, char ** argv)
     }
     else if ("cutFull" == algorithm)
     {
-        FullSegment seg;
-        if (!seg.init(dictPath.c_str()))
+        FullSegment seg(dictPath.c_str());
+        if (!seg.init())
         {
             cout << "seg init failed" << endl;
             return false;
@@ -82,8 +88,8 @@ int main(int argc, char ** argv)
     }
     else 
     {
-        MixSegment seg;
-        if(!seg.init(dictPath.c_str(), modelPath.c_str()))
+        MixSegment seg(dictPath.c_str(), modelPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;

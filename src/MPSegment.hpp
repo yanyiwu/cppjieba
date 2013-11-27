@@ -32,12 +32,14 @@ namespace CppJieba
     {
         private:
             Trie _trie;
+        private:
+            const string _dictPath;
 
         public:
-            MPSegment(){};
+            MPSegment(const char * const dictPath): _dictPath(dictPath){};
             virtual ~MPSegment(){dispose();};
         public:
-            bool init(const char* const filePath)
+            virtual bool init()
             {
                 if(_getInitFlag())
                 {
@@ -49,8 +51,8 @@ namespace CppJieba
                     LogError("_trie.init failed.");
                     return false;
                 }
-                LogInfo("_trie.loadDict(%s) start...", filePath);
-                if(!_trie.loadDict(filePath))
+                LogInfo("_trie.loadDict(%s) start...", _dictPath.c_str());
+                if(!_trie.loadDict(_dictPath.c_str()))
                 {
                     LogError("_trie.loadDict faield.");
                     return false;
@@ -58,7 +60,7 @@ namespace CppJieba
                 LogInfo("_trie.loadDict end.");
                 return _setInitFlag(true);
             }
-            bool dispose()
+            virtual bool dispose()
             {
                 if(!_getInitFlag())
                 {
@@ -69,12 +71,7 @@ namespace CppJieba
                 return true;
             }
         public:
-            //bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const;
-            bool cut(const string& str, vector<string>& res)const
-            {
-                return SegmentBase::cut(str, res);
-            }
-            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+            virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 if(!_getInitFlag())
                 {
@@ -155,7 +152,6 @@ namespace CppJieba
 
                 return true;
             }
-            //virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
             bool _calcDAG(SegmentContext& segContext)const
