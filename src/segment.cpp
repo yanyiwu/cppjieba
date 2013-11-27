@@ -1,10 +1,13 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <cstdio>
 #include "Limonp/ArgvContext.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
 #include "FullSegment.hpp"
+#include "QuerySegment.hpp"
 
 using namespace CppJieba;
 
@@ -37,13 +40,15 @@ int main(int argc, char ** argv)
     {
         cout<<"usage: \n\t"<<argv[0]<<" [options] <filename>\n"
             <<"options:\n"
-            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutFull, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
+            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutFull, cutQuery, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
             <<"\t--dictpath\tsee example\n"
             <<"\t--modelpath\tsee example\n"
+            <<"\t--maxlen\tspecify the granularity of cut used in cutQuery, If not specified, the default is 3\n"
             <<"example:\n"
             <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --algorithm cutDAG\n"
             <<"\t"<<argv[0]<<" ../test/testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
             <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
+            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutQuery --maxlen 3\n"
             <<endl;
         
         return EXIT_FAILURE;
@@ -52,6 +57,7 @@ int main(int argc, char ** argv)
     string dictPath = arg["--dictpath"];
     string modelPath = arg["--modelpath"];
     string algorithm = arg["--algorithm"];
+    int maxLen = atoi(arg["--maxlen"] == "" ? arg["--maxlen"].c_str() : "3");
 
     if("cutHMM" == algorithm)
     {
@@ -78,6 +84,17 @@ int main(int argc, char ** argv)
     else if ("cutFull" == algorithm)
     {
         FullSegment seg(dictPath.c_str());
+        if (!seg.init())
+        {
+            cout << "seg init failed" << endl;
+            return false;
+        }
+        cut(&seg, arg[1].c_str());
+        seg.dispose();
+    }
+    else if ("cutQuery" == algorithm)
+    {
+        QuerySegment seg(dictPath.c_str(), modelPath.c_str(), maxLen);
         if (!seg.init())
         {
             cout << "seg init failed" << endl;
