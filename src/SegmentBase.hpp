@@ -31,7 +31,7 @@ namespace CppJieba
                     LogError("not inited.");
                     return false;
                 }
-                const char * cstr = str.c_str();
+                const char * const cstr = str.c_str();
                 uint size = str.size();
                 uint offset = 0;
                 string subs;
@@ -40,12 +40,14 @@ namespace CppJieba
                 Unicode unico;
                 while(offset < size)
                 {
-                    if(-1 == (ret = filterAscii(cstr + offset, size, len)))
+                    const char * const nstr = cstr + offset;
+                    uint nsize = size - offset;
+                    if(-1 == (ret = filterAscii(nstr, nsize, len)) || 0 == len || len > nsize)
                     {
                         LogFatal("str[%s] illegal.", cstr);
                         return false;
                     }
-                    subs.assign(cstr + offset, len);
+                    subs.assign(nstr, len);
                     if(!ret)
                     {
                         res.push_back(subs);
@@ -63,24 +65,6 @@ namespace CppJieba
                     offset += len;
                 }
                 return true;
-                //ChineseFilter filter;
-                //filter.feed(str);
-                //for(ChineseFilter::iterator it = filter.begin(); it != filter.end(); it++)
-                //{
-                //    if(it.charType == CHWORD)
-                //    {
-                //        cut(it.begin, it.end, res);
-                //    }
-                //    else
-                //    {
-                //        string tmp;
-                //        if(TransCode::encode(it.begin, it.end, tmp))
-                //        {
-                //            res.push_back(tmp);
-                //        }
-                //    }
-                //}
-                //return true;
             }
 
     };
