@@ -22,7 +22,7 @@ make
 sudo make install
 ```
 
-### 验证
+#### 验证
 
 ```sh
 /usr/bin/cjseg.sh ../test/testlines.utf8
@@ -43,6 +43,7 @@ sudo make install
 (用chrome的原因是chrome的默认编码就是utf-8)
 
 或者用命令 `curl "http://127.0.0.1:11200/?key=南京市长江大桥"` (ubuntu中的curl安装命令`sudo apt-get install curl`)
+
 
 ### 卸载
 ```sh
