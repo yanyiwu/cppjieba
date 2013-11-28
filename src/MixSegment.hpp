@@ -55,6 +55,7 @@ namespace CppJieba
         public:
             using SegmentBase::cut;
         public:
+
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 //if(!_getInitFlag())

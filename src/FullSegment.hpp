@@ -24,13 +24,11 @@ namespace CppJieba
     public:
         bool init()
         {
-#ifndef NO_CODING_LOG
             if(_getInitFlag())
             {
                 LogError("already inited before now.");
                 return false;
             }
-#endif
             if(!_trie.init())
             {
                 LogError("_trie.init failed.");
@@ -47,12 +45,10 @@ namespace CppJieba
         }
         bool dispose()
         {
-#ifndef NO_CODING_LOG
             if(!_getInitFlag())
             {
                 return true;
             }
-#endif
             _trie.dispose();
             _setInitFlag(false);
             return true;
@@ -65,7 +61,6 @@ namespace CppJieba
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
             assert(_getInitFlag());
-#ifndef NO_CODING_LOG
             //if (!_getInitFlag())
             //{
             //    LogError("not inited.");
@@ -76,7 +71,6 @@ namespace CppJieba
                 LogError("begin >= end");
                 return false;
             }
-#endif
             //resut of searching in trie tree
             vector<pair<uint, const TrieNodeInfo*> > tRes;
 
@@ -123,7 +117,6 @@ namespace CppJieba
 
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
         {
-#ifndef NO_CODING_LOG
             if (!_getInitFlag())
             {
                 LogError("not inited.");
@@ -134,7 +127,6 @@ namespace CppJieba
                 LogError("begin > end");
                 return false;
             }
-#endif
             vector<Unicode> uRes;
             if (!cut(begin, end, uRes))
             {
