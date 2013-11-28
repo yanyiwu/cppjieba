@@ -61,16 +61,12 @@ namespace CppJieba
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
             assert(_getInitFlag());
-            //if (!_getInitFlag())
-            //{
-            //    LogError("not inited.");
-            //    return false;
-            //}
             if (begin >= end)
             {
                 LogError("begin >= end");
                 return false;
             }
+
             //resut of searching in trie tree
             vector<pair<uint, const TrieNodeInfo*> > tRes;
 
@@ -117,24 +113,21 @@ namespace CppJieba
 
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
         {
-            if (!_getInitFlag())
+            assert(_getInitFlag());
+            if (begin >= end)
             {
-                LogError("not inited.");
+                LogError("begin >= end");
                 return false;
             }
-            if (begin > end)
-            {
-                LogError("begin > end");
-                return false;
-            }
+
             vector<Unicode> uRes;
             if (!cut(begin, end, uRes))
             {
                 LogError("get unicode cut result error.");
                 return false;
             }
-            string tmp;
 
+            string tmp;
             for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++)
             {
                 if (TransCode::encode(*uItr, tmp))

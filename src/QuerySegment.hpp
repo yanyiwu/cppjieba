@@ -62,16 +62,12 @@ namespace CppJieba
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
             assert(_getInitFlag());
-            //if (!_getInitFlag())
-            //{
-            //    LogError("not inited.");
-            //    return false;
-            //}
             if (begin >= end)
             {
                 LogError("begin >= end");
                 return false;
             }
+
             //use hmm cut first
             vector<Unicode> hmmRes;
             if (!_hmmSeg.cut(begin, end, hmmRes))
@@ -107,16 +103,13 @@ namespace CppJieba
 
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
         {
-            if (!_getInitFlag())
+            assert(_getInitFlag());
+            if (begin >= end)
             {
-                LogError("not inited.");
+                LogError("begin >= end");
                 return false;
             }
-            if (begin > end)
-            {
-                LogError("begin > end");
-                return false;
-            }
+
             vector<Unicode> uRes;
             if (!cut(begin, end, uRes))
             {
