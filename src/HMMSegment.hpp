@@ -1,9 +1,40 @@
-#include "HMMSegment.h"
+#ifndef CPPJIBEA_HMMSEGMENT_H
+#define CPPJIBEA_HMMSEGMENT_H
+
+#include <iostream>
+#include <fstream>
+#include <memory.h>
+#include "Limonp/str_functs.hpp"
+#include "Limonp/logger.hpp"
+#include "globals.h"
+#include "TransCode.hpp"
+#include "ISegment.hpp"
+#include "SegmentBase.hpp"
 
 namespace CppJieba
 {
-    HMMSegment::HMMSegment()
+    using namespace Limonp;
+    class HMMSegment: public SegmentBase
     {
+        public:
+            /*
+             * STATUS:
+             * 0:B, 1:E, 2:M, 3:S
+             * */
+            enum {B = 0, E = 1, M = 2, S = 3, STATUS_SUM = 4};
+        private:
+            char _statMap[STATUS_SUM];
+            double _startProb[STATUS_SUM];
+            double _transProb[STATUS_SUM][STATUS_SUM];
+            EmitProbMap _emitProbB;
+            EmitProbMap _emitProbE;
+            EmitProbMap _emitProbM;
+            EmitProbMap _emitProbS;
+            vector<EmitProbMap* > _emitProbVec;
+            
+        public:
+            HMMSegment()
+            {
         memset(_startProb, 0, sizeof(_startProb));
         memset(_transProb, 0, sizeof(_transProb));
         _statMap[0] = 'B';
@@ -15,98 +46,23 @@ namespace CppJieba
         _emitProbVec.push_back(&_emitProbM);
         _emitProbVec.push_back(&_emitProbS);
     }
-    
-    HMMSegment::~HMMSegment()
-    {
+            virtual ~HMMSegment()
+            {
         dispose();
     }
-
-    bool HMMSegment::init(const char* const modelPath)
-    {
+        public:
+            bool init(const char* const modelPath)
+            {
         return _setInitFlag(_loadModel(modelPath));
     }
-    
-    bool HMMSegment::dispose()
-    {
+            bool dispose()
+            {
         _setInitFlag(false);
         return true;
     }
-
-    bool HMMSegment::_loadModel(const char* const filePath)
-    {
-        LogInfo("loadModel [%s] start ...", filePath);
-        ifstream ifile(filePath);
-        string line;
-        vector<string> tmp;
-        vector<string> tmp2;
-        //load _startProb
-        if(!_getLine(ifile, line))
-        {
-            return false;
-        }
-        splitStr(line, tmp, " ");
-        if(tmp.size() != STATUS_SUM)
-        {
-            LogError("start_p illegal");
-            return false;
-        }
-        for(uint j = 0; j< tmp.size(); j++)
-        {
-            _startProb[j] = atof(tmp[j].c_str());
-            //cout<<_startProb[j]<<endl;
-        }
-
-        //load _transProb
-        for(uint i = 0; i < STATUS_SUM; i++)
-        {
-            if(!_getLine(ifile, line))
+        public:
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const 
             {
-                return false;
-            }
-            splitStr(line, tmp, " ");
-            if(tmp.size() != STATUS_SUM)
-            {
-                LogError("trans_p illegal");
-                return false;
-            }
-            for(uint j =0; j < STATUS_SUM; j++)
-            {
-                _transProb[i][j] = atof(tmp[j].c_str());
-                //cout<<_transProb[i][j]<<endl;
-            }
-        }
-
-        //load _emitProbB
-        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbB))
-        {
-            return false;
-        }
-        
-        //load _emitProbE
-        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbE))
-        {
-            return false;
-        }
-        
-        //load _emitProbM
-        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbM))
-        {
-            return false;
-        }
-
-        //load _emitProbS
-        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbS))
-        {
-            return false;
-        }
-
-        LogInfo("loadModel [%s] end.", filePath);
-
-        return true;
-    }
-
-    bool HMMSegment::cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const
-    {
         if(!_getInitFlag())
         {
             LogError("not inited.");
@@ -132,14 +88,12 @@ namespace CppJieba
         }
         return true;
     }
-
-    bool HMMSegment::cut(const string& str, vector<string>& res)const
-    {
+            bool cut(const string& str, vector<string>& res)const
+            {
         return SegmentBase::cut(str, res);
     }
-
-    bool HMMSegment::cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
-    {
+            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+            {
         if(!_getInitFlag())
         {
             LogError("not inited.");
@@ -164,9 +118,11 @@ namespace CppJieba
         }
         return true;
     }
+            //virtual bool cut(const string& str, vector<string>& res)const;
 
-    bool HMMSegment::_viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<uint>& status)const
-    {
+        private:
+            bool _viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<uint>& status)const
+            {
         if(begin == end)
         {
             return false;
@@ -247,9 +203,80 @@ namespace CppJieba
         delete [] weight;
         return true;
     }
+            bool _loadModel(const char* const filePath)
+            {
+        LogInfo("loadModel [%s] start ...", filePath);
+        ifstream ifile(filePath);
+        string line;
+        vector<string> tmp;
+        vector<string> tmp2;
+        //load _startProb
+        if(!_getLine(ifile, line))
+        {
+            return false;
+        }
+        splitStr(line, tmp, " ");
+        if(tmp.size() != STATUS_SUM)
+        {
+            LogError("start_p illegal");
+            return false;
+        }
+        for(uint j = 0; j< tmp.size(); j++)
+        {
+            _startProb[j] = atof(tmp[j].c_str());
+            //cout<<_startProb[j]<<endl;
+        }
 
-    bool HMMSegment::_getLine(ifstream& ifile, string& line)
-    {
+        //load _transProb
+        for(uint i = 0; i < STATUS_SUM; i++)
+        {
+            if(!_getLine(ifile, line))
+            {
+                return false;
+            }
+            splitStr(line, tmp, " ");
+            if(tmp.size() != STATUS_SUM)
+            {
+                LogError("trans_p illegal");
+                return false;
+            }
+            for(uint j =0; j < STATUS_SUM; j++)
+            {
+                _transProb[i][j] = atof(tmp[j].c_str());
+                //cout<<_transProb[i][j]<<endl;
+            }
+        }
+
+        //load _emitProbB
+        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbB))
+        {
+            return false;
+        }
+        
+        //load _emitProbE
+        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbE))
+        {
+            return false;
+        }
+        
+        //load _emitProbM
+        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbM))
+        {
+            return false;
+        }
+
+        //load _emitProbS
+        if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbS))
+        {
+            return false;
+        }
+
+        LogInfo("loadModel [%s] end.", filePath);
+
+        return true;
+    }
+            bool _getLine(ifstream& ifile, string& line)
+            {
         while(getline(ifile, line))
         {
             trim(line);
@@ -265,9 +292,8 @@ namespace CppJieba
         }
         return false;
     }
-
-    bool HMMSegment::_loadEmitProb(const string& line, EmitProbMap& mp)
-    {
+            bool _loadEmitProb(const string& line, EmitProbMap& mp)
+            {
         if(line.empty())
         {
             return false;
@@ -292,9 +318,8 @@ namespace CppJieba
         }
         return true;
     }
-
-    bool HMMSegment::_decodeOne(const string& str, uint16_t& res)
-    {
+            bool _decodeOne(const string& str, uint16_t& res)
+            {
         Unicode ui16;
         if(!TransCode::decode(str, ui16) || ui16.size() != 1)
         {
@@ -303,9 +328,8 @@ namespace CppJieba
         res = ui16[0];
         return true;
     }
-
-    double HMMSegment::_getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const
-    {
+            double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const 
+            {
         EmitProbMap::const_iterator cit = ptMp->find(key);
         if(cit == ptMp->end())
         {
@@ -314,28 +338,9 @@ namespace CppJieba
         return cit->second;
         
     }
-}
 
-
-#ifdef HMMSEGMENT_UT
-using namespace CppJieba;
-
-
-size_t add(size_t a, size_t b)
-{
-    return a*b;
-}
-int main()
-{
-    TransCode::setUtf8Enc();
-    HMMSegment hmm;
-    hmm.loadModel("../dicts/hmm_model.utf8");
-    vector<string> res;
-    hmm.cut("小明硕士毕业于北邮网络研究院。。.", res);
-    cout<<joinStr(res, "/")<<endl;
-    
-    
-    return 0;
+            
+    };
 }
 
 #endif

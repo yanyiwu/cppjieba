@@ -2,7 +2,7 @@
 #define CPPJIEBA_MIXSEGMENT_H
 
 #include "MPSegment.hpp"
-#include "HMMSegment.h"
+#include "HMMSegment.hpp"
 #include "Limonp/str_functs.hpp"
 
 namespace CppJieba

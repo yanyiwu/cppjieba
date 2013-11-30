@@ -8,7 +8,7 @@
 #include "Husky/Daemon.h"
 #include "Husky/ServerFrame.h"
 #include "MPSegment.hpp"
-#include "HMMSegment.h"
+#include "HMMSegment.hpp"
 #include "MixSegment.h"
 
 using namespace Husky;
