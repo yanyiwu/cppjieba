@@ -1,7 +1,6 @@
 #ifndef CPPJIEBA_CHINESEFILTER_H
 #define CPPJIEBA_CHINESEFILTER_H
 
-#include "globals.h"
 #include "TransCode.hpp"
 
 namespace CppJieba

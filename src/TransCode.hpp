@@ -6,7 +6,6 @@
 #define CPPJIEBA_TRANSCODE_H
 
 
-#include "globals.h"
 #include "Limonp/str_functs.hpp"
 
 namespace CppJieba

@@ -1,7 +1,6 @@
 #ifndef CPPJIEBA_SEGMENTINTERFACE_H
 #define CPPJIEBA_SEGMENTINTERFACE_H
 
-#include "globals.h"
 
 namespace CppJieba
 {

@@ -15,7 +15,6 @@
 #include "Limonp/str_functs.hpp"
 #include "Limonp/logger.hpp"
 #include "TransCode.hpp"
-#include "globals.h"
 
 
 namespace CppJieba

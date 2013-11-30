@@ -6,7 +6,6 @@
 #include <memory.h>
 #include "Limonp/str_functs.hpp"
 #include "Limonp/logger.hpp"
-#include "globals.h"
 #include "TransCode.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
