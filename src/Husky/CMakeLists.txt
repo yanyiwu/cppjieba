@@ -1,8 +1,4 @@
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-SET(LIBHUSKY_SRC Daemon.cpp  ServerFrame.cpp)
-ADD_LIBRARY(husky STATIC ${LIBHUSKY_SRC})
-
-INSTALL(TARGETS husky ARCHIVE DESTINATION lib/CppJieba/Husky)
-INSTALL(FILES Daemon.h globals.h HttpReqInfo.hpp ServerFrame.h ThreadManager.hpp DESTINATION include/CppJieba/Husky)
+INSTALL(FILES HttpReqInfo.hpp ServerFrame.hpp ThreadManager.hpp DESTINATION include/CppJieba/Husky)
