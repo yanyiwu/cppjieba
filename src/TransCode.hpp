@@ -6,13 +6,13 @@
 #define CPPJIEBA_TRANSCODE_H
 
 
-#include "globals.h"
 #include "Limonp/str_functs.hpp"
 
 namespace CppJieba
 {
 
     using namespace Limonp;
+    typedef std::vector<uint16_t> Unicode;
     namespace TransCode
     {
         inline bool decode(const string& str, vector<uint16_t>& vec)

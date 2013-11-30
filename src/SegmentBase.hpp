@@ -1,7 +1,6 @@
 #ifndef CPPJIEBA_SEGMENTBASE_H
 #define CPPJIEBA_SEGMENTBASE_H
 
-#include "globals.h"
 #include "ISegment.hpp"
 #include "ChineseFilter.hpp"
 #include "Limonp/str_functs.hpp"

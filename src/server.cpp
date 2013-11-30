@@ -7,9 +7,9 @@
 #include "Limonp/Config.hpp"
 #include "Husky/Daemon.h"
 #include "Husky/ServerFrame.h"
-#include "MPSegment.h"
-#include "HMMSegment.h"
-#include "MixSegment.h"
+#include "MPSegment.hpp"
+#include "HMMSegment.hpp"
+#include "MixSegment.hpp"
 
 using namespace Husky;
 using namespace CppJieba;

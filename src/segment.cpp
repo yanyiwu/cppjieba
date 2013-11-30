@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include "Limonp/ArgvContext.hpp"
-#include "MPSegment.h"
-#include "HMMSegment.h"
-#include "MixSegment.h"
+#include "MPSegment.hpp"
+#include "HMMSegment.hpp"
+#include "MixSegment.hpp"
 
 using namespace CppJieba;
 
