@@ -7,7 +7,7 @@
 #include "Limonp/Config.hpp"
 #include "Husky/Daemon.h"
 #include "Husky/ServerFrame.h"
-#include "MPSegment.h"
+#include "MPSegment.hpp"
 #include "HMMSegment.h"
 #include "MixSegment.h"
 

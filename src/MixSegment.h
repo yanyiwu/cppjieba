@@ -1,7 +1,7 @@
 #ifndef CPPJIEBA_MIXSEGMENT_H
 #define CPPJIEBA_MIXSEGMENT_H
 
-#include "MPSegment.h"
+#include "MPSegment.hpp"
 #include "HMMSegment.h"
 #include "Limonp/str_functs.hpp"
 

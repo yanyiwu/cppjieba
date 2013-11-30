@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "Limonp/ArgvContext.hpp"
-#include "MPSegment.h"
+#include "MPSegment.hpp"
 #include "HMMSegment.h"
 #include "MixSegment.h"
 
