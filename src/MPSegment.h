@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <set>
 #include "Limonp/logger.hpp"
-#include "Trie.h"
+#include "Trie.hpp"
 #include "globals.h"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
