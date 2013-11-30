@@ -5,8 +5,7 @@
 #include <string.h>
 #include "Limonp/ArgvContext.hpp"
 #include "Limonp/Config.hpp"
-#include "Husky/Daemon.h"
-#include "Husky/ServerFrame.h"
+#include "Husky/ServerFrame.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
@@ -92,16 +91,7 @@ bool run(int argc, char** argv)
 
     ReqHandler reqHandler(dictPath, modelPath);
     ServerFrame sf(port, threadNum, &reqHandler);
-    Daemon daemon(&sf, pidFile.c_str());
-    if(arg["-k"] == "start")
-    {
-        return daemon.start();
-    }
-    else if(arg["-k"] == "stop")
-    {
-        return daemon.stop();
-    }
-    return false;
+    return sf.init() && sf.run();
 }
 
 int main(int argc, char* argv[])
