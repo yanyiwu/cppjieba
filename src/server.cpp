@@ -9,7 +9,7 @@
 #include "Husky/ServerFrame.h"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
-#include "MixSegment.h"
+#include "MixSegment.hpp"
 
 using namespace Husky;
 using namespace CppJieba;

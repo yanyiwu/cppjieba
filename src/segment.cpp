@@ -3,7 +3,7 @@
 #include "Limonp/ArgvContext.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
-#include "MixSegment.h"
+#include "MixSegment.hpp"
 
 using namespace CppJieba;
 
