@@ -3,7 +3,6 @@
 #include <string>
 #include <ctype.h>
 #include <string.h>
-#include "Limonp/ArgvContext.hpp"
 #include "Limonp/Config.hpp"
 #include "Husky/ServerFrame.hpp"
 #include "MPSegment.hpp"
@@ -44,13 +43,8 @@ bool run(int argc, char** argv)
     {
         return false;
     }
-    ArgvContext arg(argc, argv);
-    if(arg["-c"].empty())
-    {
-        return false;
-    }
     Config conf;
-    if(!conf.loadFile(arg["-c"].c_str()))
+    if(!conf.loadFile(argv[1]))
     {
         return false;
     }
@@ -98,7 +92,7 @@ int main(int argc, char* argv[])
 {
     if(!run(argc, argv))
     {
-        printf("usage: %s -c <config_file> -k <start|stop>\n", argv[0]);
+        printf("usage: %s <config_file>\n", argv[0]);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
