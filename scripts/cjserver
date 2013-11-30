@@ -8,6 +8,7 @@ DESC=cjserver
 
 RUNDIR=/var/run/CppJieba
 PIDFILE=$RUNDIR/cjserver.pid
+LOGFILE=/dev/null
 
 test -x $DAEMON || exit 0
 
@@ -19,7 +20,7 @@ case "$1" in
 	mkdir -p $RUNDIR
 	touch $PIDFILE
 	chmod 755 $RUNDIR
-	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --exec /bin/bash -- -c "$DAEMON $DAEMON_ARGS >> $LOGFILE 2>&1"
 	then
 		echo "$NAME."
 	else
