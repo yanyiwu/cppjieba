@@ -50,7 +50,6 @@ bool run(int argc, char** argv)
     }
     unsigned int port = 0;
     unsigned int threadNum = 0; 
-    string pidFile;
     string dictPath;
     string modelPath;
     string val;
@@ -66,11 +65,6 @@ bool run(int argc, char** argv)
         return false;
     }
     threadNum = atoi(val.c_str());
-    if(!conf.get("pid_file", pidFile))
-    {
-        LogFatal("conf get pid_file failed.");
-        return false;
-    }
 
     if(!conf.get("dict_path", dictPath))
     {
