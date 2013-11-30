@@ -1,5 +1,9 @@
 #CppJieba是"结巴"中文分词的C++版本
 
+功能性的代码全写成hpp文件，此处的hpp文件是将cpp和h两个文件全都写在hpp文件里面（当然需要遵守相关约束）
+
+之所以全写成hpp文件，是因为这样在别的项目需要使用到中文分词功能的时候直接`#include"xx.hpp" `进来就可以使用，无需麻烦的链接。
+
 ## 中文编码
 
 现在支持utf8,gbk编码的分词。   
@@ -31,10 +35,11 @@ sudo make install
 ### 启动服务
 
 ```
+#Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
 #启动
-/etc/init.d/CppJieba/start.sh
+sudo /etc/init.d/cjserver start
 #停止
-/etc/init.d/CppJieba/stop.sh
+sudo /etc/init.d/cjserver stop
 ```
 
 #### 验证服务
@@ -50,8 +55,6 @@ sudo make install
 cd build/
 cat install_manifest.txt | sudo xargs rm -rf
 ```
-
-
 
 ## 分词效果
 
@@ -166,5 +169,4 @@ TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk转换成`uint
 https://github.com/fxsjy/jieba
 
 顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
-
 
