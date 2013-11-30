@@ -16,7 +16,6 @@
 #include "Limonp/logger.hpp"
 #include "TransCode.hpp"
 #include "globals.h"
-#include "structs.h"
 
 
 namespace CppJieba
@@ -33,6 +32,30 @@ namespace CppJieba
             nodeInfoVecPos = 0;
         }
     };
+
+    struct TrieNodeInfo
+    {
+        Unicode word;
+        size_t freq;
+        string tag;
+        double logFreq; //logFreq = log(freq/sum(freq));
+        TrieNodeInfo():freq(0),logFreq(0.0)
+        {
+        }
+        TrieNodeInfo(const TrieNodeInfo& nodeInfo):word(nodeInfo.word), freq(nodeInfo.freq), tag(nodeInfo.tag), logFreq(nodeInfo.logFreq)
+        {
+        }
+        TrieNodeInfo(const Unicode& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
+        {
+        }
+		string toString()const
+		{
+            string tmp;
+            TransCode::encode(word, tmp);
+            return string_format("{word:%s,freq:%d, logFreq:%lf}", tmp.c_str(), freq, logFreq);
+		}
+    };
+    typedef unordered_map<uint, const TrieNodeInfo*> DagType;
 
     class Trie
     {

@@ -16,6 +16,17 @@
 namespace CppJieba
 {
 
+    struct SegmentChar 
+    {
+        uint16_t uniCh;
+        DagType dag;
+        const TrieNodeInfo * pInfo;
+        double weight;
+        
+        SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
+        {
+        }
+    };
     typedef vector<SegmentChar> SegmentContext;
 
     class MPSegment: public SegmentBase
