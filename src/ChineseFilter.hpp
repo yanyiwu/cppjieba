@@ -7,8 +7,9 @@
 namespace CppJieba
 {
 
+    enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1, OTHERS = 2};
+    typedef Unicode::const_iterator UniConIter;
     class ChineseFilter;
-
     class ChFilterIterator
     {
         public:

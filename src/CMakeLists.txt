@@ -9,7 +9,7 @@ LINK_DIRECTORIES(Husky)
 
 INSTALL(TARGETS cjsegment RUNTIME DESTINATION bin)
 INSTALL(TARGETS cjserver RUNTIME DESTINATION bin)
-INSTALL(FILES ChineseFilter.hpp HMMSegment.hpp MPSegment.hpp Trie.hpp globals.h ISegment.hpp  MixSegment.hpp  SegmentBase.hpp  TransCode.hpp  DESTINATION include/CppJieba)
+INSTALL(FILES ChineseFilter.hpp HMMSegment.hpp MPSegment.hpp Trie.hpp ISegment.hpp  MixSegment.hpp  SegmentBase.hpp  TransCode.hpp  DESTINATION include/CppJieba)
 
 ADD_SUBDIRECTORY(Husky)
 ADD_SUBDIRECTORY(Limonp)

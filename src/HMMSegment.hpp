@@ -14,6 +14,7 @@
 namespace CppJieba
 {
     using namespace Limonp;
+    typedef unordered_map<uint16_t, double> EmitProbMap;
     class HMMSegment: public SegmentBase
     {
         public:

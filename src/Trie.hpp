@@ -21,6 +21,9 @@
 namespace CppJieba
 {
     using namespace Limonp;
+    const double MIN_DOUBLE = -3.14e+100;
+    const double MAX_DOUBLE = 3.14e+100;
+    typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
     struct TrieNode
     {
         TrieNodeMap hmap;
