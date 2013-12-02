@@ -50,12 +50,12 @@ namespace CppJieba
         TrieNodeInfo(const Unicode& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
         {
         }
-		string toString()const
-		{
+        string toString()const
+        {
             string tmp;
             TransCode::encode(word, tmp);
             return string_format("{word:%s,freq:%d, logFreq:%lf}", tmp.c_str(), freq, logFreq);
-		}
+        }
     };
     typedef unordered_map<uint, const TrieNodeInfo*> DagType;
 
@@ -167,84 +167,84 @@ namespace CppJieba
                 return find(uintVec);
             }
             const TrieNodeInfo* find(const Unicode& uintVec)const
-    {
-        if(uintVec.empty())
-        {
-            return NULL;
-        }
-        return find(uintVec.begin(), uintVec.end());
-    }
+            {
+                if(uintVec.empty())
+                {
+                    return NULL;
+                }
+                return find(uintVec.begin(), uintVec.end());
+            }
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
-    {
-        
-        if(!_getInitFlag())
-        {
-            LogFatal("trie not initted!");
-            return NULL;
-        }
-        if(begin >= end)
-        {
-            return NULL;
-        }
-        TrieNode* p = _root;
-        for(Unicode::const_iterator it = begin; it != end; it++)
-        {
-            uint16_t chUni = *it;
-            if(p->hmap.find(chUni) == p-> hmap.end())
             {
+
+                if(!_getInitFlag())
+                {
+                    LogFatal("trie not initted!");
+                    return NULL;
+                }
+                if(begin >= end)
+                {
+                    return NULL;
+                }
+                TrieNode* p = _root;
+                for(Unicode::const_iterator it = begin; it != end; it++)
+                {
+                    uint16_t chUni = *it;
+                    if(p->hmap.find(chUni) == p-> hmap.end())
+                    {
+                        return NULL;
+                    }
+                    else
+                    {
+                        p = p->hmap[chUni];
+                    }
+                }
+                if(p->isLeaf)
+                {
+                    uint pos = p->nodeInfoVecPos;
+                    if(pos < _nodeInfoVec.size())
+                    {
+                        return &(_nodeInfoVec[pos]);
+                    }
+                    else
+                    {
+                        LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+                        return NULL;
+                    }
+                }
                 return NULL;
             }
-            else
-            {
-                p = p->hmap[chUni];
-            }
-        }
-        if(p->isLeaf)
-        {
-            uint pos = p->nodeInfoVecPos;
-            if(pos < _nodeInfoVec.size())
-            {
-                return &(_nodeInfoVec[pos]);
-            }
-            else
-            {
-                LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
-                return NULL;
-            }
-        }
-        return NULL;
-    }
             bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
-	{
-        if(!_getInitFlag())
-        {
-            LogFatal("trie not initted!");
-            return false;
-        }
-        TrieNode* p = _root;
-        for(uint i = 0; i < unico.size(); i++)
-        {
-            if(p->hmap.find(unico[i]) == p-> hmap.end())
             {
-				break;
+                if(!_getInitFlag())
+                {
+                    LogFatal("trie not initted!");
+                    return false;
+                }
+                TrieNode* p = _root;
+                for(uint i = 0; i < unico.size(); i++)
+                {
+                    if(p->hmap.find(unico[i]) == p-> hmap.end())
+                    {
+                        break;
+                    }
+                    p = p->hmap[unico[i]];
+                    if(p->isLeaf)
+                    {
+                        uint pos = p->nodeInfoVecPos;
+                        if(pos < _nodeInfoVec.size())
+                        {
+                            res.push_back(make_pair(i, &_nodeInfoVec[pos]));
+                        }
+                        else
+                        {
+                            LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+                            return false;
+                        }
+                    }
+                }
+                return !res.empty();
             }
-			p = p->hmap[unico[i]];
-			if(p->isLeaf)
-			{
-				uint pos = p->nodeInfoVecPos;
-				if(pos < _nodeInfoVec.size())
-				{
-					res.push_back(make_pair(i, &_nodeInfoVec[pos]));
-				}
-				else
-				{
-					LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
-					return false;
-				}
-			}
-        }
-		return !res.empty();
-	}
 
             const TrieNodeInfo* findPrefix(const string& str)const
             {
