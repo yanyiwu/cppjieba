@@ -17,8 +17,14 @@ void cut(const ISegment * seg, const char * const filePath)
         if(!line.empty())
         {
             res.clear();
-            seg->cut(line, res);
-            cout<<join(res.begin(), res.end(),"/")<<endl;
+            if(!seg->cut(line, res))
+            {
+                LogError("seg cut failed.");
+            }
+            else
+            {
+                print(join(res.begin(), res.end(), "/"));
+            }
         }
     }
 }
