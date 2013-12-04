@@ -18,7 +18,7 @@ namespace CppJieba
         inline bool decode(const string& str, vector<uint16_t>& vec)
         {
 #ifdef CPPJIEBA_GBK
-            return false;
+            return gbkTrans(str, vec);
 #else
             return utf8ToUnicode(str, vec);
 #endif
@@ -27,7 +27,7 @@ namespace CppJieba
         inline bool encode(vector<uint16_t>::const_iterator begin, vector<uint16_t>::const_iterator end, string& res)
         {
 #ifdef CPPJIEBA_GBK
-            return false;
+            return gbkTrans(begin, end, res);
 #else
             return unicodeToUtf8(begin, end, res);
 #endif
