@@ -164,14 +164,6 @@ namespace CppJieba
                 {
                     return NULL;
                 }
-                return find(uintVec);
-            }
-            const TrieNodeInfo* find(const Unicode& uintVec)const
-            {
-                if(uintVec.empty())
-                {
-                    return NULL;
-                }
                 return find(uintVec.begin(), uintVec.end());
             }
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
@@ -246,56 +238,11 @@ namespace CppJieba
                 return !res.empty();
             }
 
-            const TrieNodeInfo* findPrefix(const string& str)const
-            {
-                if(!_getInitFlag())
-                {
-                    LogFatal("trie not initted!");
-                    return NULL;
-                }
-                Unicode uintVec;
-
-                if(!TransCode::decode(str, uintVec))
-                {
-                    LogError("TransCode::decode failed.");
-                    return NULL;
-                }
-
-                //find
-                TrieNode* p = _root;
-                uint pos = 0;
-                uint16_t chUni = 0;
-                const TrieNodeInfo * res = NULL;
-                for(uint i = 0; i < uintVec.size(); i++)
-                {
-                    chUni = uintVec[i];
-                    if(p->isLeaf)
-                    {
-                        pos = p->nodeInfoVecPos;
-                        if(pos >= _nodeInfoVec.size())
-                        {
-                            LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
-                            return NULL;
-                        }
-                        res = &(_nodeInfoVec[pos]);
-
-                    }
-                    if(p->hmap.find(chUni) == p->hmap.end())
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        p = p->hmap[chUni];
-                    }
-                }
-                return res;
-            }
-
         public:
             double getMinLogFreq()const{return _minLogFreq;};
 
-            bool insert(const TrieNodeInfo& nodeInfo)
+        private:
+            bool _insert(const TrieNodeInfo& nodeInfo)
             {
                 if(!_getInitFlag())
                 {
@@ -338,7 +285,7 @@ namespace CppJieba
                 }
                 if(p->isLeaf)
                 {
-                    LogError("this node already inserted");
+                    LogError("this node already _inserted");
                     return false;
                 }
 
@@ -376,10 +323,10 @@ namespace CppJieba
                         nodeInfo.tag = vecBuf[2];
                     }
 
-                    //insert node
-                    if(!insert(nodeInfo))
+                    //_insert node
+                    if(!_insert(nodeInfo))
                     {
-                        LogError("insert node failed!");
+                        LogError("_insert node failed!");
                     }
                 }
                 return true;
