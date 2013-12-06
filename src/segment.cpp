@@ -4,6 +4,7 @@
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
+#include "FullSegment.hpp"
 
 using namespace CppJieba;
 
@@ -16,6 +17,7 @@ void cut(const ISegment * seg, const char * const filePath)
     {
         if(!line.empty())
         {
+            cout << line << endl;
             res.clear();
             if(!seg->cut(line, res))
             {
@@ -35,7 +37,7 @@ int main(int argc, char ** argv)
     {
         cout<<"usage: \n\t"<<argv[0]<<" [options] <filename>\n"
             <<"options:\n"
-            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
+            <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutFull, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
             <<"\t--dictpath\tsee example\n"
             <<"\t--modelpath\tsee example\n"
             <<"example:\n"
@@ -73,7 +75,18 @@ int main(int argc, char ** argv)
         cut(&seg, arg[1].c_str());
         seg.dispose();
     }
-    else
+    else if ("cutFull" == algorithm)
+    {
+        FullSegment seg(dictPath.c_str());
+        if (!seg.init())
+        {
+            cout << "seg init failed" << endl;
+            return false;
+        }
+        cut(&seg, arg[1].c_str());
+        seg.dispose();
+    }
+    else 
     {
         MixSegment seg(dictPath.c_str(), modelPath.c_str());
         if(!seg.init())
