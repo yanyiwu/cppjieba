@@ -51,7 +51,7 @@ namespace CppJieba
         private:
             CHAR_TYPE _charType(uint16_t x)const
             {
-                if((0x0030 <= x && x<= 0x0039) || (0x0041 <= x && x <= 0x005a ) || (0x0061 <= x && x <= 0x007a))
+                if(x < 0x0080)
                 {
                     return DIGIT_OR_LETTER;
                 }
