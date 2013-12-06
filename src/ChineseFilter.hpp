@@ -98,6 +98,7 @@ namespace CppJieba
                 return iterator(&_unico, _unico.end(), _unico.end(), DIGIT_OR_LETTER);
             }
     };
+    
 }
 
 #endif

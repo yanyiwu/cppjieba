@@ -218,30 +218,29 @@ namespace Limonp
         return str.find(ch) != string::npos;
     }
 
-    inline bool utf8ToUnicode(const string& str, vector<uint16_t>& vec)
+    inline bool utf8ToUnicode(const char * const str, uint len, vector<uint16_t>& vec)
     {
         char ch1, ch2;
-        if(str.empty())
+        if(!str)
         {
             return false;
         }
         vec.clear();
-        size_t siz = str.size();
-        for(uint i = 0;i < siz;)
+        for(uint i = 0;i < len;)
         {
             if(!(str[i] & 0x80)) // 0xxxxxxx
             {
                 vec.push_back(str[i]);
                 i++;
             }
-            else if ((unsigned char)str[i] <= 0xdf && i + 1 < siz) // 110xxxxxx
+            else if ((unsigned char)str[i] <= 0xdf && i + 1 < len) // 110xxxxxx
             {
                 ch1 = (str[i] >> 2) & 0x07;
                 ch2 = (str[i+1] & 0x3f) | ((str[i] & 0x03) << 6 );
                 vec.push_back(twocharToUint16(ch1, ch2));
                 i += 2;
             }
-            else if((unsigned char)str[i] <= 0xef && i + 2 < siz)
+            else if((unsigned char)str[i] <= 0xef && i + 2 < len)
             {
                 ch1 = (str[i] << 4) | ((str[i+1] >> 2) & 0x0f );
                 ch2 = ((str[i+1]<<6) & 0xc0) | (str[i+2] & 0x3f); 
@@ -254,6 +253,10 @@ namespace Limonp
             }
         }
         return true;
+    }
+    inline bool utf8ToUnicode(const string& str, vector<uint16_t>& vec)
+    {
+        return utf8ToUnicode(str.c_str(), str.size(), vec);
     }
 
     inline bool unicodeToUtf8(vector<uint16_t>::const_iterator begin, vector<uint16_t>::const_iterator end, string& res)
@@ -287,15 +290,16 @@ namespace Limonp
         return true;
     }
 
-    inline bool gbkTrans(const string& str, vector<uint16_t>& vec)
+    
+    inline bool gbkTrans(const char* const str, uint len, vector<uint16_t>& vec)
     {
         vec.clear();
-        if(str.empty())
+        if(!str)
         {
             return false;
         }
         uint i = 0;
-        while(i < str.size())
+        while(i < len)
         {
             if(0 == (str[i] & 0x80))
             {
@@ -304,7 +308,7 @@ namespace Limonp
             }
             else
             {
-                if(i + 1 < str.size()) //&& (str[i+1] & 0x80))
+                if(i + 1 < len) //&& (str[i+1] & 0x80))
                 {
                     vec.push_back(twocharToUint16(str[i], str[i + 1]));
                     i += 2;
@@ -317,6 +321,11 @@ namespace Limonp
         }
         return true;
     }
+    inline bool gbkTrans(const string& str, vector<uint16_t>& vec)
+    {
+        return gbkTrans(str.c_str(), str.size(), vec);
+    }
+
     inline bool gbkTrans(vector<uint16_t>::const_iterator begin, vector<uint16_t>::const_iterator end, string& res)
     {
         if(begin >= end)
