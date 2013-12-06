@@ -31,9 +31,11 @@ namespace CppJieba
             EmitProbMap _emitProbM;
             EmitProbMap _emitProbS;
             vector<EmitProbMap* > _emitProbVec;
+        private:
+            const string _hmmModelPath;
 
         public:
-            HMMSegment()
+            HMMSegment(const char * const filePath): _hmmModelPath(filePath)
             {
                 memset(_startProb, 0, sizeof(_startProb));
                 memset(_transProb, 0, sizeof(_transProb));
@@ -51,11 +53,11 @@ namespace CppJieba
                 dispose();
             }
         public:
-            bool init(const char* const modelPath)
+            virtual bool init()
             {
-                return _setInitFlag(_loadModel(modelPath));
+                return _setInitFlag(_loadModel(_hmmModelPath.c_str()));
             }
-            bool dispose()
+            virtual bool dispose()
             {
                 _setInitFlag(false);
                 return true;
@@ -88,11 +90,8 @@ namespace CppJieba
                 }
                 return true;
             }
-            //bool cut(const string& str, vector<string>& res)const
-            //{
-            //    return SegmentBase::cut(str, res);
-            //}
-            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+        public:
+            virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 if(!_getInitFlag())
                 {

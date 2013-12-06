@@ -13,7 +13,7 @@ namespace CppJieba
             MPSegment _mpSeg;
             HMMSegment _hmmSeg;
         public:
-            MixSegment() 
+            MixSegment(const char * const mpSegDict, const char * const hmmSegDict): _mpSeg(mpSegDict), _hmmSeg(hmmSegDict)
             {
             }
             virtual ~MixSegment()
@@ -21,26 +21,26 @@ namespace CppJieba
                 dispose();
             }
         public:
-            bool init(const char* const mpSegDict, const char* const hmmSegDict)
+            virtual bool init()
             {
                 if(_getInitFlag())
                 {
                     LogError("inited.");
                     return false;
                 }
-                if(!_mpSeg.init(mpSegDict))
+                if(!_mpSeg.init())
                 {
                     LogError("_mpSeg init");
                     return false;
                 }
-                if(!_hmmSeg.init(hmmSegDict))
+                if(!_hmmSeg.init())
                 {
                     LogError("_hmmSeg init");
                     return false;
                 }
                 return _setInitFlag(true);
             }
-            bool dispose()
+            virtual bool dispose()
             {
                 if(!_getInitFlag())
                 {
@@ -52,13 +52,9 @@ namespace CppJieba
                 return true;
             }
         public:
-            //virtual bool cut(const string& str, vector<string>& res) const;
-            //bool cut(const string& str, vector<string>& res)const
-            //{
-            //    return SegmentBase::cut(str, res);
-            //}
             using SegmentBase::cut;
-            bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+        public:
+            virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 if(!_getInitFlag())
                 {

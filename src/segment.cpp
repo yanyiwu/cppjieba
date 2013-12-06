@@ -53,8 +53,8 @@ int main(int argc, char ** argv)
 
     if("cutHMM" == algorithm)
     {
-        HMMSegment seg;
-        if(!seg.init(modelPath.c_str()))
+        HMMSegment seg(modelPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
@@ -64,8 +64,8 @@ int main(int argc, char ** argv)
     }
     else if("cutDAG" == algorithm)
     {
-        MPSegment seg;
-        if(!seg.init(dictPath.c_str()))
+        MPSegment seg(dictPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return false;
@@ -75,8 +75,8 @@ int main(int argc, char ** argv)
     }
     else
     {
-        MixSegment seg;
-        if(!seg.init(dictPath.c_str(), modelPath.c_str()))
+        MixSegment seg(dictPath.c_str(), modelPath.c_str());
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;

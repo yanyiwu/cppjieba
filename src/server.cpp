@@ -14,13 +14,10 @@ using namespace CppJieba;
 
 class ReqHandler: public IRequestHandler
 {
-    private:
-        string _dictPath;
-        string _modelPath;
     public:
-        ReqHandler(const string& dictPath, const string& modelPath): _dictPath(dictPath), _modelPath(modelPath){};
+        ReqHandler(const string& dictPath, const string& modelPath): _segment(dictPath.c_str(), modelPath.c_str()){};
         virtual ~ReqHandler(){};
-        virtual bool init(){return _segment.init(_dictPath.c_str(), _modelPath.c_str());};
+        virtual bool init(){return _segment.init();};
         virtual bool dispose(){return _segment.dispose();};
     public:
         virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd)
