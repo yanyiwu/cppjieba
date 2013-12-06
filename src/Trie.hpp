@@ -206,27 +206,33 @@ namespace CppJieba
                 }
                 return NULL;
             }
-            bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
+
+            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, vector<pair<uint, const TrieNodeInfo*> >& res) const
             {
                 if(!_getInitFlag())
                 {
                     LogFatal("trie not initted!");
                     return false;
                 }
-                TrieNode* p = _root;
-                for(uint i = 0; i < unico.size(); i++)
+                if (begin >= end) 
                 {
-                    if(p->hmap.find(unico[i]) == p-> hmap.end())
+                    LogFatal("begin >= end");
+                    return false;
+                }
+                TrieNode* p = _root;
+                for (Unicode::const_iterator itr = begin; itr != end; itr++)
+                {
+                    if(p->hmap.find(*itr) == p-> hmap.end())
                     {
                         break;
                     }
-                    p = p->hmap[unico[i]];
+                    p = p->hmap[*itr];
                     if(p->isLeaf)
                     {
                         uint pos = p->nodeInfoVecPos;
                         if(pos < _nodeInfoVec.size())
                         {
-                            res.push_back(make_pair(i, &_nodeInfoVec[pos]));
+                            res.push_back(make_pair(itr-begin, &_nodeInfoVec[pos]));
                         }
                         else
                         {
@@ -236,6 +242,15 @@ namespace CppJieba
                     }
                 }
                 return !res.empty();
+            }
+
+            bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
+            {
+                if (!unico.empty())
+                {
+                    return find(unico.begin(), unico.end(), res);
+                }
+                return false;
             }
 
         public:
