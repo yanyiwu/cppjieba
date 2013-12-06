@@ -99,6 +99,36 @@ namespace CppJieba
             }
     };
     
+    /*
+     * if char is ascii, count the ascii string's length and return 0;
+     * else count the nonascii string's length and return 1;
+     * if errors, return -1;
+     * */
+    inline int filterAscii(const char* str, uint len, uint& resLen)
+    {
+        if(!str || !len)
+        {
+            return -1;
+        }
+        char x = 0x80;
+        int resFlag = (str[0] & x ? 1 : 0);
+        resLen = 1;
+        if(!resFlag)
+        {
+            while(resLen < len && !(str[resLen] & x))
+            {
+                resLen ++;
+            }
+        }
+        else
+        {
+            while(resLen < len && (str[resLen] & x))
+            {
+                resLen ++;
+            }
+        }
+        return resFlag;
+    }
 }
 
 #endif
