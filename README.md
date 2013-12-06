@@ -8,9 +8,6 @@
 
 现在支持utf8,gbk编码的分词。   
 
-- `master`分支支持`utf8`编码   
-- `gbk`分支支持`gbk`编码
-
 ## 安装与使用
 
 ### 下载和安装
@@ -22,6 +19,8 @@ cd cppjieba-master
 mkdir build
 cd build
 cmake ..
+# 默认是utf8编码，如果要使用gbk编码则使用下句cmake命令
+# cmake .. -DENC=GBK
 make
 sudo make install
 ```
@@ -122,14 +121,14 @@ Output:
 核心目录，包含主要源代码。
 
 #### Trie树
-Trie.cpp/Trie.h 负责载入词典的trie树，主要供Segment模块使用。
+Trie.hpp 负责载入词典的trie树，主要供Segment模块使用。
 
 #### Segment模块
 
-MPSegment.cpp/MPSegment.h 
+MPSegment.hpp
 (Maximum Probability)最大概率法:负责根据Trie树构建有向无环图和进行动态规划算法，是分词算法的核心。
 
-HMMSegment.cpp/HMMSegment.h
+HMMSegment.hpp
 是根据HMM模型来进行分词，主要算法思路是根据(B,E,M,S)四个状态来代表每个字的隐藏状态。
 HMM模型由dicts/下面的`hmm_model.utf8`提供。
 分词算法即viterbi算法。

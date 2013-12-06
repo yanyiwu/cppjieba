@@ -6,7 +6,7 @@
 namespace CppJieba
 {
 
-    enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1, OTHERS = 2};
+    enum CHAR_TYPE { CHWORD = 0, DIGIT_OR_LETTER = 1};
     typedef Unicode::const_iterator UniConIter;
     class ChineseFilter;
     class ChFilterIterator
@@ -55,11 +55,7 @@ namespace CppJieba
                 {
                     return DIGIT_OR_LETTER;
                 }
-                if(x >= 0x4e00 && x <= 0x9fff)
-                {
-                    return CHWORD;
-                }
-                return OTHERS;
+                return CHWORD;
             }
             ChFilterIterator _get(UniConIter iter)
             {
@@ -67,7 +63,7 @@ namespace CppJieba
                 const UniConIter& _end = ptUnico->end();
                 if(iter == _end)
                 {
-                    return ChFilterIterator(ptUnico, end, end, OTHERS);
+                    return ChFilterIterator(ptUnico, end, end, DIGIT_OR_LETTER);
                 }
                 CHAR_TYPE charType = _charType(*iter);
                 iter ++;
@@ -99,7 +95,7 @@ namespace CppJieba
             }
             iterator end()
             {
-                return iterator(&_unico, _unico.end(), _unico.end(), OTHERS);
+                return iterator(&_unico, _unico.end(), _unico.end(), DIGIT_OR_LETTER);
             }
     };
 }
