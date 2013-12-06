@@ -31,24 +31,56 @@ namespace CppJieba
                     LogError("not inited.");
                     return false;
                 }
-                ChineseFilter filter;
-                filter.feed(str);
-                for(ChineseFilter::iterator it = filter.begin(); it != filter.end(); it++)
+                const char * cstr = str.c_str();
+                uint size = str.size();
+                uint offset = 0;
+                string subs;
+                int ret;
+                uint len;
+                Unicode unico;
+                while(offset < size)
                 {
-                    if(it.charType == CHWORD)
+                    if(-1 == (ret = filterAscii(cstr + offset, size, len)))
                     {
-                        cut(it.begin, it.end, res);
+                        LogFatal("str[%s] illegal.", cstr);
+                        return false;
+                    }
+                    subs.assign(cstr + offset, len);
+                    if(!ret)
+                    {
+                        res.push_back(subs);
                     }
                     else
                     {
-                        string tmp;
-                        if(TransCode::encode(it.begin, it.end, tmp))
+                        unico.clear();
+                        if(!TransCode::decode(subs, unico))
                         {
-                            res.push_back(tmp);
+                            LogFatal("str[%s] decode failed.", subs.c_str());
+                            return false;
                         }
+                        cut(unico.begin(), unico.end(), res);
                     }
+                    offset += len;
                 }
                 return true;
+                //ChineseFilter filter;
+                //filter.feed(str);
+                //for(ChineseFilter::iterator it = filter.begin(); it != filter.end(); it++)
+                //{
+                //    if(it.charType == CHWORD)
+                //    {
+                //        cut(it.begin, it.end, res);
+                //    }
+                //    else
+                //    {
+                //        string tmp;
+                //        if(TransCode::encode(it.begin, it.end, tmp))
+                //        {
+                //            res.push_back(tmp);
+                //        }
+                //    }
+                //}
+                //return true;
             }
 
     };
