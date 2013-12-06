@@ -57,6 +57,7 @@ namespace CppJieba
             //{
             //    return SegmentBase::cut(str, res);
             //}
+            using SegmentBase::cut;
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 if(!_getInitFlag())
