@@ -244,14 +244,14 @@ namespace CppJieba
                 return !res.empty();
             }
 
-            bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
-            {
-                if (!unico.empty())
-                {
-                    return find(unico.begin(), unico.end(), res);
-                }
-                return false;
-            }
+            //bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
+            //{
+            //    if (!unico.empty())
+            //    {
+            //        return find(unico.begin(), unico.end(), res);
+            //    }
+            //    return false;
+            //}
 
         public:
             double getMinLogFreq()const{return _minLogFreq;};

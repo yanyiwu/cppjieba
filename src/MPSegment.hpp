@@ -126,13 +126,9 @@ namespace CppJieba
                     return false;
                 }
                 SegmentContext segContext;
-                for(Unicode::const_iterator it = begin; it != end; it++)
-                {
-                    segContext.push_back(SegmentChar(*it));
-                }
 
                 //calc DAG
-                if(!_calcDAG(segContext))
+                if(!_calcDAG(begin, end, segContext))
                 {
                     LogError("_calcDAG failed.");
                     return false;
@@ -154,36 +150,47 @@ namespace CppJieba
             }
 
         private:
-            bool _calcDAG(SegmentContext& segContext)const
+            bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, SegmentContext& segContext) const
             {
-                if(segContext.empty())
+                if(begin >= end)
                 {
-                    LogError("segContext empty.");
+                    LogError("begin >= end.");
                     return false;
                 }
-
-                Unicode unicode;
-                vector<pair<uint, const TrieNodeInfo*> > vp;
-                for(uint i = 0; i < segContext.size(); i++)
+                for(Unicode::const_iterator it = begin; it != end; it++)
                 {
-                    unicode.clear();
-                    for(uint j = i ; j < segContext.size(); j++)
-                    {
-                        unicode.push_back(segContext[j].uniCh);
-                    }
+                    segContext.push_back(SegmentChar(*it));
+                }
 
+                vector<pair<uint, const TrieNodeInfo*> > vp;
+                //for(Unicode::const_iterator it = begin; it != end; it++)
+                //{
+                //    segContext.push_back(SegmentChar(*it));
+                //}
+                for(Unicode::const_iterator it = begin; it != end; it++)
+                //for(uint i = 0; i < segContext.size(); i++)
+                {
+                    //unicode.clear();
+                    //for(uint j = i; j < segContext.size(); j++)
+                    //{
+                    //    unicode.push_back(segContext[j].uniCh);
+                    //}
+                    
+                    segContext.push_back(SegmentChar(*it));
+                    SegmentChar& back = segContext.back();
+                    int i = it - begin;
                     vp.clear();
-                    if(_trie.find(unicode, vp))
+                    if(_trie.find(it, end, vp))
                     {
                         for(uint j = 0; j < vp.size(); j++)
                         {
                             uint nextp = vp[j].first + i;
-                            segContext[i].dag[nextp] = vp[j].second; 
+                            back.dag[nextp] = vp[j].second; 
                         }
                     }
-                    if(segContext[i].dag.end() == segContext[i].dag.find(i))
+                    if(back.dag.end() == back.dag.find(i))
                     {
-                        segContext[i].dag[i] = NULL;
+                        back.dag[i] = NULL;
                     }
                 }
                 return true;
