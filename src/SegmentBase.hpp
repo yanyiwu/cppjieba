@@ -31,7 +31,7 @@ namespace CppJieba
                     LogError("not inited.");
                     return false;
                 }
-                const char * cstr = str.c_str();
+                const char * const cstr = str.c_str();
                 uint size = str.size();
                 uint offset = 0;
                 string subs;
@@ -59,6 +59,11 @@ namespace CppJieba
                             return false;
                         }
                         cut(unico.begin(), unico.end(), res);
+                    }
+                    if(len == 0)
+                    {
+                        LogFatal("str[%s] illegal.", cstr);
+                        return false;
                     }
                     offset += len;
                 }

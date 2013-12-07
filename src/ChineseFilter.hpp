@@ -112,7 +112,7 @@ namespace CppJieba
         }
         char x = 0x80;
         int resFlag = (str[0] & x ? 1 : 0);
-        resLen = 1;
+        resLen = 0;
         if(!resFlag)
         {
             while(resLen < len && !(str[resLen] & x))
@@ -124,8 +124,16 @@ namespace CppJieba
         {
             while(resLen < len && (str[resLen] & x))
             {
+#ifdef CPPJIEBA_GBK
+                resLen += 2;
+#else
                 resLen ++;
+#endif
             }
+        }
+        if(resLen > len)
+        {
+            return -1;
         }
         return resFlag;
     }
