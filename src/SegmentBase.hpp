@@ -31,13 +31,22 @@ namespace CppJieba
                     LogError("not inited.");
                     return false;
                 }
+                Unicode unico;
+#ifdef NO_FILTER
+                unico.clear();
+                if(!TransCode::decode(str, unico))
+                {
+                    LogFatal("str[%s] decode failed.", str.c_str());
+                    return false;
+                }
+                return cut(unico.begin(), unico.end(), res);
+#else
                 const char * const cstr = str.c_str();
                 uint size = str.size();
                 uint offset = 0;
                 string subs;
                 int ret;
                 uint len;
-                Unicode unico;
                 while(offset < size)
                 {
                     const char * const nstr = cstr + offset;
@@ -65,6 +74,7 @@ namespace CppJieba
                     offset += len;
                 }
                 return true;
+#endif
             }
 
     };
