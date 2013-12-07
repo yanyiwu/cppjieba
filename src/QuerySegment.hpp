@@ -1,5 +1,5 @@
-#ifndef CPPJIEBA_FULLSEGMENT_H
-#define CPPJIEBA_FULLSEGMENT_H
+#ifndef CPPJIEBA_QUERYSEGMENT_H
+#define CPPJIEBA_QUERYSEGMENT_H
 
 #include <algorithm>
 #include <set>
@@ -7,41 +7,41 @@
 #include "Trie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
+#include "HMMSegment.hpp"
+#include "FullSegment.hpp"
 #include "TransCode.hpp"
 
 namespace CppJieba
 {
-    class FullSegment: public SegmentBase
+    class QuerySegment: public SegmentBase
     {
     private:
-        Trie _trie;
-        const string _dictPath;
+        HMMSegment _hmmSeg;
+        FullSegment _fullSeg;
+        int _maxWordLen;
 
     public:
-        FullSegment(const char* dictPath): _dictPath(dictPath){};
-        virtual ~FullSegment(){dispose();};
+        QuerySegment(const char* fullSegDict, const char* hmmSegDict, int maxWordLen): _hmmSeg(hmmSegDict), _fullSeg(fullSegDict), _maxWordLen(maxWordLen){};
+        virtual ~QuerySegment(){dispose();};
     public:
         bool init()
         {
 #ifndef NO_CODING_LOG
-            if(_getInitFlag())
+            if (_getInitFlag())
             {
-                LogError("already inited before now.");
-                return false;
+                LogError("inited.");
             }
 #endif
-            if(!_trie.init())
+            if (!_hmmSeg.init())
             {
-                LogError("_trie.init failed.");
+                LogError("_hmmSeg init");
                 return false;
             }
-            LogInfo("_trie.loadDict(%s) start...", _dictPath.c_str());
-            if(!_trie.loadDict(_dictPath.c_str()))
+            if (!_fullSeg.init())
             {
-                LogError("_trie.loadDict faield.");
+                LogError("_fullSeg init");
                 return false;
             }
-            LogInfo("_trie.loadDict end.");
             return _setInitFlag(true);
         }
         bool dispose()
@@ -52,7 +52,8 @@ namespace CppJieba
                 return true;
             }
 #endif
-            _trie.dispose();
+            _fullSeg.dispose();
+            _hmmSeg.dispose();
             _setInitFlag(false);
             return true;
         }
@@ -75,49 +76,38 @@ namespace CppJieba
                 return false;
             }
 #endif
-            //resut of searching in trie tree
-            vector<pair<uint, const TrieNodeInfo*> > tRes;
-
-            //max index of res's words
-            int maxIdx = 0;
-
-            // always equals to (uItr - begin)
-            int uIdx = 0;
-
-            //tmp variables
-            int wordLen = 0;
-            for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
+            //use hmm cut first
+            vector<Unicode> hmmRes;
+            if (!_hmmSeg.cut(begin, end, hmmRes))
             {
-                //find word start from uItr
-                if (_trie.find(uItr, end, tRes))
-                {
-                    for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
-                    {
-                        wordLen = itr->second->word.size();
-                        if (wordLen >= 2 || tRes.size() == 1 && maxIdx <= uIdx)
-                        {
-                            res.push_back(itr->second->word);
-                        }
-                        maxIdx = uIdx+wordLen > maxIdx ? uIdx+wordLen : maxIdx;
-                    }
-                    tRes.clear();
-                }
-                else // not found word start from uItr
-                {
-                    if (maxIdx <= uIdx) // never exist in prev results
-                    {
-                        //put itr itself in res
-                        res.push_back(Unicode(1, *uItr));
+                LogError("_hmmSeg cut failed.");
+                return false;
+            }
 
-                        //mark it exits
-                        ++maxIdx;
+            vector<Unicode> fullRes;
+            for (vector<Unicode>::const_iterator hmmResItr = hmmRes.begin(); hmmResItr != hmmRes.end(); hmmResItr++)
+            {
+                
+                // if it's too long, cut with _fullSeg, put fullRes in res
+                if (hmmResItr->size() > _maxWordLen)
+                {
+                    if (_fullSeg.cut(hmmResItr->begin(), hmmResItr->end(), fullRes))
+                    {
+                       for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++)
+                       {
+                           res.push_back(*fullResItr);
+                       }
                     }
                 }
-                ++uIdx;
+                else // just use the hmm result
+                {
+                    res.push_back(*hmmResItr);
+                }
             }
 
             return true;
         }
+
 
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
         {
@@ -139,8 +129,8 @@ namespace CppJieba
                 LogError("get unicode cut result error.");
                 return false;
             }
-            string tmp;
 
+            string tmp;
             for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++)
             {
                 if (TransCode::encode(*uItr, tmp))
