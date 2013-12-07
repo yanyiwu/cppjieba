@@ -154,8 +154,8 @@ TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk转换成`uint
 
 ### MixSegment
 
-分词速度大概是 62M / 54sec = 1.15M/sec
-测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz`
+分词速度大概是 = 2M/sec
+测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz` 电脑下开的ubuntu虚拟机
 
 
 ## 联系客服
