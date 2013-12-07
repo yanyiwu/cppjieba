@@ -163,6 +163,7 @@ namespace CppJieba
                 }
 
                 Unicode unicode;
+                vector<pair<uint, const TrieNodeInfo*> > vp;
                 for(uint i = 0; i < segContext.size(); i++)
                 {
                     unicode.clear();
@@ -171,15 +172,13 @@ namespace CppJieba
                         unicode.push_back(segContext[j].uniCh);
                     }
 
-                    vector<pair<uint, const TrieNodeInfo*> > vp;
+                    vp.clear();
                     if(_trie.find(unicode, vp))
                     {
                         for(uint j = 0; j < vp.size(); j++)
                         {
                             uint nextp = vp[j].first + i;
                             segContext[i].dag[nextp] = vp[j].second; 
-                            //cout<<vp[j].first<<endl;
-                            //LogDebug(vp[j].second->toString());
                         }
                     }
                     if(segContext[i].dag.end() == segContext[i].dag.find(i))
