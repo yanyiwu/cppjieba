@@ -47,7 +47,7 @@ int main(int argc, char ** argv)
     //    seg.dispose();
     //}
     {
-        MPSegment seg("../dicts/jieba.dict.utf8");
+        MixSegment seg("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");
         if(!seg.init())
         {
             cout<<"seg init failed."<<endl;

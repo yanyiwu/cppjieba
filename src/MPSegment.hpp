@@ -157,25 +157,10 @@ namespace CppJieba
                     LogError("begin >= end.");
                     return false;
                 }
-                for(Unicode::const_iterator it = begin; it != end; it++)
-                {
-                    segContext.push_back(SegmentChar(*it));
-                }
 
                 vector<pair<uint, const TrieNodeInfo*> > vp;
-                //for(Unicode::const_iterator it = begin; it != end; it++)
-                //{
-                //    segContext.push_back(SegmentChar(*it));
-                //}
                 for(Unicode::const_iterator it = begin; it != end; it++)
-                //for(uint i = 0; i < segContext.size(); i++)
                 {
-                    //unicode.clear();
-                    //for(uint j = i; j < segContext.size(); j++)
-                    //{
-                    //    unicode.push_back(segContext[j].uniCh);
-                    //}
-                    
                     segContext.push_back(SegmentChar(*it));
                     SegmentChar& back = segContext.back();
                     int i = it - begin;
