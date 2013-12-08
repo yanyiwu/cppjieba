@@ -157,15 +157,15 @@ namespace CppJieba
             bool _getInitFlag()const{return _initFlag;};
 
         public:
-            const TrieNodeInfo* find(const string& str)const
-            {
-                Unicode uintVec;
-                if(!TransCode::decode(str, uintVec))
-                {
-                    return NULL;
-                }
-                return find(uintVec.begin(), uintVec.end());
-            }
+            //const TrieNodeInfo* find(const string& str)const
+            //{
+            //    Unicode uintVec;
+            //    if(!TransCode::decode(str, uintVec))
+            //    {
+            //        return NULL;
+            //    }
+            //    return find(uintVec.begin(), uintVec.end());
+            //}
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
             {
 
@@ -233,6 +233,44 @@ namespace CppJieba
                         if(pos < _nodeInfoVec.size())
                         {
                             res.push_back(make_pair(itr-begin, &_nodeInfoVec[pos]));
+                        }
+                        else
+                        {
+                            LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+                            return false;
+                        }
+                    }
+                }
+                return !res.empty();
+            }
+
+            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, uint offset, unordered_map<uint, const TrieNodeInfo* > & res) const
+            {
+                if(!_getInitFlag())
+                {
+                    LogFatal("trie not initted!");
+                    return false;
+                }
+                if (begin >= end) 
+                {
+                    LogFatal("begin >= end");
+                    return false;
+                }
+                TrieNode* p = _root;
+                for (Unicode::const_iterator itr = begin; itr != end; itr++)
+                {
+                    if(p->hmap.find(*itr) == p-> hmap.end())
+                    {
+                        break;
+                    }
+                    p = p->hmap[*itr];
+                    if(p->isLeaf)
+                    {
+                        uint pos = p->nodeInfoVecPos;
+                        if(pos < _nodeInfoVec.size())
+                        {
+                            //res.push_back(make_pair(itr-begin, &_nodeInfoVec[pos]));
+                            res[itr-begin + offset] = &_nodeInfoVec[pos];
                         }
                         else
                         {

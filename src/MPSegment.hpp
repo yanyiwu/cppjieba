@@ -158,21 +158,22 @@ namespace CppJieba
                     return false;
                 }
 
-                vector<pair<uint, const TrieNodeInfo*> > vp;
+                //vector<pair<uint, const TrieNodeInfo*> > vp;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
                     segContext.push_back(SegmentChar(*it));
                     SegmentChar& back = segContext.back();
-                    int i = it - begin;
-                    vp.clear();
-                    if(_trie.find(it, end, vp))
-                    {
-                        for(uint j = 0; j < vp.size(); j++)
-                        {
-                            uint nextp = vp[j].first + i;
-                            back.dag[nextp] = vp[j].second; 
-                        }
-                    }
+                    uint i = it - begin;
+                    _trie.find(it, end, i, back.dag);
+                    //vp.clear();
+                    //if(_trie.find(it, end, vp))
+                    //{
+                    //    for(uint j = 0; j < vp.size(); j++)
+                    //    {
+                    //        uint nextp = vp[j].first + i;
+                    //        back.dag[nextp] = vp[j].second; 
+                    //    }
+                    //}
                     if(back.dag.end() == back.dag.find(i))
                     {
                         back.dag[i] = NULL;
