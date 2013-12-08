@@ -157,15 +157,6 @@ namespace CppJieba
             bool _getInitFlag()const{return _initFlag;};
 
         public:
-            //const TrieNodeInfo* find(const string& str)const
-            //{
-            //    Unicode uintVec;
-            //    if(!TransCode::decode(str, uintVec))
-            //    {
-            //        return NULL;
-            //    }
-            //    return find(uintVec.begin(), uintVec.end());
-            //}
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
             {
 
@@ -281,15 +272,6 @@ namespace CppJieba
                 }
                 return !res.empty();
             }
-
-            //bool find(const Unicode& unico, vector<pair<uint, const TrieNodeInfo*> >& res)const
-            //{
-            //    if (!unico.empty())
-            //    {
-            //        return find(unico.begin(), unico.end(), res);
-            //    }
-            //    return false;
-            //}
 
         public:
             double getMinLogFreq()const{return _minLogFreq;};

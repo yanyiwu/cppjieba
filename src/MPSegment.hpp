@@ -97,27 +97,7 @@ namespace CppJieba
                 }
                 return true;
             }
-            bool cut(const string& str, vector<TrieNodeInfo>& segWordInfos)const
-            {
-                if(!_getInitFlag())
-                {
-                    LogError("not inited.");
-                    return false;
-                }
-                if(str.empty())
-                {
-                    return false;
-                }
-                Unicode sentence;
 
-                if(!TransCode::decode(str, sentence))
-                {
-                    LogError("TransCode::decode failed.");
-                    return false;
-                }
-                return cut(sentence.begin(), sentence.end(), segWordInfos);
-
-            }
             bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const
             {
                 if(!_getInitFlag())
@@ -158,26 +138,17 @@ namespace CppJieba
                     return false;
                 }
 
-                //vector<pair<uint, const TrieNodeInfo*> > vp;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
-                    segContext.push_back(SegmentChar(*it));
-                    SegmentChar& back = segContext.back();
+                    SegmentChar schar(*it);
                     uint i = it - begin;
-                    _trie.find(it, end, i, back.dag);
-                    //vp.clear();
-                    //if(_trie.find(it, end, vp))
-                    //{
-                    //    for(uint j = 0; j < vp.size(); j++)
-                    //    {
-                    //        uint nextp = vp[j].first + i;
-                    //        back.dag[nextp] = vp[j].second; 
-                    //    }
-                    //}
-                    if(back.dag.end() == back.dag.find(i))
+                    _trie.find(it, end, i, schar.dag);
+                    //DagType::iterator dagIter;
+                    if(schar.dag.end() ==  schar.dag.find(i))
                     {
-                        back.dag[i] = NULL;
+                        schar.dag[i] = NULL;
                     }
+                    segContext.push_back(schar);
                 }
                 return true;
             }
