@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <set>
+#include <cassert>
 #include "Limonp/logger.hpp"
 #include "Trie.hpp"
 #include "ISegment.hpp"
@@ -63,15 +64,16 @@ namespace CppJieba
     public:
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
+            assert(_getInitFlag());
 #ifndef NO_CODING_LOG
-            if (!_getInitFlag())
+            //if (!_getInitFlag())
+            //{
+            //    LogError("not inited.");
+            //    return false;
+            //}
+            if (begin >= end)
             {
-                LogError("not inited.");
-                return false;
-            }
-            if (begin > end)
-            {
-                LogError("begin > end");
+                LogError("begin >= end");
                 return false;
             }
 #endif

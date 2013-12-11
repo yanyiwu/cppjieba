@@ -1,6 +1,7 @@
 #ifndef CPPJIEBA_MIXSEGMENT_H
 #define CPPJIEBA_MIXSEGMENT_H
 
+#include <cassert>
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "Limonp/str_functs.hpp"
@@ -56,11 +57,12 @@ namespace CppJieba
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
-                if(!_getInitFlag())
-                {
-                    LogError("not inited.");
-                    return false;
-                }
+                //if(!_getInitFlag())
+                //{
+                //    LogError("not inited.");
+                //    return false;
+                //}
+                assert(_getInitFlag());
                 if(begin == end)
                 {
                     return false;
