@@ -25,7 +25,7 @@ make
 sudo make install
 ```
 
-#### 验证
+#### 测试
 
 ```sh
 /usr/bin/cjseg.sh ../test/testlines.utf8
@@ -41,7 +41,7 @@ sudo /etc/init.d/cjserver start
 sudo /etc/init.d/cjserver stop
 ```
 
-#### 验证服务
+#### 测试服务
 
 然后用chrome浏览器打开`http://127.0.0.1:11200/?key=南京市长江大桥`
 (用chrome的原因是chrome的默认编码就是utf-8)

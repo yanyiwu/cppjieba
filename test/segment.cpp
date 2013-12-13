@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <CppJieba/Limonp/ArgvContext.hpp>
-#include <CppJieba/MPSegment.h>
-#include <CppJieba/HMMSegment.h>
-#include <CppJieba/MixSegment.h>
+#include "../src/Limonp/ArgvContext.hpp"
+#include "../src/MPSegment.hpp"
+#include "../src/HMMSegment.hpp"
+#include "../src/MixSegment.hpp"
 
 using namespace CppJieba;
 
@@ -27,8 +27,8 @@ int main(int argc, char ** argv)
 {
     //demo
     {
-        HMMSegment seg;
-        if(!seg.init("../dicts/hmm_model.utf8"))
+        HMMSegment seg("../dicts/hmm_model.utf8");
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
@@ -37,8 +37,8 @@ int main(int argc, char ** argv)
         seg.dispose();
     }
     {
-        MixSegment seg;
-        if(!seg.init("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8"))
+        MixSegment seg("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
@@ -47,8 +47,8 @@ int main(int argc, char ** argv)
         seg.dispose();
     }
     {
-        MPSegment seg;
-        if(!seg.init("../dicts/jieba.dict.utf8"))
+        MPSegment seg("../dicts/jieba.dict.utf8");
+        if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return false;
