@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory.h>
+#include <cassert>
 #include "Limonp/str_functs.hpp"
 #include "Limonp/logger.hpp"
 #include "TransCode.hpp"
@@ -93,11 +94,12 @@ namespace CppJieba
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
-                if(!_getInitFlag())
-                {
-                    LogError("not inited.");
-                    return false;
-                }
+                //if(!_getInitFlag())
+                //{
+                //    LogError("not inited.");
+                //    return false;
+                //}
+                assert(_getInitFlag());
                 if(begin == end)
                 {
                     return false;
