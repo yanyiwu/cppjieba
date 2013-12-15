@@ -11,7 +11,7 @@ namespace CppJieba
     class TrieManager
     {
         private:
-            unordered_map<const char*, Trie*> _tries;
+            unordered_map<std::string, Trie*> _tries;
             TrieManager(){};
             TrieManager(TrieManager& tm){};
         public:
@@ -25,8 +25,10 @@ namespace CppJieba
                 }
                 else
                 {
-                    if (_tries.find(md5.c_str()) == _tries.end())
+                    LogInfo("md5 for file '%s': %s", dictpath, md5.c_str());
+                    if (_tries.find(md5) == _tries.end())
                     {
+                        LogInfo("create a new trie for md5: '%s'", md5.c_str());
                         Trie* trie = NULL;
                         try
                         {
@@ -59,6 +61,7 @@ namespace CppJieba
                     }
                     else
                     {
+                        LogInfo("find a exits trie for md5: '%s'", md5.c_str());
                         return _tries[md5.c_str()];
                     }
                 }
