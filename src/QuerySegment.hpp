@@ -8,21 +8,22 @@
 #include "Trie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
-#include "HMMSegment.hpp"
 #include "FullSegment.hpp"
+#include "MixSegment.hpp"
 #include "TransCode.hpp"
+#include "TrieManager.hpp"
 
 namespace CppJieba
 {
     class QuerySegment: public SegmentBase
     {
     private:
-        HMMSegment _hmmSeg;
+        MixSegment _mixSeg;
         FullSegment _fullSeg;
         int _maxWordLen;
 
     public:
-        QuerySegment(const char* fullSegDict, const char* hmmSegDict, int maxWordLen): _hmmSeg(hmmSegDict), _fullSeg(fullSegDict), _maxWordLen(maxWordLen){};
+        QuerySegment(const char* dict, const char* model, int maxWordLen): _mixSeg(dict, model), _fullSeg(dict), _maxWordLen(maxWordLen){};
         virtual ~QuerySegment(){dispose();};
     public:
         bool init()
@@ -31,9 +32,9 @@ namespace CppJieba
             {
                 LogError("inited.");
             }
-            if (!_hmmSeg.init())
+            if (!_mixSeg.init())
             {
-                LogError("_hmmSeg init");
+                LogError("_mixSeg init");
                 return false;
             }
             if (!_fullSeg.init())
@@ -50,7 +51,7 @@ namespace CppJieba
                 return true;
             }
             _fullSeg.dispose();
-            _hmmSeg.dispose();
+            _mixSeg.dispose();
             _setInitFlag(false);
             return true;
         }
@@ -68,22 +69,22 @@ namespace CppJieba
                 return false;
             }
 
-            //use hmm cut first
-            vector<Unicode> hmmRes;
-            if (!_hmmSeg.cut(begin, end, hmmRes))
+            //use mix cut first
+            vector<Unicode> mixRes;
+            if (!_mixSeg.cut(begin, end, mixRes))
             {
-                LogError("_hmmSeg cut failed.");
+                LogError("_mixSeg cut failed.");
                 return false;
             }
 
             vector<Unicode> fullRes;
-            for (vector<Unicode>::const_iterator hmmResItr = hmmRes.begin(); hmmResItr != hmmRes.end(); hmmResItr++)
+            for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++)
             {
                 
                 // if it's too long, cut with _fullSeg, put fullRes in res
-                if (hmmResItr->size() > _maxWordLen)
+                if (mixResItr->size() > _maxWordLen)
                 {
-                    if (_fullSeg.cut(hmmResItr->begin(), hmmResItr->end(), fullRes))
+                    if (_fullSeg.cut(mixResItr->begin(), mixResItr->end(), fullRes))
                     {
                        for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++)
                        {
@@ -91,9 +92,9 @@ namespace CppJieba
                        }
                     }
                 }
-                else // just use the hmm result
+                else // just use the mix result
                 {
-                    res.push_back(*hmmResItr);
+                    res.push_back(*mixResItr);
                 }
             }
 

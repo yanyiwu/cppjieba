@@ -9,13 +9,14 @@
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 #include "TransCode.hpp"
+#include "TrieManager.hpp"
 
 namespace CppJieba
 {
     class FullSegment: public SegmentBase
     {
     private:
-        Trie _trie;
+        Trie* _trie;
         const string _dictPath;
 
     public:
@@ -29,18 +30,12 @@ namespace CppJieba
                 LogError("already inited before now.");
                 return false;
             }
-            if(!_trie.init())
+            _trie = TrieManager::getInstance().getTrie(_dictPath.c_str());
+            if (NULL == _trie)
             {
-                LogError("_trie.init failed.");
+                LogError("get NULL pointor from getTrie(\"%s\")", _dictPath.c_str());
                 return false;
             }
-            LogInfo("_trie.loadDict(%s) start...", _dictPath.c_str());
-            if(!_trie.loadDict(_dictPath.c_str()))
-            {
-                LogError("_trie.loadDict faield.");
-                return false;
-            }
-            LogInfo("_trie.loadDict end.");
             return _setInitFlag(true);
         }
         bool dispose()
@@ -49,7 +44,6 @@ namespace CppJieba
             {
                 return true;
             }
-            _trie.dispose();
             _setInitFlag(false);
             return true;
         }
@@ -81,7 +75,7 @@ namespace CppJieba
             for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
             {
                 //find word start from uItr
-                if (_trie.find(uItr, end, tRes))
+                if (_trie->find(uItr, end, tRes))
                 {
                     for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                     {
