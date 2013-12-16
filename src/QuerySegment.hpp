@@ -47,6 +47,7 @@ namespace CppJieba
                 LogError("_fullSeg init");
                 return false;
             }
+            _maxWordLen = maxWordLen;
             return _setInitFlag(true);
         }
 
