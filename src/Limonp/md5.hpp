@@ -338,6 +338,9 @@ public:
   // Digests a file and returns the result.
   const char* digestFile( const char *filename )
   {
+    if (NULL == filename || strcmp(filename, "") == 0)
+        return NULL;
+
     Init() ;
 
     FILE *file;
@@ -345,7 +348,7 @@ public:
     int len;
     unsigned char buffer[1024] ;
 
-    if(NULL == filename || (file = fopen (filename, "rb")) == NULL )
+    if((file = fopen (filename, "rb")) == NULL)
     {
       return NULL;
     }
