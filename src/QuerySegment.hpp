@@ -31,6 +31,7 @@ namespace CppJieba
             if (_getInitFlag())
             {
                 LogError("inited.");
+                return false;
             }
             if (!_mixSeg.init())
             {
