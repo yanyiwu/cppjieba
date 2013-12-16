@@ -20,41 +20,34 @@ namespace CppJieba
     private:
         MixSegment _mixSeg;
         FullSegment _fullSeg;
-        int _maxWordLen;
+        size_t _maxWordLen;
 
     public:
-        QuerySegment(const char* dict, const char* model, int maxWordLen): _mixSeg(dict, model), _fullSeg(dict), _maxWordLen(maxWordLen){};
-        virtual ~QuerySegment(){dispose();};
+        QuerySegment(){_setInitFlag(false);};
+        explicit QuerySegment(const string& dict, const string& model, size_t maxWordLen)
+        {
+            _setInitFlag(init(dict, model, maxWordLen));
+        };
+        virtual ~QuerySegment(){};
     public:
-        bool init()
+        bool init(const string& dict, const string& model, size_t maxWordLen)
         {
             if (_getInitFlag())
             {
-                LogError("inited.");
+                LogError("inited already.");
                 return false;
             }
-            if (!_mixSeg.init())
+            if (!_mixSeg.init(dict, model))
             {
                 LogError("_mixSeg init");
                 return false;
             }
-            if (!_fullSeg.init())
+            if (!_fullSeg.init(dict))
             {
                 LogError("_fullSeg init");
                 return false;
             }
             return _setInitFlag(true);
-        }
-        bool dispose()
-        {
-            if(!_getInitFlag())
-            {
-                return true;
-            }
-            _fullSeg.dispose();
-            _mixSeg.dispose();
-            _setInitFlag(false);
-            return true;
         }
 
     public:
@@ -92,9 +85,6 @@ namespace CppJieba
                            res.push_back(*fullResItr);
                        }
                     }
-
-                    //clear fullRes
-                    fullRes.clear();
                 }
                 else // just use the mix result
                 {

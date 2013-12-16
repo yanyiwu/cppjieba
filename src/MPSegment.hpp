@@ -34,36 +34,29 @@ namespace CppJieba
     {
         private:
             Trie* _trie;
-        private:
-            const string _dictPath;
 
         public:
-            MPSegment(const char * const dictPath): _dictPath(dictPath){};
-            virtual ~MPSegment(){dispose();};
+            MPSegment(){_setInitFlag(false);};
+            explicit MPSegment(const string& dictPath)
+            {
+                _setInitFlag(init(dictPath));
+            };
+            virtual ~MPSegment(){};
         public:
-            virtual bool init()
+            bool init(const string& dictPath)
             {
                 if(_getInitFlag())
                 {
                     LogError("already inited before now.");
                     return false;
                 }
-                _trie = TrieManager::getInstance().getTrie(_dictPath.c_str());
+                _trie = TrieManager::getInstance().getTrie(dictPath.c_str());
                 if (_trie == NULL)
                 {
-                    LogError("get a NULL pointor form getTrie(\"%s\").", _dictPath.c_str());
+                    LogError("get a NULL pointor form getTrie(\"%s\").", dictPath.c_str());
                     return false;
                 }
                 return _setInitFlag(true);
-            }
-            virtual bool dispose()
-            {
-                if(!_getInitFlag())
-                {
-                    return true;
-                }
-                _setInitFlag(false);
-                return true;
             }
         public:
             using SegmentBase::cut;

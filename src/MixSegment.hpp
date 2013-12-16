@@ -14,43 +14,31 @@ namespace CppJieba
             MPSegment _mpSeg;
             HMMSegment _hmmSeg;
         public:
-            MixSegment(const char * const mpSegDict, const char * const hmmSegDict): _mpSeg(mpSegDict), _hmmSeg(hmmSegDict)
+            MixSegment(){_setInitFlag(false);};
+            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict): _mpSeg(mpSegDict), _hmmSeg(hmmSegDict)
             {
+                _setInitFlag(_mpSeg && _hmmSeg);
             }
-            virtual ~MixSegment()
-            {
-                dispose();
-            }
+            virtual ~MixSegment(){}
         public:
-            virtual bool init()
+            bool init(const string& mpSegDict, const string& hmmSegDict)
             {
                 if(_getInitFlag())
                 {
                     LogError("inited.");
                     return false;
                 }
-                if(!_mpSeg.init())
+                if(!_mpSeg.init(mpSegDict))
                 {
                     LogError("_mpSeg init");
                     return false;
                 }
-                if(!_hmmSeg.init())
+                if(!_hmmSeg.init(hmmSegDict))
                 {
                     LogError("_hmmSeg init");
                     return false;
                 }
                 return _setInitFlag(true);
-            }
-            virtual bool dispose()
-            {
-                if(!_getInitFlag())
-                {
-                    return true;
-                }
-                _mpSeg.dispose();
-                _hmmSeg.dispose();
-                _setInitFlag(false);
-                return true;
             }
         public:
             using SegmentBase::cut;

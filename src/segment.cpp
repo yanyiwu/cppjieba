@@ -63,57 +63,52 @@ int main(int argc, char ** argv)
     if("cutHMM" == algorithm)
     {
         HMMSegment seg(modelPath.c_str());
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
         cut(&seg, arg[1].c_str());
-        seg.dispose();
     }
     else if("cutDAG" == algorithm)
     {
         MPSegment seg(dictPath.c_str());
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return false;
         }
         cut(&seg, arg[1].c_str());
-        seg.dispose();
     }
     else if ("cutFull" == algorithm)
     {
         FullSegment seg(dictPath.c_str());
-        if (!seg.init())
+        if (!seg)
         {
             cout << "seg init failed" << endl;
             return false;
         }
         cut(&seg, arg[1].c_str());
-        seg.dispose();
     }
     else if ("cutQuery" == algorithm)
     {
         QuerySegment seg(dictPath.c_str(), modelPath.c_str(), maxLen);
-        if (!seg.init())
+        if (!seg)
         {
             cout << "seg init failed" << endl;
             return false;
         }
         cut(&seg, arg[1].c_str());
-        seg.dispose();
     }
     else 
     {
         MixSegment seg(dictPath.c_str(), modelPath.c_str());
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
         cut(&seg, arg[1].c_str());
-        seg.dispose();
     }
     return EXIT_SUCCESS;
 }

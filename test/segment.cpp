@@ -31,33 +31,30 @@ int main(int argc, char ** argv)
     //demo
     {
         HMMSegment seg(HMM_DICT_FILE);
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
         cut(&seg, TEST_FILE);
-        seg.dispose();
     }
     {
         MixSegment seg(JIEBA_DICT_FILE, HMM_DICT_FILE);
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
         cut(&seg, TEST_FILE);
-        seg.dispose();
     }
     {
         MPSegment seg(JIEBA_DICT_FILE);
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return false;
         }
         cut(&seg, TEST_FILE);
-        seg.dispose();
     }
     return EXIT_SUCCESS;
 }
