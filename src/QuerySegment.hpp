@@ -84,6 +84,9 @@ namespace CppJieba
                        {
                            res.push_back(*fullResItr);
                        }
+
+                       //clear tmp res
+                       fullRes.clear();
                     }
                 }
                 else // just use the mix result

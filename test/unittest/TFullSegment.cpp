@@ -10,7 +10,6 @@ TEST(FullSegment, Test1)
     const char* res[] = {"我", "来自", "北京", "北京邮电", "北京邮电大学", "邮电", "邮电大学", "电大", "大学", "。", "。", "。", "  ", "学号", " 123456"};
     vector<string> words;
 
-    ASSERT_EQ(segment.init(), true);
     ASSERT_EQ(segment.cut(str, words), true);
 
     EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
