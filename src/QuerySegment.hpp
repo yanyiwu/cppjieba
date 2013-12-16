@@ -91,6 +91,9 @@ namespace CppJieba
                            res.push_back(*fullResItr);
                        }
                     }
+
+                    //clear fullRes
+                    fullRes.clear();
                 }
                 else // just use the mix result
                 {
