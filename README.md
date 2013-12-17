@@ -175,5 +175,6 @@ https://github.com/fxsjy/jieba
 顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
+[jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
 [cppjiebapy'discussion]:https://github.com/aszxqw/cppjieba/issues/1
