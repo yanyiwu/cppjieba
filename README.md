@@ -28,7 +28,7 @@ sudo make install
 #### 测试
 
 ```sh
-/usr/bin/cjseg.sh ../test/testlines.utf8
+cd build && ./test/segment.demo
 ```
 
 ### 启动服务

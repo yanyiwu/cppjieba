@@ -22,37 +22,41 @@ void cut(const ISegment * seg, const char * const filePath)
     }
 }
 
+const char * const TEST_FILE = "../test/testdata/testlines.utf8";
+const char * const JIEBA_DICT_FILE = "../dicts/jieba.dict.utf8";
+const char * const HMM_DICT_FILE = "../dicts/hmm_model.utf8";
+
 int main(int argc, char ** argv)
 {
     //demo
     {
-        HMMSegment seg("../dicts/hmm_model.utf8");
+        HMMSegment seg(HMM_DICT_FILE);
         if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
-        cut(&seg, "testlines.utf8");
+        cut(&seg, TEST_FILE);
         seg.dispose();
     }
     {
-        MixSegment seg("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");
+        MixSegment seg(JIEBA_DICT_FILE, HMM_DICT_FILE);
         if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
         }
-        cut(&seg, "testlines.utf8");
+        cut(&seg, TEST_FILE);
         seg.dispose();
     }
     {
-        MPSegment seg("../dicts/jieba.dict.utf8");
+        MPSegment seg(JIEBA_DICT_FILE);
         if(!seg.init())
         {
             cout<<"seg init failed."<<endl;
             return false;
         }
-        cut(&seg, "testlines.utf8");
+        cut(&seg, TEST_FILE);
         seg.dispose();
     }
     return EXIT_SUCCESS;
