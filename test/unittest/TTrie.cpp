@@ -22,13 +22,25 @@ TEST(TrieTest, Test1)
     EXPECT_EQ(nodeInfo, *trie.find(uni.begin(), uni.end()));
     word = "清华大学";
     vector<pair<uint, const TrieNodeInfo*> > res;
+    unordered_map<uint, const TrieNodeInfo* > resMap;
+    unordered_map<uint, const TrieNodeInfo* > map;
+    const char * words[] = {"清", "清华", "清华大学"};
+    for(uint i = 0; i < sizeof(words)/sizeof(words[0]); i++)
+    {
+        ASSERT_TRUE(TransCode::decode(words[i], uni));
+        res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
+        resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
+    }
     //TrieNodeInfo
     //res.push_back(make_pair(0, ))
 
     vector<pair<uint, const TrieNodeInfo*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     //print(uni);
-    //ASSERT_TRUE(trie.find(uni.begin(), uni.end(), vec));
-    print(vec);
+    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), vec));
+    ASSERT_EQ(vec, res);
+    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), 0, map));
+    ASSERT_EQ(map, resMap);
+   // print(vec);
 }
 
