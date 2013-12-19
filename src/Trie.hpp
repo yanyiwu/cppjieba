@@ -17,6 +17,7 @@
 #include "TransCode.hpp"
 
 
+
 namespace CppJieba
 {
     using namespace Limonp;
@@ -50,13 +51,17 @@ namespace CppJieba
         TrieNodeInfo(const Unicode& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
         {
         }
-        string toString()const
+        bool operator == (const TrieNodeInfo & rhs) const
         {
-            string tmp;
-            TransCode::encode(word, tmp);
-            return string_format("{word:%s,freq:%d, logFreq:%lf}", tmp.c_str(), freq, logFreq);
+            return word == rhs.word && freq == rhs.freq && tag == rhs.tag && abs(logFreq - rhs.logFreq) < 0.001;
         }
     };
+
+    inline ostream& operator << (ostream& os, const TrieNodeInfo & nodeInfo)
+    {
+        return os << nodeInfo.word << ":" << nodeInfo.freq << ":" << nodeInfo.tag << ":" << nodeInfo.logFreq ;
+    }
+
     typedef unordered_map<uint, const TrieNodeInfo*> DagType;
 
     class Trie

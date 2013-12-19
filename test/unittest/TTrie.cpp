@@ -1,0 +1,34 @@
+#include "src/Trie.hpp"
+#include "gtest/gtest.h"
+
+using namespace CppJieba;
+
+static const char* const DICT_FILE = "../dicts/jieba.dict.utf8";
+
+TEST(TrieTest, Test1)
+{
+    Trie trie;
+    ASSERT_TRUE(trie.init());
+    ASSERT_TRUE(trie.loadDict(DICT_FILE));
+    ASSERT_LT(trie.getMinLogFreq() + 17.2184, 0.001);
+    string word("来到");
+    Unicode uni;
+    ASSERT_TRUE(TransCode::decode(word, uni));
+    TrieNodeInfo nodeInfo;
+    nodeInfo.word = uni;
+    nodeInfo.freq = 8779;
+    nodeInfo.tag = "v";
+    nodeInfo.logFreq = -8.83144;
+    EXPECT_EQ(nodeInfo, *trie.find(uni.begin(), uni.end()));
+    word = "清华大学";
+    vector<pair<uint, const TrieNodeInfo*> > res;
+    //TrieNodeInfo
+    //res.push_back(make_pair(0, ))
+
+    vector<pair<uint, const TrieNodeInfo*> > vec;
+    ASSERT_TRUE(TransCode::decode(word, uni));
+    //print(uni);
+    //ASSERT_TRUE(trie.find(uni.begin(), uni.end(), vec));
+    print(vec);
+}
+
