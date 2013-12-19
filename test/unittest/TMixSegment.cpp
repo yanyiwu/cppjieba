@@ -6,10 +6,16 @@ using namespace CppJieba;
 TEST(MixSegmentTest, Test1)
 {
     MixSegment segment("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");;
-    const char* str = "我来自北京邮电大学。。。学号 123456";
-    const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","。","学号", " 123456"};
-    string s;
-    vector<string> buf(res, res + sizeof(res)/sizeof(res[0]));
+    const char* str = "我来自北京邮电大学。。。  学号 123456";
+    const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","  ","学号", " 123456"};
+    //string s;
+    //vector<string> buf(res, res + sizeof(res)/sizeof(res[0]));
+    vector<string> words;
+    ASSERT_EQ(segment.init(), true);
+    ASSERT_EQ(segment.cut(str, words), true);
+    EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    //print(words);
+    
     //for(uint i = 0; i < sizeof(res)/sizeof(res[0]); i++)
     //{
     //    buf.push_back()

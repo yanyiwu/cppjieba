@@ -26,14 +26,14 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const = 0;
             virtual bool cut(const string& str, vector<string>& res)const
             {
-                if(!_getInitFlag())
-                {
-                    LogError("not inited.");
-                    return false;
-                }
+                assert(_getInitFlag());
+                //if(!_getInitFlag())
+                //{
+                //    LogError("not inited.");
+                //    return false;
+                //}
                 Unicode unico;
 #ifdef NO_FILTER
-                unico.clear();
                 if(!TransCode::decode(str, unico))
                 {
                     LogFatal("str[%s] decode failed.", str.c_str());
