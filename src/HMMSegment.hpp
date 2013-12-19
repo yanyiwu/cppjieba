@@ -10,6 +10,7 @@
 #include "TransCode.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
+#include "Trie.hpp"
 
 namespace CppJieba
 {
@@ -64,6 +65,7 @@ namespace CppJieba
                 return true;
             }
         public:
+            using SegmentBase::cut;
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const 
             {
                 if(!_getInitFlag())

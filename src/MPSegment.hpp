@@ -66,6 +66,7 @@ namespace CppJieba
                 return true;
             }
         public:
+            using SegmentBase::cut;
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 assert(_getInitFlag());
