@@ -201,11 +201,16 @@ TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk转换成`uint
 
 ### MixSegment
 
-分词速度大概是 = 2M/sec
-测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz` 电脑下开的ubuntu虚拟机
+分词速度大概是 2M/sec 测试环境: `Intel(R) Xeon(R) CPU  E5506  @ 2.13GHz` 电脑下开的ubuntu虚拟机
+
+## 关于CppJieba的跨语言包装使用
+
+收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
+
+[jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy'discussion] .
 
 
-## 联系客服
+## 客服
 
 如果有运行问题或者任何疑问，欢迎联系 : wuyanyi09@gmail.com
 
@@ -216,3 +221,7 @@ https://github.com/fxsjy/jieba
 
 顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
+[CppJieba]:https://github.com/aszxqw/cppjieba
+[jannson]:https://github.com/jannson
+[cppjiebapy]:https://github.com/jannson/cppjiebapy
+[cppjiebapy'discussion]:https://github.com/aszxqw/cppjieba/issues/1
