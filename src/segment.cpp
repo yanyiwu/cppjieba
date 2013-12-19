@@ -43,12 +43,13 @@ int main(int argc, char ** argv)
             <<"\t--algorithm\tSupported methods are [cutDAG, cutHMM, cutFull, cutQuery, cutMix] for now. \n\t\t\tIf not specified, the default is cutMix\n"
             <<"\t--dictpath\tsee example\n"
             <<"\t--modelpath\tsee example\n"
-            <<"\t--maxlen\tspecify the granularity of cut used in cutQuery, If not specified, the default is 3\n"
+            <<"\t--maxlen\tspecify the granularity of cut used in cutQuery. \n\t\t\tIf not specified, the default is 3\n"
             <<"example:\n"
-            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --algorithm cutDAG\n"
-            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
-            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
-            <<"\t"<<argv[0]<<" ../test/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutQuery --maxlen 3\n"
+            <<"\t"<<argv[0]<<" ../test/testdata/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --algorithm cutDAG\n"
+            <<"\t"<<argv[0]<<" ../test/testdata/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --algorithm cutFull\n"
+            <<"\t"<<argv[0]<<" ../test/testdata/testlines.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutHMM\n"
+            <<"\t"<<argv[0]<<" ../test/testdata/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutMix\n"
+            <<"\t"<<argv[0]<<" ../test/testdata/testlines.utf8 --dictpath ../dicts/jieba.dict.utf8 --modelpath ../dicts/hmm_model.utf8 --algorithm cutQuery --maxlen 3\n"
             <<endl;
         
         return EXIT_FAILURE;

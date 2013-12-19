@@ -9,13 +9,14 @@
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 #include "TransCode.hpp"
+#include "TrieManager.hpp"
 
 namespace CppJieba
 {
     class FullSegment: public SegmentBase
     {
     private:
-        Trie _trie;
+        Trie* _trie;
         const string _dictPath;
 
     public:
@@ -24,36 +25,25 @@ namespace CppJieba
     public:
         bool init()
         {
-#ifndef NO_CODING_LOG
             if(_getInitFlag())
             {
                 LogError("already inited before now.");
                 return false;
             }
-#endif
-            if(!_trie.init())
+            _trie = TrieManager::getInstance().getTrie(_dictPath.c_str());
+            if (NULL == _trie)
             {
-                LogError("_trie.init failed.");
+                LogError("get NULL pointor from getTrie(\"%s\")", _dictPath.c_str());
                 return false;
             }
-            LogInfo("_trie.loadDict(%s) start...", _dictPath.c_str());
-            if(!_trie.loadDict(_dictPath.c_str()))
-            {
-                LogError("_trie.loadDict faield.");
-                return false;
-            }
-            LogInfo("_trie.loadDict end.");
             return _setInitFlag(true);
         }
         bool dispose()
         {
-#ifndef NO_CODING_LOG
             if(!_getInitFlag())
             {
                 return true;
             }
-#endif
-            _trie.dispose();
             _setInitFlag(false);
             return true;
         }
@@ -65,18 +55,12 @@ namespace CppJieba
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
             assert(_getInitFlag());
-#ifndef NO_CODING_LOG
-            //if (!_getInitFlag())
-            //{
-            //    LogError("not inited.");
-            //    return false;
-            //}
             if (begin >= end)
             {
                 LogError("begin >= end");
                 return false;
             }
-#endif
+
             //resut of searching in trie tree
             vector<pair<uint, const TrieNodeInfo*> > tRes;
 
@@ -91,7 +75,7 @@ namespace CppJieba
             for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
             {
                 //find word start from uItr
-                if (_trie.find(uItr, end, tRes))
+                if (_trie->find(uItr, end, tRes))
                 {
                     for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                     {
@@ -123,26 +107,21 @@ namespace CppJieba
 
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
         {
-#ifndef NO_CODING_LOG
-            if (!_getInitFlag())
+            assert(_getInitFlag());
+            if (begin >= end)
             {
-                LogError("not inited.");
+                LogError("begin >= end");
                 return false;
             }
-            if (begin > end)
-            {
-                LogError("begin > end");
-                return false;
-            }
-#endif
+
             vector<Unicode> uRes;
             if (!cut(begin, end, uRes))
             {
                 LogError("get unicode cut result error.");
                 return false;
             }
-            string tmp;
 
+            string tmp;
             for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++)
             {
                 if (TransCode::encode(*uItr, tmp))
