@@ -33,12 +33,21 @@ namespace CppJieba
             EmitProbMap _emitProbM;
             EmitProbMap _emitProbS;
             vector<EmitProbMap* > _emitProbVec;
-        private:
-            const string _hmmModelPath;
 
         public:
-            HMMSegment(const char * const filePath): _hmmModelPath(filePath)
+            HMMSegment(){_setInitFlag(false);}
+            explicit HMMSegment(const string& filePath)
             {
+                _setInitFlag(init(filePath));
+            }
+            virtual ~HMMSegment(){}
+        public:
+            bool init(const string& filePath)
+            {
+                if(_getInitFlag())
+                {
+                    return false;
+                }
                 memset(_startProb, 0, sizeof(_startProb));
                 memset(_transProb, 0, sizeof(_transProb));
                 _statMap[0] = 'B';
@@ -49,20 +58,7 @@ namespace CppJieba
                 _emitProbVec.push_back(&_emitProbE);
                 _emitProbVec.push_back(&_emitProbM);
                 _emitProbVec.push_back(&_emitProbS);
-            }
-            virtual ~HMMSegment()
-            {
-                dispose();
-            }
-        public:
-            virtual bool init()
-            {
-                return _setInitFlag(_loadModel(_hmmModelPath.c_str()));
-            }
-            virtual bool dispose()
-            {
-                _setInitFlag(false);
-                return true;
+                return _setInitFlag(_loadModel(filePath.c_str()));
             }
         public:
             using SegmentBase::cut;
@@ -96,11 +92,6 @@ namespace CppJieba
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
-                //if(!_getInitFlag())
-                //{
-                //    LogError("not inited.");
-                //    return false;
-                //}
                 assert(_getInitFlag());
                 if(begin == end)
                 {
@@ -121,7 +112,6 @@ namespace CppJieba
                 }
                 return true;
             }
-            //virtual bool cut(const string& str, vector<string>& res)const;
 
         private:
             bool _viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<uint>& status)const

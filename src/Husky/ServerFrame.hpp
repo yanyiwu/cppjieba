@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <cassert>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
@@ -40,9 +41,6 @@ namespace Husky
         public:
             virtual ~IRequestHandler(){};
         public:
-            virtual bool init() = 0;
-            virtual bool dispose() = 0;
-
             virtual bool do_GET(const HttpReqInfo& httpReq, string& res) = 0;
 
     };
@@ -63,10 +61,11 @@ namespace Husky
         public:
             ServerFrame(unsigned nPort, unsigned nThreadCount, IRequestHandler* pHandler)
             {
+                m_bShutdown = false;
                 m_nLsnPort = nPort;
                 m_nThreadCount = nThreadCount;
                 m_pHandler = pHandler;
-                m_bShutdown = false;
+                assert(pHandler);
                 pthread_mutex_init(&m_pmAccept,NULL);
             };
             virtual ~ServerFrame(){pthread_mutex_destroy(&m_pmAccept);};
@@ -80,11 +79,6 @@ namespace Husky
                 }
                 LogInfo("init ok {port:%d, threadNum:%d}", m_nLsnPort, m_nThreadCount);
 
-                if(!m_pHandler->init())
-                {
-                    LogFatal("m_pHandler init failed.");
-                    return false;
-                }
                 return true;
             }
             virtual bool dispose()    
@@ -95,7 +89,6 @@ namespace Husky
                     LogError("error [%s]", strerror(errno));
                     return false;
                 }
-
 
                 int sockfd;
                 struct sockaddr_in dest;
@@ -120,10 +113,6 @@ namespace Husky
                     LogError("error [%s]", strerror(errno));
                 }
                 close(sockfd);
-                if(!m_pHandler->dispose())
-                {
-                    LogFatal("m_pHandler dispose failed.");
-                }
                 return true;
             }
             virtual bool run()

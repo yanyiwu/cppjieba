@@ -25,36 +25,14 @@ void cut(const ISegment * seg, const char * const filePath)
 
 int main(int argc, char ** argv)
 {
-    //demo
-    //{
-    //    HMMSegment seg;
-    //    if(!seg.init("../dicts/hmm_model.utf8"))
-    //    {
-    //        cout<<"seg init failed."<<endl;
-    //        return EXIT_FAILURE;
-    //    }
-    //    cut(&seg, "testlines.utf8");
-    //    seg.dispose();
-    //}
-    //{
-    //    MixSegment seg;
-    //    if(!seg.init("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8"))
-    //    {
-    //        cout<<"seg init failed."<<endl;
-    //        return EXIT_FAILURE;
-    //    }
-    //    cut(&seg, "testlines.utf8");
-    //    seg.dispose();
-    //}
     {
         MixSegment seg("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");
-        if(!seg.init())
+        if(!seg)
         {
             cout<<"seg init failed."<<endl;
             return false;
         }
         cut(&seg, argv[1]);
-        seg.dispose();
     }
     return EXIT_SUCCESS;
 }

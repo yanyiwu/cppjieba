@@ -11,8 +11,8 @@ TEST(HMMSegmentTest, Test1)
     //string s;
     //vector<string> buf(res, res + sizeof(res)/sizeof(res[0]));
     vector<string> words;
-    ASSERT_EQ(segment.init(), true);
-    ASSERT_EQ(segment.cut(str, words), true);
+    ASSERT_TRUE(segment);
+    ASSERT_TRUE(segment.cut(str, words));
     //print(words);
     EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
