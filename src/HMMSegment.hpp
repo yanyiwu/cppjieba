@@ -46,6 +46,7 @@ namespace CppJieba
             {
                 if(_getInitFlag())
                 {
+                    LogError("inited already.");
                     return false;
                 }
                 memset(_startProb, 0, sizeof(_startProb));
@@ -58,7 +59,13 @@ namespace CppJieba
                 _emitProbVec.push_back(&_emitProbE);
                 _emitProbVec.push_back(&_emitProbM);
                 _emitProbVec.push_back(&_emitProbS);
-                return _setInitFlag(_loadModel(filePath.c_str()));
+                if(!_setInitFlag(_loadModel(filePath.c_str())))
+                {
+                    LogError("_loadModel(%s) failed.", filePath.c_str());
+                    return false;
+                }
+                LogInfo("HMMSegment init(%s) ok.", filePath.c_str());
+                return true;
             }
         public:
             using SegmentBase::cut;
@@ -198,7 +205,7 @@ namespace CppJieba
             }
             bool _loadModel(const char* const filePath)
             {
-                LogInfo("loadModel [%s] start ...", filePath);
+                LogDebug("loadModel [%s] start ...", filePath);
                 ifstream ifile(filePath);
                 string line;
                 vector<string> tmp;
@@ -264,7 +271,7 @@ namespace CppJieba
                     return false;
                 }
 
-                LogInfo("loadModel [%s] end.", filePath);
+                LogDebug("loadModel [%s] end.", filePath);
 
                 return true;
             }
