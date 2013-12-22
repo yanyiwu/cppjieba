@@ -23,48 +23,47 @@ namespace CppJieba
                     LogError("error when getting md5 for file '%s'", dictpath);
                     return NULL;
                 }
-                else
+                LogInfo("md5 for file '%s': %s", dictpath, md5.c_str());
+
+                if (_tries.find(md5) != _tries.end())
                 {
-                    LogInfo("md5 for file '%s': %s", dictpath, md5.c_str());
-                    if (_tries.find(md5) == _tries.end())
-                    {
-                        LogInfo("create a new trie for md5: '%s'", md5.c_str());
-                        Trie* trie = NULL;
-                        try
-                        {
-                            trie = new Trie();
-                        }
-                        catch (const bad_alloc& e)
-                        {
-                            LogError("error when new a trie for file '%s'", dictpath);
-                            return NULL;
-                        }
-                        if (NULL == trie)
-                            return NULL;
-
-                        if (!trie->init())
-                        { 
-                            LogError("trie init error for file '%s'", dictpath);
-                            return NULL;
-                        }
-
-                        LogInfo("trie->loadDict(%s) start...", dictpath);
-                        if (!trie->loadDict(dictpath))
-                        {
-                            LogError("trie->loadDict(%s) failed...", dictpath);
-                            return NULL;
-                        }
-                        LogInfo("trie->loadDict end...");
-
-                        _tries[md5.c_str()] = trie;
-                        return trie;
-                    }
-                    else
-                    {
-                        LogInfo("find a exits trie for md5: '%s'", md5.c_str());
-                        return _tries[md5.c_str()];
-                    }
+                    LogInfo("find a exits trie for md5: '%s'", md5.c_str());
+                    return _tries[md5.c_str()];
                 }
+
+                LogInfo("create a new trie for md5: '%s'", md5.c_str());
+                Trie* trie = NULL;
+                try
+                {
+                    trie = new Trie();
+                }
+                catch (const bad_alloc& e)
+                {
+                    LogError("error when new a trie for file '%s'", dictpath);
+                    return NULL;
+                }
+                if (NULL == trie)
+                {
+                    LogError("get NULL from new trie for file '%s'", dictpath);
+                    return NULL;
+                }
+
+                if (!trie->init())
+                { 
+                    LogError("trie init error for file '%s'", dictpath);
+                    return NULL;
+                }
+
+                LogInfo("trie->loadDict(%s) start...", dictpath);
+                if (!trie->loadDict(dictpath))
+                {
+                    LogError("trie->loadDict(%s) failed...", dictpath);
+                    return NULL;
+                }
+                LogInfo("trie->loadDict end...");
+
+                _tries[md5.c_str()] = trie;
+                return trie;
             }
 
             static TrieManager& getInstance()
