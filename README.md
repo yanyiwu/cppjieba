@@ -28,7 +28,7 @@ sudo make install
 #### 测试
 
 ```sh
-cd build && ./test/segment.demo
+make test 
 ```
 
 ### 启动服务

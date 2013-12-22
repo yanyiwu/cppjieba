@@ -1,9 +1,9 @@
-#include "src/ChineseFilter.hpp"
+#include "src/SegmentBase.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
 
-TEST(ChineseFilterTest, Test1)
+TEST(SegmentBaseTest, Test1)
 {
     const char* str = "heheh你好...hh";
     string s;
@@ -18,7 +18,7 @@ TEST(ChineseFilterTest, Test1)
     {
         uint len;
         const char* t =  str + offset;
-        int ret = filterAscii(t, size - offset, len);
+        int ret = SegmentBase::filterAscii(t, size - offset, len);
         s.assign(t, len);
         res.push_back(s);
         //cout<<s<<","<<ret<<","<<len<<endl;
