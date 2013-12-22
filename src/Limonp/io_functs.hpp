@@ -10,17 +10,17 @@
 namespace Limonp
 {
     using namespace std;
-    inline string loadFile2Str(const char * const filepath)
+    inline bool loadFile2Str(const char * const filepath, string& res)
     {
         ifstream in(filepath);
         if(!in)
         {
-            return "";
+            return false;
         }
         istreambuf_iterator<char> beg(in), end;
-        string str(beg, end);
+        res.assign(beg, end);
         in.close();
-        return str;
+        return true;
     }
     
     inline void loadStr2File(const char * const filename, ios_base::openmode mode, const string& str)
