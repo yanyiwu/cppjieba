@@ -5,7 +5,7 @@ using namespace CppJieba;
 
 TEST(MixSegmentTest, Test1)
 {
-    MixSegment segment("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");;
+    MixSegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");;
     const char* str = "我来自北京邮电大学。。。  学号 123456";
     const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","  ","学号", " 123456"};
     vector<string> words;

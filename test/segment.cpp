@@ -23,8 +23,8 @@ void cut(const ISegment * seg, const char * const filePath)
 }
 
 const char * const TEST_FILE = "../test/testdata/testlines.utf8";
-const char * const JIEBA_DICT_FILE = "../dicts/jieba.dict.utf8";
-const char * const HMM_DICT_FILE = "../dicts/hmm_model.utf8";
+const char * const JIEBA_DICT_FILE = "../dict/jieba.dict.utf8";
+const char * const HMM_DICT_FILE = "../dict/hmm_model.utf8";
 
 int main(int argc, char ** argv)
 {

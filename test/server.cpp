@@ -8,8 +8,8 @@
 using namespace Husky;
 using namespace CppJieba;
 
-const char * const DEFAULT_DICTPATH = "../dicts/jieba.dict.utf8";
-const char * const DEFAULT_MODELPATH = "../dicts/hmm_model.utf8";
+const char * const DEFAULT_DICTPATH = "../dict/jieba.dict.utf8";
+const char * const DEFAULT_MODELPATH = "../dict/hmm_model.utf8";
 
 class ServerDemo: public IRequestHandler
 {
