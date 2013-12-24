@@ -3,9 +3,11 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test/lib)
 
 SET(GTEST_ROOT_DIR gtest-1.6.0)
 
+ADD_DEFINITIONS(-DLOGGER_LEVEL=LL_WARN)
 INCLUDE_DIRECTORIES(${GTEST_ROOT_DIR} ${GTEST_ROOT_DIR}/include ${PROJECT_SOURCE_DIR})
 ADD_LIBRARY(gtest STATIC ${GTEST_ROOT_DIR}/src/gtest-all.cc)
-ADD_EXECUTABLE(test.run gtest_main.cc TSegmentBase.cpp TMixSegment.cpp TMPSegment.cpp THMMSegment.cpp TTrie.cpp TFullSegment.cpp TQuerySegment.cpp TTrieManager.cpp)
+FILE(GLOB SRCFILES *.cpp)
+ADD_EXECUTABLE(test.run ${SRCFILES})
 TARGET_LINK_LIBRARIES(gtest pthread)
 TARGET_LINK_LIBRARIES(test.run gtest pthread)
 

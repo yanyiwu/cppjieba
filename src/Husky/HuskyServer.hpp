@@ -29,7 +29,7 @@ namespace Husky
     using namespace Limonp;
     typedef	int SOCKET;
     const struct timeval SOCKET_TIMEOUT = {2, 0};
-    const char* const RESPONSE_FORMAT = "HTTP/1.1 200 OK\r\nConnection: close\r\nServer: FrameServer/1.0.0\r\nContent-Type: text/json; charset=%s\r\nContent-Length: %d\r\n\r\n";
+    const char* const RESPONSE_FORMAT = "HTTP/1.1 200 OK\r\nConnection: close\r\nServer: HuskyServer/1.0.0\r\nContent-Type: text/json; charset=%s\r\nContent-Length: %d\r\n\r\n";
     const char* const RESPONSE_CHARSET_UTF8 = "UTF-8";
     const char* const RESPONSE_CHARSET_GB2312 = "GB2312";
     const char* const CLIENT_IP_K = "CLIENT_IP"; 
@@ -53,13 +53,13 @@ namespace Husky
         bool * pShutdown;
     };
 
-    class ServerFrame//: public IWorkHandler
+    class HuskyServer
     {
         private:
             pthread_mutex_t m_pmAccept;
             bool m_bShutdown;
         public:
-            ServerFrame(unsigned nPort, unsigned nThreadCount, IRequestHandler* pHandler)
+            explicit HuskyServer(unsigned nPort, unsigned nThreadCount, IRequestHandler* pHandler)
             {
                 m_bShutdown = false;
                 m_nLsnPort = nPort;
@@ -68,7 +68,7 @@ namespace Husky
                 assert(pHandler);
                 pthread_mutex_init(&m_pmAccept,NULL);
             };
-            virtual ~ServerFrame(){pthread_mutex_destroy(&m_pmAccept);};
+            virtual ~HuskyServer(){pthread_mutex_destroy(&m_pmAccept);};
             virtual bool init()  
             {
 
@@ -292,8 +292,6 @@ namespace Husky
             u_short  m_nThreadCount;
             SOCKET   m_lsnSock;
             IRequestHandler *m_pHandler;
-            //static bool m_bShutdown;
-            //static pthread_mutex_t m_pmAccept;
 
     }; 
 

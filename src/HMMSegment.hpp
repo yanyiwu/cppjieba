@@ -215,7 +215,7 @@ namespace CppJieba
                 {
                     return false;
                 }
-                splitStr(line, tmp, " ");
+                split(line, tmp, " ");
                 if(tmp.size() != STATUS_SUM)
                 {
                     LogError("start_p illegal");
@@ -234,7 +234,7 @@ namespace CppJieba
                     {
                         return false;
                     }
-                    splitStr(line, tmp, " ");
+                    split(line, tmp, " ");
                     if(tmp.size() != STATUS_SUM)
                     {
                         LogError("trans_p illegal");
@@ -284,7 +284,7 @@ namespace CppJieba
                     {
                         continue;
                     }
-                    if(strStartsWith(line, "#"))
+                    if(startsWith(line, "#"))
                     {
                         continue;
                     }
@@ -300,10 +300,10 @@ namespace CppJieba
                 }
                 vector<string> tmp, tmp2;
                 uint16_t unico = 0;
-                splitStr(line, tmp, ",");
+                split(line, tmp, ",");
                 for(uint i = 0; i < tmp.size(); i++)
                 {
-                    splitStr(tmp[i], tmp2, ":");
+                    split(tmp[i], tmp2, ":");
                     if(2 != tmp2.size())
                     {
                         LogError("_emitProb illegal.");
