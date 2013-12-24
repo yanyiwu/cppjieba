@@ -11,13 +11,12 @@ namespace CppJieba
     struct KeyWordInfo
     {
         string word;
-        uint freq;
         double idf;
     };
 
     inline ostream& operator << (ostream& os, const KeyWordInfo & keyword)
     {
-        return os << keyword.word << "," << keyword.freq << "," << keyword.idf;
+        return os << keyword.word << "," << keyword.idf;
     }
 
     class KeywordExtractor
@@ -25,9 +24,7 @@ namespace CppJieba
         private:
             MPSegment _segment;
         private:
-            unordered_map<string, const KeyWordInfo* > _wordIndex;
-            vector<KeyWordInfo> _wordinfos;
-            size_t _totalFreq;
+            unordered_map<string, double> _idfMap;
         protected:
             bool _isInited;
             bool _getInitFlag()const{return _isInited;};
@@ -36,22 +33,19 @@ namespace CppJieba
             operator bool(){return _getInitFlag();};
         public:
             KeywordExtractor(){_setInitFlag(false);};
-            explicit KeywordExtractor(const string& dictPath){_setInitFlag(init(dictPath));};
+            explicit KeywordExtractor(const string& dictPath, const string& idfPath){_setInitFlag(init(dictPath, idfPath));};
             ~KeywordExtractor(){};
         public:
-            bool init(const string& dictPath)
+            bool init(const string& dictPath, const string& idfPath)
             {
-                ifstream ifs(dictPath.c_str());
+                ifstream ifs(idfPath.c_str());
                 if(!ifs)
                 {
-                    LogError("open %s failed.", dictPath.c_str());
+                    LogError("open %s failed.", idfPath.c_str());
                     return false;
                 }
-                _totalFreq = 0;
-                int tfreq;
                 string line ;
                 vector<string> buf;
-                KeyWordInfo keywordInfo;
                 for(uint lineno = 0; getline(ifs, line); lineno++)
                 {
                     buf.clear();
@@ -60,33 +54,12 @@ namespace CppJieba
                         LogError("line[%d] empty. skipped.", lineno);
                         continue;
                     }
-                    if(!split(line, buf, " ") || buf.size() != 3)
+                    if(!split(line, buf, " ") || buf.size() != 2)
                     {
                         LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
                         continue;
                     }
-                    keywordInfo.word = buf[0];
-                    tfreq= atoi(buf[1].c_str());
-                    if(tfreq <= 0)
-                    {
-                        LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
-                        continue;
-                    }
-                    keywordInfo.freq = tfreq;
-                    _totalFreq += tfreq;
-                    _wordinfos.push_back(keywordInfo);
-                }
-
-                // calculate idf & make index.
-                for(uint i = 0; i < _wordinfos.size(); i++)
-                {
-                    if(_wordinfos[i].freq <= 0)
-                    {
-                        LogFatal("freq value is not positive.");
-                        return false;
-                    }
-                    _wordinfos[i].idf = -log(_wordinfos[i].freq);
-                    _wordIndex[_wordinfos[i].word] = &(_wordinfos[i]);
+                    _idfMap[buf[0]] = atof(buf[1].c_str());
                 }
                 return _setInitFlag(_segment.init(dictPath));
             };
@@ -110,10 +83,10 @@ namespace CppJieba
 
                 for(unordered_map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end();)
                 {
-                    unordered_map<string, const KeyWordInfo*>::const_iterator cit = _wordIndex.find(itr->first);
-                    if(cit != _wordIndex.end())
+                    unordered_map<string, double>::const_iterator cit = _idfMap.find(itr->first);
+                    if(cit != _idfMap.end())
                     {
-                        itr->second *= cit->second->idf;
+                        itr->second *= cit->second;
                         itr ++;
                     }
                     else
