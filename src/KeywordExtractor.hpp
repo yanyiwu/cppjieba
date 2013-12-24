@@ -2,6 +2,7 @@
 #define CPPJIEBA_KEYWORD_EXTRACTOR_H
 
 #include "MPSegment.hpp"
+#include <cmath>
 
 namespace CppJieba
 {
@@ -9,18 +10,24 @@ namespace CppJieba
 
     struct KeyWordInfo
     {
-        
+        string word;
         uint freq;
-        double weight;
+        double idf;
     };
 
-    class KeywordExtractor//: public MPSegment
+    inline ostream& operator << (ostream& os, const KeyWordInfo & keyword)
+    {
+        return os << keyword.word << "," << keyword.freq << "," << keyword.idf;
+    }
+
+    class KeywordExtractor
     {
         private:
             MPSegment _segment;
         private:
-            unordered_map<string, uint> _wordIndex;
-            vector<KeyWordInfo> _words;
+            unordered_map<string, const KeyWordInfo* > _wordIndex;
+            vector<KeyWordInfo> _wordinfos;
+            size_t _totalFreq;
         protected:
             bool _isInited;
             bool _getInitFlag()const{return _isInited;};
@@ -40,16 +47,51 @@ namespace CppJieba
                     LogError("open %s failed.", dictPath.c_str());
                     return false;
                 }
+                _totalFreq = 0;
+                int tfreq;
                 string line ;
                 vector<string> buf;
+                KeyWordInfo keywordInfo;
                 for(uint lineno = 0; getline(ifs, line); lineno++)
                 {
                     buf.clear();
+                    if(line.empty())
+                    {
+                        LogError("line[%d] empty. skipped.", lineno);
+                        continue;
+                    }
+                    if(!split(line, buf, " ") || buf.size() != 3)
+                    {
+                        LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
+                        continue;
+                    }
+                    keywordInfo.word = buf[0];
+                    tfreq= atoi(buf[1].c_str());
+                    if(tfreq <= 0)
+                    {
+                        LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
+                        continue;
+                    }
+                    keywordInfo.freq = tfreq;
+                    _totalFreq += tfreq;
+                    _wordinfos.push_back(keywordInfo);
+                }
+
+                // calculate idf & make index.
+                for(uint i = 0; i < _wordinfos.size(); i++)
+                {
+                    if(_wordinfos[i].freq <= 0)
+                    {
+                        LogFatal("freq value is not positive.");
+                        return false;
+                    }
+                    _wordinfos[i].idf = -log(_wordinfos[i].freq);
+                    _wordIndex[_wordinfos[i].word] = &(_wordinfos[i]);
                 }
                 return _setInitFlag(_segment.init(dictPath));
             };
         public:
-            bool extract(const string& str, vector<string>& keywords, uint topN)
+            bool extract(const string& str, vector<string>& keywords, uint topN) const
             {
                 assert(_getInitFlag());
 
@@ -60,14 +102,28 @@ namespace CppJieba
                     return false;
                 }
 
-                unordered_map<string, uint> wordcnt;
+                unordered_map<string, double> wordmap;
                 for(uint i = 0; i < words.size(); i ++)
                 {
-                    wordcnt[ words[i] ] ++;
+                    wordmap[ words[i] ] += 1.0;
                 }
 
-                vector<pair<string, uint> > topWords(topN);
-                partial_sort_copy(wordcnt.begin(), wordcnt.end(), topWords.begin(), topWords.end(), _cmp);
+                for(unordered_map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end();)
+                {
+                    unordered_map<string, const KeyWordInfo*>::const_iterator cit = _wordIndex.find(itr->first);
+                    if(cit != _wordIndex.end())
+                    {
+                        itr->second *= cit->second->idf;
+                        itr ++;
+                    }
+                    else
+                    {
+                        itr = wordmap.erase(itr);
+                    }
+                }
+
+                vector<pair<string, double> > topWords(min(topN, wordmap.size()));
+                partial_sort_copy(wordmap.begin(), wordmap.end(), topWords.begin(), topWords.end(), _cmp);
 
                 keywords.clear();
                 for(uint i = 0; i < topWords.size(); i++)
