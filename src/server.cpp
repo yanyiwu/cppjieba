@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 #include "Limonp/Config.hpp"
-#include "Husky/ServerFrame.hpp"
+#include "Husky/HuskyServer.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
@@ -38,8 +38,8 @@ bool run(int argc, char** argv)
     {
         return false;
     }
-    Config conf;
-    if(!conf.loadFile(argv[1]))
+    Config conf(argv[1]);
+    if(!conf)
     {
         return false;
     }
@@ -90,7 +90,7 @@ bool run(int argc, char** argv)
     }
 
     ReqHandler reqHandler(dictPath, modelPath);
-    ServerFrame sf(port, threadNum, &reqHandler);
+    HuskyServer sf(port, threadNum, &reqHandler);
     return sf.init() && sf.run();
 }
 

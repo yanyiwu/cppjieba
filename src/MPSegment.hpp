@@ -32,7 +32,7 @@ namespace CppJieba
 
     class MPSegment: public SegmentBase
     {
-        private:
+        protected:
             Trie* _trie;
 
         public:

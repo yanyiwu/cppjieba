@@ -11,6 +11,7 @@
 #include <string>
 #include <stdio.h>
 #include <stdarg.h>
+#include <cassert>
 #include "io_functs.hpp"
 #include "str_functs.hpp"
 
@@ -21,6 +22,7 @@
 #define LogWarn(fmt, ...) Logger::LoggingF(LL_WARN, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogError(fmt, ...) Logger::LoggingF(LL_ERROR, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogFatal(fmt, ...) Logger::LoggingF(LL_FATAL, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+
 
 
 namespace Limonp
@@ -36,16 +38,11 @@ namespace Limonp
         public:
             static bool Logging(uint level, const string& msg, const char* fileName, int lineNo)
             {
-                if(level > LL_FATAL)
-                {
-                    cerr<<"level's value is out of range"<<endl;
-                    return false;
-                }
+                assert(level <= LL_FATAL);
                 char buf[CSTR_BUFFER_SIZE];
                 time_t timeNow;
                 time(&timeNow);
-                size_t ret = strftime(buf, sizeof(buf), LOG_TIME_FORMAT, localtime(&timeNow));
-                if(0 == ret)
+                if(!strftime(buf, sizeof(buf), LOG_TIME_FORMAT, localtime(&timeNow)))
                 {
                     fprintf(stderr, "stftime failed.\n");
                     return false;
@@ -55,6 +52,9 @@ namespace Limonp
             }
             static bool LoggingF(uint level, const char* fileName, int lineNo, const string& fmt, ...)
             {
+#ifdef LOGGER_LEVEL
+                if(level < LOGGER_LEVEL) return true;
+#endif
                 int size = 256;
                 string msg;
                 va_list ap;

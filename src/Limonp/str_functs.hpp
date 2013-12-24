@@ -72,28 +72,6 @@ namespace Limonp
         }
     }
 
-    //inline bool joinStr(const vector<string>& src, string& dest, const string& connectorStr)
-    //{
-    //    if(src.empty())
-    //    {
-    //        return false;
-    //    }
-    //    for(uint i = 0; i < src.size() - 1; i++)
-    //    {
-    //        dest += src[i];
-    //        dest += connectorStr;
-    //    }
-    //    dest += src[src.size() - 1];
-    //    return true;
-    //}
-
-    //inline string joinStr(const vector<string>& source, const string& connector)
-    //{
-    //    string res;
-    //    joinStr(source, res, connector);
-    //    return res;
-    //}
-
     template<class T>
         void join(T begin, T end, string& res, const string& connector)
         {
@@ -122,7 +100,7 @@ namespace Limonp
 
 
 
-    inline bool splitStr(const string& src, vector<string>& res, const string& pattern)
+    inline bool split(const string& src, vector<string>& res, const string& pattern)
     {
         if(src.empty())
         {
@@ -181,20 +159,9 @@ namespace Limonp
     }
 
 
-    inline uint16_t twocharToUint16(char high, char low)
-    {
-        return (((uint16_t(high) & 0x00ff ) << 8) | (uint16_t(low) & 0x00ff));
-    }
 
-    inline pair<char, char> uint16ToChar2(uint16_t in)
-    {
-        pair<char, char> res;
-        res.first = (in>>8) & 0x00ff; //high
-        res.second = (in) & 0x00ff; //low
-        return res;
-    }
 
-    inline bool strStartsWith(const string& str, const string& prefix)
+    inline bool startsWith(const string& str, const string& prefix)
     {
         //return str.substr(0, prefix.size()) == prefix;
         if(prefix.length() > str.length())
@@ -204,7 +171,7 @@ namespace Limonp
         return 0 == str.compare(0, prefix.length(), prefix);
     }
 
-    inline bool strEndsWith(const string& str, const string& suffix)
+    inline bool endsWith(const string& str, const string& suffix)
     {
         if(suffix.length() > str.length())
         {
@@ -218,13 +185,19 @@ namespace Limonp
         return str.find(ch) != string::npos;
     }
 
+    inline uint16_t twocharToUint16(char high, char low)
+    {
+        return (((uint16_t(high) & 0x00ff ) << 8) | (uint16_t(low) & 0x00ff));
+    }
+
     inline bool utf8ToUnicode(const char * const str, uint len, vector<uint16_t>& vec)
     {
-        char ch1, ch2;
         if(!str)
         {
             return false;
         }
+        char ch1, ch2;
+        uint16_t tmp;
         vec.clear();
         for(uint i = 0;i < len;)
         {
@@ -237,14 +210,16 @@ namespace Limonp
             {
                 ch1 = (str[i] >> 2) & 0x07;
                 ch2 = (str[i+1] & 0x3f) | ((str[i] & 0x03) << 6 );
-                vec.push_back(twocharToUint16(ch1, ch2));
+                tmp = (((uint16_t(ch1) & 0x00ff ) << 8) | (uint16_t(ch2) & 0x00ff));
+                vec.push_back(tmp);
                 i += 2;
             }
             else if((unsigned char)str[i] <= 0xef && i + 2 < len)
             {
                 ch1 = (str[i] << 4) | ((str[i+1] >> 2) & 0x0f );
                 ch2 = ((str[i+1]<<6) & 0xc0) | (str[i+2] & 0x3f); 
-                vec.push_back(twocharToUint16(ch1, ch2));
+                tmp = (((uint16_t(ch1) & 0x00ff ) << 8) | (uint16_t(ch2) & 0x00ff));
+                vec.push_back(tmp);
                 i += 3;
             }
             else
@@ -310,7 +285,8 @@ namespace Limonp
             {
                 if(i + 1 < len) //&& (str[i+1] & 0x80))
                 {
-                    vec.push_back(twocharToUint16(str[i], str[i + 1]));
+                    uint16_t tmp = (((uint16_t(str[i]) & 0x00ff ) << 8) | (uint16_t(str[i+1]) & 0x00ff));
+                    vec.push_back(tmp);
                     i += 2;
                 }
                 else
@@ -321,10 +297,19 @@ namespace Limonp
         }
         return true;
     }
+
     inline bool gbkTrans(const string& str, vector<uint16_t>& vec)
     {
         return gbkTrans(str.c_str(), str.size(), vec);
     }
+
+    //inline pair<char, char> uint16ToChar2(uint16_t in)
+    //{
+    //    pair<char, char> res;
+    //    res.first = (in>>8) & 0x00ff; //high
+    //    res.second = (in) & 0x00ff; //low
+    //    return res;
+    //}
 
     inline bool gbkTrans(vector<uint16_t>::const_iterator begin, vector<uint16_t>::const_iterator end, string& res)
     {
@@ -333,18 +318,21 @@ namespace Limonp
             return false;
         }
         res.clear();
-        pair<char, char> pa;
+        //pair<char, char> pa;
+        char first, second;
         while(begin != end)
         {
-            pa = uint16ToChar2(*begin);
-            if(pa.first & 0x80)
+            //pa = uint16ToChar2(*begin);
+            first = ((*begin)>>8) & 0x00ff;
+            second = (*begin) & 0x00ff;
+            if(first & 0x80)
             {
-                res += pa.first;
-                res += pa.second;
+                res += first;
+                res += second;
             }
             else
             {
-                res += pa.second;
+                res += second;
             }
             begin++;
         }

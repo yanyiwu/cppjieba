@@ -7,10 +7,20 @@ namespace CppJieba
 {
     using namespace Limonp;
 
-    class KeywordExtractor
+    struct KeyWordInfo
+    {
+        
+        uint freq;
+        double weight;
+    };
+
+    class KeywordExtractor//: public MPSegment
     {
         private:
             MPSegment _segment;
+        private:
+            unordered_map<string, uint> _wordIndex;
+            vector<KeyWordInfo> _words;
         protected:
             bool _isInited;
             bool _getInitFlag()const{return _isInited;};
@@ -22,7 +32,22 @@ namespace CppJieba
             explicit KeywordExtractor(const string& dictPath){_setInitFlag(init(dictPath));};
             ~KeywordExtractor(){};
         public:
-            bool init(const string& dictPath){return _setInitFlag(_segment.init(dictPath));};
+            bool init(const string& dictPath)
+            {
+                ifstream ifs(dictPath.c_str());
+                if(!ifs)
+                {
+                    LogError("open %s failed.", dictPath.c_str());
+                    return false;
+                }
+                string line ;
+                vector<string> buf;
+                for(uint lineno = 0; getline(ifs, line); lineno++)
+                {
+                    buf.clear();
+                }
+                return _setInitFlag(_segment.init(dictPath));
+            };
         public:
             bool extract(const string& str, vector<string>& keywords, uint topN)
             {
