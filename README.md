@@ -173,7 +173,7 @@ FullSegment.hpp
 
 #### TransCode模块
 
-TransCode.cpp/TransCode.h 负责转换编码类型，将utf8和gbk转换成`uint16_t`类型，也负责逆转换。
+TransCode.hpp 负责转换编码类型，将utf8和gbk转换成`uint16_t`类型，也负责逆转换。
 
 ### src/Husky
 
