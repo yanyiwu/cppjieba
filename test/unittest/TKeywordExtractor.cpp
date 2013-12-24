@@ -5,7 +5,7 @@ using namespace CppJieba;
 
 TEST(KeywordExtractorTest, Test1)
 {
-    KeywordExtractor extractor("../dicts/jieba.dict.utf8");
+    KeywordExtractor extractor("../dict/jieba.dict.utf8");
     const char* str = "我来自北京邮电大学。。。  学号 123456";
     const char* res[] = {"北京邮电大学", "来自"};
     vector<string> words;
@@ -16,7 +16,7 @@ TEST(KeywordExtractorTest, Test1)
 
 TEST(KeywordExtractorTest, Test2)
 {
-    KeywordExtractor extractor("../dicts/jieba.dict.utf8");
+    KeywordExtractor extractor("../dict/jieba.dict.utf8");
     const char* str = "我来自北京邮电大学。。。  学号 123456";
     const char* res[] = {"北京邮电大学", "来自", "学", "号", "我"};
     vector<string> words;
@@ -31,7 +31,7 @@ TEST(KeywordExtractorTest, Test3)
     ifstream ifs("../test/testdata/weicheng.utf8");
     ASSERT_TRUE(ifs);
     string str((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));
-    KeywordExtractor extractor("../dicts/jieba.dict.utf8");
+    KeywordExtractor extractor("../dict/jieba.dict.utf8");
     vector<string> keywords;
     string res;
     extractor.extract(str, keywords, 5);
