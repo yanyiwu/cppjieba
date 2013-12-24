@@ -165,7 +165,7 @@ MPSegment.hpp
 
 HMMSegment.hpp
 是根据HMM模型来进行分词，主要算法思路是根据(B,E,M,S)四个状态来代表每个字的隐藏状态。
-HMM模型由dicts/下面的`hmm_model.utf8`提供。
+HMM模型由dict/下面的`hmm_model.utf8`提供。
 分词算法即viterbi算法。
 
 FullSegment.hpp
