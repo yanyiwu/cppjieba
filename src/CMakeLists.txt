@@ -7,7 +7,7 @@ TARGET_LINK_LIBRARIES(cjserver pthread)
 
 INSTALL(TARGETS cjsegment RUNTIME DESTINATION bin)
 INSTALL(TARGETS cjserver RUNTIME DESTINATION bin)
-INSTALL(FILES HMMSegment.hpp MPSegment.hpp Trie.hpp TrieManager.hpp ISegment.hpp  MixSegment.hpp  SegmentBase.hpp  TransCode.hpp  DESTINATION include/CppJieba)
+INSTALL(FILES HMMSegment.hpp MPSegment.hpp Trie.hpp TrieManager.hpp ISegment.hpp  MixSegment.hpp  SegmentBase.hpp  TransCode.hpp KeywordExtractor.hpp DESTINATION include/CppJieba)
 
 ADD_SUBDIRECTORY(Husky)
 ADD_SUBDIRECTORY(Limonp)
