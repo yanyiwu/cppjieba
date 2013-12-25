@@ -8,16 +8,16 @@ namespace CppJieba
 {
     using namespace Limonp;
 
-    struct KeyWordInfo
-    {
-        string word;
-        double idf;
-    };
+    //struct KeyWordInfo
+    //{
+    //    string word;
+    //    double tfidf;
+    //};
 
-    inline ostream& operator << (ostream& os, const KeyWordInfo & keyword)
-    {
-        return os << keyword.word << "," << keyword.idf;
-    }
+    //inline ostream& operator << (ostream& os, const KeyWordInfo & keyword)
+    //{
+    //    return os << keyword.word << "," << keyword.idf;
+    //}
 
     class KeywordExtractor
     {
@@ -64,10 +64,24 @@ namespace CppJieba
                 return _setInitFlag(_segment.init(dictPath));
             };
         public:
+
             bool extract(const string& str, vector<string>& keywords, uint topN) const
             {
                 assert(_getInitFlag());
+                vector<pair<string, double> > topWords;
+                if(!extract(str, topWords, topN))
+                {
+                    return false;
+                }
+                for(uint i = 0; i < topWords.size(); i++)
+                {
+                    keywords.push_back(topWords[i].first);
+                }
+                return true;
+            }
 
+            bool extract(const string& str, vector<pair<string, double> >& keywords, uint topN) const
+            {
                 vector<string> words;
                 if(!_segment.cut(str, words))
                 {
@@ -95,16 +109,11 @@ namespace CppJieba
                     }
                 }
 
-                vector<pair<string, double> > topWords(min(topN, wordmap.size()));
-                partial_sort_copy(wordmap.begin(), wordmap.end(), topWords.begin(), topWords.end(), _cmp);
-
-                keywords.clear();
-                for(uint i = 0; i < topWords.size(); i++)
-                {
-                    keywords.push_back(topWords[i].first);
-                }
+                keywords.resize(min(topN, wordmap.size()));
+                partial_sort_copy(wordmap.begin(), wordmap.end(), keywords.begin(), keywords.end(), _cmp);
                 return true;
             }
+
         private:
             static bool _cmp(const pair<string, uint>& lhs, const pair<string, uint>& rhs)
             {
