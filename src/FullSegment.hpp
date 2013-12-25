@@ -71,7 +71,7 @@ namespace CppJieba
                         for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                         {
                             wordLen = itr->second->word.size();
-                            if (wordLen >= 2 || tRes.size() == 1 && maxIdx <= uIdx)
+                            if (wordLen >= 2 || (tRes.size() == 1 && maxIdx <= uIdx))
                             {
                                 res.push_back(itr->second->word);
                             }

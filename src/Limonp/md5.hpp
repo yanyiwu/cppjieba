@@ -34,7 +34,7 @@
 namespace Limonp 
 {
 
-#pragma region MD5 defines
+//#pragma region MD5 defines
 // Constants for MD5Transform routine.
 #define S11 7
 #define S12 12
@@ -85,7 +85,7 @@ namespace Limonp
   (a) = ROTATE_LEFT ((a), (s)); \
   (a) += (b); \
   }
-#pragma endregion
+//#pragma endregion
 
 
 typedef unsigned char BYTE ;
@@ -115,7 +115,7 @@ private:
     unsigned char buffer[64];                         /* input buffer */
   } context ;
 
-  #pragma region static helper functions
+  //#pragma region static helper functions
   // The core of the MD5 algorithm is here.
   // MD5 basic transformation. Transforms state based on block.
   static void MD5Transform( UINT4 state[4], unsigned char block[64] )
@@ -229,7 +229,7 @@ private:
       output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) |
       (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
   }
-  #pragma endregion
+  //#pragma endregion
 
 
 public:
@@ -354,7 +354,7 @@ public:
     }
     else
     {
-      while( len = fread( buffer, 1, 1024, file ) )
+      while( (len = fread( buffer, 1, 1024, file )) )
         Update( buffer, len ) ;
       Final();
 
