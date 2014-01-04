@@ -336,17 +336,20 @@ namespace CppJieba
                 vector<string> vecBuf;
 
                 TrieNodeInfo nodeInfo;
+                size_t lineno = 0;
                 while(getline(ifs, line))
                 {
                     vecBuf.clear();
+                    lineno ++;
                     split(line, vecBuf, " ");
                     if(3 < vecBuf.size())
                     {
-                        LogError("line[%s] illegal.", line.c_str());
+                        LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         return false;
                     }
                     if(!TransCode::decode(vecBuf[0], nodeInfo.word))
                     {
+                        LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         return false;
                     }
                     nodeInfo.freq = atoi(vecBuf[1].c_str());
