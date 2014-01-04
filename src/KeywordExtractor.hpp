@@ -3,6 +3,7 @@
 
 #include "MPSegment.hpp"
 #include <cmath>
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
 namespace CppJieba
 {
@@ -109,7 +110,7 @@ namespace CppJieba
                     }
                 }
 
-                keywords.resize(min(topN, wordmap.size()));
+                keywords.resize(MIN(topN, wordmap.size()));
                 partial_sort_copy(wordmap.begin(), wordmap.end(), keywords.begin(), keywords.end(), _cmp);
                 return true;
             }

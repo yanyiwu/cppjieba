@@ -16,9 +16,9 @@ TEST(SegmentBaseTest, Test1)
     uint offset = 0;
     while(offset < size)
     {
-        uint len;
+        uint len = 0;
         const char* t =  str + offset;
-        int ret = SegmentBase::filterAscii(t, size - offset, len);
+        SegmentBase::filterAscii(t, size - offset, len);
         s.assign(t, len);
         res.push_back(s);
         //cout<<s<<","<<ret<<","<<len<<endl;
