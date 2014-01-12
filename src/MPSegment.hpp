@@ -32,7 +32,7 @@ namespace CppJieba
 
     class MPSegment: public SegmentBase
     {
-        private:
+        protected:
             Trie* _trie;
 
         public:
@@ -56,6 +56,7 @@ namespace CppJieba
                     LogError("get a NULL pointor form getTrie(\"%s\").", dictPath.c_str());
                     return false;
                 }
+                LogInfo("MPSegment init(%s) ok", dictPath.c_str());
                 return _setInitFlag(true);
             }
         public:

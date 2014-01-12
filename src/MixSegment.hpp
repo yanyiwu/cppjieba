@@ -15,9 +15,9 @@ namespace CppJieba
             HMMSegment _hmmSeg;
         public:
             MixSegment(){_setInitFlag(false);};
-            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict): _mpSeg(mpSegDict), _hmmSeg(hmmSegDict)
+            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict)
             {
-                _setInitFlag(_mpSeg && _hmmSeg);
+                _setInitFlag(init(mpSegDict, hmmSegDict));
             }
             virtual ~MixSegment(){}
         public:
@@ -38,6 +38,7 @@ namespace CppJieba
                     LogError("_hmmSeg init");
                     return false;
                 }
+                LogInfo("MixSegment init(%s, %s)", mpSegDict.c_str(), hmmSegDict.c_str());
                 return _setInitFlag(true);
             }
         public:

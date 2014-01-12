@@ -130,26 +130,13 @@ namespace CppJieba
             }
             bool loadDict(const char * const filePath)
             {
-                if(!_getInitFlag())
-                {
-                    LogError("not initted.");
-                    return false;
-                }
-
-                if(!checkFileExist(filePath))
-                {
-                    LogError("cann't find fiel[%s].",filePath);
-                    return false;
-                }
-                bool res = false;
-                res = _trieInsert(filePath);
-                if(!res)
+                assert(_getInitFlag());
+                if(!_trieInsert(filePath))
                 {
                     LogError("_trieInsert failed.");
                     return false;
                 }
-                res = _countWeight();
-                if(!res)
+                if(!_countWeight())
                 {
                     LogError("_countWeight failed.");
                     return false;
@@ -339,22 +326,30 @@ namespace CppJieba
         private:
             bool _trieInsert(const char * const filePath)
             {
-                ifstream ifile(filePath);
+                ifstream ifs(filePath);
+                if(!ifs)
+                {
+                    LogError("open %s failed.", filePath);
+                    return false;
+                }
                 string line;
                 vector<string> vecBuf;
 
                 TrieNodeInfo nodeInfo;
-                while(getline(ifile, line))
+                size_t lineno = 0;
+                while(getline(ifs, line))
                 {
                     vecBuf.clear();
-                    splitStr(line, vecBuf, " ");
+                    lineno ++;
+                    split(line, vecBuf, " ");
                     if(3 < vecBuf.size())
                     {
-                        LogError("line[%s] illegal.", line.c_str());
+                        LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         return false;
                     }
                     if(!TransCode::decode(vecBuf[0], nodeInfo.word))
                     {
+                        LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         return false;
                     }
                     nodeInfo.freq = atoi(vecBuf[1].c_str());

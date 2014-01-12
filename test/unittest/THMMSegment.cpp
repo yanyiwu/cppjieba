@@ -5,7 +5,7 @@ using namespace CppJieba;
 
 TEST(HMMSegmentTest, Test1)
 {
-    HMMSegment segment("../dicts/hmm_model.utf8");;
+    HMMSegment segment("../dict/hmm_model.utf8");;
     const char* str = "我来自北京邮电大学。。。  学号 123456";
     const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "  ", "学号", " 123456"};
     //string s;

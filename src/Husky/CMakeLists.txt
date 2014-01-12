@@ -1,4 +1,5 @@
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-INSTALL(FILES HttpReqInfo.hpp ServerFrame.hpp ThreadManager.hpp DESTINATION include/CppJieba/Husky)
+FILE(GLOB SRCS *.hpp)
+INSTALL(FILES ${SRCS} DESTINATION include/CppJieba/Husky)

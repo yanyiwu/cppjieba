@@ -22,9 +22,9 @@ namespace Limonp
 
                 for(int i = 0; i < argc; i++)
                 {
-                    if(strStartsWith(argv[i], "-"))
+                    if(startsWith(argv[i], "-"))
                     {
-                        if(i + 1 < argc && !strStartsWith(argv[i + 1], "-"))
+                        if(i + 1 < argc && !startsWith(argv[i + 1], "-"))
                         {
                             _mpss[argv[i]] = argv[i+1];
                             i++;

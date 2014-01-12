@@ -46,6 +46,7 @@ namespace CppJieba
             {
                 if(_getInitFlag())
                 {
+                    LogError("inited already.");
                     return false;
                 }
                 memset(_startProb, 0, sizeof(_startProb));
@@ -58,7 +59,13 @@ namespace CppJieba
                 _emitProbVec.push_back(&_emitProbE);
                 _emitProbVec.push_back(&_emitProbM);
                 _emitProbVec.push_back(&_emitProbS);
-                return _setInitFlag(_loadModel(filePath.c_str()));
+                if(!_setInitFlag(_loadModel(filePath.c_str())))
+                {
+                    LogError("_loadModel(%s) failed.", filePath.c_str());
+                    return false;
+                }
+                LogInfo("HMMSegment init(%s) ok.", filePath.c_str());
+                return true;
             }
         public:
             using SegmentBase::cut;
@@ -198,7 +205,7 @@ namespace CppJieba
             }
             bool _loadModel(const char* const filePath)
             {
-                LogInfo("loadModel [%s] start ...", filePath);
+                LogDebug("loadModel [%s] start ...", filePath);
                 ifstream ifile(filePath);
                 string line;
                 vector<string> tmp;
@@ -208,7 +215,7 @@ namespace CppJieba
                 {
                     return false;
                 }
-                splitStr(line, tmp, " ");
+                split(line, tmp, " ");
                 if(tmp.size() != STATUS_SUM)
                 {
                     LogError("start_p illegal");
@@ -227,7 +234,7 @@ namespace CppJieba
                     {
                         return false;
                     }
-                    splitStr(line, tmp, " ");
+                    split(line, tmp, " ");
                     if(tmp.size() != STATUS_SUM)
                     {
                         LogError("trans_p illegal");
@@ -264,7 +271,7 @@ namespace CppJieba
                     return false;
                 }
 
-                LogInfo("loadModel [%s] end.", filePath);
+                LogDebug("loadModel [%s] end.", filePath);
 
                 return true;
             }
@@ -277,7 +284,7 @@ namespace CppJieba
                     {
                         continue;
                     }
-                    if(strStartsWith(line, "#"))
+                    if(startsWith(line, "#"))
                     {
                         continue;
                     }
@@ -293,10 +300,10 @@ namespace CppJieba
                 }
                 vector<string> tmp, tmp2;
                 uint16_t unico = 0;
-                splitStr(line, tmp, ",");
+                split(line, tmp, ",");
                 for(uint i = 0; i < tmp.size(); i++)
                 {
-                    splitStr(tmp[i], tmp2, ":");
+                    split(tmp[i], tmp2, ":");
                     if(2 != tmp2.size())
                     {
                         LogError("_emitProb illegal.");

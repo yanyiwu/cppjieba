@@ -22,28 +22,19 @@ void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
     for(uint i = 0; i < times; i ++)
     {
         LogInfo("times[%u]", i);
-        //ifile.seekg(0);
-        //while(getline(ifile, line))
-        //{
-        //    if(!line.empty())
-        //    {
-                res.clear();
-                seg->cut(doc, res);
-                //print(res);
-                //cout<<join(res.begin(), res.end(),"/")<<endl;
-        //    }
-        //}
+        res.clear();
+        seg->cut(doc, res);
     }
 }
 
 int main(int argc, char ** argv)
 {
     {
-        MixSegment seg("../dicts/jieba.dict.utf8", "../dicts/hmm_model.utf8");
+        MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
         if(!seg)
         {
             cout<<"seg init failed."<<endl;
-            return false;
+            return EXIT_FAILURE;
         }
         cut(&seg, "../test/testdata/weicheng.utf8");
     }

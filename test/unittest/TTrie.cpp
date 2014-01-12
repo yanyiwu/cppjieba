@@ -3,7 +3,7 @@
 
 using namespace CppJieba;
 
-static const char* const DICT_FILE = "../dicts/jieba.dict.utf8";
+static const char* const DICT_FILE = "../dict/jieba.dict.utf8";
 
 TEST(TrieTest, Test1)
 {
