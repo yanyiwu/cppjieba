@@ -12,7 +12,7 @@ namespace Husky
     class ThreadManager
     {
         private:
-            typedef int HANDLE;
+            typedef pthread_t HANDLE;
             typedef void *(* PThreadFunc)(void* param);
         public:
             ThreadManager(){;}
@@ -25,7 +25,7 @@ namespace Husky
                 _handles.clear();
             }
 
-            HANDLE CreateThread( PThreadFunc pFunc,void *pPara)
+            int CreateThread( PThreadFunc pFunc,void *pPara)
             {	
                 pthread_t pt;
                 int nErrorCode = pthread_create(&pt,NULL,pFunc,pPara);
