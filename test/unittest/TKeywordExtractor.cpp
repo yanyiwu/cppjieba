@@ -29,7 +29,7 @@ TEST(KeywordExtractorTest, Test2)
 TEST(KeywordExtractorTest, Test3)
 {
     ifstream ifs("../test/testdata/weicheng.utf8");
-    ASSERT_TRUE(ifs);
+    ASSERT_TRUE(!!ifs);
     string str((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));
     KeywordExtractor extractor("../dict/jieba.dict.utf8", "../dict/idf.utf8");
     const char* res[] = {"小姐", "孙小姐", "方鸿渐", "自己", "没有"};
@@ -42,7 +42,7 @@ TEST(KeywordExtractorTest, Test3)
 TEST(KeywordExtractorTest, Test4)
 {
     ifstream ifs("../test/testdata/weicheng.utf8");
-    ASSERT_TRUE(ifs);
+    ASSERT_TRUE(!!ifs);
     string str((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));
     KeywordExtractor extractor("../dict/jieba.dict.utf8", "../dict/idf.utf8");
     //const char* res[] = {"小姐", "孙小姐", "方鸿渐", "自己", "没有"};
