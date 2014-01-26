@@ -100,7 +100,7 @@ namespace Limonp
 
 
 
-    inline bool split(const string& src, vector<string>& res, const string& pattern)
+    inline bool split(const string& src, vector<string>& res, const string& pattern, size_t offset = 0, size_t len = string::npos)
     {
         if(src.empty())
         {
@@ -110,20 +110,28 @@ namespace Limonp
 
         size_t start = 0;
         size_t end = 0;
-        while(start < src.size())
+        size_t cnt = 0;
+        while(start < src.size() && res.size() < len)
         {
             end = src.find_first_of(pattern, start);
             if(string::npos == end)
             {
-                res.push_back(src.substr(start));
+                if(cnt >= offset)
+                {
+                    res.push_back(src.substr(start));
+                }
                 return true;
             }
-            res.push_back(src.substr(start, end - start));
-            if(end == src.size() - 1)
+            //if(end == src.size() - 1)
+            //{
+            //    res.push_back("");
+            //    return true;
+            //}
+            if(cnt >= offset)
             {
-                res.push_back("");
-                break;
+                res.push_back(src.substr(start, end - start));
             }
+            cnt ++;
             start = end + 1;
         }
         return true;
@@ -158,12 +166,8 @@ namespace Limonp
         return ltrim(rtrim(s));
     }
 
-
-
-
     inline bool startsWith(const string& str, const string& prefix)
     {
-        //return str.substr(0, prefix.size()) == prefix;
         if(prefix.length() > str.length())
         {
             return false;

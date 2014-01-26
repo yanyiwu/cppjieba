@@ -19,7 +19,7 @@ TEST(Md5Test, Test1)
 {
     ASSERT_EQ(sizeof(DICT_FILE)/sizeof(DICT_FILE[0]), sizeof(DICT_FILE_MD5)/sizeof(DICT_FILE_MD5[0]));
     string tmp;
-    for (int i = 0; i < sizeof(DICT_FILE)/sizeof(DICT_FILE[0]); i++)
+    for (uint i = 0; i < sizeof(DICT_FILE)/sizeof(DICT_FILE[0]); i++)
     {
         md5File(DICT_FILE[i], tmp);
         ASSERT_EQ(tmp, string(DICT_FILE_MD5[i]));
