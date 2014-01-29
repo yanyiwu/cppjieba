@@ -3,6 +3,7 @@
 
 #include "TransCode.hpp"
 #include "Limonp/logger.hpp"
+#include "Limonp/InitOnOff.hpp"
 #include "ISegment.hpp"
 #include <cassert>
 
@@ -10,17 +11,11 @@
 namespace CppJieba
 {
     using namespace Limonp;
-    class SegmentBase: public ISegment
+    class SegmentBase: public ISegment, public InitOnOff
     {
         public:
-            SegmentBase(){_setInitFlag(false);};
+            SegmentBase(){};
             virtual ~SegmentBase(){};
-        protected:
-            bool _isInited;
-            bool _getInitFlag()const{return _isInited;};
-            bool _setInitFlag(bool flag){return _isInited = flag;};
-        public:
-            operator bool(){return _getInitFlag();};
 
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const = 0;
