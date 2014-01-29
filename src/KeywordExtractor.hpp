@@ -20,18 +20,12 @@ namespace CppJieba
     //    return os << keyword.word << "," << keyword.idf;
     //}
 
-    class KeywordExtractor
+    class KeywordExtractor: public InitOnOff
     {
         private:
             MPSegment _segment;
         private:
             unordered_map<string, double> _idfMap;
-        protected:
-            bool _isInited;
-            bool _getInitFlag()const{return _isInited;};
-            bool _setInitFlag(bool flag){return _isInited = flag;};
-        public:
-            operator bool(){return _getInitFlag();};
         public:
             KeywordExtractor(){_setInitFlag(false);};
             explicit KeywordExtractor(const string& dictPath, const string& idfPath){_setInitFlag(init(dictPath, idfPath));};
