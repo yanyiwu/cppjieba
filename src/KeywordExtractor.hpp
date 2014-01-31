@@ -1,37 +1,37 @@
 #ifndef CPPJIEBA_KEYWORD_EXTRACTOR_H
 #define CPPJIEBA_KEYWORD_EXTRACTOR_H
 
-#include "MPSegment.hpp"
+#include "MixSegment.hpp"
 #include <cmath>
+#include <unordered_set>
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
 namespace CppJieba
 {
     using namespace Limonp;
 
-    //struct KeyWordInfo
-    //{
-    //    string word;
-    //    double tfidf;
-    //};
-
-    //inline ostream& operator << (ostream& os, const KeyWordInfo & keyword)
-    //{
-    //    return os << keyword.word << "," << keyword.idf;
-    //}
+    /*utf8*/
+    const char * BLACK_LIST[] = {"。", "，", "、", "我", "的", "”", "“", "了",
+        "你", "她", "他", "它", "说", "是", "：", "不"};
 
     class KeywordExtractor: public InitOnOff
     {
         private:
-            MPSegment _segment;
+            MixSegment _segment;
         private:
             unordered_map<string, double> _idfMap;
+            double _idfAverage;
+
+            unordered_set<string> _blackSet;
         public:
             KeywordExtractor(){_setInitFlag(false);};
-            explicit KeywordExtractor(const string& dictPath, const string& idfPath){_setInitFlag(init(dictPath, idfPath));};
+            explicit KeywordExtractor(const string& dictPath, const string& hmmFilePath, const string& idfPath)
+            {
+                _setInitFlag(init(dictPath, hmmFilePath, idfPath));
+            };
             ~KeywordExtractor(){};
         public:
-            bool init(const string& dictPath, const string& idfPath)
+            bool init(const string& dictPath, const string& hmmFilePath, const string& idfPath)
             {
                 ifstream ifs(idfPath.c_str());
                 if(!ifs)
@@ -41,7 +41,10 @@ namespace CppJieba
                 }
                 string line ;
                 vector<string> buf;
-                for(uint lineno = 0; getline(ifs, line); lineno++)
+                double idf = 0.0;
+                double idfSum = 0.0;
+                size_t lineno = 0;
+                for(;getline(ifs, line); lineno++)
                 {
                     buf.clear();
                     if(line.empty())
@@ -54,9 +57,22 @@ namespace CppJieba
                         LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
                         continue;
                     }
-                    _idfMap[buf[0]] = atof(buf[1].c_str());
-                }
-                return _setInitFlag(_segment.init(dictPath));
+                    idf = atof(buf[1].c_str());
+                    _idfMap[buf[0]] = idf;
+                    idfSum += idf;
+
+                } 
+
+                std::copy(
+                            BLACK_LIST, BLACK_LIST + sizeof(BLACK_LIST)/sizeof(BLACK_LIST[0]), 
+                            std::inserter(_blackSet, _blackSet.begin()));
+                
+                assert(lineno);
+                _idfAverage = idfSum / lineno;
+
+                assert(_idfAverage > 0.0);
+                
+                return _setInitFlag(_segment.init(dictPath, hmmFilePath));
             };
         public:
 
@@ -90,18 +106,24 @@ namespace CppJieba
                     wordmap[ words[i] ] += 1.0;
                 }
 
-                for(unordered_map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end();)
+                for(unordered_map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end(); )
                 {
+                    if(_blackSet.end() != _blackSet.find(itr->first))
+                    {
+                        itr = wordmap.erase(itr);
+                        continue;
+                    }
+
                     unordered_map<string, double>::const_iterator cit = _idfMap.find(itr->first);
                     if(cit != _idfMap.end())
                     {
                         itr->second *= cit->second;
-                        itr ++;
                     }
                     else
                     {
-                        itr = wordmap.erase(itr);
+                        itr->second *= _idfAverage;
                     }
+                    itr ++;
                 }
 
                 keywords.resize(MIN(topN, wordmap.size()));
