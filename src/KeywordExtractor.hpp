@@ -11,8 +11,7 @@ namespace CppJieba
     using namespace Limonp;
 
     /*utf8*/
-    const char * BLACK_LIST[] = {"。", "，", "、", "我", "的", "”", "“", "了",
-        "你", "她", "他", "它", "说", "是", "：", "不"};
+    const char * BLACK_LIST[] = {"我们", "他们"};
 
     class KeywordExtractor: public InitOnOff
     {
@@ -100,6 +99,19 @@ namespace CppJieba
                     return false;
                 }
 
+                // filtering single word.
+                for(vector<string>::iterator iter = words.begin(); iter != words.end(); )
+                {
+                    if(_isSingleWord(*iter))
+                    {
+                        iter = words.erase(iter);
+                    }
+                    else
+                    {
+                        iter++;
+                    }
+                }
+
                 unordered_map<string, double> wordmap;
                 for(uint i = 0; i < words.size(); i ++)
                 {
@@ -129,6 +141,15 @@ namespace CppJieba
                 keywords.resize(MIN(topN, wordmap.size()));
                 partial_sort_copy(wordmap.begin(), wordmap.end(), keywords.begin(), keywords.end(), _cmp);
                 return true;
+            }
+        private:
+            bool _isSingleWord(const string& str) const
+            {
+                Unicode unicode;
+                TransCode::decode(str, unicode);
+                if(unicode.size() == 1)
+                  return true;
+                return false;
             }
 
         private:
