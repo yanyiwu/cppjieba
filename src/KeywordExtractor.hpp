@@ -138,8 +138,11 @@ namespace CppJieba
                     itr ++;
                 }
 
-                keywords.resize(MIN(topN, wordmap.size()));
-                partial_sort_copy(wordmap.begin(), wordmap.end(), keywords.begin(), keywords.end(), _cmp);
+                keywords.clear();
+                std::copy(wordmap.begin(), wordmap.end(), std::inserter(keywords, keywords.begin()));
+                topN = MIN(topN, keywords.size());
+                partial_sort(keywords.begin(), keywords.begin() + topN, keywords.end(), _cmp);
+                keywords.resize(topN);
                 return true;
             }
         private:
@@ -153,7 +156,7 @@ namespace CppJieba
             }
 
         private:
-            static bool _cmp(const pair<string, uint>& lhs, const pair<string, uint>& rhs)
+            static bool _cmp(const pair<string, double>& lhs, const pair<string, double>& rhs)
             {
                 return lhs.second > rhs.second;
             }
