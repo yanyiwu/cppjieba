@@ -45,21 +45,15 @@ TEST(KeywordExtractorTest, Test3)
 
 }
 
-//TEST(KeywordExtractorTest, Test4)
-//{
-//    ifstream ifs("../test/testdata/weicheng.utf8");
-//    ASSERT_TRUE(!!ifs);
-//    string str((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));
-//    KeywordExtractor extractor("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8");
-//    //const char* res[] = {"小姐", "孙小姐", "方鸿渐", "自己", "没有"};
-//    vector<pair<string,double> >  keywords;
-//    extractor.extract(str, keywords, 5);
-//    //print(keywords);
-//    string res;
-//    res << keywords;
-//    print(keywords);
-//    print(__LINE__);
-//    exit(1);
-//    ASSERT_EQ(res, "[\"小姐:4268.75\", \"孙小姐:3789.41\", \"方鸿渐:3030.35\", \"自己:2300.54\", \"没有:2104.27\"]");
-//
-//}
+TEST(KeywordExtractorTest, Test4)
+{
+    KeywordExtractor extractor("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8");
+    string s("我是蓝翔技工拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上总经理，出任CEO，迎娶白富美，走上人生巅峰。");
+    string res;
+    vector<pair<string, double> > wordweights;
+    size_t topN = 5;
+    extractor.extract(s, wordweights, topN);
+    res << wordweights;
+    print(res);
+    ASSERT_EQ(res, "[\"CEO:11.7392\", \"白富美:11.7392\", \"蓝翔:11.7392\", \"迎娶:10.0505\", \"加薪:10.6426\"]");
+}
