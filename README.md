@@ -4,6 +4,9 @@
 
 之所以全写成hpp文件，是因为这样在别的项目需要使用到中文分词功能的时候直接`#include"xx.hpp" `进来就可以使用，无需麻烦的链接。
 
+实践证明写成hpp使用起来真的很爽，在后面提到的在iOS应用中的使用，和包装成`Node.js`的扩展[NodeJieba]都特别顺利。
+`
+
 ## 中文编码
 
 现在支持utf8,gbk编码的分词。   
@@ -12,8 +15,8 @@
 
 ### 依赖
 
-* g++ (version >= 4.6);
-* cmake (version >= 2.8);
+* g++ (version >= 4.6 recommended);
+* cmake (version >= 2.8 recommended);
 
 ### 下载和安装
 
@@ -197,8 +200,11 @@ TransCode.hpp 负责转换编码类型，将utf8和gbk转换成`uint16_t`类型�
 
 收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
 
-[jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy'discussion] .
+[jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy_discussion] .
 
+## NodeJieba
+
+如果有需要在`nodejs`中使用分词，不妨试一下[NodeJieba]。
 
 ## 客服
 
@@ -214,4 +220,5 @@ https://github.com/fxsjy/jieba
 [CppJieba]:https://github.com/aszxqw/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
-[cppjiebapy'discussion]:https://github.com/aszxqw/cppjieba/issues/1
+[cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
+[NodeJieba]:https://github.com/aszxqw/nodejieba
