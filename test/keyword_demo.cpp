@@ -8,6 +8,6 @@ int main(int argc, char ** argv)
     vector<pair<string, double> > wordweights;
     size_t topN = 5;
     extractor.extract(s, wordweights, topN);
-    print(wordweights);
+    cout<< s << "\n -> \n" << wordweights << endl;
     return EXIT_SUCCESS;
 }
