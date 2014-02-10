@@ -1,4 +1,4 @@
-## v2.2.1 
+## v2.3.0 
 
 1. 增加`KeywordExtractor.hpp`来进行关键词抽取。
 2. 使用`gtest`来做单元测试。
