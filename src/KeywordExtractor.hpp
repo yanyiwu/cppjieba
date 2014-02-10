@@ -142,6 +142,7 @@ namespace CppJieba
                 std::copy(wordmap.begin(), wordmap.end(), std::inserter(keywords, keywords.begin()));
                 topN = MIN(topN, keywords.size());
                 partial_sort(keywords.begin(), keywords.begin() + topN, keywords.end(), _cmp);
+                keywords.resize(topN);
                 return true;
             }
         private:
