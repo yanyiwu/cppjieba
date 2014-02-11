@@ -167,50 +167,10 @@ you will see:
 关键词抽取的demo代码请见`test/keyword_demo.cpp`
 
 
-## 模块详解
+## 代码详解
 
-本项目主要是如下目录组成：
+详见：http://aszxqw.com/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
 
-### src
-
-核心目录，包含主要源代码。
-
-#### TrieManager模块
-TrieManager.hpp 提供一个单例TrieManager，负责管理trie树。
-通过该单例获取trie树时，会先判断是否已经由该字典文件生成了一颗trie树，如果已有则返回已有的trie树，否则重新创建一颗trie树返回。
-
-#### Trie树
-Trie.hpp 负责载入词典的trie树，主要供Segment模块使用。
-
-#### Segment模块
-
-MPSegment.hpp
-(Maximum Probability)最大概率法:负责根据Trie树构建有向无环图和进行动态规划算法，是分词算法的核心。
-
-HMMSegment.hpp
-是根据HMM模型来进行分词，主要算法思路是根据(B,E,M,S)四个状态来代表每个字的隐藏状态。
-HMM模型由dict/下面的`hmm_model.utf8`提供。
-分词算法即viterbi算法。
-
-FullSegment.hpp
-枚举句子中所有可能成词的情况，找出字典里存在的即可。
-
-#### TransCode模块
-
-TransCode.hpp 负责转换编码类型，将utf8和gbk转换成`uint16_t`类型，也负责逆转换。
-
-### src/Husky
-
-提供服务的框架代码，
-
-详见：  https://github.com/aszxqw/husky
-
-### src/Limonp 
-
-主要是一些工具函数，例如字符串操作等。    
-直接include就可以使用。
-
-详见：  https://github.com/aszxqw/limonp
 
 ## 关于CppJieba的跨语言包装使用
 
