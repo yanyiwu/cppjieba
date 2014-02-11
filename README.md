@@ -41,6 +41,8 @@ make test
 
 ### 启动服务
 
+因为服务的后台运行需要`start-stop-daemon`，在ubuntu下是自带的。但是在CentOS下就需要自己安装了。
+
 ```
 #Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
 #启动
