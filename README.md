@@ -189,6 +189,10 @@ you will see:
 
 如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
 
+## 演示
+
+http://cppjieba-webdemo.herokuapp.com/
+
 ## 客服
 
 如果有运行问题或者任何疑问，欢迎联系 : wuyanyi09@gmail.com
