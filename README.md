@@ -173,16 +173,21 @@ you will see:
 
 详见：http://aszxqw.com/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
 
+## 相关应用
 
-## 关于CppJieba的跨语言包装使用
+### 关于CppJieba的跨语言包装使用
 
 收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
 
 [jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy_discussion] .
 
-## NodeJieba
+### NodeJieba
 
-如果有需要在`nodejs`中使用分词，不妨试一下[NodeJieba]。
+如果有需要在`node.js`中使用分词，不妨试一下[NodeJieba]。
+
+### simhash
+
+如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
 
 ## 客服
 
@@ -190,13 +195,14 @@ you will see:
 
 ## 鸣谢
 
-"结巴中文"分词作者: SunJunyi  
+"结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
 
-顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
+顾名思义，之所以叫CppJieba，是参照Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
+[simhash]:https://github.com/aszxqw/simhash
