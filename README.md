@@ -5,7 +5,8 @@
 之所以全写成hpp文件，是因为这样在别的项目需要使用到中文分词功能的时候直接`#include"xx.hpp" `进来就可以使用，无需麻烦的链接。
 
 实践证明写成hpp使用起来真的很爽，在后面提到的在iOS应用中的使用，和包装成`Node.js`的扩展[NodeJieba]都特别顺利。
-`
+
+如果对代码细节感兴趣的请见 [代码详解]
 
 ## 中文编码
 
@@ -169,10 +170,6 @@ you will see:
 关键词抽取的demo代码请见`test/keyword_demo.cpp`
 
 
-## 代码详解
-
-详见：http://aszxqw.com/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
-
 ## 相关应用
 
 ### 关于CppJieba的跨语言包装使用
@@ -210,3 +207,4 @@ https://github.com/fxsjy/jieba
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
 [simhash]:https://github.com/aszxqw/simhash
+[代码详解]:http://aszxqw.github.io/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
