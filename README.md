@@ -189,6 +189,7 @@ you will see:
 ## 演示
 
 http://cppjieba-webdemo.herokuapp.com/
+(建议使用chrome打开)
 
 ## 客服
 
