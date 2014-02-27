@@ -5,7 +5,8 @@
 之所以全写成hpp文件，是因为这样在别的项目需要使用到中文分词功能的时候直接`#include"xx.hpp" `进来就可以使用，无需麻烦的链接。
 
 实践证明写成hpp使用起来真的很爽，在后面提到的在iOS应用中的使用，和包装成`Node.js`的扩展[NodeJieba]都特别顺利。
-`
+
+如果对代码细节感兴趣的请见 [代码详解]
 
 ## 中文编码
 
@@ -169,20 +170,26 @@ you will see:
 关键词抽取的demo代码请见`test/keyword_demo.cpp`
 
 
-## 代码详解
+## 相关应用
 
-详见：http://aszxqw.com/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
-
-
-## 关于CppJieba的跨语言包装使用
+### 关于CppJieba的跨语言包装使用
 
 收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
 
 [jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy_discussion] .
 
-## NodeJieba
+### NodeJieba
 
-如果有需要在`nodejs`中使用分词，不妨试一下[NodeJieba]。
+如果有需要在`node.js`中使用分词，不妨试一下[NodeJieba]。
+
+### simhash
+
+如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
+
+## 演示
+
+http://cppjieba-webdemo.herokuapp.com/
+(建议使用chrome打开)
 
 ## 客服
 
@@ -190,13 +197,15 @@ you will see:
 
 ## 鸣谢
 
-"结巴中文"分词作者: SunJunyi  
+"结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
 
-顾名思义，之所以叫CppJieba，是参照SunJunyi大神的Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
+顾名思义，之所以叫CppJieba，是参照Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
+[simhash]:https://github.com/aszxqw/simhash
+[代码详解]:http://aszxqw.github.io/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
