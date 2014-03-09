@@ -1,7 +1,9 @@
 #include "src/MPSegment.hpp"
+#include "src/Limonp/io_functs.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
+using namespace Limonp;
 
 TEST(MPSegmentTest, Test1)
 {
@@ -15,3 +17,30 @@ TEST(MPSegmentTest, Test1)
     EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
 
+TEST(MPSegmentTest, Test2)
+{
+    MPSegment segment("../dict/jieba.dict.utf8");
+    string line;
+    ifstream ifs("../test/testdata/review.100");
+    vector<string> words;
+
+    string eRes;
+    loadFile2Str("../test/testdata/review.100.res", eRes);
+    string res;
+    
+    while(getline(ifs, line))
+    {
+        res += line;
+        res += '\n';
+        
+        words.clear();
+        segment.cut(line, words);
+        string s;
+        s << words;
+        res += s;
+        res += '\n';
+    }
+    WriteStr2File("../test/testdata/review.100.res", res.c_str(), "w");
+    //ASSERT_EQ(res, eRes);
+    
+}
