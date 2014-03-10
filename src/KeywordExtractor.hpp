@@ -11,7 +11,7 @@ namespace CppJieba
     using namespace Limonp;
 
     /*utf8*/
-    static const char * BLACK_LIST[] = {"我们", "他们"};
+    const char * const BLACK_LIST[] = {"我们", "他们"};
 
     class KeywordExtractor: public InitOnOff
     {
