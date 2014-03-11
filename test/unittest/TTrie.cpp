@@ -22,8 +22,8 @@ TEST(TrieTest, Test1)
     EXPECT_EQ(nodeInfo, *trie.find(uni.begin(), uni.end()));
     word = "清华大学";
     vector<pair<uint, const TrieNodeInfo*> > res;
-    unordered_map<uint, const TrieNodeInfo* > resMap;
-    unordered_map<uint, const TrieNodeInfo* > map;
+    map<uint, const TrieNodeInfo* > resMap;
+    map<uint, const TrieNodeInfo* > map;
     const char * words[] = {"清", "清华", "清华大学"};
     for(uint i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {

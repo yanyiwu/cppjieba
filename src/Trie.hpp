@@ -62,7 +62,7 @@ namespace CppJieba
         return os << nodeInfo.word << ":" << nodeInfo.freq << ":" << nodeInfo.tag << ":" << nodeInfo.logFreq ;
     }
 
-    typedef unordered_map<uint, const TrieNodeInfo*> DagType;
+    typedef map<uint, const TrieNodeInfo*> DagType;
 
     class Trie
     {
@@ -227,7 +227,7 @@ namespace CppJieba
                 return !res.empty();
             }
 
-            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, uint offset, unordered_map<uint, const TrieNodeInfo* > & res) const
+            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, uint offset, DagType & res) const
             {
                 if(!_getInitFlag())
                 {
