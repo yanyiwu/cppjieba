@@ -112,13 +112,13 @@ namespace CppJieba
                     }
                 }
 
-                unordered_map<string, double> wordmap;
+                map<string, double> wordmap;
                 for(uint i = 0; i < words.size(); i ++)
                 {
                     wordmap[ words[i] ] += 1.0;
                 }
 
-                for(unordered_map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end(); )
+                for(map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end(); )
                 {
                     if(_blackSet.end() != _blackSet.find(itr->first))
                     {
