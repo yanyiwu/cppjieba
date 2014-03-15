@@ -11,8 +11,6 @@ namespace CppJieba
     using namespace Limonp;
 
     /*utf8*/
-    const char * const BLACK_LIST[] = {"我们", "他们"};
-
     class KeywordExtractor: public InitOnOff
     {
         private:
@@ -21,56 +19,20 @@ namespace CppJieba
             unordered_map<string, double> _idfMap;
             double _idfAverage;
 
-            unordered_set<string> _blackSet;
+            unordered_set<string> _stopWords;
         public:
             KeywordExtractor(){_setInitFlag(false);};
-            explicit KeywordExtractor(const string& dictPath, const string& hmmFilePath, const string& idfPath)
+            explicit KeywordExtractor(const string& dictPath, const string& hmmFilePath, const string& idfPath, const string& stopWordPath)
             {
-                _setInitFlag(init(dictPath, hmmFilePath, idfPath));
+                _setInitFlag(init(dictPath, hmmFilePath, idfPath, stopWordPath));
             };
             ~KeywordExtractor(){};
+
         public:
-            bool init(const string& dictPath, const string& hmmFilePath, const string& idfPath)
+            bool init(const string& dictPath, const string& hmmFilePath, const string& idfPath, const string& stopWordPath)
             {
-                ifstream ifs(idfPath.c_str());
-                if(!ifs)
-                {
-                    LogError("open %s failed.", idfPath.c_str());
-                    return false;
-                }
-                string line ;
-                vector<string> buf;
-                double idf = 0.0;
-                double idfSum = 0.0;
-                size_t lineno = 0;
-                for(;getline(ifs, line); lineno++)
-                {
-                    buf.clear();
-                    if(line.empty())
-                    {
-                        LogError("line[%d] empty. skipped.", lineno);
-                        continue;
-                    }
-                    if(!split(line, buf, " ") || buf.size() != 2)
-                    {
-                        LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
-                        continue;
-                    }
-                    idf = atof(buf[1].c_str());
-                    _idfMap[buf[0]] = idf;
-                    idfSum += idf;
-
-                } 
-
-                std::copy(
-                            BLACK_LIST, BLACK_LIST + sizeof(BLACK_LIST)/sizeof(BLACK_LIST[0]), 
-                            std::inserter(_blackSet, _blackSet.begin()));
-                
-                assert(lineno);
-                _idfAverage = idfSum / lineno;
-
-                assert(_idfAverage > 0.0);
-                
+                _loadIdfDict(idfPath);
+                _loadStopWordDict(stopWordPath);
                 return _setInitFlag(_segment.init(dictPath, hmmFilePath));
             };
         public:
@@ -120,7 +82,7 @@ namespace CppJieba
 
                 for(map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end(); )
                 {
-                    if(_blackSet.end() != _blackSet.find(itr->first))
+                    if(_stopWords.end() != _stopWords.find(itr->first))
                     {
                         itr = wordmap.erase(itr);
                         continue;
@@ -144,6 +106,58 @@ namespace CppJieba
                 partial_sort(keywords.begin(), keywords.begin() + topN, keywords.end(), _cmp);
                 keywords.resize(topN);
                 return true;
+            }
+        private:
+            void _loadIdfDict(const string& idfPath)
+            {
+                ifstream ifs(idfPath.c_str());
+                if(!ifs)
+                {
+                    LogError("open %s failed.", idfPath.c_str());
+                    assert(false);
+                }
+                string line ;
+                vector<string> buf;
+                double idf = 0.0;
+                double idfSum = 0.0;
+                size_t lineno = 0;
+                for(;getline(ifs, line); lineno++)
+                {
+                    buf.clear();
+                    if(line.empty())
+                    {
+                        LogError("line[%d] empty. skipped.", lineno);
+                        continue;
+                    }
+                    if(!split(line, buf, " ") || buf.size() != 2)
+                    {
+                        LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
+                        continue;
+                    }
+                    idf = atof(buf[1].c_str());
+                    _idfMap[buf[0]] = idf;
+                    idfSum += idf;
+
+                } 
+
+                assert(lineno);
+                _idfAverage = idfSum / lineno;
+                assert(_idfAverage > 0.0);
+            }
+            void _loadStopWordDict(const string& filePath)
+            {
+                ifstream ifs(filePath.c_str());
+                if(!ifs)
+                {
+                    LogError("open %s failed.", filePath.c_str());
+                    assert(false);
+                }
+                string line ;
+                while(getline(ifs, line))
+                {
+                    _stopWords.insert(line);
+                }
+                assert(_stopWords.size());
             }
         private:
             bool _isSingleWord(const string& str) const
