@@ -18,16 +18,13 @@ namespace CppJieba
             explicit MixSegment(const string& mpSegDict, const string& hmmSegDict)
             {
                 _setInitFlag(init(mpSegDict, hmmSegDict));
+                assert(_getInitFlag());
             }
             virtual ~MixSegment(){}
         public:
             bool init(const string& mpSegDict, const string& hmmSegDict)
             {
-                if(_getInitFlag())
-                {
-                    LogError("inited.");
-                    return false;
-                }
+                assert(!_getInitFlag());
                 if(!_mpSeg.init(mpSegDict))
                 {
                     LogError("_mpSeg init");

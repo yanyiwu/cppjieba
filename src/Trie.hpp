@@ -14,6 +14,7 @@
 #include <limits>
 #include "Limonp/str_functs.hpp"
 #include "Limonp/logger.hpp"
+#include "Limonp/InitOnOff.hpp"
 #include "TransCode.hpp"
 
 
@@ -64,14 +65,13 @@ namespace CppJieba
 
     typedef map<uint, const TrieNodeInfo*> DagType;
 
-    class Trie
+    class Trie: public InitOnOff
     {
 
         private:
             TrieNode* _root;
             vector<TrieNodeInfo> _nodeInfoVec;
 
-            bool _initFlag;
             int64_t _freqSum;
             double _minLogFreq;
 
@@ -81,57 +81,28 @@ namespace CppJieba
                 _root = NULL;
                 _freqSum = 0;
                 _minLogFreq = MAX_DOUBLE;
-                _initFlag = false;
+                _setInitFlag(false);
+            }
+            Trie(const string& filePath): Trie()
+            {
+                _setInitFlag(init(filePath));
             }
             ~Trie()
             {
-                dispose();
-            }
-            bool init()
-            {
-                if(_getInitFlag())
-                {
-                    LogError("already initted!");
-                    return false;
-                }
-
-                try
-                {
-                    _root = new TrieNode;
-                }
-                catch(const bad_alloc& e)
-                {
-                    return false;
-                }
-                if(NULL == _root)
-                {
-                    return false;
-                }
-                _setInitFlag(true);
-                return true;
-            }
-            bool dispose()
-            {
                 if(!_getInitFlag())
                 {
-                    return false;
+                    return;
                 }
-                bool ret = _deleteNode(_root);
-                if(!ret)
-                {
-                    LogFatal("_deleteNode failed!");
-                    return false;
-                }
-                _root = NULL;
-                _nodeInfoVec.clear();
-
-                _setInitFlag(false);
-                return ret;
+                _deleteNode(_root);
             }
-            bool loadDict(const char * const filePath)
+        public:
+            bool init(const string& filePath)
             {
-                assert(_getInitFlag());
-                if(!_trieInsert(filePath))
+                assert(!_getInitFlag());
+
+                _root = new TrieNode;
+                assert(_root);
+                if(!_trieInsert(filePath.c_str()))
                 {
                     LogError("_trieInsert failed.");
                     return false;
@@ -141,12 +112,8 @@ namespace CppJieba
                     LogError("_countWeight failed.");
                     return false;
                 }
-                return true;
+                return _setInitFlag(true);
             }
-
-        private:
-            void _setInitFlag(bool on){_initFlag = on;};
-            bool _getInitFlag()const{return _initFlag;};
 
         public:
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
@@ -271,12 +238,6 @@ namespace CppJieba
         private:
             bool _insert(const TrieNodeInfo& nodeInfo)
             {
-                if(!_getInitFlag())
-                {
-                    LogFatal("not initted!");
-                    return false;
-                }
-
 
                 const Unicode& uintVec = nodeInfo.word;
                 TrieNode* p = _root;
@@ -358,10 +319,9 @@ namespace CppJieba
                         nodeInfo.tag = vecBuf[2];
                     }
 
-                    //_insert node
                     if(!_insert(nodeInfo))
                     {
-                        LogError("_insert node failed!");
+                        assert(false);
                     }
                 }
                 return true;
@@ -405,7 +365,7 @@ namespace CppJieba
                 return true;
             }
 
-            bool _deleteNode(TrieNode* node)
+            void _deleteNode(TrieNode* node)
             {
                 for(TrieNodeMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
                 {
@@ -414,7 +374,6 @@ namespace CppJieba
                 }
 
                 delete node;
-                return true;
             }
 
     };

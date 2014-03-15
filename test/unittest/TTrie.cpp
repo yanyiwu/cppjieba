@@ -8,8 +8,7 @@ static const char* const DICT_FILE = "../dict/jieba.dict.utf8";
 TEST(TrieTest, Test1)
 {
     Trie trie;
-    ASSERT_TRUE(trie.init());
-    ASSERT_TRUE(trie.loadDict(DICT_FILE));
+    ASSERT_TRUE(trie.init(DICT_FILE));
     ASSERT_LT(trie.getMinLogFreq() + 17.2184, 0.001);
     string word("来到");
     Unicode uni;

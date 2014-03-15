@@ -4,7 +4,6 @@
 #include "MixSegment.hpp"
 #include "Limonp/str_functs.hpp"
 #include "Trie.hpp"
-#include "TrieManager.hpp"
 
 namespace CppJieba
 {
@@ -14,7 +13,7 @@ namespace CppJieba
     {
         private:
             MixSegment _segment;
-            Trie* _trie;
+            Trie _trie;
 
         public:
             PosTagger(){_setInitFlag(false);};
@@ -26,17 +25,10 @@ namespace CppJieba
         public:
             bool init(const string& dictPath, const string& hmmFilePath, const string& charStatus, const string& startProb, const string& emitProb, const string& endProb, const string& transProb)
             {
-                if (_getInitFlag())
-                {
-                    LogError("already inited before.");
-                    return false;
-                }
-                _trie = TrieManager::getInstance().getTrie(dictPath.c_str());
-                if (NULL == _trie)
-                {
-                    LogError("get a NULL pointor from getTrie(\"%s\").", dictPath.c_str());
-                    return false;
-                }
+                
+                assert(!_getInitFlag());
+                _trie.init(dictPath);
+                assert(_trie);
                 return _setInitFlag(_segment.init(dictPath, hmmFilePath));
             };
 
@@ -59,7 +51,7 @@ namespace CppJieba
                         LogError("decode failed.");
                         return false;
                     }
-                    tmp = _trie->find(unico.begin(), unico.end());
+                    tmp = _trie.find(unico.begin(), unico.end());
                     res.push_back(make_pair(*itr, tmp == NULL ? "x" : tmp->tag));
                 }
                 tmp = NULL;

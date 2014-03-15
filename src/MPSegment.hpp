@@ -10,7 +10,7 @@
 #include <cassert>
 #include "Limonp/logger.hpp"
 #include "Trie.hpp"
-#include "TrieManager.hpp"
+#include "Trie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 
@@ -25,15 +25,14 @@ namespace CppJieba
         double weight;
 
         SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
-        {
-        }
+        {}
     };
     typedef vector<SegmentChar> SegmentContext;
 
     class MPSegment: public SegmentBase
     {
         protected:
-            Trie* _trie;
+            Trie _trie;
 
         public:
             MPSegment(){_setInitFlag(false);};
@@ -50,12 +49,8 @@ namespace CppJieba
                     LogError("already inited before now.");
                     return false;
                 }
-                _trie = TrieManager::getInstance().getTrie(dictPath.c_str());
-                if (_trie == NULL)
-                {
-                    LogError("get a NULL pointor form getTrie(\"%s\").", dictPath.c_str());
-                    return false;
-                }
+                _trie.init(dictPath);
+                assert(_trie);
                 LogInfo("MPSegment init(%s) ok", dictPath.c_str());
                 return _setInitFlag(true);
             }
@@ -129,7 +124,7 @@ namespace CppJieba
                 {
                     SegmentChar schar(*it);
                     uint i = it - begin;
-                    _trie->find(it, end, i, schar.dag);
+                    _trie.find(it, end, i, schar.dag);
                     //DagType::iterator dagIter;
                     if(schar.dag.end() ==  schar.dag.find(i))
                     {
@@ -167,7 +162,7 @@ namespace CppJieba
                         }
                         else
                         {
-                            val += _trie->getMinLogFreq();
+                            val += _trie.getMinLogFreq();
                         }
                         if(val > segContext[i].weight)
                         {
@@ -195,7 +190,7 @@ namespace CppJieba
                         TrieNodeInfo nodeInfo;
                         nodeInfo.word.push_back(segContext[i].uniCh);
                         nodeInfo.freq = 0;
-                        nodeInfo.logFreq = _trie->getMinLogFreq();
+                        nodeInfo.logFreq = _trie.getMinLogFreq();
                         res.push_back(nodeInfo);
                         i++;
                     }
