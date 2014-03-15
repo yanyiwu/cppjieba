@@ -7,7 +7,7 @@ using namespace Limonp;
 
 TEST(MPSegmentTest, Test1)
 {
-    MPSegment segment("../dict/jieba.dict.utf8");;
+    MPSegment segment("../dict/extra_dict/jieba.dict.small.utf8");;
     const char* str = "我来自北京邮电大学。。。  学号 123456";
     const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","  ","学","号", " 123456"};
     vector<string> words;
@@ -19,7 +19,7 @@ TEST(MPSegmentTest, Test1)
 
 TEST(MPSegmentTest, Test2)
 {
-    MPSegment segment("../dict/jieba.dict.utf8");
+    MPSegment segment("../dict/extra_dict/jieba.dict.small.utf8");
     string line;
     ifstream ifs("../test/testdata/review.100");
     vector<string> words;

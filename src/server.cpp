@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 #include "Limonp/Config.hpp"
+#include "Limonp/io_functs.hpp"
 #include "Husky/HuskyServer.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"

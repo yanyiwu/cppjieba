@@ -3,13 +3,13 @@
 
 using namespace CppJieba;
 
-static const char* const DICT_FILE = "../dict/jieba.dict.utf8";
+static const char* const DICT_FILE = "../dict/extra_dict/jieba.dict.small.utf8";
 
 TEST(TrieTest, Test1)
 {
     Trie trie;
     ASSERT_TRUE(trie.init(DICT_FILE));
-    ASSERT_LT(trie.getMinLogFreq() + 17.2184, 0.001);
+    ASSERT_LT(trie.getMinLogFreq() + 15.6479, 0.001);
     string word("来到");
     Unicode uni;
     ASSERT_TRUE(TransCode::decode(word, uni));
@@ -17,7 +17,8 @@ TEST(TrieTest, Test1)
     nodeInfo.word = uni;
     nodeInfo.freq = 8779;
     nodeInfo.tag = "v";
-    nodeInfo.logFreq = -8.83144;
+    nodeInfo.logFreq = -8.87033;
+    
     EXPECT_EQ(nodeInfo, *trie.find(uni.begin(), uni.end()));
     word = "清华大学";
     vector<pair<uint, const TrieNodeInfo*> > res;
