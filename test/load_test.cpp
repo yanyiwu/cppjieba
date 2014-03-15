@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "../src/Limonp/ArgvContext.hpp"
+#include "../src/Limonp/io_functs.hpp"
 #include "../src/MPSegment.hpp"
 #include "../src/HMMSegment.hpp"
 #include "../src/MixSegment.hpp"
