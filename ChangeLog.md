@@ -2,6 +2,7 @@
 
 1. 修改了设计上的问题，删除了`TrieManager`这个类，以避免造成一些可能的隐患。
 2. 增加`stop_words.utf8`词典，并修改`KeywordExtractor`的初始化函数用以使用此词典。
+3. 优化了Trie树相关部分代码结构。
 
 ## v2.3.2
 

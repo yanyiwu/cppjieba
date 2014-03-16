@@ -104,18 +104,17 @@ namespace CppJieba
         public:
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
             {
+                TrieNodeMap::const_iterator citer;
                 TrieNode* p = _root;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
                     uint16_t chUni = *it;
-                    if(p->hmap.find(chUni) == p-> hmap.end())
+                    citer = p->hmap.find(chUni);
+                    if(p-> hmap.end() == citer)
                     {
                         return NULL;
                     }
-                    else
-                    {
-                        p = p->hmap[chUni];
-                    }
+                    p = citer->second;
                 }
                 if(p->isLeaf)
                 {
@@ -126,26 +125,19 @@ namespace CppJieba
 
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, vector<pair<size_t, const TrieNodeInfo*> >& res) const
             {
+                TrieNodeMap::const_iterator citer;
                 TrieNode* p = _root;
                 for (Unicode::const_iterator itr = begin; itr != end; itr++)
                 {
-                    if(p->hmap.find(*itr) == p-> hmap.end())
+                    citer = p->hmap.find(*itr);
+                    if(p->hmap.end() == citer)
                     {
                         break;
                     }
-                    p = p->hmap[*itr];
+                    p = citer->second;
                     if(p->isLeaf)
                     {
-                        size_t pos = p->nodeInfoPos;
-                        if(pos < _nodeInfos.size())
-                        {
-                            res.push_back(make_pair(itr-begin, &_nodeInfos[pos]));
-                        }
-                        else
-                        {
-                            LogFatal("node's nodeInfoPos is out of _nodeInfos's range");
-                            return false;
-                        }
+                        res.push_back(make_pair(itr-begin, &_nodeInfos[p->nodeInfoPos]));
                     }
                 }
                 return !res.empty();
@@ -154,25 +146,18 @@ namespace CppJieba
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, size_t offset, DagType & res) const
             {
                 TrieNode* p = _root;
+                TrieNodeMap::const_iterator citer;
                 for (Unicode::const_iterator itr = begin; itr != end; itr++)
                 {
-                    if(p->hmap.find(*itr) == p-> hmap.end())
+                    citer = p->hmap.find(*itr);
+                    if(p->hmap.end() == citer)
                     {
                         break;
                     }
-                    p = p->hmap[*itr];
+                    p = citer->second;
                     if(p->isLeaf)
                     {
-                        size_t pos = p->nodeInfoPos;
-                        if(pos < _nodeInfos.size())
-                        {
-                            res[itr-begin + offset] = &_nodeInfos[pos];
-                        }
-                        else
-                        {
-                            LogFatal("node's nodeInfoPos is out of _nodeInfos's range");
-                            return false;
-                        }
+                        res[itr - begin + offset] = &_nodeInfos[p->nodeInfoPos];
                     }
                 }
                 return !res.empty();
@@ -184,11 +169,11 @@ namespace CppJieba
         private:
             void _insert(const TrieNodeInfo& nodeInfo, size_t nodeInfoPos)
             {
-                const Unicode& uintVec = nodeInfo.word;
+                const Unicode& unico = nodeInfo.word;
                 TrieNode* p = _root;
-                for(size_t i = 0; i < uintVec.size(); i++)
+                for(size_t i = 0; i < unico.size(); i++)
                 {
-                    uint16_t cu = uintVec[i];
+                    uint16_t cu = unico[i];
                     assert(p);
                     if(!isIn(p->hmap, cu))
                     {
