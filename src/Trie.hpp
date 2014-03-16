@@ -30,11 +30,11 @@ namespace CppJieba
     {
         TrieNodeMap hmap;
         bool isLeaf;
-        size_t nodeInfoVecPos;
+        size_t nodeInfoPos;
         TrieNode()
         {
             isLeaf = false;
-            nodeInfoVecPos = 0;
+            nodeInfoPos = 0;
         }
     };
 
@@ -64,7 +64,7 @@ namespace CppJieba
 
         private:
             TrieNode* _root;
-            vector<TrieNodeInfo> _nodeInfoVec;
+            vector<TrieNodeInfo> _nodeInfos;
 
             int64_t _freqSum;
             double _minLogFreq;
@@ -97,11 +97,7 @@ namespace CppJieba
                     LogError("_trieInsert failed.");
                     return false;
                 }
-                if(!_countWeight())
-                {
-                    LogError("_countWeight failed.");
-                    return false;
-                }
+                _countWeight();
                 return _setInitFlag(true);
             }
 
@@ -123,16 +119,7 @@ namespace CppJieba
                 }
                 if(p->isLeaf)
                 {
-                    size_t pos = p->nodeInfoVecPos;
-                    if(pos < _nodeInfoVec.size())
-                    {
-                        return &(_nodeInfoVec[pos]);
-                    }
-                    else
-                    {
-                        LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
-                        return NULL;
-                    }
+                    return &(_nodeInfos[p->nodeInfoPos]);
                 }
                 return NULL;
             }
@@ -149,14 +136,14 @@ namespace CppJieba
                     p = p->hmap[*itr];
                     if(p->isLeaf)
                     {
-                        size_t pos = p->nodeInfoVecPos;
-                        if(pos < _nodeInfoVec.size())
+                        size_t pos = p->nodeInfoPos;
+                        if(pos < _nodeInfos.size())
                         {
-                            res.push_back(make_pair(itr-begin, &_nodeInfoVec[pos]));
+                            res.push_back(make_pair(itr-begin, &_nodeInfos[pos]));
                         }
                         else
                         {
-                            LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+                            LogFatal("node's nodeInfoPos is out of _nodeInfos's range");
                             return false;
                         }
                     }
@@ -176,14 +163,14 @@ namespace CppJieba
                     p = p->hmap[*itr];
                     if(p->isLeaf)
                     {
-                        size_t pos = p->nodeInfoVecPos;
-                        if(pos < _nodeInfoVec.size())
+                        size_t pos = p->nodeInfoPos;
+                        if(pos < _nodeInfos.size())
                         {
-                            res[itr-begin + offset] = &_nodeInfoVec[pos];
+                            res[itr-begin + offset] = &_nodeInfos[pos];
                         }
                         else
                         {
-                            LogFatal("node's nodeInfoVecPos is out of _nodeInfoVec's range");
+                            LogFatal("node's nodeInfoPos is out of _nodeInfos's range");
                             return false;
                         }
                     }
@@ -195,16 +182,15 @@ namespace CppJieba
             double getMinLogFreq() const {return _minLogFreq;};
 
         private:
-            void _insert(const TrieNodeInfo& nodeInfo)
+            void _insert(const TrieNodeInfo& nodeInfo, size_t nodeInfoPos)
             {
-
                 const Unicode& uintVec = nodeInfo.word;
                 TrieNode* p = _root;
                 for(size_t i = 0; i < uintVec.size(); i++)
                 {
                     uint16_t cu = uintVec[i];
                     assert(p);
-                    if(p->hmap.end() == p->hmap.find(cu))
+                    if(!isIn(p->hmap, cu))
                     {
                         TrieNode * next = new TrieNode;
                         assert(next);
@@ -216,13 +202,9 @@ namespace CppJieba
                         p = p->hmap[cu];
                     }
                 }
-                assert(p);
-                assert(!p->isLeaf);
 
                 p->isLeaf = true;
-                _nodeInfoVec.push_back(nodeInfo);
-                p->nodeInfoVecPos = _nodeInfoVec.size() - 1;
-
+                p->nodeInfoPos = nodeInfoPos;
             }
 
         private:
@@ -235,45 +217,45 @@ namespace CppJieba
                     return false;
                 }
                 string line;
-                vector<string> vecBuf;
+                vector<string> buf;
 
                 TrieNodeInfo nodeInfo;
                 for(size_t lineno = 0 ; getline(ifs, line); lineno++)
                 {
-                    split(line, vecBuf, " ");
-                    assert(vecBuf.size() == DICT_COLUMN_NUM);
-                    if(!TransCode::decode(vecBuf[0], nodeInfo.word))
+                    split(line, buf, " ");
+                    assert(buf.size() == DICT_COLUMN_NUM);
+                    if(!TransCode::decode(buf[0], nodeInfo.word))
                     {
                         LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         return false;
                     }
-                    nodeInfo.freq = atoi(vecBuf[1].c_str());
-                    nodeInfo.tag = vecBuf[2];
+                    nodeInfo.freq = atoi(buf[1].c_str());
+                    nodeInfo.tag = buf[2];
+                    
+                    _nodeInfos.push_back(nodeInfo);
 
-                    _insert(nodeInfo);
+                }
+                for(size_t i = 0; i < _nodeInfos.size(); i++)
+                {
+                    _insert(_nodeInfos[i], i);
                 }
                 return true;
             }
-            bool _countWeight()
+            void _countWeight()
             {
-                if(_nodeInfoVec.empty() || 0 != _freqSum)
-                {
-                    LogError("_nodeInfoVec is empty or _freqSum has been counted already.");
-                    return false;
-                }
-
                 //freq total freq
-                for(size_t i = 0; i < _nodeInfoVec.size(); i++)
+                _freqSum = 0;
+                for(size_t i = 0; i < _nodeInfos.size(); i++)
                 {
-                    _freqSum += _nodeInfoVec[i].freq;
+                    _freqSum += _nodeInfos[i].freq;
                 }
 
                 assert(_freqSum);
 
                 //normalize
-                for(size_t i = 0; i < _nodeInfoVec.size(); i++)
+                for(size_t i = 0; i < _nodeInfos.size(); i++)
                 {
-                    TrieNodeInfo& nodeInfo = _nodeInfoVec[i];
+                    TrieNodeInfo& nodeInfo = _nodeInfos[i];
                     assert(nodeInfo.freq);
                     nodeInfo.logFreq = log(double(nodeInfo.freq)/double(_freqSum));
                     if(_minLogFreq > nodeInfo.logFreq)
@@ -282,7 +264,6 @@ namespace CppJieba
                     }
                 }
 
-                return true;
             }
 
             void _deleteNode(TrieNode* node)
