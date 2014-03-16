@@ -37,7 +37,7 @@ namespace CppJieba
             };
         public:
 
-            bool extract(const string& str, vector<string>& keywords, uint topN) const
+            bool extract(const string& str, vector<string>& keywords, size_t topN) const
             {
                 assert(_getInitFlag());
                 vector<pair<string, double> > topWords;
@@ -45,14 +45,14 @@ namespace CppJieba
                 {
                     return false;
                 }
-                for(uint i = 0; i < topWords.size(); i++)
+                for(size_t i = 0; i < topWords.size(); i++)
                 {
                     keywords.push_back(topWords[i].first);
                 }
                 return true;
             }
 
-            bool extract(const string& str, vector<pair<string, double> >& keywords, uint topN) const
+            bool extract(const string& str, vector<pair<string, double> >& keywords, size_t topN) const
             {
                 vector<string> words;
                 if(!_segment.cut(str, words))
@@ -75,7 +75,7 @@ namespace CppJieba
                 }
 
                 map<string, double> wordmap;
-                for(uint i = 0; i < words.size(); i ++)
+                for(size_t i = 0; i < words.size(); i ++)
                 {
                     wordmap[ words[i] ] += 1.0;
                 }

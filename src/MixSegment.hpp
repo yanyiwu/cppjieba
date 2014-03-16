@@ -59,7 +59,7 @@ namespace CppJieba
 
                 vector<Unicode> hmmRes;
                 Unicode piece;
-                for (uint i = 0, j = 0; i < infos.size(); i++)
+                for (size_t i = 0, j = 0; i < infos.size(); i++)
                 {
                     //if mp get a word, it's ok, put it into result
                     if (1 != infos[i].word.size())
@@ -84,7 +84,7 @@ namespace CppJieba
                     }
 
                     //put hmm result to return
-                    for (uint k = 0; k < hmmRes.size(); k++)
+                    for (size_t k = 0; k < hmmRes.size(); k++)
                     {
                         res.push_back(hmmRes[k]);
                     }

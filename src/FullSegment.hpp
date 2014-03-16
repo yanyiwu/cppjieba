@@ -48,7 +48,7 @@ namespace CppJieba
                 }
 
                 //resut of searching in trie tree
-                vector<pair<uint, const TrieNodeInfo*> > tRes;
+                vector<pair<size_t, const TrieNodeInfo*> > tRes;
 
                 //max index of res's words
                 int maxIdx = 0;
@@ -63,7 +63,7 @@ namespace CppJieba
                     //find word start from uItr
                     if (_trie.find(uItr, end, tRes))
                     {
-                        for (vector<pair<uint, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
+                        for (vector<pair<size_t, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                         {
                             wordLen = itr->second->word.size();
                             if (wordLen >= 2 || (tRes.size() == 1 && maxIdx <= uIdx))

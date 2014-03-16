@@ -7,6 +7,7 @@ static const char* const DICT_FILE = "../dict/extra_dict/jieba.dict.small.utf8";
 
 TEST(TrieTest, Test1)
 {
+    string s1, s2;
     Trie trie;
     ASSERT_TRUE(trie.init(DICT_FILE));
     ASSERT_LT(trie.getMinLogFreq() + 15.6479, 0.001);
@@ -18,14 +19,16 @@ TEST(TrieTest, Test1)
     nodeInfo.freq = 8779;
     nodeInfo.tag = "v";
     nodeInfo.logFreq = -8.87033;
+    s1 << nodeInfo;
+    s2 << (*trie.find(uni.begin(), uni.end()));
     
-    EXPECT_EQ(nodeInfo, *trie.find(uni.begin(), uni.end()));
+    EXPECT_EQ("[\"26469\", \"21040\"]:8779:v:-8.87033", s2);
     word = "清华大学";
-    vector<pair<uint, const TrieNodeInfo*> > res;
-    map<uint, const TrieNodeInfo* > resMap;
-    map<uint, const TrieNodeInfo* > map;
+    vector<pair<size_t, const TrieNodeInfo*> > res;
+    map<size_t, const TrieNodeInfo* > resMap;
+    map<size_t, const TrieNodeInfo* > map;
     const char * words[] = {"清", "清华", "清华大学"};
-    for(uint i = 0; i < sizeof(words)/sizeof(words[0]); i++)
+    for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
         ASSERT_TRUE(TransCode::decode(words[i], uni));
         res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
@@ -34,7 +37,7 @@ TEST(TrieTest, Test1)
     //TrieNodeInfo
     //res.push_back(make_pair(0, ))
 
-    vector<pair<uint, const TrieNodeInfo*> > vec;
+    vector<pair<size_t, const TrieNodeInfo*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     //print(uni);
     ASSERT_TRUE(trie.find(uni.begin(), uni.end(), vec));

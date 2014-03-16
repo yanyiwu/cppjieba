@@ -37,15 +37,15 @@ namespace CppJieba
                 return cut(unico.begin(), unico.end(), res);
 #else
                 const char * const cstr = str.c_str();
-                uint size = str.size();
-                uint offset = 0;
+                size_t size = str.size();
+                size_t offset = 0;
                 string subs;
                 int ret;
-                uint len;
+                size_t len;
                 while(offset < size)
                 {
                     const char * const nstr = cstr + offset;
-                    uint nsize = size - offset;
+                    size_t nsize = size - offset;
                     if(-1 == (ret = filterAscii(nstr, nsize, len)) || 0 == len || len > nsize)
                     {
                         LogFatal("str[%s] illegal.", cstr);
@@ -78,7 +78,7 @@ namespace CppJieba
              * else count the nonascii string's length and return 1;
              * if errors, return -1;
              * */
-            static int filterAscii(const char* str, uint len, uint& resLen)
+            static int filterAscii(const char* str, size_t len, size_t& resLen)
             {
                 if(!str || !len)
                 {

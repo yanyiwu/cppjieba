@@ -12,11 +12,11 @@ TEST(SegmentBaseTest, Test1)
     buf.push_back("你好");
     buf.push_back("...hh");
     vector<string> res;
-    uint size = strlen(str);
-    uint offset = 0;
+    size_t size = strlen(str);
+    size_t offset = 0;
     while(offset < size)
     {
-        uint len = 0;
+        size_t len = 0;
         const char* t =  str + offset;
         SegmentBase::filterAscii(t, size - offset, len);
         s.assign(t, len);
