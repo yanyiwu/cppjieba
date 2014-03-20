@@ -16,7 +16,7 @@
 
 ### 依赖
 
-* g++ (version >= 4.6 recommended);
+* g++ (version >= 4.4.7 recommended);
 * cmake (version >= 2.8 recommended);
 
 ### 下载和安装
