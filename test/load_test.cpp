@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include <fstream>
 #include "../src/Limonp/ArgvContext.hpp"
 #include "../src/Limonp/io_functs.hpp"
@@ -30,14 +31,15 @@ void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
 
 int main(int argc, char ** argv)
 {
+    MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
+    if(!seg)
     {
-        MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
-        if(!seg)
-        {
-            cout<<"seg init failed."<<endl;
-            return EXIT_FAILURE;
-        }
-        cut(&seg, "../test/testdata/weicheng.utf8");
+        cout<<"seg init failed."<<endl;
+        return EXIT_FAILURE;
     }
+    long beginTime = clock();
+    cut(&seg, "../test/testdata/weicheng.utf8");
+    long endTime = clock();
+    printf("[%.3lf seconds]time consumeed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
     return EXIT_SUCCESS;
 }
