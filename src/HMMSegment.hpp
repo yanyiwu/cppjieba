@@ -136,21 +136,10 @@ namespace CppJieba
                 size_t now, old, stat;
                 double tmp, endE, endS;
 
-                try
-                {
-                    path = new int [XYSize];
-                    weight = new double [XYSize];
-                }
-                catch(const std::bad_alloc&)
-                {
-                    LogError("bad_alloc");
-                    return false;
-                }
-                if(NULL == path || NULL == weight)
-                {
-                    LogError("bad_alloc");
-                    return false;
-                }
+                path = new int [XYSize];
+                assert(path);
+                weight = new double [XYSize];
+                assert(weight);
 
                 //start
                 for(size_t y = 0; y < Y; y++)

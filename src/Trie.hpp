@@ -77,8 +77,9 @@ namespace CppJieba
                 _minLogFreq = MAX_DOUBLE;
                 _setInitFlag(false);
             }
-            Trie(const string& filePath): Trie()
+            Trie(const string& filePath)
             {
+                Trie();
                 _setInitFlag(init(filePath));
             }
             ~Trie()
