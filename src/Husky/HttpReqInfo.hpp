@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "Limonp/logger.hpp"
+#include "Limonp/str_functs.hpp"
 
 namespace Husky
 {
@@ -76,22 +77,22 @@ namespace Husky
     class HttpReqInfo
     {
         public:
-            bool load(const string& headerStr)
+            HttpReqInfo(const string& headerStr)
             {
                 size_t lpos = 0, rpos = 0;
                 vector<string> buf;
                 rpos = headerStr.find("\n", lpos);
                 if(string::npos == rpos)
                 {
-                    LogFatal("headerStr illegal.");
-                    return false;
+                    LogError("headerStr illegal.");
+                    return;
                 }
                 string firstline(headerStr, lpos, rpos - lpos);
                 trim(firstline);
                 if(!split(firstline, buf, " ") || 3 != buf.size())
                 {
-                    LogFatal("parse header first line failed.");
-                    return false;
+                    LogError("parse header first line failed.");
+                    return;
                 }
                 _headerMap[KEY_METHOD] = trim(buf[0]); 
                 _headerMap[KEY_PATH] = trim(buf[1]); 
@@ -103,12 +104,11 @@ namespace Husky
                     _parseUrl(firstline, _methodGetMap);
                 }
 
-
                 lpos = rpos + 1;
                 if(lpos >= headerStr.size())
                 {
-                    LogFatal("headerStr illegal");
-                    return false;
+                    LogError("headerStr illegal");
+                    return;
                 }
                 //message header begin
                 while(lpos < headerStr.size() && string::npos != (rpos = headerStr.find('\n', lpos)) && rpos > lpos)
@@ -125,8 +125,8 @@ namespace Husky
                     trim(v);
                     if(k.empty()||v.empty())
                     {
-                        LogFatal("headerStr illegal.");
-                        return false;
+                        LogError("headerStr illegal.");
+                        return;
                     }
                     upper(k);
                     _headerMap[k] = v;
@@ -136,7 +136,6 @@ namespace Husky
 
                 //body begin
 
-                return true;
             }
         public:
             string& operator[] (const string& key)
@@ -156,15 +155,15 @@ namespace Husky
                 return _find(_methodPostMap, argKey, res);
             }
         private:
-            HashMap<string, string> _headerMap;
-            HashMap<string, string> _methodGetMap;
-            HashMap<string, string> _methodPostMap;
+            std::unordered_map<string, string> _headerMap;
+            std::unordered_map<string, string> _methodGetMap;
+            std::unordered_map<string, string> _methodPostMap;
             //public:
             friend ostream& operator<<(ostream& os, const HttpReqInfo& obj);
         private:
-            bool _find(const HashMap<string, string>& mp, const string& key, string& res)const
+            bool _find(const std::unordered_map<string, string>& mp, const string& key, string& res)const
             {
-                HashMap<string, string>::const_iterator it = mp.find(key);
+                std::unordered_map<string, string>::const_iterator it = mp.find(key);
                 if(it == mp.end())
                 {
                     return false;
@@ -173,7 +172,7 @@ namespace Husky
                 return true;
             }
         private:
-            bool _parseUrl(const string& url, HashMap<string, string>& mp)
+            bool _parseUrl(const string& url, std::unordered_map<string, string>& mp)
             {
                 if(url.empty())
                 {

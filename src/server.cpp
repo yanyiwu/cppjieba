@@ -5,7 +5,7 @@
 #include <string.h>
 #include "Limonp/Config.hpp"
 #include "Limonp/io_functs.hpp"
-#include "Husky/HuskyServer.hpp"
+#include "Husky/EpollServer.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
@@ -19,7 +19,7 @@ class ReqHandler: public IRequestHandler
         ReqHandler(const string& dictPath, const string& modelPath): _segment(dictPath, modelPath){};
         virtual ~ReqHandler(){};
     public:
-        virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd)
+        virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd) const
         {
             string sentence, tmp;
             vector<string> words;
@@ -45,7 +45,6 @@ bool run(int argc, char** argv)
         return false;
     }
     unsigned int port = 0;
-    unsigned int threadNum = 0; 
     string dictPath;
     string modelPath;
     string val;
@@ -55,12 +54,6 @@ bool run(int argc, char** argv)
         return false;
     }
     port = atoi(val.c_str());
-    if(!conf.get("thread_num", val))
-    {
-        LogFatal("conf get thread_num failed.");
-        return false;
-    }
-    threadNum = atoi(val.c_str());
 
     if(!conf.get("dict_path", dictPath))
     {
@@ -92,8 +85,8 @@ bool run(int argc, char** argv)
     }
 
     ReqHandler reqHandler(dictPath, modelPath);
-    HuskyServer sf(port, threadNum, &reqHandler);
-    return sf.init() && sf.run();
+    EpollServer sf(port, &reqHandler);
+    return sf.start();
 }
 
 int main(int argc, char* argv[])
