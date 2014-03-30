@@ -44,11 +44,6 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 assert(_getInitFlag());
-                if(begin >= end)
-                {
-                    LogError("begin >= end");
-                    return false;
-                }
 
                 vector<TrieNodeInfo> infos;
                 if(!_mpSeg.cut(begin, end, infos))
