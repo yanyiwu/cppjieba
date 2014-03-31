@@ -40,6 +40,6 @@ int main(int argc, char ** argv)
     long beginTime = clock();
     cut(&seg, "../test/testdata/weicheng.utf8");
     long endTime = clock();
-    printf("[%.3lf seconds]time consumeed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
+    printf("[%.3lf seconds]time consumed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
     return EXIT_SUCCESS;
 }
