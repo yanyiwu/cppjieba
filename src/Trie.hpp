@@ -26,16 +26,14 @@ namespace CppJieba
     const double MAX_DOUBLE = 3.14e+100;
     const size_t DICT_COLUMN_NUM = 3;
     typedef unordered_map<uint16_t, struct TrieNode*> TrieNodeMap;
+    struct TrieNodeInfo;
     struct TrieNode
     {
         TrieNodeMap hmap;
         bool isLeaf;
-        size_t nodeInfoPos;
-        TrieNode()
-        {
-            isLeaf = false;
-            nodeInfoPos = 0;
-        }
+        const TrieNodeInfo * ptTrieNodeInfo;
+        TrieNode(): isLeaf(false), ptTrieNodeInfo(NULL)
+        {}
     };
 
     struct TrieNodeInfo
@@ -72,7 +70,7 @@ namespace CppJieba
         public:
             Trie()
             {
-                _root = NULL;
+                _root = new TrieNode;
                 _freqSum = 0;
                 _minLogFreq = MAX_DOUBLE;
                 _setInitFlag(false);
@@ -90,15 +88,11 @@ namespace CppJieba
             bool init(const string& filePath)
             {
                 assert(!_getInitFlag());
-
-                _root = new TrieNode;
-                assert(_root);
-                if(!_trieInsert(filePath))
-                {
-                    LogError("_trieInsert failed.");
-                    return false;
-                }
-                _countWeight();
+                _loadDict(filePath, _nodeInfos);
+                _createTrie(_nodeInfos, _root);
+                _freqSum = _calculateFreqSum(_nodeInfos);
+                assert(_freqSum);
+                _minLogFreq = _calculateLogFreqAndGetMinValue(_nodeInfos, _freqSum);
                 return _setInitFlag(true);
             }
 
@@ -119,7 +113,7 @@ namespace CppJieba
                 }
                 if(p->isLeaf)
                 {
-                    return &(_nodeInfos[p->nodeInfoPos]);
+                    return p->ptTrieNodeInfo;
                 }
                 return NULL;
             }
@@ -138,7 +132,7 @@ namespace CppJieba
                     p = citer->second;
                     if(p->isLeaf)
                     {
-                        res.push_back(make_pair(itr-begin, &_nodeInfos[p->nodeInfoPos]));
+                        res.push_back(make_pair(itr-begin, p->ptTrieNodeInfo));
                     }
                 }
                 return !res.empty();
@@ -158,7 +152,7 @@ namespace CppJieba
                     p = citer->second;
                     if(p->isLeaf)
                     {
-                        res[itr - begin + offset] = &_nodeInfos[p->nodeInfoPos];
+                        res[itr - begin + offset] = p->ptTrieNodeInfo;
                     }
                 }
                 return !res.empty();
@@ -168,43 +162,43 @@ namespace CppJieba
             double getMinLogFreq() const {return _minLogFreq;};
 
         private:
-            void _insert(const TrieNodeInfo& nodeInfo, size_t nodeInfoPos)
+            void _insertNode(const TrieNodeInfo& nodeInfo, TrieNode* ptNode) const
             {
                 const Unicode& unico = nodeInfo.word;
-                TrieNode* p = _root;
                 for(size_t i = 0; i < unico.size(); i++)
                 {
                     uint16_t cu = unico[i];
-                    assert(p);
-                    if(!isIn(p->hmap, cu))
+                    assert(ptNode);
+                    if(!isIn(ptNode->hmap, cu))
                     {
                         TrieNode * next = new TrieNode;
                         assert(next);
-                        p->hmap[cu] = next;
-                        p = next;
+                        ptNode->hmap[cu] = next;
+                        ptNode = next;
                     }
                     else
                     {
-                        p = p->hmap[cu];
+                        ptNode = ptNode->hmap[cu];
                     }
                 }
 
-                p->isLeaf = true;
-                p->nodeInfoPos = nodeInfoPos;
+                ptNode->isLeaf = true;
+                ptNode->ptTrieNodeInfo = &nodeInfo;
             }
 
         private:
-            bool _trieInsert(const string& filePath)
+            void _loadDict(const string& filePath, vector<TrieNodeInfo>& nodeInfos) const
             {
                 ifstream ifs(filePath.c_str());
                 if(!ifs)
                 {
-                    LogError("open %s failed.", filePath.c_str());
-                    return false;
+                    LogFatal("open %s failed.", filePath.c_str());
+                    exit(1);
                 }
                 string line;
                 vector<string> buf;
 
+                nodeInfos.clear();
                 TrieNodeInfo nodeInfo;
                 for(size_t lineno = 0 ; getline(ifs, line); lineno++)
                 {
@@ -213,43 +207,46 @@ namespace CppJieba
                     if(!TransCode::decode(buf[0], nodeInfo.word))
                     {
                         LogError("line[%u:%s] illegal.", lineno, line.c_str());
-                        return false;
+                        continue;
                     }
                     nodeInfo.freq = atoi(buf[1].c_str());
                     nodeInfo.tag = buf[2];
                     
-                    _nodeInfos.push_back(nodeInfo);
-
+                    nodeInfos.push_back(nodeInfo);
                 }
+            }
+            bool _createTrie(const vector<TrieNodeInfo>& nodeInfos, TrieNode * ptNode)
+            {
                 for(size_t i = 0; i < _nodeInfos.size(); i++)
                 {
-                    _insert(_nodeInfos[i], i);
+                    _insertNode(_nodeInfos[i], ptNode);
                 }
                 return true;
             }
-            void _countWeight()
+            size_t _calculateFreqSum(const vector<TrieNodeInfo>& nodeInfos) const
             {
-                //freq total freq
-                _freqSum = 0;
-                for(size_t i = 0; i < _nodeInfos.size(); i++)
+                size_t freqSum = 0;
+                for(size_t i = 0; i < nodeInfos.size(); i++)
                 {
-                    _freqSum += _nodeInfos[i].freq;
+                    freqSum += nodeInfos[i].freq;
                 }
-
-                assert(_freqSum);
-
-                //normalize
-                for(size_t i = 0; i < _nodeInfos.size(); i++)
+                return freqSum;
+            }
+            double _calculateLogFreqAndGetMinValue(vector<TrieNodeInfo>& nodeInfos, size_t freqSum) const
+            {
+                assert(freqSum);
+                double minLogFreq = MAX_DOUBLE;
+                for(size_t i = 0; i < nodeInfos.size(); i++)
                 {
-                    TrieNodeInfo& nodeInfo = _nodeInfos[i];
+                    TrieNodeInfo& nodeInfo = nodeInfos[i];
                     assert(nodeInfo.freq);
-                    nodeInfo.logFreq = log(double(nodeInfo.freq)/double(_freqSum));
-                    if(_minLogFreq > nodeInfo.logFreq)
+                    nodeInfo.logFreq = log(double(nodeInfo.freq)/double(freqSum));
+                    if(minLogFreq > nodeInfo.logFreq)
                     {
-                        _minLogFreq = nodeInfo.logFreq;
+                        minLogFreq = nodeInfo.logFreq;
                     }
                 }
-
+                return minLogFreq;
             }
 
             void _deleteNode(TrieNode* node)
