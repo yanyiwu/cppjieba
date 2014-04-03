@@ -26,6 +26,11 @@ class ReqHandler: public IRequestHandler
             httpReq.GET("key", tmp); 
             URLDecode(tmp, sentence);
             _segment.cut(sentence, words);
+            if(httpReq.GET("format", tmp) && tmp == "simple")
+            {
+                join(words.begin(), words.end(), strSnd, " ");
+                return true;
+            }
             strSnd << words;
             return true;
         }
