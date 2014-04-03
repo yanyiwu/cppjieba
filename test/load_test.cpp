@@ -23,10 +23,12 @@ void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
     loadFile2Str(filePath, doc);
     for(uint i = 0; i < times; i ++)
     {
-        LogInfo("times[%u]", i);
+        printf("process [%3.0lf %%]\r", 100.0*(i+1)/times);
+        fflush(stdout);
         res.clear();
         seg->cut(doc, res);
     }
+    printf("\n");
 }
 
 int main(int argc, char ** argv)
