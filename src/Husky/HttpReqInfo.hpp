@@ -135,7 +135,8 @@ namespace Husky
                 //message header end
 
                 //body begin
-
+                _body.assign(headerStr.substr(rpos));
+                trim(_body);
             }
         public:
             string& operator[] (const string& key)
@@ -150,14 +151,23 @@ namespace Husky
             {
                 return _find(_methodGetMap, argKey, res);
             }
-            bool POST(const string& argKey, string& res)const
+            //bool POST(const string& argKey, string& res)const
+            //{
+            //    return _find(_methodPostMap, argKey, res);
+            //}
+            const string& getMethod() const
             {
-                return _find(_methodPostMap, argKey, res);
+                return _headerMap.find(KEY_METHOD)->second;
+            }
+            const string& getBody() const
+            {
+                return _body;
             }
         private:
             std::unordered_map<string, string> _headerMap;
             std::unordered_map<string, string> _methodGetMap;
-            std::unordered_map<string, string> _methodPostMap;
+            //std::unordered_map<string, string> _methodPostMap;
+            string _body;
             //public:
             friend ostream& operator<<(ostream& os, const HttpReqInfo& obj);
         private:
@@ -215,7 +225,7 @@ namespace Husky
 
     inline std::ostream& operator << (std::ostream& os, const Husky::HttpReqInfo& obj)
     {
-        return os << obj._headerMap << obj._methodGetMap << obj._methodPostMap;
+        return os << obj._headerMap << obj._methodGetMap/* << obj._methodPostMap*/ << obj._body;
     }
 
 }

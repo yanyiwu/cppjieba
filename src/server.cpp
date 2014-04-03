@@ -34,6 +34,13 @@ class ReqHandler: public IRequestHandler
             strSnd << words;
             return true;
         }
+        virtual bool do_POST(const HttpReqInfo& httpReq, string& strSnd) const
+        {
+            vector<string> words;
+            _segment.cut(httpReq.getBody(), words);
+            strSnd << words;
+            return true;
+        }
     private:
         MixSegment _segment;
 };
