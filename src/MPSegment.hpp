@@ -24,7 +24,7 @@ namespace CppJieba
         const TrieNodeInfo * pInfo;
         double weight;
 
-        SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
+        SegmentChar():uniCh(0), pInfo(NULL), weight(0.0)
         {}
     };
     typedef vector<SegmentChar> SegmentContext;
@@ -117,15 +117,17 @@ namespace CppJieba
         private:
             bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, SegmentContext& segContext) const
             {
+                SegmentChar schar;
+                size_t offset;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
-                    SegmentChar schar(*it);
-                    size_t i = it - begin;
-                    _trie.find(it, end, schar.dag, i);
-                    //DagType::iterator dagIter;
-                    if(schar.dag.end() ==  schar.dag.find(i))
+                    schar.uniCh = *it;
+                    offset = it - begin;
+                    schar.dag.clear();
+                    _trie.find(it, end, schar.dag, offset);
+                    if(!isIn(schar.dag, offset))
                     {
-                        schar.dag[i] = NULL;
+                        schar.dag[offset] = NULL;
                     }
                     segContext.push_back(schar);
                 }
@@ -139,15 +141,19 @@ namespace CppJieba
                     return false;
                 }
 
+                size_t nextPos;
+                const TrieNodeInfo* p;
+                double val;
+
                 for(int i = segContext.size() - 1; i >= 0; i--)
                 {
                     segContext[i].pInfo = NULL;
                     segContext[i].weight = MIN_DOUBLE;
                     for(DagType::const_iterator it = segContext[i].dag.begin(); it != segContext[i].dag.end(); it++)
                     {
-                        size_t nextPos = it->first;
-                        const TrieNodeInfo* p = it->second;
-                        double val = 0.0;
+                        nextPos = it->first;
+                        p = it->second;
+                        val = 0.0;
                         if(nextPos + 1 < segContext.size())
                         {
                             val += segContext[nextPos + 1].weight;
