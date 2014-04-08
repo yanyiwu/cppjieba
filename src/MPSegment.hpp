@@ -64,15 +64,15 @@ namespace CppJieba
                     return false;
                 }
 
-                vector<TrieNodeInfo> segWordInfos;
-                if(!cut(begin, end, segWordInfos))
+                vector<Unicode> words;
+                if(!cut(begin, end, words))
                 {
                     return false;
                 }
                 string word;
-                for(size_t i = 0; i < segWordInfos.size(); i++)
+                for(size_t i = 0; i < words.size(); i++)
                 {
-                    if(TransCode::encode(segWordInfos[i].word, word))
+                    if(TransCode::encode(words[i], word))
                     {
                         res.push_back(word);
                     }
@@ -84,7 +84,7 @@ namespace CppJieba
                 return true;
             }
 
-            bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const
+            bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 if(!_getInitFlag())
                 {
@@ -92,7 +92,6 @@ namespace CppJieba
                     return false;
                 }
                 SegmentContext segContext;
-
                 //calc DAG
                 if(!_calcDAG(begin, end, segContext))
                 {
@@ -106,7 +105,7 @@ namespace CppJieba
                     return false;
                 }
 
-                if(!_cut(segContext, segWordInfos))
+                if(!_cut(segContext, res))
                 {
                     LogError("_cut failed.");
                     return false;
@@ -172,7 +171,7 @@ namespace CppJieba
                 return true;
 
             }
-            bool _cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)const
+            bool _cut(SegmentContext& segContext, vector<Unicode>& res)const
             {
                 size_t i = 0;
                 while(i < segContext.size())
@@ -180,16 +179,12 @@ namespace CppJieba
                     const TrieNodeInfo* p = segContext[i].pInfo;
                     if(p)
                     {
-                        res.push_back(*p);
+                        res.push_back(p->word);
                         i += p->word.size();
                     }
                     else//single chinese word
                     {
-                        TrieNodeInfo nodeInfo;
-                        nodeInfo.word.push_back(segContext[i].uniCh);
-                        nodeInfo.freq = 0;
-                        nodeInfo.logFreq = _trie.getMinLogFreq();
-                        res.push_back(nodeInfo);
+                        res.push_back(Unicode(1, segContext[i].uniCh));
                         i++;
                     }
                 }
