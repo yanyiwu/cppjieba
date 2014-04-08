@@ -131,15 +131,11 @@ namespace CppJieba
                 size_t Y = STATUS_SUM;
                 size_t X = end - begin;
                 size_t XYSize = X * Y;
-                int * path;
-                double * weight;
                 size_t now, old, stat;
                 double tmp, endE, endS;
 
-                path = new int [XYSize];
-                assert(path);
-                weight = new double [XYSize];
-                assert(weight);
+                vector<int> path(XYSize);
+                vector<double> weight(XYSize);
 
                 //start
                 for(size_t y = 0; y < Y; y++)
@@ -147,8 +143,10 @@ namespace CppJieba
                     weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], *begin, MIN_DOUBLE);
                     path[0 + y * X] = -1;
                 }
-                //process
-                //for(; begin != end; begin++)
+
+
+                double emitProb;
+
                 for(size_t x = 1; x < X; x++)
                 {
                     for(size_t y = 0; y < Y; y++)
@@ -156,10 +154,11 @@ namespace CppJieba
                         now = x + y*X;
                         weight[now] = MIN_DOUBLE;
                         path[now] = E; // warning
+                        emitProb = _getEmitProb(_emitProbVec[y], *(begin+x), MIN_DOUBLE);
                         for(size_t preY = 0; preY < Y; preY++)
                         {
                             old = x - 1 + preY * X;
-                            tmp = weight[old] + _transProb[preY][y] + _getEmitProb(_emitProbVec[y], *(begin+x), MIN_DOUBLE);
+                            tmp = weight[old] + _transProb[preY][y] + emitProb;
                             if(tmp > weight[now])
                             {
                                 weight[now] = tmp;
@@ -188,8 +187,6 @@ namespace CppJieba
                     stat = path[x + stat*X];
                 }
 
-                delete [] path;
-                delete [] weight;
                 return true;
             }
             bool _loadModel(const char* const filePath)
