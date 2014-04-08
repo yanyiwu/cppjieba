@@ -48,7 +48,7 @@ namespace CppJieba
                 }
 
                 //resut of searching in trie tree
-                vector<pair<size_t, const TrieNodeInfo*> > tRes;
+                DagType tRes;
 
                 //max index of res's words
                 int maxIdx = 0;
@@ -61,9 +61,10 @@ namespace CppJieba
                 for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
                 {
                     //find word start from uItr
-                    if (_trie.find(uItr, end, tRes))
+                    if (_trie.find(uItr, end, 0, tRes))
                     {
-                        for (vector<pair<size_t, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
+                        for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
+                        //for (vector<pair<size_t, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                         {
                             wordLen = itr->second->word.size();
                             if (wordLen >= 2 || (tRes.size() == 1 && maxIdx <= uIdx))

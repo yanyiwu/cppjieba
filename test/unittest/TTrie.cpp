@@ -40,8 +40,6 @@ TEST(TrieTest, Test1)
     vector<pair<size_t, const TrieNodeInfo*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     //print(uni);
-    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), vec));
-    ASSERT_EQ(vec, res);
     ASSERT_TRUE(trie.find(uni.begin(), uni.end(), 0, map));
     ASSERT_EQ(map, resMap);
    // print(vec);

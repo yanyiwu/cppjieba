@@ -118,26 +118,6 @@ namespace CppJieba
                 return NULL;
             }
 
-            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, vector<pair<size_t, const TrieNodeInfo*> >& res) const
-            {
-                TrieNodeMap::const_iterator citer;
-                TrieNode* p = _root;
-                for (Unicode::const_iterator itr = begin; itr != end; itr++)
-                {
-                    citer = p->hmap.find(*itr);
-                    if(p->hmap.end() == citer)
-                    {
-                        break;
-                    }
-                    p = citer->second;
-                    if(p->isLeaf)
-                    {
-                        res.push_back(make_pair(itr-begin, p->ptTrieNodeInfo));
-                    }
-                }
-                return !res.empty();
-            }
-
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, size_t offset, DagType & res) const
             {
                 TrieNode* p = _root;
