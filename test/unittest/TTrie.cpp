@@ -26,7 +26,7 @@ TEST(TrieTest, Test1)
     word = "清华大学";
     vector<pair<size_t, const TrieNodeInfo*> > res;
     map<size_t, const TrieNodeInfo* > resMap;
-    map<size_t, const TrieNodeInfo* > map;
+    map<size_t, const TrieNodeInfo* > mp;
     const char * words[] = {"清", "清华", "清华大学"};
     for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
@@ -40,8 +40,8 @@ TEST(TrieTest, Test1)
     vector<pair<size_t, const TrieNodeInfo*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     //print(uni);
-    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), 0, map));
-    ASSERT_EQ(map, resMap);
+    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), mp, 0));
+    ASSERT_EQ(mp, resMap);
    // print(vec);
 }
 

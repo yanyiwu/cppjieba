@@ -122,7 +122,7 @@ namespace CppJieba
                 {
                     SegmentChar schar(*it);
                     size_t i = it - begin;
-                    _trie.find(it, end, i, schar.dag);
+                    _trie.find(it, end, schar.dag, i);
                     //DagType::iterator dagIter;
                     if(schar.dag.end() ==  schar.dag.find(i))
                     {

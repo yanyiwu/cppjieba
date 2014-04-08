@@ -42,12 +42,6 @@ namespace CppJieba
         size_t freq;
         string tag;
         double logFreq; //logFreq = log(freq/sum(freq));
-        TrieNodeInfo():freq(0),logFreq(0.0)
-        {}
-        TrieNodeInfo(const TrieNodeInfo& nodeInfo):word(nodeInfo.word), freq(nodeInfo.freq), tag(nodeInfo.tag), logFreq(nodeInfo.logFreq)
-        {}
-        TrieNodeInfo(const Unicode& _word):word(_word),freq(0),logFreq(MIN_DOUBLE)
-        {}
     };
 
     inline ostream& operator << (ostream& os, const TrieNodeInfo & nodeInfo)
@@ -118,7 +112,7 @@ namespace CppJieba
                 return NULL;
             }
 
-            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, size_t offset, DagType & res) const
+            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType & res, size_t offset = 0) const
             {
                 TrieNode* p = _root;
                 TrieNodeMap::const_iterator citer;
