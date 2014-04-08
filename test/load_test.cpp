@@ -9,7 +9,7 @@
 
 using namespace CppJieba;
 
-void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
+void cut(const ISegment * seg, const char * const filePath, size_t times = 30)
 {
     ifstream ifile(filePath);
     if(!ifile)
