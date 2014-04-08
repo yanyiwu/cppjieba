@@ -94,12 +94,11 @@ namespace CppJieba
             const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
             {
                 TrieNodeMap::const_iterator citer;
-                TrieNode* p = _root;
+                const TrieNode* p = _root;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
-                    uint16_t chUni = *it;
-                    citer = p->hmap.find(chUni);
-                    if(p-> hmap.end() == citer)
+                    citer = p->hmap.find(*it);
+                    if(p->hmap.end() == citer)
                     {
                         return NULL;
                     }
@@ -114,7 +113,7 @@ namespace CppJieba
 
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType & res, size_t offset = 0) const
             {
-                TrieNode* p = _root;
+                const TrieNode* p = _root;
                 TrieNodeMap::const_iterator citer;
                 for (Unicode::const_iterator itr = begin; itr != end; itr++)
                 {
@@ -139,21 +138,23 @@ namespace CppJieba
             void _insertNode(const TrieNodeInfo& nodeInfo, TrieNode* ptNode) const
             {
                 const Unicode& unico = nodeInfo.word;
+                TrieNodeMap::const_iterator citer;
                 for(size_t i = 0; i < unico.size(); i++)
                 {
                     uint16_t cu = unico[i];
                     assert(ptNode);
-                    if(!isIn(ptNode->hmap, cu))
+                    citer = ptNode->hmap.find(cu);
+                    if(ptNode->hmap.end() == citer)
                     {
                         TrieNode * next = new TrieNode;
-                        assert(next);
                         ptNode->hmap[cu] = next;
                         ptNode = next;
                     }
                     else
                     {
-                        ptNode = ptNode->hmap[cu];
+                        ptNode = citer->second;
                     }
+
                 }
 
                 ptNode->isLeaf = true;
