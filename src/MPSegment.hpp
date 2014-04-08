@@ -59,18 +59,22 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 assert(_getInitFlag());
+                if(begin == end)
+                {
+                    return false;
+                }
 
                 vector<TrieNodeInfo> segWordInfos;
                 if(!cut(begin, end, segWordInfos))
                 {
                     return false;
                 }
-                string tmp;
+                string word;
                 for(size_t i = 0; i < segWordInfos.size(); i++)
                 {
-                    if(TransCode::encode(segWordInfos[i].word, tmp))
+                    if(TransCode::encode(segWordInfos[i].word, word))
                     {
-                        res.push_back(tmp);
+                        res.push_back(word);
                     }
                     else
                     {
@@ -114,12 +118,6 @@ namespace CppJieba
         private:
             bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, SegmentContext& segContext) const
             {
-                if(begin >= end)
-                {
-                    LogError("begin >= end.");
-                    return false;
-                }
-
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
                     SegmentChar schar(*it);
