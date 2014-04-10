@@ -1,30 +1,30 @@
-#include "src/Trie.hpp"
+#include "src/DictTrie.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
 
 static const char* const DICT_FILE = "../dict/extra_dict/jieba.dict.small.utf8";
 
-TEST(TrieTest, NewAndDelete)
+TEST(DictTrieTest, NewAndDelete)
 {
-    Trie * trie;
-    trie = new Trie(DICT_FILE);
+    DictTrie * trie;
+    trie = new DictTrie(DICT_FILE);
     delete trie;
-    trie = new Trie();
+    trie = new DictTrie();
     delete trie;
 }
 
-TEST(TrieTest, Test1)
+TEST(DictTrieTest, Test1)
 {
 
     string s1, s2;
-    Trie trie;
+    DictTrie trie;
     ASSERT_TRUE(trie.init(DICT_FILE));
     ASSERT_LT(trie.getMinLogFreq() + 15.6479, 0.001);
     string word("来到");
     Unicode uni;
     ASSERT_TRUE(TransCode::decode(word, uni));
-    TrieNodeInfo nodeInfo;
+    DictUnit nodeInfo;
     nodeInfo.word = uni;
     nodeInfo.freq = 8779;
     nodeInfo.tag = "v";
@@ -34,9 +34,9 @@ TEST(TrieTest, Test1)
     
     EXPECT_EQ("[\"26469\", \"21040\"]:8779:v:-8.87033", s2);
     word = "清华大学";
-    vector<pair<size_t, const TrieNodeInfo*> > res;
-    map<size_t, const TrieNodeInfo* > resMap;
-    map<size_t, const TrieNodeInfo* > mp;
+    vector<pair<size_t, const DictUnit*> > res;
+    map<size_t, const DictUnit* > resMap;
+    map<size_t, const DictUnit* > mp;
     const char * words[] = {"清", "清华", "清华大学"};
     for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
@@ -44,10 +44,10 @@ TEST(TrieTest, Test1)
         res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
         resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
     }
-    //TrieNodeInfo
+    //DictUnit
     //res.push_back(make_pair(0, ))
 
-    vector<pair<size_t, const TrieNodeInfo*> > vec;
+    vector<pair<size_t, const DictUnit*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     //print(uni);
     ASSERT_TRUE(trie.find(uni.begin(), uni.end(), mp, 0));

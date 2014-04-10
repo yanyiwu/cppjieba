@@ -12,7 +12,7 @@
 #include "Limonp/logger.hpp"
 #include "Limonp/InitOnOff.hpp"
 #include "TransCode.hpp"
-#include "DictTrie.hpp"
+#include "Trie.hpp"
 
 
 
@@ -32,20 +32,30 @@ namespace CppJieba
         double logFreq; //logFreq = log(freq/sum(freq));
     };
 
+    inline ostream & operator << (ostream& os, const DictUnit& unit)
+    {
+        string s;
+        s << unit.word;
+        return os << string_format("%s %u %s %llf", s.c_str(), unit.freq, unit.tag.c_str(), unit.logFreq);
+    }
+
     typedef map<size_t, const DictUnit*> DagType;
 
-    class DictTrie: InitOnOff
+    class DictTrie: public InitOnOff
     {
-
+        public:
+            typedef Trie<Unicode::value_type, DictUnit> TrieType;
         private:
             vector<DictUnit> _nodeInfos;
+            TrieType * _trie;
 
-            int64_t _freqSum;
+            size_t _freqSum;
             double _minLogFreq;
 
         public:
             DictTrie()
             {
+                _trie = NULL;
                 _freqSum = 0;
                 _minLogFreq = MAX_DOUBLE;
                 _setInitFlag(false);
@@ -57,6 +67,10 @@ namespace CppJieba
             }
             ~DictTrie()
             {
+                if(_trie)
+                {
+                    delete _trie;
+                }
             }
         private:
             
@@ -69,14 +83,40 @@ namespace CppJieba
                 _freqSum = _calculateFreqSum(_nodeInfos);
                 assert(_freqSum);
                 _minLogFreq = _calculateLogFreqAndGetMinValue(_nodeInfos, _freqSum);
-                return _setInitFlag(true);
+                _trie = _creatTrie(_nodeInfos);
+                return _setInitFlag(_trie);
             }
 
+        public:
+            const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const
+            {
+                return _trie->find(begin, end);
+            }
+            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType& dag, size_t offset = 0) const
+            {
+                return _trie->find(begin, end, dag, offset);
+            }
 
         public:
             double getMinLogFreq() const {return _minLogFreq;};
 
         private:
+            TrieType * _creatTrie(const vector<DictUnit>& dictUnits)
+            {
+                if(dictUnits.empty())
+                {
+                    return NULL;
+                }
+                vector<Unicode> words;
+                vector<const DictUnit*> valuePointers;
+                for(size_t i = 0 ; i < dictUnits.size(); i ++)
+                {
+                    words.push_back(dictUnits[i].word);
+                    valuePointers.push_back(&dictUnits[i]);
+                }
+                TrieType * trie = new TrieType(words, valuePointers);
+                return trie;
+            }
             void _loadDict(const string& filePath, vector<DictUnit>& nodeInfos) const
             {
                 ifstream ifs(filePath.c_str());

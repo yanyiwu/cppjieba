@@ -21,7 +21,7 @@ namespace CppJieba
     {
         uint16_t uniCh;
         DagType dag;
-        const TrieNodeInfo * pInfo;
+        const DictUnit * pInfo;
         double weight;
 
         SegmentChar():uniCh(0), pInfo(NULL), weight(0.0)
@@ -142,7 +142,7 @@ namespace CppJieba
                 }
 
                 size_t nextPos;
-                const TrieNodeInfo* p;
+                const DictUnit* p;
                 double val;
 
                 for(int i = segContext.size() - 1; i >= 0; i--)
@@ -182,7 +182,7 @@ namespace CppJieba
                 size_t i = 0;
                 while(i < segContext.size())
                 {
-                    const TrieNodeInfo* p = segContext[i].pInfo;
+                    const DictUnit* p = segContext[i].pInfo;
                     if(p)
                     {
                         res.push_back(p->word);

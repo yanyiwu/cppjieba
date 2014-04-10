@@ -64,7 +64,7 @@ namespace CppJieba
                     if (_dictTrie.find(uItr, end, tRes, 0))
                     {
                         for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
-                        //for (vector<pair<size_t, const TrieNodeInfo*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
+                        //for (vector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                         {
                             wordLen = itr->second->word.size();
                             if (wordLen >= 2 || (tRes.size() == 1 && maxIdx <= uIdx))

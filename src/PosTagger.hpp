@@ -42,7 +42,7 @@ namespace CppJieba
                     return false;
                 }
 
-                const TrieNodeInfo *tmp = NULL;
+                const DictUnit *tmp = NULL;
                 Unicode unico;
                 for (vector<string>::iterator itr = cutRes.begin(); itr != cutRes.end(); ++itr)
                 {
