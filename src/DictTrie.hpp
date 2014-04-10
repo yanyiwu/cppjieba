@@ -38,7 +38,6 @@ namespace CppJieba
     {
 
         private:
-            DictTrieNode* _root;
             vector<DictUnit> _nodeInfos;
 
             int64_t _freqSum;
@@ -47,9 +46,6 @@ namespace CppJieba
         public:
             DictTrie()
             {
-                _root = new DictTrieNode;
-                _root.ptKeyMap = NULL;
-                _root.offset = 0;
                 _freqSum = 0;
                 _minLogFreq = MAX_DOUBLE;
                 _setInitFlag(false);
@@ -61,7 +57,6 @@ namespace CppJieba
             }
             ~DictTrie()
             {
-                _deleteNode(_root);
             }
         private:
             
@@ -71,7 +66,6 @@ namespace CppJieba
             {
                 assert(!_getInitFlag());
                 _loadDict(filePath, _nodeInfos);
-                _createDictTrie(_nodeInfos, _root);
                 _freqSum = _calculateFreqSum(_nodeInfos);
                 assert(_freqSum);
                 _minLogFreq = _calculateLogFreqAndGetMinValue(_nodeInfos, _freqSum);
