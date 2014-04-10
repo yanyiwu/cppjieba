@@ -30,9 +30,8 @@ namespace CppJieba
     struct TrieNode
     {
         TrieNodeMap hmap;
-        bool isLeaf;
         const TrieNodeInfo * ptTrieNodeInfo;
-        TrieNode(): isLeaf(false), ptTrieNodeInfo(NULL)
+        TrieNode(): ptTrieNodeInfo(NULL)
         {}
     };
 
@@ -104,11 +103,7 @@ namespace CppJieba
                     }
                     p = citer->second;
                 }
-                if(p->isLeaf)
-                {
-                    return p->ptTrieNodeInfo;
-                }
-                return NULL;
+                return p->ptTrieNodeInfo;
             }
 
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType & res, size_t offset = 0) const
@@ -123,7 +118,7 @@ namespace CppJieba
                         break;
                     }
                     p = citer->second;
-                    if(p->isLeaf)
+                    if(p->ptTrieNodeInfo)
                     {
                         res[itr - begin + offset] = p->ptTrieNodeInfo;
                     }
@@ -157,7 +152,6 @@ namespace CppJieba
 
                 }
 
-                ptNode->isLeaf = true;
                 ptNode->ptTrieNodeInfo = &nodeInfo;
             }
 
