@@ -12,7 +12,7 @@
 #include "Limonp/logger.hpp"
 #include "Limonp/InitOnOff.hpp"
 #include "TransCode.hpp"
-#include "Trie.hpp"
+#include "DictTrie.hpp"
 
 
 

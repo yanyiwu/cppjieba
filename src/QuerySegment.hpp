@@ -5,13 +5,13 @@
 #include <set>
 #include <cassert>
 #include "Limonp/logger.hpp"
-#include "Trie.hpp"
+#include "DictTrie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 #include "FullSegment.hpp"
 #include "MixSegment.hpp"
 #include "TransCode.hpp"
-#include "Trie.hpp"
+#include "DictTrie.hpp"
 
 namespace CppJieba
 {
