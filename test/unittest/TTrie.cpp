@@ -5,8 +5,18 @@ using namespace CppJieba;
 
 static const char* const DICT_FILE = "../dict/extra_dict/jieba.dict.small.utf8";
 
+TEST(TrieTest, NewAndDelete)
+{
+    Trie * trie;
+    trie = new Trie(DICT_FILE);
+    delete trie;
+    trie = new Trie();
+    delete trie;
+}
+
 TEST(TrieTest, Test1)
 {
+
     string s1, s2;
     Trie trie;
     ASSERT_TRUE(trie.init(DICT_FILE));

@@ -71,13 +71,16 @@ namespace CppJieba
             }
             Trie(const string& filePath)
             {
-                Trie();
+                new (this) Trie();
                 _setInitFlag(init(filePath));
             }
             ~Trie()
             {
                 _deleteNode(_root);
             }
+        private:
+            
+            
         public:
             bool init(const string& filePath)
             {
