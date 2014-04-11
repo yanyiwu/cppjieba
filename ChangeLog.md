@@ -1,10 +1,10 @@
-## v2.3.5 is coming
+## v2.4.0 is coming
 
 1. 适配更低级版本的`g++`和`cmake`，已在`g++ 4.1.2`和`cmake 2.6`上测试通过。
 2. 修改一些测试用例的文件，减少测试时编译的时间。
 3. 修复`make install`相关的问题。
 4. 增加HTTP服务的POST请求接口。
-5. 修改Trie这个类潜在的bug并完善单元测试
+5. 拆分`Trie.hpp`成`DictTrie.hpp`和`Trie.hpp`，将trie树这个数据结构抽象出来，并且修复Trie这个类潜在的bug并完善单元测试。
 
 ## v2.3.4
 
