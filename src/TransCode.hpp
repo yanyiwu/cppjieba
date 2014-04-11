@@ -15,7 +15,7 @@ namespace CppJieba
     typedef std::vector<uint16_t> Unicode;
     namespace TransCode
     {
-        inline bool decode(const string& str, vector<uint16_t>& vec)
+        inline bool decode(const string& str, Unicode& vec)
         {
 #ifdef CPPJIEBA_GBK
             return gbkTrans(str, vec);
@@ -24,7 +24,7 @@ namespace CppJieba
 #endif
         }
 
-        inline bool encode(vector<uint16_t>::const_iterator begin, vector<uint16_t>::const_iterator end, string& res)
+        inline bool encode(Unicode::const_iterator begin, Unicode::const_iterator end, string& res)
         {
 #ifdef CPPJIEBA_GBK
             return gbkTrans(begin, end, res);
@@ -33,7 +33,7 @@ namespace CppJieba
 #endif
         }
         
-        inline bool encode(const vector<uint16_t>& uni, string& res)
+        inline bool encode(const Unicode& uni, string& res)
         {
             return encode(uni.begin(), uni.end(), res);
         }

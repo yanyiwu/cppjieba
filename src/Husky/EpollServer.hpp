@@ -37,13 +37,14 @@ namespace Husky
             virtual ~IRequestHandler(){};
         public:
             virtual bool do_GET(const HttpReqInfo& httpReq, string& res) const = 0;
+            virtual bool do_POST(const HttpReqInfo& httpReq, string& res) const = 0;
     };
 
     class EpollServer
     {
         private:
             static const size_t LISTEN_QUEUE_LEN = 1024;
-            static const size_t RECV_BUFFER_SIZE = 1024 * 8;
+            static const size_t RECV_BUFFER_SIZE = 1024*4;
             static const int MAXEPOLLSIZE = 512;
 
         private:
@@ -59,10 +60,10 @@ namespace Husky
             bool _setInitFlag(bool flag) {return _isInited = flag;} 
         public:
             explicit EpollServer(uint port, const IRequestHandler* pHandler): _reqHandler(pHandler), _host_socket(-1), _isShutDown(false), _epollSize(0)
-            {
-                assert(_reqHandler);
-                _setInitFlag(_init_epoll(port));
-            };
+        {
+            assert(_reqHandler);
+            _setInitFlag(_init_epoll(port));
+        };
             ~EpollServer(){};// unfinished;
         public:
             operator bool() const
@@ -75,10 +76,9 @@ namespace Husky
                 //int clientSock;
                 sockaddr_in clientaddr;
                 socklen_t nSize = sizeof(clientaddr);
-                //char recvBuf[RECV_BUFFER_SIZE];
                 struct epoll_event events[MAXEPOLLSIZE];
                 int nfds, clientSock;
-                
+
                 while(!_isShutDown)
                 {
                     if(-1 == (nfds = epoll_wait(_epoll_fd, events, _epollSize, -1)))
@@ -88,7 +88,7 @@ namespace Husky
                     }
 
                     //LogDebug("epoll_wait return event sum[%d]", nfds);
-                    
+
                     for(int i = 0; i < nfds; i++)
                     {
                         if(events[i].data.fd == _host_socket) /*new connect coming.*/
@@ -106,7 +106,7 @@ namespace Husky
                             }
 
                             //LogInfo("connecting from: %d:%d， client socket: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port), clientSock);
-                            
+
                             /* inet_ntoa is not thread safety at some version  */
                             //_sockIpMap[clientSock] = inet_ntoa(clientaddr.sin_addr);
 
@@ -119,7 +119,7 @@ namespace Husky
                             _closesocket(events[i].data.fd);
                         }
                     }
-                    
+
                 }
                 return true;
             }
@@ -190,26 +190,42 @@ namespace Husky
                 }
 
                 string strRec, strSnd, strRetByHandler;
-                strRec.resize(RECV_BUFFER_SIZE);
-                int nRetCode = recv(sockfd, (char*)strRec.c_str(), strRec.size(), 0);
-                if(-1 == nRetCode)
+                char recvBuf[RECV_BUFFER_SIZE];
+                int nRetCode = -1;
+                while(true)
                 {
-                    LogDebug(strerror(errno));
-                    return false;
-                }
-                if(0 == nRetCode)
-                {
-                    LogDebug("client socket closed gracefully.");
-                    return false;
+                    memset(recvBuf, 0, sizeof(recvBuf));
+                    nRetCode = recv(sockfd, recvBuf, sizeof(recvBuf) - 1, 0);
+                    if(-1 == nRetCode)
+                    {
+                        LogDebug(strerror(errno));
+                        return false;
+                    }
+                    if(0 == nRetCode)
+                    {
+                        LogDebug("client socket orderly shut down");
+                        return false;
+                    }
+                    strRec += recvBuf;
+                    if(nRetCode != sizeof(recvBuf) - 1)
+                    {
+                        break;
+                    }
                 }
 
                 HttpReqInfo httpReq(strRec);
-                if(!_reqHandler->do_GET(httpReq, strRetByHandler))
+                if("GET" == httpReq.getMethod() && !_reqHandler->do_GET(httpReq, strRetByHandler))
                 {
                     LogError("do_GET failed.");
                     return false;
                 }
+                if("POST" == httpReq.getMethod() && !_reqHandler->do_POST(httpReq, strRetByHandler))
+                {
+                    LogError("do_POST failed.");
+                    return false;
+                }
                 string_format(strSnd, HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
+
                 if(-1 == send(sockfd, strSnd.c_str(), strSnd.length(), 0))
                 {
                     LogError(strerror(errno));

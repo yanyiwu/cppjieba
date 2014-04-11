@@ -80,7 +80,6 @@ TEST(MPSegmentTest, Test2)
         res += line;
         res += '\n';
         
-        words.clear();
         segment.cut(line, words);
         string s;
         s << words;

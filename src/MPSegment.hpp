@@ -24,7 +24,7 @@ namespace CppJieba
         const TrieNodeInfo * pInfo;
         double weight;
 
-        SegmentChar(uint16_t uni):uniCh(uni), pInfo(NULL), weight(0.0)
+        SegmentChar():uniCh(0), pInfo(NULL), weight(0.0)
         {}
     };
     typedef vector<SegmentChar> SegmentContext;
@@ -59,18 +59,22 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 assert(_getInitFlag());
-
-                vector<TrieNodeInfo> segWordInfos;
-                if(!cut(begin, end, segWordInfos))
+                if(begin == end)
                 {
                     return false;
                 }
-                string tmp;
-                for(size_t i = 0; i < segWordInfos.size(); i++)
+
+                vector<Unicode> words;
+                if(!cut(begin, end, words))
                 {
-                    if(TransCode::encode(segWordInfos[i].word, tmp))
+                    return false;
+                }
+                string word;
+                for(size_t i = 0; i < words.size(); i++)
+                {
+                    if(TransCode::encode(words[i], word))
                     {
-                        res.push_back(tmp);
+                        res.push_back(word);
                     }
                     else
                     {
@@ -80,7 +84,7 @@ namespace CppJieba
                 return true;
             }
 
-            bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<TrieNodeInfo>& segWordInfos)const
+            bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 if(!_getInitFlag())
                 {
@@ -88,7 +92,6 @@ namespace CppJieba
                     return false;
                 }
                 SegmentContext segContext;
-
                 //calc DAG
                 if(!_calcDAG(begin, end, segContext))
                 {
@@ -102,7 +105,7 @@ namespace CppJieba
                     return false;
                 }
 
-                if(!_cut(segContext, segWordInfos))
+                if(!_cut(segContext, res))
                 {
                     LogError("_cut failed.");
                     return false;
@@ -114,21 +117,17 @@ namespace CppJieba
         private:
             bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, SegmentContext& segContext) const
             {
-                if(begin >= end)
-                {
-                    LogError("begin >= end.");
-                    return false;
-                }
-
+                SegmentChar schar;
+                size_t offset;
                 for(Unicode::const_iterator it = begin; it != end; it++)
                 {
-                    SegmentChar schar(*it);
-                    size_t i = it - begin;
-                    _trie.find(it, end, i, schar.dag);
-                    //DagType::iterator dagIter;
-                    if(schar.dag.end() ==  schar.dag.find(i))
+                    schar.uniCh = *it;
+                    offset = it - begin;
+                    schar.dag.clear();
+                    _trie.find(it, end, schar.dag, offset);
+                    if(!isIn(schar.dag, offset))
                     {
-                        schar.dag[i] = NULL;
+                        schar.dag[offset] = NULL;
                     }
                     segContext.push_back(schar);
                 }
@@ -142,15 +141,19 @@ namespace CppJieba
                     return false;
                 }
 
+                size_t nextPos;
+                const TrieNodeInfo* p;
+                double val;
+
                 for(int i = segContext.size() - 1; i >= 0; i--)
                 {
                     segContext[i].pInfo = NULL;
                     segContext[i].weight = MIN_DOUBLE;
                     for(DagType::const_iterator it = segContext[i].dag.begin(); it != segContext[i].dag.end(); it++)
                     {
-                        size_t nextPos = it->first;
-                        const TrieNodeInfo* p = it->second;
-                        double val = 0.0;
+                        nextPos = it->first;
+                        p = it->second;
+                        val = 0.0;
                         if(nextPos + 1 < segContext.size())
                         {
                             val += segContext[nextPos + 1].weight;
@@ -174,7 +177,7 @@ namespace CppJieba
                 return true;
 
             }
-            bool _cut(SegmentContext& segContext, vector<TrieNodeInfo>& res)const
+            bool _cut(SegmentContext& segContext, vector<Unicode>& res)const
             {
                 size_t i = 0;
                 while(i < segContext.size())
@@ -182,16 +185,12 @@ namespace CppJieba
                     const TrieNodeInfo* p = segContext[i].pInfo;
                     if(p)
                     {
-                        res.push_back(*p);
+                        res.push_back(p->word);
                         i += p->word.size();
                     }
                     else//single chinese word
                     {
-                        TrieNodeInfo nodeInfo;
-                        nodeInfo.word.push_back(segContext[i].uniCh);
-                        nodeInfo.freq = 0;
-                        nodeInfo.logFreq = _trie.getMinLogFreq();
-                        res.push_back(nodeInfo);
+                        res.push_back(Unicode(1, segContext[i].uniCh));
                         i++;
                     }
                 }

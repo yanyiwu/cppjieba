@@ -22,12 +22,8 @@ namespace CppJieba
             virtual bool cut(const string& str, vector<string>& res)const
             {
                 assert(_getInitFlag());
-                //if(!_getInitFlag())
-                //{
-                //    LogError("not inited.");
-                //    return false;
-                //}
                 Unicode unico;
+                res.clear();
 #ifdef NO_FILTER
                 if(!TransCode::decode(str, unico))
                 {

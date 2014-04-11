@@ -26,6 +26,18 @@ class ReqHandler: public IRequestHandler
             httpReq.GET("key", tmp); 
             URLDecode(tmp, sentence);
             _segment.cut(sentence, words);
+            if(httpReq.GET("format", tmp) && tmp == "simple")
+            {
+                join(words.begin(), words.end(), strSnd, " ");
+                return true;
+            }
+            strSnd << words;
+            return true;
+        }
+        virtual bool do_POST(const HttpReqInfo& httpReq, string& strSnd) const
+        {
+            vector<string> words;
+            _segment.cut(httpReq.getBody(), words);
             strSnd << words;
             return true;
         }

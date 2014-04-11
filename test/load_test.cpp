@@ -9,7 +9,7 @@
 
 using namespace CppJieba;
 
-void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
+void cut(const ISegment * seg, const char * const filePath, size_t times = 30)
 {
     ifstream ifile(filePath);
     if(!ifile)
@@ -23,10 +23,12 @@ void cut(const ISegment * seg, const char * const filePath, size_t times = 10)
     loadFile2Str(filePath, doc);
     for(uint i = 0; i < times; i ++)
     {
-        LogInfo("times[%u]", i);
+        printf("process [%3.0lf %%]\r", 100.0*(i+1)/times);
+        fflush(stdout);
         res.clear();
         seg->cut(doc, res);
     }
+    printf("\n");
 }
 
 int main(int argc, char ** argv)
@@ -40,6 +42,6 @@ int main(int argc, char ** argv)
     long beginTime = clock();
     cut(&seg, "../test/testdata/weicheng.utf8");
     long endTime = clock();
-    printf("[%.3lf seconds]time consumeed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
+    printf("[%.3lf seconds]time consumed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
     return EXIT_SUCCESS;
 }

@@ -44,14 +44,8 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 assert(_getInitFlag());
-                if(begin >= end)
-                {
-                    LogError("begin >= end");
-                    return false;
-                }
-
-                vector<TrieNodeInfo> infos;
-                if(!_mpSeg.cut(begin, end, infos))
+                vector<Unicode> words;
+                if(!_mpSeg.cut(begin, end, words))
                 {
                     LogError("mpSeg cutDAG failed.");
                     return false;
@@ -59,20 +53,20 @@ namespace CppJieba
 
                 vector<Unicode> hmmRes;
                 Unicode piece;
-                for (size_t i = 0, j = 0; i < infos.size(); i++)
+                for (size_t i = 0, j = 0; i < words.size(); i++)
                 {
                     //if mp get a word, it's ok, put it into result
-                    if (1 != infos[i].word.size())
+                    if (1 != words[i].size())
                     {
-                        res.push_back(infos[i].word);
+                        res.push_back(words[i]);
                         continue;
                     }
 
                     // if mp get a single one, collect it in sequence
                     j = i;
-                    while (j < infos.size() && infos[j].word.size() == 1)
+                    while (j < words.size() && words[j].size() == 1)
                     {
-                        piece.push_back(infos[j].word[0]);
+                        piece.push_back(words[j][0]);
                         j++;
                     }
 
