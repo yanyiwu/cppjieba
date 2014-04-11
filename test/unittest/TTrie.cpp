@@ -32,7 +32,7 @@ TEST(DictTrieTest, Test1)
     s1 << nodeInfo;
     s2 << (*trie.find(uni.begin(), uni.end()));
     
-    EXPECT_EQ("[\"26469\", \"21040\"]:8779:v:-8.87033", s2);
+    EXPECT_EQ("[\"26469\", \"21040\"] 8779 v -8.870", s2);
     word = "清华大学";
     vector<pair<size_t, const DictUnit*> > res;
     map<size_t, const DictUnit* > resMap;

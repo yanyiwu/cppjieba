@@ -47,8 +47,8 @@ namespace CppJieba
                     const TrieNodeType* ptNode = _root;
                     for(typename vector<KeyType>::const_iterator it = begin; it != end; it++)
                     {
-                        citer = ptNode->ptKeyMap->find(*it);
-                        if(ptNode->ptKeyMap->end() == citer)
+                        assert(ptNode);
+                        if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*it)))
                         {
                             return NULL;
                         }
@@ -63,8 +63,8 @@ namespace CppJieba
                     ordererMap.clear();
                     for(typename vector<KeyType>::const_iterator itr = begin; itr != end ; itr++)
                     {
-                        citer = ptNode->ptKeyMap->find(*itr);
-                        if(ptNode->ptKeyMap->end() == citer)
+                        assert(ptNode);
+                        if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*itr)))
                         {
                             break;
                         }

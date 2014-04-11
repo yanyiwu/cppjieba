@@ -36,7 +36,7 @@ namespace CppJieba
     {
         string s;
         s << unit.word;
-        return os << string_format("%s %u %s %llf", s.c_str(), unit.freq, unit.tag.c_str(), unit.logFreq);
+        return os << string_format("%s %u %s %.3lf", s.c_str(), unit.freq, unit.tag.c_str(), unit.logFreq);
     }
 
     typedef map<size_t, const DictUnit*> DagType;
