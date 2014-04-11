@@ -80,6 +80,7 @@ namespace CppJieba
             {
                 assert(!_getInitFlag());
                 _loadDict(filePath, _nodeInfos);
+                _shrink(_nodeInfos);
                 _freqSum = _calculateFreqSum(_nodeInfos);
                 assert(_freqSum);
                 _minLogFreq = _calculateLogFreqAndGetMinValue(_nodeInfos, _freqSum);
@@ -114,6 +115,7 @@ namespace CppJieba
                     words.push_back(dictUnits[i].word);
                     valuePointers.push_back(&dictUnits[i]);
                 }
+
                 TrieType * trie = new TrieType(words, valuePointers);
                 return trie;
             }
@@ -170,6 +172,11 @@ namespace CppJieba
                     }
                 }
                 return minLogFreq;
+            }
+
+            void _shrink(vector<DictUnit>& units) const
+            {
+                vector<DictUnit>(units.begin(), units.end()).swap(units);
             }
 
 
