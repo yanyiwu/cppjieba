@@ -1,5 +1,7 @@
 #!/bin/sh
 
+PATH=/usr/bin/:/usr/local/bin/:/sbin/:$PATH
+
 PID=`pidof cjserver`
 if [ ! -z "${PID}" ]
 then
