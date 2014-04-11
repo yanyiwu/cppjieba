@@ -5,6 +5,7 @@
 3. 修复`make install`相关的问题。
 4. 增加HTTP服务的POST请求接口。
 5. 拆分`Trie.hpp`成`DictTrie.hpp`和`Trie.hpp`，将trie树这个数据结构抽象出来，并且修复Trie这个类潜在的bug并完善单元测试。
+6. 重写cjserver的启动和停止，新启动和停止方法详见README.md。
 
 ## v2.3.4
 
