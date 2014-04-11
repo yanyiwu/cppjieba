@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PID=`pidof cjserver`
+if [ ! -z "${PID}" ]
+then
+    kill ${PID}
+    sleep 1
+    echo "service stop ok."
+else
+    echo "cjserver is not running."
+fi

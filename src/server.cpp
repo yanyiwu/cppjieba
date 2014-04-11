@@ -77,24 +77,6 @@ bool run(int argc, char** argv)
         LogFatal("conf get model_path failed.");
         return false;
     }
-    if(conf.get("daemonize", val) && "true" == val)
-    {
-        if(fork() > 0)
-          exit(0);
-        setsid();
-        if(!conf.get("pid_file", val))
-        {
-            LogFatal("conf get pid_file failed.");
-            return false;
-        }
-
-        int pid = getpid();
-        string pidStr;
-        string_format(pidStr, "%d", pid);
-        loadStr2File(val.c_str(), ios::out, pidStr);
-        LogInfo("write pid[%s] into file[%s]", pidStr.c_str(), val.c_str());
-        
-    }
 
     ReqHandler reqHandler(dictPath, modelPath);
     EpollServer sf(port, &reqHandler);

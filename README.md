@@ -47,9 +47,9 @@ make test
 ```
 #Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
 #启动
-sudo /etc/init.d/cjserver start
+/etc/init.d/cjserver.start
 #停止
-sudo /etc/init.d/cjserver stop
+/etc/init.d/cjserver.stop
 ```
 
 #### 测试服务

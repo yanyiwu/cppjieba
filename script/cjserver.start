@@ -1,0 +1,10 @@
+#!/bin/sh
+
+PID=`pidof cjserver`
+if [ ! -z "${PID}" ]
+then
+    echo "please stop cjserver first."
+else
+    cjserver /etc/CppJieba/server.conf &
+    echo "service startted."
+fi
