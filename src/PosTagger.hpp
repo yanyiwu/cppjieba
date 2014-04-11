@@ -3,7 +3,7 @@
 
 #include "MixSegment.hpp"
 #include "Limonp/str_functs.hpp"
-#include "Trie.hpp"
+#include "DictTrie.hpp"
 
 namespace CppJieba
 {
@@ -13,7 +13,7 @@ namespace CppJieba
     {
         private:
             MixSegment _segment;
-            Trie _trie;
+            DictTrie _dictTrie;
 
         public:
             PosTagger(){_setInitFlag(false);};
@@ -27,8 +27,8 @@ namespace CppJieba
             {
                 
                 assert(!_getInitFlag());
-                _trie.init(dictPath);
-                assert(_trie);
+                _dictTrie.init(dictPath);
+                assert(_dictTrie);
                 return _setInitFlag(_segment.init(dictPath, hmmFilePath));
             };
 
@@ -42,7 +42,7 @@ namespace CppJieba
                     return false;
                 }
 
-                const TrieNodeInfo *tmp = NULL;
+                const DictUnit *tmp = NULL;
                 Unicode unico;
                 for (vector<string>::iterator itr = cutRes.begin(); itr != cutRes.end(); ++itr)
                 {
@@ -51,7 +51,7 @@ namespace CppJieba
                         LogError("decode failed.");
                         return false;
                     }
-                    tmp = _trie.find(unico.begin(), unico.end());
+                    tmp = _dictTrie.find(unico.begin(), unico.end());
                     res.push_back(make_pair(*itr, tmp == NULL ? "x" : tmp->tag));
                 }
                 tmp = NULL;

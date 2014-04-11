@@ -1,241 +1,143 @@
-/************************************
- * file enc : ASCII
- * author   : wuyanyi09@gmail.com
- ************************************/
-#ifndef CPPJIEBA_TRIE_H
-#define CPPJIEBA_TRIE_H
+#ifndef CPPJIEBA_TRIE_HPP
+#define CPPJIEBA_TRIE_HPP
 
-#include <iostream>
-#include <fstream>
-#include <map>
-#include <cstring>
-#include <stdint.h>
-#include <cmath>
-#include <limits>
-#include "Limonp/str_functs.hpp"
-#include "Limonp/logger.hpp"
-#include "Limonp/InitOnOff.hpp"
-#include "TransCode.hpp"
-
-
+#include "Limonp/std_outbound.hpp"
+#include <vector>
 
 namespace CppJieba
 {
-    using namespace Limonp;
-    const double MIN_DOUBLE = -3.14e+100;
-    const double MAX_DOUBLE = 3.14e+100;
-    const size_t DICT_COLUMN_NUM = 3;
-    typedef map<uint16_t, struct TrieNode*> TrieNodeMap;
-    struct TrieNodeInfo;
-    struct TrieNode
-    {
-        TrieNodeMap hmap;
-        const TrieNodeInfo * ptTrieNodeInfo;
-        TrieNode(): ptTrieNodeInfo(NULL)
-        {}
-    };
+    using namespace std;
+    template <class KeyType, class ValueType>
+        class TrieNode
+        {
+            public:
+                typedef map<KeyType, TrieNode<KeyType, ValueType>* > KeyMapType;
+            public:
+                KeyMapType * ptKeyMap;
+                const ValueType * ptValue;
+        };
 
-    struct TrieNodeInfo
-    {
-        Unicode word;
-        size_t freq;
-        string tag;
-        double logFreq; //logFreq = log(freq/sum(freq));
-    };
-
-    inline ostream& operator << (ostream& os, const TrieNodeInfo & nodeInfo)
-    {
-        return os << nodeInfo.word << ":" << nodeInfo.freq << ":" << nodeInfo.tag << ":" << nodeInfo.logFreq ;
-    }
-
-    typedef map<size_t, const TrieNodeInfo*> DagType;
-
-    class Trie: public InitOnOff
-    {
-
-        private:
-            TrieNode* _root;
-            vector<TrieNodeInfo> _nodeInfos;
-
-            int64_t _freqSum;
-            double _minLogFreq;
-
-        public:
-            Trie()
-            {
-                _root = new TrieNode;
-                _freqSum = 0;
-                _minLogFreq = MAX_DOUBLE;
-                _setInitFlag(false);
-            }
-            Trie(const string& filePath)
-            {
-                new (this) Trie();
-                _setInitFlag(init(filePath));
-            }
-            ~Trie()
-            {
-                _deleteNode(_root);
-            }
-        private:
-            
-            
-        public:
-            bool init(const string& filePath)
-            {
-                assert(!_getInitFlag());
-                _loadDict(filePath, _nodeInfos);
-                _createTrie(_nodeInfos, _root);
-                _freqSum = _calculateFreqSum(_nodeInfos);
-                assert(_freqSum);
-                _minLogFreq = _calculateLogFreqAndGetMinValue(_nodeInfos, _freqSum);
-                return _setInitFlag(true);
-            }
-
-        public:
-            const TrieNodeInfo* find(Unicode::const_iterator begin, Unicode::const_iterator end)const
-            {
-                TrieNodeMap::const_iterator citer;
-                const TrieNode* p = _root;
-                for(Unicode::const_iterator it = begin; it != end; it++)
+    template <class KeyType, class ValueType>
+        class Trie
+        {
+            public:
+                typedef TrieNode<KeyType, ValueType> TrieNodeType;
+            private:
+                TrieNodeType* _root;
+            public:
+                Trie(const vector<vector<KeyType> >& keys, const vector<const ValueType* >& valuePointers)
                 {
-                    citer = p->hmap.find(*it);
-                    if(p->hmap.end() == citer)
-                    {
-                        return NULL;
-                    }
-                    p = citer->second;
+                    _root = new TrieNodeType;
+                    _root->ptKeyMap = NULL;
+                    _root->ptValue = NULL;
+
+                    _createTrie(keys, valuePointers);
                 }
-                return p->ptTrieNodeInfo;
-            }
-
-            bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType & res, size_t offset = 0) const
-            {
-                const TrieNode* p = _root;
-                TrieNodeMap::const_iterator citer;
-                for (Unicode::const_iterator itr = begin; itr != end; itr++)
+                ~Trie()
                 {
-                    citer = p->hmap.find(*itr);
-                    if(p->hmap.end() == citer)
+                    if(_root)
                     {
-                        break;
-                    }
-                    p = citer->second;
-                    if(p->ptTrieNodeInfo)
-                    {
-                        res[itr - begin + offset] = p->ptTrieNodeInfo;
+                        _deleteNode(_root);
                     }
                 }
-                return !res.empty();
-            }
-
-        public:
-            double getMinLogFreq() const {return _minLogFreq;};
-
-        private:
-            void _insertNode(const TrieNodeInfo& nodeInfo, TrieNode* ptNode) const
-            {
-                const Unicode& unico = nodeInfo.word;
-                TrieNodeMap::const_iterator citer;
-                for(size_t i = 0; i < unico.size(); i++)
+            public:
+                const ValueType* find(typename vector<KeyType>::const_iterator begin, typename vector<KeyType>::const_iterator end) const
                 {
-                    uint16_t cu = unico[i];
-                    assert(ptNode);
-                    citer = ptNode->hmap.find(cu);
-                    if(ptNode->hmap.end() == citer)
+                    typename TrieNodeType::KeyMapType::const_iterator citer;
+                    const TrieNodeType* ptNode = _root;
+                    for(typename vector<KeyType>::const_iterator it = begin; it != end; it++)
                     {
-                        TrieNode * next = new TrieNode;
-                        ptNode->hmap[cu] = next;
-                        ptNode = next;
-                    }
-                    else
-                    {
+                        assert(ptNode);
+                        if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*it)))
+                        {
+                            return NULL;
+                        }
                         ptNode = citer->second;
                     }
-
+                    return ptNode->ptValue;
                 }
-
-                ptNode->ptTrieNodeInfo = &nodeInfo;
-            }
-
-        private:
-            void _loadDict(const string& filePath, vector<TrieNodeInfo>& nodeInfos) const
-            {
-                ifstream ifs(filePath.c_str());
-                if(!ifs)
+                bool find(typename vector<KeyType>::const_iterator begin, typename vector<KeyType> ::const_iterator end, map<typename vector<KeyType>::size_type, const ValueType* >& ordererMap, size_t offset = 0) const
                 {
-                    LogFatal("open %s failed.", filePath.c_str());
-                    exit(1);
-                }
-                string line;
-                vector<string> buf;
-
-                nodeInfos.clear();
-                TrieNodeInfo nodeInfo;
-                for(size_t lineno = 0 ; getline(ifs, line); lineno++)
-                {
-                    split(line, buf, " ");
-                    assert(buf.size() == DICT_COLUMN_NUM);
-                    if(!TransCode::decode(buf[0], nodeInfo.word))
+                    const TrieNodeType * ptNode = _root;
+                    typename TrieNodeType::KeyMapType::const_iterator citer;
+                    ordererMap.clear();
+                    for(typename vector<KeyType>::const_iterator itr = begin; itr != end ; itr++)
                     {
-                        LogError("line[%u:%s] illegal.", lineno, line.c_str());
-                        continue;
+                        assert(ptNode);
+                        if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*itr)))
+                        {
+                            break;
+                        }
+                        ptNode = citer->second;
+                        if(ptNode->ptValue)
+                        {
+                            ordererMap[itr - begin + offset] = ptNode->ptValue;
+                        }
                     }
-                    nodeInfo.freq = atoi(buf[1].c_str());
-                    nodeInfo.tag = buf[2];
-                    
-                    nodeInfos.push_back(nodeInfo);
+                    return ordererMap.size();
                 }
-            }
-            bool _createTrie(const vector<TrieNodeInfo>& nodeInfos, TrieNode * ptNode)
-            {
-                for(size_t i = 0; i < _nodeInfos.size(); i++)
+            private:
+                void _createTrie(const vector<vector<KeyType> >& keys, const vector<const ValueType*>& valuePointers)
                 {
-                    _insertNode(_nodeInfos[i], ptNode);
-                }
-                return true;
-            }
-            size_t _calculateFreqSum(const vector<TrieNodeInfo>& nodeInfos) const
-            {
-                size_t freqSum = 0;
-                for(size_t i = 0; i < nodeInfos.size(); i++)
-                {
-                    freqSum += nodeInfos[i].freq;
-                }
-                return freqSum;
-            }
-            double _calculateLogFreqAndGetMinValue(vector<TrieNodeInfo>& nodeInfos, size_t freqSum) const
-            {
-                assert(freqSum);
-                double minLogFreq = MAX_DOUBLE;
-                for(size_t i = 0; i < nodeInfos.size(); i++)
-                {
-                    TrieNodeInfo& nodeInfo = nodeInfos[i];
-                    assert(nodeInfo.freq);
-                    nodeInfo.logFreq = log(double(nodeInfo.freq)/double(freqSum));
-                    if(minLogFreq > nodeInfo.logFreq)
+                    if(valuePointers.empty() || keys.empty())
                     {
-                        minLogFreq = nodeInfo.logFreq;
+                        return;
+                    }
+                    assert(keys.size() == valuePointers.size());
+
+                    for(size_t i = 0; i < keys.size(); i++)
+                    {
+                        _insertNode(keys[i], valuePointers[i]);
                     }
                 }
-                return minLogFreq;
-            }
-
-            void _deleteNode(TrieNode* node)
-            {
-                if(!node)
+            private:
+                void _insertNode(const vector<KeyType>& key, const ValueType* ptValue)
                 {
-                    return;
-                }
-                for(TrieNodeMap::iterator it = node->hmap.begin(); it != node->hmap.end(); it++)
-                {
-                    TrieNode* next = it->second;
-                    _deleteNode(next);
-                }
-                delete node;
-            }
+                    TrieNodeType* ptNode  = _root;
 
-    };
+                    typename TrieNodeType::KeyMapType::const_iterator kmIter;
+
+                    for(typename vector<KeyType>::const_iterator citer = key.begin(); citer != key.end(); citer++)
+                    {
+                        if(NULL == ptNode->ptKeyMap)
+                        {
+                            ptNode->ptKeyMap = new typename TrieNodeType::KeyMapType;
+                        }
+                        kmIter = ptNode->ptKeyMap->find(*citer);
+                        if(ptNode->ptKeyMap->end() == kmIter)
+                        {
+                            TrieNodeType * nextNode = new TrieNodeType;
+                            nextNode->ptKeyMap = NULL;
+                            nextNode->ptValue = NULL;
+
+                            (*ptNode->ptKeyMap)[*citer] = nextNode;
+                            ptNode = nextNode;
+                        }
+                        else
+                        {
+                            ptNode = kmIter->second;
+                        }
+                    }
+                    ptNode->ptValue = ptValue;
+                }
+                void _deleteNode(TrieNodeType* node)
+                {
+                    if(!node)
+                    {
+                        return;
+                    }
+                    if(node->ptKeyMap)
+                    {
+                        typename TrieNodeType::KeyMapType::iterator it;
+                        for(it = node->ptKeyMap->begin(); it != node->ptKeyMap->end(); it++)
+                        {
+                            _deleteNode(it->second);
+                        }
+                        delete node->ptKeyMap;
+                    }
+                    delete node;
+                }
+        };
 }
 
 #endif

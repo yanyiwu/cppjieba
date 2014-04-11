@@ -9,8 +9,8 @@
 #include <set>
 #include <cassert>
 #include "Limonp/logger.hpp"
-#include "Trie.hpp"
-#include "Trie.hpp"
+#include "DictTrie.hpp"
+#include "DictTrie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 
@@ -21,7 +21,7 @@ namespace CppJieba
     {
         uint16_t uniCh;
         DagType dag;
-        const TrieNodeInfo * pInfo;
+        const DictUnit * pInfo;
         double weight;
 
         SegmentChar():uniCh(0), pInfo(NULL), weight(0.0)
@@ -32,7 +32,7 @@ namespace CppJieba
     class MPSegment: public SegmentBase
     {
         protected:
-            Trie _trie;
+            DictTrie _dictTrie;
 
         public:
             MPSegment(){_setInitFlag(false);};
@@ -49,8 +49,8 @@ namespace CppJieba
                     LogError("already inited before now.");
                     return false;
                 }
-                _trie.init(dictPath);
-                assert(_trie);
+                _dictTrie.init(dictPath);
+                assert(_dictTrie);
                 LogInfo("MPSegment init(%s) ok", dictPath.c_str());
                 return _setInitFlag(true);
             }
@@ -124,7 +124,7 @@ namespace CppJieba
                     schar.uniCh = *it;
                     offset = it - begin;
                     schar.dag.clear();
-                    _trie.find(it, end, schar.dag, offset);
+                    _dictTrie.find(it, end, schar.dag, offset);
                     if(!isIn(schar.dag, offset))
                     {
                         schar.dag[offset] = NULL;
@@ -142,7 +142,7 @@ namespace CppJieba
                 }
 
                 size_t nextPos;
-                const TrieNodeInfo* p;
+                const DictUnit* p;
                 double val;
 
                 for(int i = segContext.size() - 1; i >= 0; i--)
@@ -165,7 +165,7 @@ namespace CppJieba
                         }
                         else
                         {
-                            val += _trie.getMinLogFreq();
+                            val += _dictTrie.getMinLogFreq();
                         }
                         if(val > segContext[i].weight)
                         {
@@ -182,7 +182,7 @@ namespace CppJieba
                 size_t i = 0;
                 while(i < segContext.size())
                 {
-                    const TrieNodeInfo* p = segContext[i].pInfo;
+                    const DictUnit* p = segContext[i].pInfo;
                     if(p)
                     {
                         res.push_back(p->word);
