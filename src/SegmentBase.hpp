@@ -11,6 +11,9 @@
 namespace CppJieba
 {
     using namespace Limonp;
+
+    const char* const SPECIAL_CHARS = " \t\n";
+
     class SegmentBase: public ISegment, public InitOnOff
     {
         public:
@@ -24,14 +27,6 @@ namespace CppJieba
                 assert(_getInitFlag());
                 Unicode unico;
                 res.clear();
-#ifdef NO_FILTER
-                if(!TransCode::decode(str, unico))
-                {
-                    LogFatal("str[%s] decode failed.", str.c_str());
-                    return false;
-                }
-                return cut(unico.begin(), unico.end(), res);
-#else
                 const char * const cstr = str.c_str();
                 size_t size = str.size();
                 size_t offset = 0;
@@ -42,7 +37,7 @@ namespace CppJieba
                 {
                     const char * const nstr = cstr + offset;
                     size_t nsize = size - offset;
-                    if(-1 == (ret = filterAscii(nstr, nsize, len)) || 0 == len || len > nsize)
+                    if(-1 == (ret = filterSpecialChars(nstr, nsize, len)) || 0 == len || len > nsize)
                     {
                         LogFatal("str[%s] illegal.", cstr);
                         return false;
@@ -65,9 +60,30 @@ namespace CppJieba
                     offset += len;
                 }
                 return true;
-#endif
             }
         public:
+
+            /*
+             * if char is SPECIAL_CHARS, count the SPECITAL_CHARS string's length and return 0;
+             * else count the NO SPECIAL_CHARS string's length and return 1;
+             * if errors, return -1;
+             * */
+            static int filterSpecialChars(const char* str, size_t len, size_t& resLen)
+            {
+                if(!str || !len)
+                {
+                    return -1;
+                }
+
+                resLen = 1;
+                int flag = (strchr(SPECIAL_CHARS, *str) ?  0: 1);
+                for(size_t i = 1; i < len && bool(flag) != bool(strchr(SPECIAL_CHARS, str[i])); i++)
+                {
+                    resLen ++;
+                }
+                return flag;
+
+            }
 
             /*
              * if char is ascii, count the ascii string's length and return 0;
