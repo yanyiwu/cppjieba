@@ -23,11 +23,10 @@ namespace CppJieba
         DagType dag;
         const DictUnit * pInfo;
         double weight;
-
-        SegmentChar():uniCh(0), pInfo(NULL), weight(0.0)
+        size_t nextPos;
+        SegmentChar():uniCh(0), pInfo(NULL), weight(0.0), nextPos(0)
         {}
     };
-    typedef vector<SegmentChar> SegmentContext;
 
     class MPSegment: public SegmentBase
     {
@@ -91,21 +90,21 @@ namespace CppJieba
                     LogError("not inited.");
                     return false;
                 }
-                SegmentContext segContext;
+                vector<SegmentChar> SegmentChars;
                 //calc DAG
-                if(!_calcDAG(begin, end, segContext))
+                if(!_calcDAG(begin, end, SegmentChars))
                 {
                     LogError("_calcDAG failed.");
                     return false;
                 }
 
-                if(!_calcDP(segContext))
+                if(!_calcDP(SegmentChars))
                 {
                     LogError("_calcDP failed.");
                     return false;
                 }
 
-                if(!_cut(segContext, res))
+                if(!_cut(SegmentChars, res))
                 {
                     LogError("_cut failed.");
                     return false;
@@ -115,7 +114,7 @@ namespace CppJieba
             }
 
         private:
-            bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, SegmentContext& segContext) const
+            bool _calcDAG(Unicode::const_iterator begin, Unicode::const_iterator end, vector<SegmentChar>& SegmentChars) const
             {
                 SegmentChar schar;
                 size_t offset;
@@ -129,15 +128,15 @@ namespace CppJieba
                     {
                         schar.dag[offset] = NULL;
                     }
-                    segContext.push_back(schar);
+                    SegmentChars.push_back(schar);
                 }
                 return true;
             }
-            bool _calcDP(SegmentContext& segContext)const
+            bool _calcDP(vector<SegmentChar>& SegmentChars)const
             {
-                if(segContext.empty())
+                if(SegmentChars.empty())
                 {
-                    LogError("segContext empty");
+                    LogError("SegmentChars empty");
                     return false;
                 }
 
@@ -145,18 +144,18 @@ namespace CppJieba
                 const DictUnit* p;
                 double val;
 
-                for(int i = segContext.size() - 1; i >= 0; i--)
+                for(int i = SegmentChars.size() - 1; i >= 0; i--)
                 {
-                    segContext[i].pInfo = NULL;
-                    segContext[i].weight = MIN_DOUBLE;
-                    for(DagType::const_iterator it = segContext[i].dag.begin(); it != segContext[i].dag.end(); it++)
+                    SegmentChars[i].pInfo = NULL;
+                    SegmentChars[i].weight = MIN_DOUBLE;
+                    for(DagType::const_iterator it = SegmentChars[i].dag.begin(); it != SegmentChars[i].dag.end(); it++)
                     {
                         nextPos = it->first;
                         p = it->second;
                         val = 0.0;
-                        if(nextPos + 1 < segContext.size())
+                        if(nextPos + 1 < SegmentChars.size())
                         {
-                            val += segContext[nextPos + 1].weight;
+                            val += SegmentChars[nextPos + 1].weight;
                         }
 
                         if(p)
@@ -167,22 +166,22 @@ namespace CppJieba
                         {
                             val += _dictTrie.getMinLogFreq();
                         }
-                        if(val > segContext[i].weight)
+                        if(val > SegmentChars[i].weight)
                         {
-                            segContext[i].pInfo = p;
-                            segContext[i].weight = val;
+                            SegmentChars[i].pInfo = p;
+                            SegmentChars[i].weight = val;
                         }
                     }
                 }
                 return true;
 
             }
-            bool _cut(SegmentContext& segContext, vector<Unicode>& res)const
+            bool _cut(vector<SegmentChar>& SegmentChars, vector<Unicode>& res)const
             {
                 size_t i = 0;
-                while(i < segContext.size())
+                while(i < SegmentChars.size())
                 {
-                    const DictUnit* p = segContext[i].pInfo;
+                    const DictUnit* p = SegmentChars[i].pInfo;
                     if(p)
                     {
                         res.push_back(p->word);
@@ -190,7 +189,7 @@ namespace CppJieba
                     }
                     else//single chinese word
                     {
-                        res.push_back(Unicode(1, segContext[i].uniCh));
+                        res.push_back(Unicode(1, SegmentChars[i].uniCh));
                         i++;
                     }
                 }
