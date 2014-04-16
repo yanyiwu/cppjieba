@@ -1,25 +1,27 @@
-#CppJieba是"结巴"中文分词的C++版本
+# CppJieba
 
-功能性的代码全写成hpp文件，文件依赖一直是很让人讨厌的东西，全做成hpp头文件形式的目的就是为了省去链接的依赖。
+## Introduction
 
-**没有依赖，就没有伤害。**
+CppJieba是"结巴"中文分词的C++版本
 
-实践证明写成hpp使用起来真的很爽，在后面提到的在iOS应用中的使用，和包装成`Node.js`的扩展[NodeJieba]都特别顺利。
+代码细节详解请见 [代码详解]
 
-如果对代码细节感兴趣的请见 [代码详解]
+## Feature
 
-## 中文编码
++ 源代码都写进头文件hpp里，`include`即可使用。
++ 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码。
++ 内置分词服务，在linux环境下可安装使用。mac因为没有自带`epoll`，使用示例请看[libcppjieba]。
++ [libcppjieba] 最简单易懂的CppJieba头文件库使用示例。
++ 项目自带较为完善的单元测试，核心功能中文分词的稳定性接受过线上环境检验。
 
-现在支持utf8,gbk编码的分词。   
+## Usage & Example
 
-## 安装与使用
-
-### 依赖
+### Dependency
 
 * g++ (version >= 4.1 recommended);
 * cmake (version >= 2.6 recommended);
 
-### 下载和安装
+### Download & Demo
 
 ```sh
 wget https://github.com/aszxqw/cppjieba/archive/master.zip -O cppjieba-master.zip
@@ -34,25 +36,21 @@ make
 sudo make install
 ```
 
-#### 测试
+#### testing
 
 ```sh
 make test 
 ```
 
-### 启动服务
-
-因为服务的后台运行需要`start-stop-daemon`，在ubuntu下是自带的。但是在CentOS下就需要自己安装了。
+### server start & stop
 
 ```
 #Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
-#启动
 /etc/init.d/cjserver.start
-#停止
 /etc/init.d/cjserver.stop
 ```
 
-#### 测试服务
+#### testing server
 
 然后用chrome浏览器打开`http://127.0.0.1:11200/?key=南京市长江大桥`
 (用chrome的原因是chrome的默认编码就是utf-8)
@@ -89,13 +87,15 @@ curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
 ["南京市", "长江大桥"]
 ```
 
-### 卸载
+### uninstall
 ```sh
 cd build/
 cat install_manifest.txt | sudo xargs rm -rf
 ```
 
-## 分词效果
+## Demo
+
+最简单易懂的使用示例请看[libcppjieba]。它是根据[issue25]的建议专门弄的头文件库。
 
 ### MPSegment's demo
 
@@ -172,7 +172,6 @@ Output:
 
 ```
 
-### 效果分析
 
 以上依次是MP,HMM,Mix三种方法的效果。  
 
@@ -212,7 +211,7 @@ __词性标注是一个未完成的部分，现在只是一个简单版本。__
 
 
 
-## 相关应用
+## Application
 
 ### 关于CppJieba的跨语言包装使用
 
@@ -228,21 +227,19 @@ __词性标注是一个未完成的部分，现在只是一个简单版本。__
 
 如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
 
-## 演示
+## Online Demo
 
 http://cppjieba-webdemo.herokuapp.com/
 (建议使用chrome打开)
 
-## 客服
+## Contact
 
-如果有运行问题或者任何疑问，欢迎联系 : wuyanyi09@gmail.com
+I will appreciate that if you issue any question or send mails to me(wuyanyi09@foxmail.com).
 
-## 鸣谢
+## Thanks
 
 "结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
-
-顾名思义，之所以叫CppJieba，是参照Jieba分词Python程序写成的，所以饮水思源，再次感谢SunJunyi。
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
 [jannson]:https://github.com/jannson
@@ -251,3 +248,5 @@ https://github.com/fxsjy/jieba
 [NodeJieba]:https://github.com/aszxqw/nodejieba
 [simhash]:https://github.com/aszxqw/simhash
 [代码详解]:http://aszxqw.github.io/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
+[libcppjieba]:https://github.com/aszxqw/libcppjieba
+[issue25]:https://github.com/aszxqw/cppjieba/issues/25
