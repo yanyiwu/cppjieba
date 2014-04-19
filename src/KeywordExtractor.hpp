@@ -62,23 +62,14 @@ namespace CppJieba
                     return false;
                 }
 
-                // filtering single word.
-                for(vector<string>::iterator iter = words.begin(); iter != words.end(); )
+                map<string, double> wordmap;
+                for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
                 {
                     if(_isSingleWord(*iter))
                     {
-                        iter = words.erase(iter);
+                        continue;
                     }
-                    else
-                    {
-                        iter++;
-                    }
-                }
-
-                map<string, double> wordmap;
-                for(size_t i = 0; i < words.size(); i ++)
-                {
-                    wordmap[ words[i] ] += 1.0;
+                    wordmap[*iter] += 1.0;
                 }
 
                 for(map<string, double>::iterator itr = wordmap.begin(); itr != wordmap.end(); )
