@@ -226,6 +226,10 @@ __词性标注是一个未完成的部分，现在只是一个简单版本。__
 
 如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
 
+### exjieba
+
+如果有需要在`erlang`中使用分词的话，不妨试一下[exjieba]。
+
 ## Online Demo
 
 http://cppjieba-webdemo.herokuapp.com/
@@ -249,3 +253,4 @@ https://github.com/fxsjy/jieba
 [代码详解]:http://aszxqw.github.io/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
 [libcppjieba]:https://github.com/aszxqw/libcppjieba
 [issue25]:https://github.com/aszxqw/cppjieba/issues/25
+[exjieba]:https://github.com/falood/exjieba
