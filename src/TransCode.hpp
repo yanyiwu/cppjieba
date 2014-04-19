@@ -12,7 +12,8 @@ namespace CppJieba
 {
 
     using namespace Limonp;
-    typedef std::vector<uint16_t> Unicode;
+    typedef uint16_t UnicodeValueType;
+    typedef std::vector<UnicodeValueType> Unicode;
     namespace TransCode
     {
         inline bool decode(const string& str, Unicode& vec)

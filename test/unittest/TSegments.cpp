@@ -9,30 +9,31 @@
 
 using namespace CppJieba;
 
-TEST(SegmentBaseTest, Test1)
-{
-    const char* str = "heheh你好...hh";
-    string s;
-    vector<string> buf;
-    buf.push_back("heheh");
-    buf.push_back("你好");
-    buf.push_back("...hh");
-    vector<string> res;
-    size_t size = strlen(str);
-    size_t offset = 0;
-    while(offset < size)
-    {
-        size_t len = 0;
-        const char* t =  str + offset;
-        SegmentBase::filterAscii(t, size - offset, len);
-        s.assign(t, len);
-        res.push_back(s);
-        //cout<<s<<","<<ret<<","<<len<<endl;
-        //cout<<str<<endl;
-        offset += len;
-    }
-    EXPECT_EQ(res, buf);
-}
+
+//TEST(SegmentBaseTest, Test1)
+//{
+//    const char* str = "heheh你好...hh";
+//    string s;
+//    vector<string> buf;
+//    buf.push_back("heheh");
+//    buf.push_back("你好");
+//    buf.push_back("...hh");
+//    vector<string> res;
+//    size_t size = strlen(str);
+//    size_t offset = 0;
+//    while(offset < size)
+//    {
+//        size_t len = 0;
+//        const char* t =  str + offset;
+//        SegmentBase::filterAscii(t, size - offset, len);
+//        s.assign(t, len);
+//        res.push_back(s);
+//        //cout<<s<<","<<ret<<","<<len<<endl;
+//        //cout<<str<<endl;
+//        offset += len;
+//    }
+//    ASSERT_EQ(res, buf);
+//}
 
 //int main(int argc, char** argv)
 //{
@@ -44,24 +45,24 @@ TEST(SegmentBaseTest, Test1)
 TEST(MixSegmentTest, Test1)
 {
     MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");;
-    const char* str = "我来自北京邮电大学。。。  学号 123456";
-    const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","  ","学号", " 123456"};
+    const char* str = "我来自北京邮电大学。。。学号123456";
+    const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。", "学号", "123456"};
     vector<string> words;
     ASSERT_TRUE(segment);
     ASSERT_TRUE(segment.cut(str, words));
-    EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
 
 TEST(MPSegmentTest, Test1)
 {
     MPSegment segment("../dict/extra_dict/jieba.dict.small.utf8");;
-    const char* str = "我来自北京邮电大学。。。  学号 123456";
-    const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。","  ","学","号", " 123456"};
+    const char* str = "我来自北京邮电大学。";
+    const char* res[] = {"我", "来自", "北京邮电大学", "。"};
     vector<string> words;
     ASSERT_TRUE(segment);
     ASSERT_TRUE(segment.cut(str, words));
     //print(words);
-    EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
 
 TEST(MPSegmentTest, Test2)
@@ -93,28 +94,25 @@ TEST(MPSegmentTest, Test2)
 TEST(HMMSegmentTest, Test1)
 {
     HMMSegment segment("../dict/hmm_model.utf8");;
-    const char* str = "我来自北京邮电大学。。。  学号 123456";
-    const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "  ", "学号", " 123456"};
-    //string s;
-    //vector<string> buf(res, res + sizeof(res)/sizeof(res[0]));
+    const char* str = "我来自北京邮电大学。。。学号123456";
+    const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
     vector<string> words;
     ASSERT_TRUE(segment);
     ASSERT_TRUE(segment.cut(str, words));
-    //print(words);
-    EXPECT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
 
 TEST(FullSegment, Test1)
 {
     FullSegment segment("../dict/extra_dict/jieba.dict.small.utf8");
-    const char* str = "我来自北京邮电大学。。。  学号 123456";
+    const char* str = "我来自北京邮电大学";
     vector<string> words;
 
     ASSERT_EQ(segment.cut(str, words), true);
 
     string s;
     s << words;
-    ASSERT_EQ(s, "[\"我\", \"来自\", \"北京\", \"北京邮电大学\", \"邮电\", \"电大\", \"大学\", \"。\", \"。\", \"。\", \"  \", \"学\", \"号\", \" 123456\"]");
+    ASSERT_EQ(s, "[\"我\", \"来自\", \"北京\", \"北京邮电大学\", \"邮电\", \"电大\", \"大学\"]");
 }
 
 TEST(QuerySegment, Test1)

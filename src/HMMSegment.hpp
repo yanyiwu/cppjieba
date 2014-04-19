@@ -69,13 +69,42 @@ namespace CppJieba
             }
         public:
             using SegmentBase::cut;
+        public:
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const 
             {
-                if(!_getInitFlag())
+                Unicode::const_iterator left = begin;
+                Unicode::const_iterator right = begin;
+                while(right != end)
                 {
-                    LogError("not inited.");
+                    if(*right < 0x80) 
+                    {
+                        if(left != right && !_cut(left, right, res))
+                        {
+                            return false;
+                        }
+                        left = right;
+                        while(*right < 0x80 && right != end)
+                        {
+                            right++;
+                        }
+                        res.push_back(Unicode(left, right));
+                        left = right;
+                    }
+                    else
+                    {
+                        right++;
+                    }
+                }
+                if(left != right && !_cut(left, right, res))
+                {
                     return false;
                 }
+                return true;
+            }
+        private:
+            bool _cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const 
+            {
+                assert(_getInitFlag());
                 vector<size_t> status; 
                 if(!_viterbi(begin, end, status))
                 {
@@ -85,7 +114,7 @@ namespace CppJieba
 
                 Unicode::const_iterator left = begin;
                 Unicode::const_iterator right;
-                for(size_t i =0; i< status.size(); i++)
+                for(size_t i = 0; i < status.size(); i++)
                 {
                     if(status[i] % 2) //if(E == status[i] || S == status[i])
                     {
@@ -171,7 +200,7 @@ namespace CppJieba
                 endE = weight[X-1+E*X];
                 endS = weight[X-1+S*X];
                 stat = 0;
-                if(endE > endS)
+                if(endE >= endS)
                 {
                     stat = E;
                 }
