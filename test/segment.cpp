@@ -30,6 +30,15 @@ int main(int argc, char ** argv)
 {
     //demo
     {
+        MPSegment seg(JIEBA_DICT_FILE);
+        if(!seg)
+        {
+            cout<<"seg init failed."<<endl;
+            return false;
+        }
+        cut(&seg, TEST_FILE);
+    }
+    {
         HMMSegment seg(HMM_DICT_FILE);
         if(!seg)
         {
@@ -44,15 +53,6 @@ int main(int argc, char ** argv)
         {
             cout<<"seg init failed."<<endl;
             return EXIT_FAILURE;
-        }
-        cut(&seg, TEST_FILE);
-    }
-    {
-        MPSegment seg(JIEBA_DICT_FILE);
-        if(!seg)
-        {
-            cout<<"seg init failed."<<endl;
-            return false;
         }
         cut(&seg, TEST_FILE);
     }
