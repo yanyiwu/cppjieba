@@ -8,10 +8,9 @@ CppJieba是"结巴"中文分词的C++版本
 
 ## Feature
 
-+ 源代码都写进头文件hpp里，`include`即可使用。
++ 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码。
-+ 内置分词服务，在linux环境下可安装使用。mac因为没有自带`epoll`，使用示例请看[libcppjieba]。
-+ [libcppjieba] 最简单易懂的CppJieba头文件库使用示例。
++ 内置分词服务`server/server.cpp`，在linux环境下可安装使用。
 + 项目自带较为完善的单元测试，核心功能中文分词的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 
@@ -96,7 +95,11 @@ cat install_manifest.txt | sudo xargs rm -rf
 
 ## Demo
 
-最简单易懂的使用示例请看[libcppjieba]。它是根据[issue25]的建议专门弄的头文件库。
+```
+make && ./segment.demo
+```
+
+see details in `test/segment_demo.cpp`.
 
 ### MPSegment's demo
 
@@ -184,15 +187,29 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ### 自定义用户词典
 
+自定义词典示例请看`test/testdata/userdict.utf8`。
+
+载入自定义词典示例请看`test/segment.cpp`。
+
+没有使用自定义用户词典时的结果:
+
 ```
+令狐冲/是/云/计算/行业/的/专家
 ```
 
+使用自定义用户词典时的结果:
+
+```
+令狐冲/是/云计算/行业/的/专家
+```
 
 ### 关键词抽取
 
 ```
-make && ./test/keyword.demo
+make && ./keyword.demo
 ```
+
+see details in `test/keyword_demo.cpp`.
 
 you will see:
 
@@ -201,21 +218,17 @@ you will see:
 ["CEO:11.7392", "升职:10.8562", "加薪:10.6426", "手扶拖拉机:10.0089", "巅峰:9.49396"]
 ```
 
-关键词抽取的demo代码请见`test/keyword_demo.cpp`
-
 ### 词性标注
 
 ```
-make && ./test/tagging_demo
+make && ./tagging.demo
 ```
+
+see details in `test/tagging_demo.cpp`.
 
 ```
 ["我:r", "是:v", "蓝翔:x", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:x", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
-
-__词性标注是一个未完成的部分，现在只是一个简单版本。__
-
-
 
 ## Application
 
@@ -236,6 +249,10 @@ __词性标注是一个未完成的部分，现在只是一个简单版本。__
 ### exjieba
 
 如果有需要在`erlang`中使用分词的话，不妨试一下[exjieba]。
+
+### libcppjieba
+
+[libcppjieba] 是最简单易懂的CppJieba头文件库使用示例。
 
 ## Online Demo
 
