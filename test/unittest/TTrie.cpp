@@ -48,19 +48,20 @@ TEST(DictTrieTest, Test1)
 
     vector<pair<size_t, const DictUnit*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
-    //print(uni);
     ASSERT_TRUE(trie.find(uni.begin(), uni.end(), mp, 0));
     ASSERT_EQ(mp, resMap);
-   // print(vec);
 }
 
 TEST(DictTrieTest, UserDict)
 {
-    DictTrie trie(DICT_FILE);
+    DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
     ASSERT_TRUE(trie);
     string word = "云计算";
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
-    print((*trie.find(unicode.begin(), unicode.end())));
-    exit(0);
+    const DictUnit * unit = trie.find(unicode.begin(), unicode.end());
+    ASSERT_TRUE(unit);
+    string res ;
+    res << *unit;
+    ASSERT_EQ("[\"20113\", \"35745\", \"31639\"] x -2.975", res);
 }

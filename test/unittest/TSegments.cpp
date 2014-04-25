@@ -58,19 +58,27 @@ TEST(MixSegmentTest, Test1)
     ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));
 }
 
-TEST(MixSegmentTest, UserDict)
+TEST(MixSegmentTest, NoUserDict)
 {
-    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
-    //MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/extra_dict/jieba.dict.small.utf8");
+    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
     ASSERT_TRUE(segment);
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
     ASSERT_TRUE(segment.cut(str, words));
-    print(words);
-    exit(0);
+    string res;
+    ASSERT_EQ("[\"令狐冲\", \"是\", \"云\", \"计算\", \"方面\", \"的\", \"专家\"]", res << words);
     
-    //* 之前： 李小福 / 是 / 创新 / 办 / 主任 / 也 / 是 / 云 / 计算 / 方面 / 的 / 专家 /
-    //    加载自定义词库后：　李小福 / 是 / 创新办 / 主任 / 也 / 是 / 云计算 / 方面 / 的 / 专家 /
+}
+TEST(MixSegmentTest, UserDict)
+{
+    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+    ASSERT_TRUE(segment);
+    const char* str = "令狐冲是云计算方面的专家";
+    vector<string> words;
+    ASSERT_TRUE(segment.cut(str, words));
+    string res;
+    ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
+    
 }
 
 TEST(MPSegmentTest, Test1)
@@ -81,7 +89,6 @@ TEST(MPSegmentTest, Test1)
     vector<string> words;
     ASSERT_TRUE(segment);
     ASSERT_TRUE(segment.cut(str, words));
-    //print(words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
 }
 

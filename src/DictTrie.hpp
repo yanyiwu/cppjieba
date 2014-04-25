@@ -85,7 +85,6 @@ namespace CppJieba
                 {
                     double maxWeight = _findMaxWeight(_nodeInfos);
                     _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG, _nodeInfos);
-                    LogDebug("load userdict[%s] ok.", userDictPath.c_str());
                 }
                 _shrink(_nodeInfos);
                 _trie = _creatTrie(_nodeInfos);
@@ -125,7 +124,8 @@ namespace CppJieba
                 assert(ifs);
                 string line;
                 DictUnit nodeInfo;
-                for(size_t lineno = 0; getline(ifs, line); lineno++)
+                size_t lineno;
+                for(lineno = 0; getline(ifs, line); lineno++)
                 {
                     if(!TransCode::decode(line, nodeInfo.word))
                     {
@@ -136,6 +136,7 @@ namespace CppJieba
                     nodeInfo.tag = defaultTag;
                     nodeInfos.push_back(nodeInfo);
                 }
+                LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
             }
             void _loadDict(const string& filePath, vector<DictUnit>& nodeInfos) const
             {
