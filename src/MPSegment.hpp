@@ -160,11 +160,11 @@ namespace CppJieba
 
                         if(p)
                         {
-                            val += p->logFreq; 
+                            val += p->weight; 
                         }
                         else
                         {
-                            val += _dictTrie.getMinLogFreq();
+                            val += _dictTrie.getMinWeight();
                         }
                         if(val > SegmentChars[i].weight)
                         {
