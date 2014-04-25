@@ -47,7 +47,7 @@ make test
 
 ```
 #Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
-/etc/init.d/cjserver.start
+/etc/init.d/cjserver.start >> /dev/null 2>&1
 /etc/init.d/cjserver.stop
 ```
 
