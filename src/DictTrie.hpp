@@ -60,10 +60,10 @@ namespace CppJieba
                 _minWeight = MAX_DOUBLE;
                 _setInitFlag(false);
             }
-            DictTrie(const string& filePath)
+            DictTrie(const string& dictPath, const string& userDictPath = "")
             {
                 new (this) DictTrie();
-                _setInitFlag(init(filePath));
+                _setInitFlag(init(dictPath, userDictPath));
             }
             ~DictTrie()
             {
@@ -80,9 +80,12 @@ namespace CppJieba
                 _loadDict(dictPath, _nodeInfos);
                 _calculateWeight(_nodeInfos);
                 _minWeight = _findMinWeight(_nodeInfos);
+                
                 if(userDictPath.size())
                 {
-                    _loadUserDict(dictPath, _minWeight, UNKNOWN_TAG, _nodeInfos);
+                    double maxWeight = _findMaxWeight(_nodeInfos);
+                    _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG, _nodeInfos);
+                    LogDebug("load userdict[%s] ok.", userDictPath.c_str());
                 }
                 _shrink(_nodeInfos);
                 _trie = _creatTrie(_nodeInfos);
@@ -164,6 +167,15 @@ namespace CppJieba
                 for(size_t i = 0; i < nodeInfos.size(); i++)
                 {
                     ret = min(nodeInfos[i].weight, ret);
+                }
+                return ret;
+            }
+            double _findMaxWeight(const vector<DictUnit>& nodeInfos) const
+            {
+                double ret = MIN_DOUBLE;
+                for(size_t i = 0; i < nodeInfos.size(); i++)
+                {
+                    ret = max(nodeInfos[i].weight, ret);
                 }
                 return ret;
             }

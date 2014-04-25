@@ -15,17 +15,17 @@ namespace CppJieba
             HMMSegment _hmmSeg;
         public:
             MixSegment(){_setInitFlag(false);};
-            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict)
+            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
             {
-                _setInitFlag(init(mpSegDict, hmmSegDict));
+                _setInitFlag(init(mpSegDict, hmmSegDict, userDict));
                 assert(_getInitFlag());
             }
             virtual ~MixSegment(){}
         public:
-            bool init(const string& mpSegDict, const string& hmmSegDict)
+            bool init(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
             {
                 assert(!_getInitFlag());
-                if(!_mpSeg.init(mpSegDict))
+                if(!_mpSeg.init(mpSegDict, userDict))
                 {
                     LogError("_mpSeg init");
                     return false;

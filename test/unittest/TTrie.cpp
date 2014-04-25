@@ -54,3 +54,13 @@ TEST(DictTrieTest, Test1)
    // print(vec);
 }
 
+TEST(DictTrieTest, UserDict)
+{
+    DictTrie trie(DICT_FILE);
+    ASSERT_TRUE(trie);
+    string word = "云计算";
+    Unicode unicode;
+    ASSERT_TRUE(TransCode::decode(word, unicode));
+    print((*trie.find(unicode.begin(), unicode.end())));
+    exit(0);
+}

@@ -35,20 +35,20 @@ namespace CppJieba
 
         public:
             MPSegment(){_setInitFlag(false);};
-            explicit MPSegment(const string& dictPath)
+            explicit MPSegment(const string& dictPath, const string& userDictPath = "")
             {
-                _setInitFlag(init(dictPath));
+                _setInitFlag(init(dictPath, userDictPath));
             };
             virtual ~MPSegment(){};
         public:
-            bool init(const string& dictPath)
+            bool init(const string& dictPath, const string& userDictPath = "")
             {
                 if(_getInitFlag())
                 {
                     LogError("already inited before now.");
                     return false;
                 }
-                _dictTrie.init(dictPath);
+                _dictTrie.init(dictPath, userDictPath);
                 assert(_dictTrie);
                 LogInfo("MPSegment init(%s) ok", dictPath.c_str());
                 return _setInitFlag(true);
