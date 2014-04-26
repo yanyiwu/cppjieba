@@ -1,6 +1,11 @@
 language: cpp
 install: cmake
-script: cmake
+script: 
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - make test
 compiler:
   - clang
   - gcc
