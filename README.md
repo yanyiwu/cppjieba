@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/aszxqw/cppjieba.png?branch=master)](https://travis-ci.org/aszxqw/cppjieba)
+- - -
+
 # CppJieba
 
 ## Introduction
