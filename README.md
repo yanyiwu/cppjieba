@@ -21,15 +21,14 @@ CppJieba是"结巴"中文分词的C++版本
 
 ### Dependency
 
-* g++ (version >= 4.1 recommended);
+* g++ (version >= 4.1 recommended) or clang++;
 * cmake (version >= 2.6 recommended);
 
 ### Download & Demo
 
 ```sh
-wget https://github.com/aszxqw/cppjieba/archive/master.zip -O cppjieba-master.zip
-unzip cppjieba-master.zip
-cd cppjieba-master
+git clone --depth=10 --branch=master git://github.com/aszxqw/cppjieba.git
+cd cppjieba
 mkdir build
 cd build
 cmake ..
