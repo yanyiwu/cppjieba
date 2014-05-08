@@ -14,7 +14,7 @@ CppJieba是"结巴"中文分词的C++版本
 + 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码。
 + 内置分词服务`server/server.cpp`，在linux环境下可安装使用。
-+ 项目自带较为完善的单元测试，核心功能中文分词的稳定性接受过线上环境检验。
++ 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 
 ## Usage & Example
@@ -34,6 +34,7 @@ cd build
 cmake ..
 # 默认是utf8编码，如果要使用gbk编码则使用下句cmake命令
 # cmake .. -DENC=GBK
+# 需要注意的是，单元测试都是针对utf8的测试，如果是使用gbk选项的话，此测试不通过。
 make
 sudo make install
 ```
