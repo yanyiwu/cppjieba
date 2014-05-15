@@ -8,5 +8,5 @@ then
     echo "please stop cjserver first."
 else
     cjserver /etc/CppJieba/server.conf &
-    echo "service startted."
+    echo "service started."
 fi
