@@ -53,6 +53,10 @@ namespace CppJieba
                 LogInfo("MPSegment init(%s) ok", dictPath.c_str());
                 return _setInitFlag(true);
             }
+            bool isUserDictSingleChineseWord(const Unicode::value_type & value) const
+            {
+                return _dictTrie.isUserDictSingleChineseWord(value);
+            }
         public:
             using SegmentBase::cut;
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const

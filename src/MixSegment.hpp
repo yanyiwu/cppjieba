@@ -56,15 +56,15 @@ namespace CppJieba
                 for (size_t i = 0, j = 0; i < words.size(); i++)
                 {
                     //if mp get a word, it's ok, put it into result
-                    if (1 != words[i].size())
+                    if (1 != words[i].size() || (words[i].size() == 1 && _mpSeg.isUserDictSingleChineseWord(words[i][0])))
                     {
                         res.push_back(words[i]);
                         continue;
                     }
 
-                    // if mp get a single one, collect it in sequence
+                    // if mp get a single one and it is not in userdict, collect it in sequence
                     j = i;
-                    while (j < words.size() && words[j].size() == 1)
+                    while (j < words.size() && 1 == words[j].size() && !_mpSeg.isUserDictSingleChineseWord(words[j][0]))
                     {
                         piece.push_back(words[j][0]);
                         j++;
@@ -77,7 +77,7 @@ namespace CppJieba
                         return false;
                     }
 
-                    //put hmm result to return
+                    //put hmm result to result
                     for (size_t k = 0; k < hmmRes.size(); k++)
                     {
                         res.push_back(hmmRes[k]);

@@ -50,6 +50,13 @@ namespace CppJieba
             TrieType * _trie;
 
             double _minWeight;
+        private:
+            unordered_set<Unicode::value_type> _userDictSingleChineseWord;
+        public:
+            bool isUserDictSingleChineseWord(const Unicode::value_type& word) const
+            {
+                return isIn(_userDictSingleChineseWord, word);
+            }
         public:
             double getMinWeight() const {return _minWeight;};
 
@@ -84,7 +91,7 @@ namespace CppJieba
                 if(userDictPath.size())
                 {
                     double maxWeight = _findMaxWeight(_nodeInfos);
-                    _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG, _nodeInfos);
+                    _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG);
                 }
                 _shrink(_nodeInfos);
                 _trie = _creatTrie(_nodeInfos);
@@ -118,7 +125,7 @@ namespace CppJieba
                 TrieType * trie = new TrieType(words, valuePointers);
                 return trie;
             }
-            void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag,  vector<DictUnit>& nodeInfos) const
+            void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag)
             {
                 ifstream ifs(filePath.c_str());
                 assert(ifs);
@@ -132,9 +139,13 @@ namespace CppJieba
                         LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         continue;
                     }
+                    if(nodeInfo.word.size() == 1)
+                    {
+                        _userDictSingleChineseWord.insert(nodeInfo.word[0]);
+                    }
                     nodeInfo.weight = defaultWeight; 
                     nodeInfo.tag = defaultTag;
-                    nodeInfos.push_back(nodeInfo);
+                    _nodeInfos.push_back(nodeInfo);
                 }
                 LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
             }
