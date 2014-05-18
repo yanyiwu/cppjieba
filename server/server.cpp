@@ -56,7 +56,7 @@ bool run(int argc, char** argv)
     {
         return false;
     }
-    unsigned int port = 0;
+    size_t port = 0;
     string dictPath;
     string modelPath;
     string val;
@@ -79,7 +79,7 @@ bool run(int argc, char** argv)
     }
 
     ReqHandler reqHandler(dictPath, modelPath);
-    EpollServer sf(port, &reqHandler);
+    EpollServer sf(port, reqHandler);
     return sf.start();
 }
 
