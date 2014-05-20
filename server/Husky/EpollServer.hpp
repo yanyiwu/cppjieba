@@ -17,6 +17,7 @@
 #include <sys/epoll.h>
 #include <fcntl.h>
 #include "HttpReqInfo.hpp"
+#include "Limonp/InitOnOff.hpp"
 
 
 
@@ -40,7 +41,7 @@ namespace Husky
             virtual bool do_POST(const HttpReqInfo& httpReq, string& res) const = 0;
     };
 
-    class EpollServer
+    class EpollServer: public InitOnOff
     {
         private:
             static const size_t LISTEN_QUEUE_LEN = 1024;
@@ -48,38 +49,26 @@ namespace Husky
             static const int MAXEPOLLSIZE = 512;
 
         private:
-            const IRequestHandler* _reqHandler;
+            const IRequestHandler & _reqHandler;
             int _host_socket;
             int _epoll_fd;
-            bool _isShutDown;
             int _epollSize;
             unordered_map<int, string> _sockIpMap;
-        private:
-            bool _isInited;
-            bool _getInitFlag() const {return _isInited;}
-            bool _setInitFlag(bool flag) {return _isInited = flag;} 
         public:
-            explicit EpollServer(uint port, const IRequestHandler* pHandler): _reqHandler(pHandler), _host_socket(-1), _isShutDown(false), _epollSize(0)
-        {
-            assert(_reqHandler);
-            _setInitFlag(_init_epoll(port));
-        };
-            ~EpollServer(){};// unfinished;
-        public:
-            operator bool() const
+            explicit EpollServer(size_t port, const IRequestHandler & handler): _reqHandler(handler), _host_socket(-1), _epollSize(0)
             {
-                return _getInitFlag();
-            }
+                _setInitFlag(_init_epoll(port));
+            };
+            ~EpollServer(){};
         public:
             bool start()
             {
-                //int clientSock;
                 sockaddr_in clientaddr;
                 socklen_t nSize = sizeof(clientaddr);
                 struct epoll_event events[MAXEPOLLSIZE];
                 int nfds, clientSock;
 
-                while(!_isShutDown)
+                while(true)
                 {
                     if(-1 == (nfds = epoll_wait(_epoll_fd, events, _epollSize, -1)))
                     {
@@ -105,8 +94,6 @@ namespace Husky
                                 continue;
                             }
 
-                            //LogInfo("connecting from: %d:%d， client socket: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port), clientSock);
-
                             /* inet_ntoa is not thread safety at some version  */
                             //_sockIpMap[clientSock] = inet_ntoa(clientaddr.sin_addr);
 
@@ -122,35 +109,6 @@ namespace Husky
 
                 }
                 return true;
-            }
-            void stop()
-            {
-                _isShutDown = true;
-                if(-1 == close(_host_socket))
-                {
-                    LogError(strerror(errno));
-                    return;
-                }
-                int sockfd;
-                struct sockaddr_in dest;
-                if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-                {
-                    LogError(strerror(errno));
-                    return;
-                }
-                bzero(&dest, sizeof(dest));
-                dest.sin_family = AF_INET;
-                dest.sin_port = htons(_host_socket);
-                if(0 == inet_aton("127.0.0.1", (struct in_addr *) &dest.sin_addr.s_addr))
-                {
-                    LogError(strerror(errno));
-                    return;
-                }
-                if(connect(sockfd, (struct sockaddr *) &dest, sizeof(dest)) < 0)
-                {
-                    LogError(strerror(errno));
-                }
-                _closesocket(sockfd);
             }
         private:
             bool _epoll_add(int sockfd, uint32_t events)
@@ -171,7 +129,8 @@ namespace Husky
                 _epollSize ++;
                 return true;
             }
-            bool _response(int sockfd) const
+
+            bool _setsockopt(int sockfd) const
             {
                 if(-1 == setsockopt(sockfd, SOL_SOCKET, SO_LINGER, (const char*)&LNG, sizeof(LNG)))
                 {
@@ -188,8 +147,11 @@ namespace Husky
                     LogError(strerror(errno));
                     return false;
                 }
+                return true;
+            }
 
-                string strRec, strSnd, strRetByHandler;
+            bool _receive(int sockfd, string& strRec) const
+            {
                 char recvBuf[RECV_BUFFER_SIZE];
                 int nRetCode = -1;
                 while(true)
@@ -198,13 +160,13 @@ namespace Husky
                     nRetCode = recv(sockfd, recvBuf, sizeof(recvBuf) - 1, 0);
                     if(-1 == nRetCode)
                     {
-                        LogDebug(strerror(errno));
+                        LogError(strerror(errno));
                         return false;
                     }
                     if(0 == nRetCode)
                     {
                         LogDebug("client socket orderly shut down");
-                        return false;
+                        return true;
                     }
                     strRec += recvBuf;
                     if(nRetCode != sizeof(recvBuf) - 1)
@@ -212,29 +174,52 @@ namespace Husky
                         break;
                     }
                 }
+                return true;
+            }
+            bool _send(int sockfd, const string& strSnd) const
+            {
+                if(-1 == send(sockfd, strSnd.c_str(), strSnd.length(), 0))
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                return true;
+            }
+
+            bool _response(int sockfd) const
+            {
+                if(!_setsockopt(sockfd))
+                {
+                    return false;
+                }
+                string strRec, strSnd, strRetByHandler;
+                if(!_receive(sockfd, strRec))
+                {
+                    return false;
+                }
 
                 HttpReqInfo httpReq(strRec);
-                if("GET" == httpReq.getMethod() && !_reqHandler->do_GET(httpReq, strRetByHandler))
+                if("GET" == httpReq.getMethod() && !_reqHandler.do_GET(httpReq, strRetByHandler))
                 {
                     LogError("do_GET failed.");
                     return false;
                 }
-                if("POST" == httpReq.getMethod() && !_reqHandler->do_POST(httpReq, strRetByHandler))
+                if("POST" == httpReq.getMethod() && !_reqHandler.do_POST(httpReq, strRetByHandler))
                 {
                     LogError("do_POST failed.");
                     return false;
                 }
                 string_format(strSnd, HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
 
-                if(-1 == send(sockfd, strSnd.c_str(), strSnd.length(), 0))
+                if(!_send(sockfd, strSnd))
                 {
-                    LogError(strerror(errno));
                     return false;
                 }
-                LogInfo("{response:%s, epollsize:%d}", strRetByHandler.c_str(), _epollSize);
+
+                LogInfo("response:%s", strRetByHandler.c_str());
                 return true;
             }
-            bool _init_epoll(uint port)
+            bool _init_epoll(size_t port)
             { 
                 _host_socket = socket(AF_INET, SOCK_STREAM, 0);
                 if(-1 == _host_socket)
@@ -276,7 +261,7 @@ namespace Husky
                     LogError("_epoll_add(%d, EPOLLIN) failed.", _host_socket);
                     return false;
                 }
-                LogInfo("create socket listening port[%u], epoll{size:%d} init ok", port, _epollSize);
+                LogInfo("create socket listening port[%u], epoll{size:%d} init ok", port, MAXEPOLLSIZE);
                 return true;
             }
             void _closesocket(int sockfd)
