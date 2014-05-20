@@ -277,7 +277,7 @@ https://github.com/fxsjy/jieba
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
 [simhash]:https://github.com/aszxqw/simhash
-[代码详解]:http://aszxqw.github.io/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
+[代码详解]:http://aszxqw.com/jekyll/update/2014/02/10/cppjieba-dai-ma-xiang-jie.html
 [libcppjieba]:https://github.com/aszxqw/libcppjieba
 [issue25]:https://github.com/aszxqw/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
