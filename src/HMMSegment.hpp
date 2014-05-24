@@ -105,7 +105,7 @@ namespace CppJieba
             bool _cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const 
             {
                 assert(_getInitFlag());
-                vector<size_t> status(end - begin); 
+                vector<size_t> status; 
                 if(!_viterbi(begin, end, status))
                 {
                     LogError("_viterbi failed.");
@@ -134,16 +134,18 @@ namespace CppJieba
                     return false;
                 }
                 vector<Unicode> words;
+                words.reserve(end - begin);
                 if(!cut(begin, end, words))
                 {
                     return false;
                 }
-                string tmp;
+                size_t offset = res.size();
+                res.resize(res.size() + words.size());
                 for(size_t i = 0; i < words.size(); i++)
                 {
-                    if(TransCode::encode(words[i], tmp))
+                    if(!TransCode::encode(words[i], res[offset + i]))
                     {
-                        res.push_back(tmp);
+                        LogError("encode failed.");
                     }
                 }
                 return true;
@@ -159,7 +161,7 @@ namespace CppJieba
 
                 size_t Y = STATUS_SUM;
                 size_t X = end - begin;
-                assert(status.size() == X);
+
                 size_t XYSize = X * Y;
                 size_t now, old, stat;
                 double tmp, endE, endS;
@@ -210,6 +212,7 @@ namespace CppJieba
                     stat = S;
                 }
 
+                status.resize(X);
                 for(int x = X -1 ; x >= 0; x--)
                 {
                     status[x] = stat;

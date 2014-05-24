@@ -99,9 +99,8 @@ namespace CppJieba
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
                 assert(_getInitFlag());
-                if(begin >= end)
+                if(begin == end)
                 {
-                    LogError("begin >= end");
                     return false;
                 }
 
@@ -109,7 +108,6 @@ namespace CppJieba
                 uRes.reserve(end - begin);
                 if (!cut(begin, end, uRes))
                 {
-                    LogError("get unicode cut result error.");
                     return false;
                 }
 
