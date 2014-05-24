@@ -16,12 +16,12 @@ namespace CppJieba
     typedef std::vector<UnicodeValueType> Unicode;
     namespace TransCode
     {
-        inline bool decode(const string& str, Unicode& vec)
+        inline bool decode(const string& str, Unicode& res)
         {
 #ifdef CPPJIEBA_GBK
-            return gbkTrans(str, vec);
+            return gbkTrans(str, res);
 #else
-            return utf8ToUnicode(str, vec);
+            return utf8ToUnicode(str, res);
 #endif
         }
 

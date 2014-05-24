@@ -42,10 +42,13 @@ namespace CppJieba
             virtual bool cut(const string& str, vector<string>& res)const
             {
                 assert(_getInitFlag());
+                res.clear();
+                res.reserve(str.size());
 
                 Unicode unicode;
+                unicode.reserve(str.size());
+
                 TransCode::decode(str, unicode);
-                res.clear();
                 
                 Unicode::const_iterator left = unicode.begin();
                 Unicode::const_iterator right = unicode.begin();

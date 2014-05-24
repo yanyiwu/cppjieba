@@ -45,6 +45,7 @@ namespace CppJieba
             {
                 assert(_getInitFlag());
                 vector<Unicode> words;
+                words.reserve(end - begin);
                 if(!_mpSeg.cut(begin, end, words))
                 {
                     LogError("mpSeg cutDAG failed.");
@@ -52,7 +53,9 @@ namespace CppJieba
                 }
 
                 vector<Unicode> hmmRes;
+                hmmRes.reserve(end - begin);
                 Unicode piece;
+                piece.reserve(end - begin);
                 for (size_t i = 0, j = 0; i < words.size(); i++)
                 {
                     //if mp get a word, it's ok, put it into result
@@ -90,7 +93,6 @@ namespace CppJieba
                     //let i jump over this piece
                     i = j - 1;
                 }
-
                 return true;
             }
 
@@ -104,20 +106,18 @@ namespace CppJieba
                 }
 
                 vector<Unicode> uRes;
+                uRes.reserve(end - begin);
                 if (!cut(begin, end, uRes))
                 {
                     LogError("get unicode cut result error.");
                     return false;
                 }
 
-                string tmp;
-                for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++)
+                size_t offset = res.size();
+                res.resize(res.size() + uRes.size());
+                for(size_t i = 0; i < uRes.size(); i ++, offset++)
                 {
-                    if (TransCode::encode(*uItr, tmp))
-                    {
-                        res.push_back(tmp);
-                    }
-                    else
+                    if(!TransCode::encode(uRes[i], res[offset]))
                     {
                         LogError("encode failed.");
                     }
