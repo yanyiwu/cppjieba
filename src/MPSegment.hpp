@@ -96,6 +96,7 @@ namespace CppJieba
                 }
                 vector<SegmentChar> SegmentChars;
                 //calc DAG
+                SegmentChars.reserve(end - begin);
                 if(!_calcDAG(begin, end, SegmentChars))
                 {
                     LogError("_calcDAG failed.");
