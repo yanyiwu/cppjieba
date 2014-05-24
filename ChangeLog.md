@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v2.4.2
+
+1. 适当使用`vector::reserve`，约提高性能`30%`。
+
 ## v2.4.1
 
 1. 完善一些特殊字符和字母串的切词效果。
