@@ -2,44 +2,11 @@
 #include "src/MixSegment.hpp"
 #include "src/MPSegment.hpp"
 #include "src/HMMSegment.hpp"
-#include "src/Limonp/io_functs.hpp"
 #include "src/FullSegment.hpp"
 #include "src/QuerySegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
-
-
-//TEST(SegmentBaseTest, Test1)
-//{
-//    const char* str = "heheh你好...hh";
-//    string s;
-//    vector<string> buf;
-//    buf.push_back("heheh");
-//    buf.push_back("你好");
-//    buf.push_back("...hh");
-//    vector<string> res;
-//    size_t size = strlen(str);
-//    size_t offset = 0;
-//    while(offset < size)
-//    {
-//        size_t len = 0;
-//        const char* t =  str + offset;
-//        SegmentBase::filterAscii(t, size - offset, len);
-//        s.assign(t, len);
-//        res.push_back(s);
-//        //cout<<s<<","<<ret<<","<<len<<endl;
-//        //cout<<str<<endl;
-//        offset += len;
-//    }
-//    ASSERT_EQ(res, buf);
-//}
-
-//int main(int argc, char** argv)
-//{
-//    //ChineseFilter chFilter;
-//    return 0;
-//}
 
 
 TEST(MixSegmentTest, Test1)
@@ -100,7 +67,11 @@ TEST(MPSegmentTest, Test2)
     vector<string> words;
 
     string eRes;
-    loadFile2Str("../test/testdata/review.100.res", eRes);
+    {
+        ifstream ifs("../test/testdata/review.100.res");
+        ASSERT_TRUE(ifs);
+        eRes << ifs;
+    }
     string res;
     
     while(getline(ifs, line))
@@ -114,8 +85,9 @@ TEST(MPSegmentTest, Test2)
         res += s;
         res += '\n';
     }
-    WriteStr2File("../test/testdata/review.100.res", res.c_str(), "w");
-    //ASSERT_EQ(res, eRes);
+    ofstream ofs("../test/testdata/review.100.res");
+    ASSERT_TRUE(ofs);
+    ofs << res;
     
 }
 TEST(HMMSegmentTest, Test1)

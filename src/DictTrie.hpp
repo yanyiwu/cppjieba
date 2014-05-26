@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include "Limonp/str_functs.hpp"
-#include "Limonp/logger.hpp"
+#include "Limonp/StringUtil.hpp"
+#include "Limonp/Logger.hpp"
 #include "Limonp/InitOnOff.hpp"
 #include "TransCode.hpp"
 #include "Trie.hpp"

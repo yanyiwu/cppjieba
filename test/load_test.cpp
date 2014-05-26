@@ -1,8 +1,6 @@
 #include <iostream>
 #include <ctime>
 #include <fstream>
-#include "../src/Limonp/ArgvContext.hpp"
-#include "../src/Limonp/io_functs.hpp"
 #include "../src/MPSegment.hpp"
 #include "../src/HMMSegment.hpp"
 #include "../src/MixSegment.hpp"
@@ -16,7 +14,9 @@ void cut(size_t times = 20)
     assert(seg);
     vector<string> res;
     string doc;
-    loadFile2Str("../test/testdata/weicheng.utf8", doc);
+    ifstream ifs("../test/testdata/weicheng.utf8");
+    assert(ifs);
+    doc << ifs;
     long beginTime = clock();
     for(size_t i = 0; i < times; i ++)
     {
@@ -35,7 +35,9 @@ void extract(size_t times = 400)
     assert(extractor);
     vector<string> words;
     string doc;
-    loadFile2Str("../test/testdata/review.100", doc);
+    ifstream ifs("../test/testdata/review.100");
+    assert(ifs);
+    doc << ifs;
     long beginTime = clock();
     for(size_t i = 0; i < times; i ++)
     {

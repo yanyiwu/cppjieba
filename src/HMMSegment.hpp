@@ -5,8 +5,8 @@
 #include <fstream>
 #include <memory.h>
 #include <cassert>
-#include "Limonp/str_functs.hpp"
-#include "Limonp/logger.hpp"
+#include "Limonp/StringUtil.hpp"
+#include "Limonp/Logger.hpp"
 #include "TransCode.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"

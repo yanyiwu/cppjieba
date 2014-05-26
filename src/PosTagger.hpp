@@ -2,7 +2,7 @@
 #define CPPJIEBA_POS_TAGGING_H
 
 #include "MixSegment.hpp"
-#include "Limonp/str_functs.hpp"
+#include "Limonp/StringUtil.hpp"
 #include "DictTrie.hpp"
 
 namespace CppJieba

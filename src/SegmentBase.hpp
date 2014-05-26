@@ -2,7 +2,7 @@
 #define CPPJIEBA_SEGMENTBASE_H
 
 #include "TransCode.hpp"
-#include "Limonp/logger.hpp"
+#include "Limonp/Logger.hpp"
 #include "Limonp/InitOnOff.hpp"
 #include "ISegment.hpp"
 #include <cassert>
@@ -43,7 +43,6 @@ namespace CppJieba
             {
                 assert(_getInitFlag());
                 res.clear();
-                res.reserve(str.size());
 
                 Unicode unicode;
                 unicode.reserve(str.size());

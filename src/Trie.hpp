@@ -1,7 +1,7 @@
 #ifndef CPPJIEBA_TRIE_HPP
 #define CPPJIEBA_TRIE_HPP
 
-#include "Limonp/std_outbound.hpp"
+#include "Limonp/StdExtension.hpp"
 #include <vector>
 
 namespace CppJieba

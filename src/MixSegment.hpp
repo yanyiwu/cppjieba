@@ -4,7 +4,7 @@
 #include <cassert>
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
-#include "Limonp/str_functs.hpp"
+#include "Limonp/StringUtil.hpp"
 
 namespace CppJieba
 {

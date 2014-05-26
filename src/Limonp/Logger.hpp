@@ -9,8 +9,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <stdio.h>
+#include <cstdlib>
 #include <stdarg.h>
+#include <time.h>
 #include <cassert>
 
 #define FILE_BASENAME strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
@@ -20,8 +23,6 @@
 #define LogWarn(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_WARN, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogError(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_ERROR, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogFatal(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_FATAL, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
-
-
 
 namespace Limonp
 {

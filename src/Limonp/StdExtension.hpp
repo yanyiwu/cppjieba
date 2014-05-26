@@ -1,5 +1,5 @@
-#ifndef LIMONP_STD_OUTBOUND_H
-#define LIMONP_STD_OUTBOUND_H
+#ifndef LIMONP_STD_EXTEMSION_HPP
+#define LIMONP_STD_EXTEMSION_HPP
 
 #include <map>
 
@@ -21,6 +21,7 @@ namespace std
 #include <vector>
 #include <fstream>
 #include <sstream>
+
 
 namespace std
 {
@@ -124,6 +125,14 @@ namespace std
         basic_string<T> & operator << (basic_string<T> & s, ifstream & ifs)
         {
             return s.assign((istreambuf_iterator<T>(ifs)), istreambuf_iterator<T>());
+        }
+
+    template<class T>
+        ofstream & operator << (ofstream & ofs, const basic_string<T>& s)
+        {
+            ostreambuf_iterator<T> itr (ofs);
+            copy(s.begin(), s.end(), itr);
+            return ofs;
         }
 }
 

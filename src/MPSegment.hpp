@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <set>
 #include <cassert>
-#include "Limonp/logger.hpp"
+#include "Limonp/Logger.hpp"
 #include "DictTrie.hpp"
 #include "DictTrie.hpp"
 #include "ISegment.hpp"
