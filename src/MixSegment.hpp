@@ -15,7 +15,7 @@ namespace CppJieba
             HMMSegment _hmmSeg;
         public:
             MixSegment(){_setInitFlag(false);};
-            explicit MixSegment(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
+            MixSegment(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
             {
                 _setInitFlag(init(mpSegDict, hmmSegDict, userDict));
                 assert(_getInitFlag());
