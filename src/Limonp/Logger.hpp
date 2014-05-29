@@ -49,7 +49,7 @@ namespace Limonp
 #ifdef LOGGER_LEVEL
                 if(level < LOGGER_LEVEL) return;
 #endif
-                int size = 256;
+                size_t size = 256;
                 string msg;
                 va_list ap;
                 while (1) {
