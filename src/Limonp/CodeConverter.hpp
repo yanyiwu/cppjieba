@@ -39,7 +39,12 @@ namespace Limonp
         private: 
             iconv_t _iconv_handle; 
     }; 
-
+    
+    inline bool code_convert(const char* from_charset, const char* to_charset, const string& from, string& to)
+    {
+        CodeConverter cc(from_charset, to_charset);
+        return cc.convert(from, to);
+    }
 }
 
 #endif
