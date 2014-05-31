@@ -17,12 +17,12 @@ CppJieba是"结巴"中文分词的C++版本
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 
-## Usage & Example
+## Usage 
 
 ### Dependency
 
-* g++ (version >= 4.1 recommended) or clang++;
-* cmake (version >= 2.6 recommended);
+* `g++ (version >= 4.1 recommended) or clang++`;
+* `cmake (version >= 2.6 recommended)`;
 
 ### Download & Demo
 
@@ -39,7 +39,7 @@ make
 sudo make install
 ```
 
-#### testing
+### testing
 
 ```sh
 make test 
@@ -53,7 +53,7 @@ make test
 /etc/init.d/cjserver.stop
 ```
 
-#### testing server
+### testing server
 
 然后用chrome浏览器打开`http://127.0.0.1:11200/?key=南京市长江大桥`
 (用chrome的原因是chrome的默认编码就是utf-8)
@@ -257,6 +257,10 @@ see details in `test/tagging_demo.cpp`.
 
 [libcppjieba] 是最简单易懂的CppJieba头文件库使用示例。
 
+### `keyword_server`
+
+[KeywordServer] 50行搭建一个**中文关键词抽取服务**。
+
 ## Online Demo
 
 http://cppjieba-webdemo.herokuapp.com/
@@ -264,7 +268,7 @@ http://cppjieba-webdemo.herokuapp.com/
 
 ## Contact
 
-I will appreciate that if you issue any question or send mails to me(wuyanyi09@foxmail.com).
+I will appreciate that if you issue any question or send mails to me. (**wuyanyi09@foxmail.com**)
 
 ## Thanks
 
@@ -281,3 +285,4 @@ https://github.com/fxsjy/jieba
 [libcppjieba]:https://github.com/aszxqw/libcppjieba
 [issue25]:https://github.com/aszxqw/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
+[KeywordServer]:https://github.com/aszxqw/keyword_server
