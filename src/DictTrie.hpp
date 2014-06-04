@@ -44,7 +44,7 @@ namespace CppJieba
     class DictTrie: public InitOnOff
     {
         public:
-            typedef Trie<Unicode::value_type, DictUnit> TrieType;
+            typedef Trie<Unicode::value_type, DictUnit, Unicode, vector<Unicode>, vector<const DictUnit*> > TrieType;
         private:
             vector<DictUnit> _nodeInfos;
             TrieType * _trie;

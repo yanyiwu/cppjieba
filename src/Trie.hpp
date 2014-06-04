@@ -17,7 +17,7 @@ namespace CppJieba
                 const ValueType * ptValue;
         };
 
-    template <class KeyType, class ValueType>
+    template <class KeyType, class ValueType, class KeyContainerType = vector<KeyType>, class KeysContainerType = vector<KeyContainerType>, class ValueContainerType = vector<const ValueType* > >
         class Trie
         {
             public:
@@ -25,7 +25,7 @@ namespace CppJieba
             private:
                 TrieNodeType* _root;
             public:
-                Trie(const vector<vector<KeyType> >& keys, const vector<const ValueType* >& valuePointers)
+                Trie(const KeysContainerType& keys, const ValueContainerType& valuePointers)
                 {
                     _root = new TrieNodeType;
                     _root->ptKeyMap = NULL;
@@ -41,11 +41,11 @@ namespace CppJieba
                     }
                 }
             public:
-                const ValueType* find(typename vector<KeyType>::const_iterator begin, typename vector<KeyType>::const_iterator end) const
+                const ValueType* find(typename KeyContainerType::const_iterator begin, typename KeyContainerType::const_iterator end) const
                 {
                     typename TrieNodeType::KeyMapType::const_iterator citer;
                     const TrieNodeType* ptNode = _root;
-                    for(typename vector<KeyType>::const_iterator it = begin; it != end; it++)
+                    for(typename KeyContainerType::const_iterator it = begin; it != end; it++)
                     {
                         assert(ptNode);
                         if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*it)))
@@ -56,12 +56,12 @@ namespace CppJieba
                     }
                     return ptNode->ptValue;
                 }
-                bool find(typename vector<KeyType>::const_iterator begin, typename vector<KeyType> ::const_iterator end, map<typename vector<KeyType>::size_type, const ValueType* >& ordererMap, size_t offset = 0) const
+                bool find(typename KeyContainerType::const_iterator begin, typename KeyContainerType::const_iterator end, map<typename KeyContainerType::size_type, const ValueType* >& ordererMap, size_t offset = 0) const
                 {
                     const TrieNodeType * ptNode = _root;
                     typename TrieNodeType::KeyMapType::const_iterator citer;
                     ordererMap.clear();
-                    for(typename vector<KeyType>::const_iterator itr = begin; itr != end ; itr++)
+                    for(typename KeyContainerType::const_iterator itr = begin; itr != end ; itr++)
                     {
                         assert(ptNode);
                         if(NULL == ptNode->ptKeyMap || ptNode->ptKeyMap->end() == (citer = ptNode->ptKeyMap->find(*itr)))
@@ -77,7 +77,7 @@ namespace CppJieba
                     return ordererMap.size();
                 }
             private:
-                void _createTrie(const vector<vector<KeyType> >& keys, const vector<const ValueType*>& valuePointers)
+                void _createTrie(const KeysContainerType& keys, const ValueContainerType& valuePointers)
                 {
                     if(valuePointers.empty() || keys.empty())
                     {
@@ -91,13 +91,13 @@ namespace CppJieba
                     }
                 }
             private:
-                void _insertNode(const vector<KeyType>& key, const ValueType* ptValue)
+                void _insertNode(const KeyContainerType& key, const ValueType* ptValue)
                 {
                     TrieNodeType* ptNode  = _root;
 
                     typename TrieNodeType::KeyMapType::const_iterator kmIter;
 
-                    for(typename vector<KeyType>::const_iterator citer = key.begin(); citer != key.end(); citer++)
+                    for(typename KeyContainerType::const_iterator citer = key.begin(); citer != key.end(); citer++)
                     {
                         if(NULL == ptNode->ptKeyMap)
                         {

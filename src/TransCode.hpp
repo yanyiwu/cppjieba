@@ -7,13 +7,14 @@
 
 
 #include "Limonp/StringUtil.hpp"
+#include "Limonp/LocalVector.hpp"
 
 namespace CppJieba
 {
 
     using namespace Limonp;
     typedef uint16_t UnicodeValueType;
-    typedef std::vector<UnicodeValueType> Unicode;
+    typedef Limonp::LocalVector<UnicodeValueType> Unicode;
     namespace TransCode
     {
         inline bool decode(const string& str, Unicode& res)
