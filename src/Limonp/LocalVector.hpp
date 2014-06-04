@@ -9,7 +9,7 @@
 namespace Limonp
 {
     using namespace std;
-    const size_t LOCAL_VECTOR_BUFFER_SIZE = 32;
+    const size_t LOCAL_VECTOR_BUFFER_SIZE = 16;
     template <class T>
         class LocalVector
         {
