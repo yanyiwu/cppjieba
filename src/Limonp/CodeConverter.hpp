@@ -28,7 +28,7 @@ namespace Limonp
                 to.resize(from_size * 2); // iconv failed, may be you can raise this 2 to bigger number.
                 char * pto = (char*)to.c_str();
                 size_t to_size = to.size();
-                if(-1 == iconv(_iconv_handle, &pfrom, &from_size, &pto, &to_size))
+                if(size_t(-1) == iconv(_iconv_handle, &pfrom, &from_size, &pto, &to_size))
                 {
                     to.clear();
                     return false;

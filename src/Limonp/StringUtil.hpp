@@ -29,7 +29,7 @@ namespace Limonp
 
     inline void string_format(string& res, const char* fmt, ...)
     {
-        size_t size = 256;
+        int size = 256;
         va_list ap;
         res.clear();
         while (1) {
@@ -49,7 +49,7 @@ namespace Limonp
     }
     inline string string_format(const char* fmt, ...) 
     {
-        size_t size = 256;
+        int size = 256;
         std::string str;
         va_list ap;
         while (1) {
