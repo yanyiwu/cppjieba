@@ -9,6 +9,10 @@
 namespace Limonp
 {
     using namespace std;
+    /*
+     * LocalVector<T> : T must be primitive type (char , int, size_t), if T is struct or class, LocalVector<T> may be dangerous..
+     * LocalVector<T> is simple and not well-tested. 
+     */
     const size_t LOCAL_VECTOR_BUFFER_SIZE = 16;
     template <class T>
         class LocalVector
@@ -92,13 +96,11 @@ namespace Limonp
                 }
                 void push_back(const T& t)
                 {
-                    if(!full())
+                    if(_size == _capacity)
                     {
-                        _ptr[_size++] = t;
-                        return ;
+                        assert(_capacity);
+                        reserve(_capacity * 2);
                     }
-                    assert(_capacity);
-                    reserve(_capacity * 2);
                     _ptr[_size ++ ] = t;
                 }
                 void reserve(size_t size) 
@@ -117,10 +119,6 @@ namespace Limonp
                     {
                         free(old);
                     }
-                }
-                bool full() const
-                {
-                    return size() == capacity();
                 }
                 bool empty() const
                 {
