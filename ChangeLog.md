@@ -1,8 +1,9 @@
 # CppJieba ChangeLog
 
-## v2.4.2
+## v2.4.2 (is coming)
 
 1. 适当使用`vector::reserve`，约提高性能`30%`。
+2. 在`1.`的基础上，使用`Limonp/LocalVector.hpp`作为`Unicode`的类型，约提高性能 `13%`。
 
 ## v2.4.1
 
