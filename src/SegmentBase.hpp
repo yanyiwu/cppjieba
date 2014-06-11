@@ -4,6 +4,7 @@
 #include "TransCode.hpp"
 #include "Limonp/Logger.hpp"
 #include "Limonp/InitOnOff.hpp"
+#include "Limonp/NonCopyable.hpp"
 #include "ISegment.hpp"
 #include <cassert>
 
@@ -19,7 +20,7 @@ namespace CppJieba
     const UnicodeValueType SPECIAL_SYMBOL[] = {32u, 9u, 10u};  
 #endif
 
-    class SegmentBase: public ISegment, public InitOnOff
+    class SegmentBase: public ISegment, public InitOnOff, public NonCopyable
     {
         public:
             SegmentBase(){_loadSpecialSymbols();};
