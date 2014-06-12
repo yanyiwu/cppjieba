@@ -55,10 +55,21 @@ make test
 
 ### testing server
 
-然后用chrome浏览器打开`http://127.0.0.1:11200/?key=南京市长江大桥`
-(用chrome的原因是chrome的默认编码就是utf-8)
+然后用chrome浏览器打开 (chrome的默认编码是utf-8):
 
-或者用命令 `curl "http://127.0.0.1:11200/?key=南京市长江大桥"` (ubuntu中的curl安装命令`sudo apt-get install curl`) 
+```
+http://127.0.0.1:11200/?key=南京市长江大桥
+```
+
+```
+http://127.0.0.1:11200/?key=南京市长江大桥&format=simple
+```
+
+或者用命令  (ubuntu中的curl安装命令`sudo apt-get install curl`) 
+
+```
+curl -G  "http://127.0.0.1:11200/" --data-urlencode "key=南京市长江大桥"
+```
 
 你可以看到返回的结果如下：(返回结果是json格式)
 
@@ -69,7 +80,7 @@ make test
 如果你使用如下调用方式：
 
 ```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
+curl -G  "http://127.0.0.1:11200/" --data-urlencode "key=南京市长江大桥" -d "format=simple"
 ```
 
 则返回结果如下：(返回结果按空格隔开)
