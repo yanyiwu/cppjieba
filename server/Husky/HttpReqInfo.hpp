@@ -5,6 +5,7 @@
 #include <string>
 #include "Limonp/Logger.hpp"
 #include "Limonp/StringUtil.hpp"
+#include "Limonp/InitOnOff.hpp"
 
 namespace Husky
 {
@@ -70,25 +71,30 @@ namespace Husky
         }
     }
 
-    class HttpReqInfo
+    class HttpReqInfo: public InitOnOff
     {
         public:
             HttpReqInfo(const string& headerStr)
+            {
+                _setInitFlag(_init(headerStr));
+            }
+        private:
+            bool _init(const string& headerStr)
             {
                 size_t lpos = 0, rpos = 0;
                 vector<string> buf;
                 rpos = headerStr.find("\n", lpos);
                 if(string::npos == rpos)
                 {
-                    LogError("headerStr illegal.");
-                    return;
+                    LogError("headerStr[%s] illegal.", headerStr.c_str());
+                    return false;
                 }
                 string firstline(headerStr, lpos, rpos - lpos);
                 trim(firstline);
                 if(!split(firstline, buf, " ") || 3 != buf.size())
                 {
-                    LogError("parse header first line failed.");
-                    return;
+                    LogError("parse header firstline[%s] failed.", firstline.c_str());
+                    return false;
                 }
                 _headerMap[KEY_METHOD] = trim(buf[0]); 
                 _headerMap[KEY_PATH] = trim(buf[1]); 
@@ -103,8 +109,8 @@ namespace Husky
                 lpos = rpos + 1;
                 if(lpos >= headerStr.size())
                 {
-                    LogError("headerStr illegal");
-                    return;
+                    LogError("headerStr[%s] illegal.", headerStr.c_str());
+                    return false;
                 }
                 //message header begin
                 while(lpos < headerStr.size() && string::npos != (rpos = headerStr.find('\n', lpos)) && rpos > lpos)
@@ -121,8 +127,8 @@ namespace Husky
                     trim(v);
                     if(k.empty()||v.empty())
                     {
-                        LogError("headerStr illegal.");
-                        return;
+                        LogError("headerStr[%s] illegal.", headerStr.c_str());
+                        return false;
                     }
                     upper(k);
                     _headerMap[k] = v;
@@ -133,11 +139,17 @@ namespace Husky
                 //body begin
                 _body.assign(headerStr.substr(rpos));
                 trim(_body);
+                return true;
             }
+        
         public:
-            string& operator[] (const string& key)
+            //string& operator[] (const string& key)
+            //{
+            //    return _headerMap[key];
+            //}
+            const string& set(const string& key, const string& value)
             {
-                return _headerMap[key];
+                return _headerMap[key] = value;
             }
             bool find(const string& key, string& res)const
             {

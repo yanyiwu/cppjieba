@@ -17,7 +17,6 @@
 #include <sys/epoll.h>
 #include <fcntl.h>
 #include "HttpReqInfo.hpp"
-#include "Limonp/InitOnOff.hpp"
 
 
 
@@ -199,6 +198,11 @@ namespace Husky
                 }
 
                 HttpReqInfo httpReq(strRec);
+                if(!httpReq)
+                {
+                    LogError("HttpReqInfo invalid.");
+                    return false;
+                }
                 if("GET" == httpReq.getMethod() && !_reqHandler.do_GET(httpReq, strRetByHandler))
                 {
                     LogError("do_GET failed.");
