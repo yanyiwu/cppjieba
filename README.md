@@ -36,6 +36,8 @@ cmake ..
 # cmake .. -DENC=GBK
 # 需要注意的是，单元测试都是针对utf8的测试，如果是使用gbk选项的话，此测试不通过。
 make
+# 如果你需要服务支持用户自定义词典的话，
+# 可以在 ./conf/server.conf 里面的这行 "#user_dict_path=/usr/share/CppJieba/dict/user.dict.utf8" 前面的#号去掉。
 sudo make install
 ```
 
@@ -48,7 +50,6 @@ make test
 ### server start & stop
 
 ```
-#Usage: /etc/init.d/cjserver {start|stop|restart|force-reload}
 /etc/init.d/cjserver.start >> /dev/null 2>&1
 /etc/init.d/cjserver.stop
 ```
@@ -203,7 +204,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 自定义词典示例请看`test/testdata/userdict.utf8`。
 
-载入自定义词典示例请看`test/segment.cpp`。
+载入自定义词典示例请看`test/segment.cpp`，产生的可执行文件示例请见 `build/segment.demo`
 
 没有使用自定义用户词典时的结果:
 

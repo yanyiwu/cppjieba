@@ -15,7 +15,7 @@ using namespace CppJieba;
 class ReqHandler: public IRequestHandler
 {
     public:
-        ReqHandler(const string& dictPath, const string& modelPath): _segment(dictPath, modelPath){};
+        ReqHandler(const string& dictPath, const string& modelPath, const string& userDictPath): _segment(dictPath, modelPath, userDictPath){};
         virtual ~ReqHandler(){};
     public:
         virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd) const
@@ -58,6 +58,7 @@ bool run(int argc, char** argv)
     size_t port = 0;
     string dictPath;
     string modelPath;
+    string userDictPath;
     string val;
     if(!conf.get("port", val))
     {
@@ -77,7 +78,12 @@ bool run(int argc, char** argv)
         return false;
     }
 
-    ReqHandler reqHandler(dictPath, modelPath);
+    if(!conf.get("user_dict_path", userDictPath)) //optional
+    {
+        userDictPath = "";
+    }
+
+    ReqHandler reqHandler(dictPath, modelPath, userDictPath);
     EpollServer sf(port, reqHandler);
     return sf.start();
 }
