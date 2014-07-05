@@ -44,7 +44,7 @@ namespace Limonp
                 strftime(buf, sizeof(buf), LOG_TIME_FORMAT, localtime(&timeNow));
                 fprintf(stderr, LOG_FORMAT, buf, fileName, lineno,LOG_LEVEL_ARRAY[level], msg.c_str());
             }
-            static void LoggingF(size_t level, const char* fileName, int lineno, const string& fmt, ...)
+            static void LoggingF(size_t level, const char* fileName, int lineno, const char* const fmt, ...)
             {
 #ifdef LOGGER_LEVEL
                 if(level < LOGGER_LEVEL) return;
@@ -55,7 +55,7 @@ namespace Limonp
                 while (1) {
                     msg.resize(size);
                     va_start(ap, fmt);
-                    int n = vsnprintf((char *)msg.c_str(), size, fmt.c_str(), ap);
+                    int n = vsnprintf((char *)msg.c_str(), size, fmt, ap);
                     va_end(ap);
                     if (n > -1 && n < size) {
                         msg.resize(n);
