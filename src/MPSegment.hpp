@@ -73,13 +73,14 @@ namespace CppJieba
                 {
                     return false;
                 }
-                res.resize(words.size());
+                size_t offset = res.size();
+                res.resize(res.size() + words.size());
                 for(size_t i = 0; i < words.size(); i++)
                 {
-                    if(!TransCode::encode(words[i], res[i]))
+                    if(!TransCode::encode(words[i], res[i + offset]))
                     {
                         LogError("encode failed.");
-                        res[i].clear();
+                        res[i + offset].clear();
                     }
                 }
                 return true;

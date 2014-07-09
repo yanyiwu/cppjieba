@@ -23,6 +23,7 @@ TEST(MixSegmentTest, Test1)
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
     ASSERT_TRUE(segment.cut(str2, words));
     ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));
+    //exit(0);
 }
 
 TEST(MixSegmentTest, NoUserDict)
@@ -50,7 +51,7 @@ TEST(MixSegmentTest, UserDict)
 
 TEST(MPSegmentTest, Test1)
 {
-    MPSegment segment("../dict/extra_dict/jieba.dict.small.utf8");;
+    MPSegment segment("../dict/jieba.dict.utf8");;
     const char* str = "我来自北京邮电大学。";
     const char* res[] = {"我", "来自", "北京邮电大学", "。"};
     vector<string> words;
@@ -63,8 +64,6 @@ TEST(MPSegmentTest, Test1)
         const char * res[] = {"B超", " ", "T恤"};
         vector<string> words;
         ASSERT_TRUE(segment.cut(str, words));
-        cout << words << endl;
-        exit(0);
         ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
     }
 }
