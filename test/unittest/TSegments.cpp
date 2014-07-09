@@ -57,6 +57,16 @@ TEST(MPSegmentTest, Test1)
     ASSERT_TRUE(segment);
     ASSERT_TRUE(segment.cut(str, words));
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+
+    {
+        const char* str = "B超 T恤";
+        const char * res[] = {"B超", " ", "T恤"};
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        cout << words << endl;
+        exit(0);
+        ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    }
 }
 
 TEST(MPSegmentTest, Test2)
