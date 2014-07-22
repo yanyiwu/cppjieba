@@ -287,6 +287,11 @@ I will appreciate that if you issue any question or send mails to me. (**wuyanyi
 "结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
 
+## Author
+
+- aszxqw https://github.com/aszxqw wuyanyi09@foxmail.com
+- aholic https://github.com/aholic ruochen.xu@gmail.com
+
 [CppJieba]:https://github.com/aszxqw/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
