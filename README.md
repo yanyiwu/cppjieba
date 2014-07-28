@@ -44,7 +44,7 @@ sudo make install
 ### testing
 
 ```sh
-make test 
+make && ./test/test.run
 ```
 
 ### server start & stop
