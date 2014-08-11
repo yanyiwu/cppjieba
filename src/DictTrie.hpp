@@ -10,7 +10,6 @@
 #include <limits>
 #include "Limonp/StringUtil.hpp"
 #include "Limonp/Logger.hpp"
-#include "Limonp/InitOnOff.hpp"
 #include "TransCode.hpp"
 #include "Trie.hpp"
 
@@ -41,7 +40,7 @@ namespace CppJieba
 
     typedef map<size_t, const DictUnit*> DagType;
 
-    class DictTrie: public InitOnOff
+    class DictTrie
     {
         public:
             typedef Trie<Unicode::value_type, DictUnit, Unicode, vector<Unicode>, vector<const DictUnit*> > TrieType;
@@ -65,12 +64,11 @@ namespace CppJieba
             {
                 _trie = NULL;
                 _minWeight = MAX_DOUBLE;
-                _setInitFlag(false);
             }
             DictTrie(const string& dictPath, const string& userDictPath = "")
             {
                 new (this) DictTrie();
-                _setInitFlag(init(dictPath, userDictPath));
+                init(dictPath, userDictPath);
             }
             ~DictTrie()
             {
@@ -83,7 +81,7 @@ namespace CppJieba
         public:
             bool init(const string& dictPath, const string& userDictPath = "")
             {
-                assert(!_getInitFlag());
+                assert(!_trie);
                 _loadDict(dictPath, _nodeInfos);
                 _calculateWeight(_nodeInfos);
                 _minWeight = _findMinWeight(_nodeInfos);
@@ -96,7 +94,7 @@ namespace CppJieba
                 _shrink(_nodeInfos);
                 _trie = _creatTrie(_nodeInfos);
                 assert(_trie);
-                return _setInitFlag(true);
+                return true;
             }
 
         public:

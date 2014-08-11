@@ -34,24 +34,18 @@ namespace CppJieba
             DictTrie _dictTrie;
 
         public:
-            MPSegment(){_setInitFlag(false);};
-            explicit MPSegment(const string& dictPath, const string& userDictPath = "")
+            MPSegment(){};
+            MPSegment(const string& dictPath, const string& userDictPath = "")
             {
-                _setInitFlag(init(dictPath, userDictPath));
+                LIMONP_CHECK(init(dictPath, userDictPath));
             };
             virtual ~MPSegment(){};
         public:
             bool init(const string& dictPath, const string& userDictPath = "")
             {
-                if(_getInitFlag())
-                {
-                    LogError("already inited before now.");
-                    return false;
-                }
-                _dictTrie.init(dictPath, userDictPath);
-                assert(_dictTrie);
+                LIMONP_CHECK(_dictTrie.init(dictPath, userDictPath));
                 LogInfo("MPSegment init(%s) ok", dictPath.c_str());
-                return _setInitFlag(true);
+                return true;
             }
             bool isUserDictSingleChineseWord(const Unicode::value_type & value) const
             {
@@ -61,7 +55,6 @@ namespace CppJieba
             using SegmentBase::cut;
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
-                assert(_getInitFlag());
                 if(begin == end)
                 {
                     return false;
@@ -92,7 +85,6 @@ namespace CppJieba
                 {
                     return false;
                 }
-                assert(_getInitFlag());
                 vector<SegmentChar> segmentChars(end - begin);
 
                 //calc DAG

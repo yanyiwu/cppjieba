@@ -9,32 +9,29 @@ namespace CppJieba
 {
     using namespace Limonp;
 
-    class PosTagger: public InitOnOff
+    class PosTagger
     {
         private:
             MixSegment _segment;
             DictTrie _dictTrie;
 
         public:
-            PosTagger(){_setInitFlag(false);};
+            PosTagger(){};
             PosTagger(const string& dictPath, const string& hmmFilePath, const string& charStatus, const string& startProb, const string& emitProb, const string& endProb, const string& transProb)
             {
-                _setInitFlag(init(dictPath, hmmFilePath, charStatus, startProb, emitProb, endProb, transProb));
+                LIMONP_CHECK(init(dictPath, hmmFilePath, charStatus, startProb, emitProb, endProb, transProb));
             };
             ~PosTagger(){};
         public:
             bool init(const string& dictPath, const string& hmmFilePath, const string& charStatus, const string& startProb, const string& emitProb, const string& endProb, const string& transProb)
             {
-                
-                assert(!_getInitFlag());
-                _dictTrie.init(dictPath);
-                assert(_dictTrie);
-                return _setInitFlag(_segment.init(dictPath, hmmFilePath));
+                LIMONP_CHECK(_dictTrie.init(dictPath));
+                LIMONP_CHECK(_segment.init(dictPath, hmmFilePath));
+                return true;
             };
 
             bool tag(const string& src, vector<pair<string, string> >& res)
             {
-                assert(_getInitFlag());
                 vector<string> cutRes;
                 if (!_segment.cut(src, cutRes))
                 {

@@ -35,20 +35,15 @@ namespace CppJieba
             vector<EmitProbMap* > _emitProbVec;
 
         public:
-            HMMSegment(){_setInitFlag(false);}
+            HMMSegment(){}
             explicit HMMSegment(const string& filePath)
             {
-                _setInitFlag(init(filePath));
+                LIMONP_CHECK(init(filePath));
             }
             virtual ~HMMSegment(){}
         public:
             bool init(const string& filePath)
             {
-                if(_getInitFlag())
-                {
-                    LogError("inited already.");
-                    return false;
-                }
                 memset(_startProb, 0, sizeof(_startProb));
                 memset(_transProb, 0, sizeof(_transProb));
                 _statMap[0] = 'B';
@@ -59,11 +54,7 @@ namespace CppJieba
                 _emitProbVec.push_back(&_emitProbE);
                 _emitProbVec.push_back(&_emitProbM);
                 _emitProbVec.push_back(&_emitProbS);
-                if(!_setInitFlag(_loadModel(filePath.c_str())))
-                {
-                    LogError("_loadModel(%s) failed.", filePath.c_str());
-                    return false;
-                }
+                LIMONP_CHECK(_loadModel(filePath.c_str()));
                 LogInfo("HMMSegment init(%s) ok.", filePath.c_str());
                 return true;
             }
@@ -104,7 +95,6 @@ namespace CppJieba
         private:
             bool _cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const 
             {
-                assert(_getInitFlag());
                 vector<size_t> status; 
                 if(!_viterbi(begin, end, status))
                 {
@@ -128,7 +118,6 @@ namespace CppJieba
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
-                assert(_getInitFlag());
                 if(begin == end)
                 {
                     return false;

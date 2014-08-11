@@ -11,7 +11,6 @@ using namespace CppJieba;
 void cut(size_t times = 20)
 {
     MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
-    assert(seg);
     vector<string> res;
     string doc;
     ifstream ifs("../test/testdata/weicheng.utf8");
@@ -32,7 +31,6 @@ void cut(size_t times = 20)
 void extract(size_t times = 400)
 {
     KeywordExtractor extractor("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");
-    assert(extractor);
     vector<string> words;
     string doc;
     ifstream ifs("../test/testdata/review.100");

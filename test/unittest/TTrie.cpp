@@ -55,7 +55,6 @@ TEST(DictTrieTest, Test1)
 TEST(DictTrieTest, UserDict)
 {
     DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
-    ASSERT_TRUE(trie);
     string word = "云计算";
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
