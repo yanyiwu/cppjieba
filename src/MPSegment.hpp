@@ -114,6 +114,10 @@ namespace CppJieba
 
                 return true;
             }
+            const DictTrie* getDictTrie() const 
+            {
+                return &_dictTrie;
+            }
 
         private:
             void _calcDP(vector<SegmentChar>& SegmentChars) const

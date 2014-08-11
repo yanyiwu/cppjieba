@@ -42,7 +42,7 @@ namespace CppJieba
                 LogError("_mixSeg init");
                 return false;
             }
-            if (!_fullSeg.init(dict))
+            if (!_fullSeg.init(_mixSeg.getDictTrie()))
             {
                 LogError("_fullSeg init");
                 return false;

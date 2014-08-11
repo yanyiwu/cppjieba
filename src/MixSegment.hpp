@@ -122,6 +122,11 @@ namespace CppJieba
                 }
                 return true;
             }
+
+            const DictTrie* getDictTrie() const 
+            {
+                return _mpSeg.getDictTrie();
+            }
     };
 }
 

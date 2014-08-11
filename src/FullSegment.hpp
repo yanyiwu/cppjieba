@@ -15,23 +15,47 @@ namespace CppJieba
     class FullSegment: public SegmentBase
     {
         private:
-            DictTrie _dictTrie;
-
+            const DictTrie* _dictTrie;
+            bool _isBorrowed;
         public:
-            FullSegment(){_setInitFlag(false);};
-            explicit FullSegment(const string& dictPath){_setInitFlag(init(dictPath));}
-            virtual ~FullSegment(){};
+            FullSegment()
+            {
+                _dictTrie = NULL;
+                _isBorrowed = false;
+            }
+            explicit FullSegment(const string& dictPath)
+            {
+                _dictTrie = NULL;
+                init(dictPath);
+            }
+            explicit FullSegment(const DictTrie* dictTrie) 
+            {
+                _dictTrie = NULL;
+                init(dictTrie);
+            }
+            virtual ~FullSegment()
+            {
+                if(_dictTrie && ! _isBorrowed) 
+                {
+                    delete _dictTrie;
+                }
+
+            };
         public:
             bool init(const string& dictPath)
             {
-                if(_getInitFlag())
-                {
-                    LogError("already inited before now.");
-                    return false;
-                }
-                _dictTrie.init(dictPath.c_str());
-                assert(_dictTrie);
-                return _setInitFlag(true);
+                assert(_dictTrie == NULL);
+                _dictTrie = new DictTrie(dictPath);
+                _isBorrowed = false;
+                return true;
+            }
+            bool init(const DictTrie* dictTrie) 
+            {
+                assert(_dictTrie == NULL);
+                assert(dictTrie);
+                _dictTrie = dictTrie;
+                _isBorrowed = true;
+                return true;
             }
 
         public:
@@ -40,7 +64,7 @@ namespace CppJieba
         public:
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
             {
-                assert(_getInitFlag());
+                assert(_dictTrie);
                 if (begin >= end)
                 {
                     LogError("begin >= end");
@@ -61,7 +85,7 @@ namespace CppJieba
                 for (Unicode::const_iterator uItr = begin; uItr != end; uItr++)
                 {
                     //find word start from uItr
-                    if (_dictTrie.find(uItr, end, tRes, 0))
+                    if (_dictTrie->find(uItr, end, tRes, 0))
                     {
                         for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
                         //for (vector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
@@ -94,7 +118,7 @@ namespace CppJieba
 
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const
             {
-                assert(_getInitFlag());
+                assert(_dictTrie);
                 if (begin >= end)
                 {
                     LogError("begin >= end");
