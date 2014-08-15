@@ -73,7 +73,7 @@ TEST(MPSegmentTest, Test2)
     string eRes;
     {
         ifstream ifs("../test/testdata/review.100.res");
-        ASSERT_TRUE(ifs);
+        ASSERT_TRUE(!!ifs);
         eRes << ifs;
     }
     string res;
@@ -90,7 +90,7 @@ TEST(MPSegmentTest, Test2)
         res += '\n';
     }
     ofstream ofs("../test/testdata/review.100.res");
-    ASSERT_TRUE(ofs);
+    ASSERT_TRUE(!!ofs);
     ofs << res;
     
 }
