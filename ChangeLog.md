@@ -6,6 +6,7 @@
 2. 在`1.`的基础上，使用`Limonp/LocalVector.hpp`作为`Unicode`的类型，约提高性能 `13%`。
 3. 使 `cjserver` 支持用户自定义词典，通过在 `conf/server.conf` 里面配置 `user_dict_path` 来实现。
 4. 修复 `MPSegmentor` 切词时，当句子中含有特殊字符时，切词结果不完整的问题。
+5. 修改 `-std=c++0x` 或者 `-std=c++11` 时编译失败的问题。
 
 ## v2.4.1
 
