@@ -273,6 +273,10 @@ see details in `test/tagging_demo.cpp`.
 
 [KeywordServer] 50行搭建一个**中文关键词抽取服务**。
 
+### `ngx_http_cppjieba_module`
+
+如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
+
 ## Online Demo
 
 http://cppjieba-webdemo.herokuapp.com/
@@ -298,8 +302,9 @@ https://github.com/fxsjy/jieba
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
 [simhash]:https://github.com/aszxqw/simhash
-[代码详解]:http://www.aszxqw.com/work/2014/02/10/cppjieba-dai-ma-xiang-jie.html
+[代码详解]:http://yanyiwu.com/work/2014/02/10/cppjieba-dai-ma-xiang-jie.html
 [libcppjieba]:https://github.com/aszxqw/libcppjieba
 [issue25]:https://github.com/aszxqw/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
 [KeywordServer]:https://github.com/aszxqw/keyword_server
+[ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
