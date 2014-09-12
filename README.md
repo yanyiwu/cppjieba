@@ -3,13 +3,13 @@
 
 # CppJieba
 
-## Introduction
+## 简介
 
 CppJieba是"结巴"中文分词的C++版本
 
 代码细节详解请见 [代码详解]
 
-## Feature
+## 特性
 
 + 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码。
@@ -17,14 +17,14 @@ CppJieba是"结巴"中文分词的C++版本
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 
-## Usage 
+## 用法
 
-### Dependency
+### 依赖软件
 
 * `g++ (version >= 4.1 recommended) or clang++`;
 * `cmake (version >= 2.6 recommended)`;
 
-### Download & Demo
+### 下载和编译
 
 ```sh
 git clone --depth=10 --branch=master git://github.com/aszxqw/cppjieba.git
@@ -36,87 +36,19 @@ cmake ..
 # cmake .. -DENC=GBK
 # 需要注意的是，单元测试都是针对utf8的测试，如果是使用gbk选项的话，此测试不通过。
 make
-# 如果你需要服务支持用户自定义词典的话，
-# 可以在 ./conf/server.conf 里面的这行 "#user_dict_path=/usr/share/CppJieba/dict/user.dict.utf8" 前面的#号去掉。
-sudo make install
 ```
 
-### testing
-
-```sh
-make && ./test/test.run
-```
-
-### server start & stop
+## 演示
 
 ```
-/etc/init.d/cjserver.start >> /dev/null 2>&1
-/etc/init.d/cjserver.stop
+./segment.demo
 ```
 
-### testing server
+详细请看 `test/segment_demo.cpp`.
 
-然后用chrome浏览器打开 (chrome的默认编码是utf-8):
+### 分词结果示例
 
-```
-http://127.0.0.1:11200/?key=南京市长江大桥
-```
-
-```
-http://127.0.0.1:11200/?key=南京市长江大桥&format=simple
-```
-
-或者用命令  (ubuntu中的curl安装命令`sudo apt-get install curl`) 
-
-```
-curl -G  "http://127.0.0.1:11200/" --data-urlencode "key=南京市长江大桥"
-```
-
-你可以看到返回的结果如下：(返回结果是json格式)
-
-```
-["南京市", "长江大桥"]
-```
-
-如果你使用如下调用方式：
-
-```
-curl -G  "http://127.0.0.1:11200/" --data-urlencode "key=南京市长江大桥" -d "format=simple"
-```
-
-则返回结果如下：(返回结果按空格隔开)
-
-```
-南京市 长江大桥
-```
-
-同时，也支持HTTP POST模式，使用如下调用:
-
-```
-curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
-```
-
-返回结果如下：
-
-```
-["南京市", "长江大桥"]
-```
-
-### uninstall
-```sh
-cd build/
-cat install_manifest.txt | sudo xargs rm -rf
-```
-
-## Demo
-
-```
-make && ./segment.demo
-```
-
-see details in `test/segment_demo.cpp`.
-
-### MPSegment's demo
+**MPSegment**
 
 Output:
 ```
@@ -131,9 +63,8 @@ Output:
 
 ```
 
-### HMMSegment's demo
+**HMMSegment**
 
-Output:
 ```
 我来到北京清华大学
 我来/到/北京/清华大学
@@ -146,9 +77,8 @@ Output:
 
 ```
 
-### MixSegment's demo
+**MixSegment**
 
-Output:
 ```
 我来到北京清华大学
 我/来到/北京/清华大学
@@ -161,9 +91,8 @@ Output:
 
 ```
 
-### FullSegment's demo
+**FullSegment**
 
-Output:
 ```
 我来到北京清华大学
 我/来到/北京/清华/清华大学/华大/大学
@@ -176,9 +105,8 @@ Output:
 
 ```
 
-### QuerySegment's demo
+**QuerySegment**
 
-Output:
 ```
 我来到北京清华大学
 我/来到/北京/清华/清华大学/华大/大学
@@ -190,7 +118,6 @@ Output:
 小明/硕士/毕业/于/中国/中国科学院/科学/科学院/学院/计算所/，/后/在/中国/中国科学院/科学/科学院/学院/日本/日本京都大学/京都/京都大学/大学/深造
 
 ```
-
 
 以上依次是MP,HMM,Mix三种方法的效果。  
 
@@ -224,28 +151,92 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 make && ./keyword.demo
 ```
 
-see details in `test/keyword_demo.cpp`.
-
-you will see:
+你将看到如下结果：
 
 ```
 我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
 ["CEO:11.7392", "升职:10.8562", "加薪:10.6426", "手扶拖拉机:10.0089", "巅峰:9.49396"]
 ```
 
+详细请见 `test/keyword_demo.cpp`.
+
 ### 词性标注
 
 ```
-make && ./tagging.demo
+./tagging.demo
 ```
 
-see details in `test/tagging_demo.cpp`.
+详情请看 `test/tagging_demo.cpp`.
 
 ```
 ["我:r", "是:v", "蓝翔:x", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:x", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
 
-## Application
+## 服务使用
+
+### 启动服务
+
+```
+./bin/cjserver ../test/testdata/server.conf
+```
+
+### 客户端请求示例
+
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥"
+```
+
+```
+["南京市", "长江大桥"]
+```
+
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
+```
+
+```
+南京市 长江大桥
+```
+
+用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
+
+
+同时，也支持HTTP POST模式，使用如下调用:
+
+```
+curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
+```
+
+返回结果如下：
+
+```
+["南京市", "长江大桥"]
+```
+
+如果有需要**安装使用**的，可以按照如下操作：
+
+### 安装服务
+
+```
+sudo make install
+```
+
+### 服务启动和停止
+
+```
+/etc/init.d/cjserver.start >> /dev/null 2>&1
+/etc/init.d/cjserver.stop
+```
+
+### 卸载服务
+
+```sh
+cd build/
+cat install_manifest.txt | sudo xargs rm -rf
+```
+
+
+## 应用
 
 ### 关于CppJieba的跨语言包装使用
 
@@ -277,21 +268,21 @@ see details in `test/tagging_demo.cpp`.
 
 如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
 
-## Online Demo
+## 线上演示
 
 http://cppjieba-webdemo.herokuapp.com/
 (建议使用chrome打开)
 
-## Contact
+## 客服
 
-I will appreciate that if you issue any question or send mails to me. (**wuyanyi09@foxmail.com**)
+`wuyanyi09@foxmail.com`
 
-## Thanks
+## 鸣谢
 
 "结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
 
-## Author
+## 作者
 
 - aszxqw https://github.com/aszxqw wuyanyi09@foxmail.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
