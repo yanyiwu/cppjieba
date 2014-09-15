@@ -13,12 +13,12 @@ namespace Limonp
         public: 
             CodeConverter(const char *from_charset,const char *to_charset) 
             { 
-                _iconv_handle = iconv_open(to_charset,from_charset); 
+                iconv__handle = iconv_open(to_charset,from_charset); 
             } 
 
             ~CodeConverter() 
             { 
-                iconv_close(_iconv_handle); 
+                iconv_close(iconv__handle); 
             } 
 
             bool convert(const string& from, string& to) const
@@ -28,7 +28,7 @@ namespace Limonp
                 to.resize(from_size * 2); // iconv failed, may be you can raise this 2 to bigger number.
                 char * pto = (char*)to.c_str();
                 size_t to_size = to.size();
-                if(size_t(-1) == iconv(_iconv_handle, &pfrom, &from_size, &pto, &to_size))
+                if(size_t(-1) == iconv(iconv__handle, &pfrom, &from_size, &pto, &to_size))
                 {
                     to.clear();
                     return false;
@@ -37,7 +37,7 @@ namespace Limonp
                 return true;
             }
         private: 
-            iconv_t _iconv_handle; 
+            iconv_t iconv__handle; 
     }; 
     
     inline bool code_convert(const char* from_charset, const char* to_charset, const string& from, string& to)

@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 #include "Limonp/Config.hpp"
-#include "Husky/EpollServer.hpp"
+#include "Husky/ThreadPoolServer.hpp"
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
 #include "MixSegment.hpp"
@@ -55,37 +55,28 @@ bool run(int argc, char** argv)
     {
         return false;
     }
-    size_t port = 0;
+    int port = 0;
+    int threadNumber = 0;
+    int queueMaxSize = 0;
     string dictPath;
     string modelPath;
     string userDictPath;
-    string val;
-    if(!conf.get("port", val))
-    {
-        LogFatal("conf get port failed.");
-        return false;
-    }
-    port = atoi(val.c_str());
-
-    if(!conf.get("dict_path", dictPath))
-    {
-        LogFatal("conf get dict_path failed.");
-        return false;
-    }
-    if(!conf.get("model_path", modelPath))
-    {
-        LogFatal("conf get model_path failed.");
-        return false;
-    }
-
+    LIMONP_CHECK(conf.get("port", port));
+    LIMONP_CHECK(conf.get("thread_number", threadNumber));
+    LIMONP_CHECK(conf.get("queue_max_size", queueMaxSize));
+    LIMONP_CHECK(conf.get("dict_path", dictPath));
+    LIMONP_CHECK(conf.get("model_path", modelPath));
     if(!conf.get("user_dict_path", userDictPath)) //optional
     {
         userDictPath = "";
     }
 
+    LogInfo("config info: %s", conf.getConfigInfo().c_str());
+
     ReqHandler reqHandler(dictPath, modelPath, userDictPath);
-    EpollServer sf(port, reqHandler);
+    ThreadPoolServer sf(threadNumber, queueMaxSize, port, reqHandler);
     return sf.start();
+
 }
 
 int main(int argc, char* argv[])

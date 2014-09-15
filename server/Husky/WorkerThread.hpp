@@ -1,0 +1,134 @@
+#ifndef HUSKY_WORKER_HPP
+#define HUSKY_WORKER_HPP
+
+#include "Limonp/ThreadPool.hpp"
+#include "IRequestHandler.hpp"
+
+namespace Husky
+{
+    const char* const HTTP_FORMAT = "HTTP/1.1 200 OK\r\nConnection: close\r\nServer: HuskyServer/1.0.0\r\nContent-Type: text/json; charset=%s\r\nContent-Length: %d\r\n\r\n%s";
+    const char* const CHARSET_UTF8 = "UTF-8";
+    const char* const CLIENT_IP_K = "CLIENT_IP"; 
+    const size_t RECV_BUFFER_SIZE = 16 * 1024;
+
+    const struct linger LNG = {1, 1};
+    const struct timeval SOCKET_TIMEOUT = {16, 0};
+
+
+    class WorkerThread: public ITask
+    {
+        public:
+            WorkerThread(int sockfs, const IRequestHandler& reqHandler): 
+                _sockfd(sockfs), _reqHandler(reqHandler) 
+            {
+            }
+            virtual ~WorkerThread() 
+            {
+            }
+        private:
+            int _sockfd;
+            const IRequestHandler& _reqHandler;
+
+        public:
+            void run() 
+            {
+                do
+                {
+                    if(!_setsockopt(_sockfd))
+                    {
+                        LogFatal("_setsockopt failed.");
+                        break;
+                    }
+                    string strSnd, strRetByHandler;
+                    HttpReqInfo httpReq;
+                    if(!_receive(_sockfd, httpReq))
+                    {
+                        LogFatal("_receive failed.");
+                        break;
+                    }
+
+                    if("GET" == httpReq.getMethod() && !_reqHandler.do_GET(httpReq, strRetByHandler))
+                    {
+                        LogError("do_GET failed.");
+                        break;
+                    }
+                    if("POST" == httpReq.getMethod() && !_reqHandler.do_POST(httpReq, strRetByHandler))
+                    {
+                        LogError("do_POST failed.");
+                        break;
+                    }
+                    string_format(strSnd, HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
+
+                    if(!_send(_sockfd, strSnd))
+                    {
+                        LogError("_send failed.");
+                        break;
+                    }
+                    LogInfo("response:%s", strRetByHandler.c_str());
+                } while(false);
+
+
+                if(-1 == close(_sockfd))
+                {
+                    LogError(strerror(errno));
+                }
+            }
+        private:
+            bool _receive(int sockfd, HttpReqInfo& httpInfo) const
+            {
+                char recvBuf[RECV_BUFFER_SIZE];
+                int n;
+                while((n = recv(sockfd, recvBuf, RECV_BUFFER_SIZE, 0)) > 0)
+                {
+                    if(!httpInfo.isHeaderFinished()) 
+                    {
+                        httpInfo.parseHeaders(recvBuf, n);
+                        continue;
+                    }
+                    httpInfo.appendBody(recvBuf, n);
+                    if(!httpInfo.isBodyFinished()) 
+                    {
+                        continue;
+                    }
+                    break;
+                }
+                if(n < 0) 
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                return true;
+            }
+            bool _send(int sockfd, const string& strSnd) const
+            {
+                if(-1 == send(sockfd, strSnd.c_str(), strSnd.length(), 0))
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                return true;
+            }
+            bool _setsockopt(int sockfd) const
+            {
+                if(-1 == setsockopt(sockfd, SOL_SOCKET, SO_LINGER, (const char*)&LNG, sizeof(LNG)))
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                if(-1 == setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&SOCKET_TIMEOUT, sizeof(SOCKET_TIMEOUT)))
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                if(-1 == setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&SOCKET_TIMEOUT, sizeof(SOCKET_TIMEOUT)))
+                {
+                    LogError(strerror(errno));
+                    return false;
+                }
+                return true;
+            }
+            
+    };
+}
+
+#endif

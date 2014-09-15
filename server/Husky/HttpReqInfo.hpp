@@ -5,7 +5,6 @@
 #include <string>
 #include "Limonp/Logger.hpp"
 #include "Limonp/StringUtil.hpp"
-#include "Limonp/InitOnOff.hpp"
 
 namespace Husky
 {
@@ -71,16 +70,19 @@ namespace Husky
         }
     }
 
-    class HttpReqInfo: public InitOnOff
+    class HttpReqInfo
     {
         public:
-            HttpReqInfo(const string& headerStr)
+            HttpReqInfo()
             {
-                _setInitFlag(_init(headerStr));
+                _isHeaderFinished = false;
+                _isBodyFinished = false;
+                _contentLength = 0;
             }
-        private:
-            bool _init(const string& headerStr)
+        public:
+            bool parseHeaders(const char* buffer, size_t len) 
             {
+                string headerStr(buffer, len);
                 size_t lpos = 0, rpos = 0;
                 vector<string> buf;
                 rpos = headerStr.find("\n", lpos);
@@ -134,19 +136,47 @@ namespace Husky
                     _headerMap[k] = v;
                     lpos = rpos + 1;
                 }
-                //message header end
-
-                //body begin
-                _body.assign(headerStr.substr(rpos));
-                trim(_body);
+                rpos ++;
+                _isHeaderFinished = true;
+                string content_length;
+                if(!find("CONTENT-LENGTH", content_length)) 
+                {
+                    _isBodyFinished = true;
+                    return true;
+                }
+                _contentLength = atoi(content_length.c_str());
+                if(rpos < headerStr.size()) 
+                {
+                    appendBody(headerStr.c_str() + rpos, headerStr.size() - rpos);
+                }
                 return true;
+                //message header end
             }
-        
+            void appendBody(const char* buffer, size_t len) 
+            {
+                if(_isBodyFinished)
+                {
+                    return;
+                }
+                _body.append(buffer, len);
+                if(_body.size() >= _contentLength) 
+                {
+                    _isBodyFinished = true;
+                }
+                else
+                {
+                    _isBodyFinished = false;
+                }
+            }
+            bool isHeaderFinished() const 
+            {
+                return _isHeaderFinished;
+            }
+            bool isBodyFinished() const
+            {
+                return _isBodyFinished;
+            }
         public:
-            //string& operator[] (const string& key)
-            //{
-            //    return _headerMap[key];
-            //}
             const string& set(const string& key, const string& value)
             {
                 return _headerMap[key] = value;
@@ -176,6 +206,9 @@ namespace Husky
                 return _body;
             }
         private:
+            bool _isHeaderFinished;
+            bool _isBodyFinished;
+            size_t _contentLength;
             unordered_map<string, string> _headerMap;
             unordered_map<string, string> _methodGetMap;
             string _body;
