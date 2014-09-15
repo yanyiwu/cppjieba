@@ -78,7 +78,7 @@ namespace Husky
             {
                 char recvBuf[RECV_BUFFER_SIZE];
                 int n;
-                while((n = recv(sockfd, recvBuf, RECV_BUFFER_SIZE, 0)) > 0)
+                while(!httpInfo.isBodyFinished() && (n = recv(sockfd, recvBuf, RECV_BUFFER_SIZE, 0)) > 0)
                 {
                     if(!httpInfo.isHeaderFinished()) 
                     {
@@ -86,11 +86,6 @@ namespace Husky
                         continue;
                     }
                     httpInfo.appendBody(recvBuf, n);
-                    if(!httpInfo.isBodyFinished()) 
-                    {
-                        continue;
-                    }
-                    break;
                 }
                 if(n < 0) 
                 {
