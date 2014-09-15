@@ -47,12 +47,12 @@ namespace Husky
                         break;
                     }
 
-                    if("GET" == httpReq.getMethod() && !_reqHandler.do_GET(httpReq, strRetByHandler))
+                    if(httpReq.isGET() && !_reqHandler.do_GET(httpReq, strRetByHandler))
                     {
                         LogError("do_GET failed.");
                         break;
                     }
-                    if("POST" == httpReq.getMethod() && !_reqHandler.do_POST(httpReq, strRetByHandler))
+                    if(httpReq.isPOST() && !_reqHandler.do_POST(httpReq, strRetByHandler))
                     {
                         LogError("do_POST failed.");
                         break;
@@ -77,7 +77,7 @@ namespace Husky
             bool _receive(int sockfd, HttpReqInfo& httpInfo) const
             {
                 char recvBuf[RECV_BUFFER_SIZE];
-                int n;
+                int n = 0;
                 while(!httpInfo.isBodyFinished() && (n = recv(sockfd, recvBuf, RECV_BUFFER_SIZE, 0)) > 0)
                 {
                     if(!httpInfo.isHeaderFinished()) 

@@ -189,9 +189,27 @@ namespace Husky
             {
                 return _find(_methodGetMap, argKey, res);
             }
-            const string& getMethod() const
+            //const string& getMethod() const
+            //{
+            //    return _headerMap.find(KEY_METHOD)->second;
+            //}
+            bool isGET() const
             {
-                return _headerMap.find(KEY_METHOD)->second;
+                string str;
+                if(!_find(_headerMap, KEY_METHOD, str))
+                {
+                    return false;
+                }
+                return str == "GET";
+            }
+            bool isPOST() const
+            {
+                string str;
+                if(!_find(_headerMap, KEY_METHOD, str))
+                {
+                    return false;
+                }
+                return str == "POST";
             }
             const unordered_map<string, string> & getMethodGetMap() const
             {
