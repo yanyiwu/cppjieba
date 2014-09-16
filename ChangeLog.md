@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v2.4.3 (is coming)
+
+1. 更新 [Husky] 服务代码，新 [Husky] 为基于线程池的服务器简易框架。并且修复当 HTTP POST 请求时 body 过长数据丢失的问题。
+
 ## v2.4.2
 
 1. 适当使用 `vector`， 的基础上，使用`Limonp/LocalVector.hpp`作为`Unicode`的类型等优化，约提高性能 `30%`。
@@ -60,6 +64,8 @@
 1. 完成__最大概率分词算法__和__HMM分词算法__，并且将他们结合起来成效果最好的`MixSegment`。
 2. 进行大量的代码重构，将主要的功能性代码都写成了hpp文件。
 3. 使用`cmake`工具来管理项目。
-4. 使用`Limonp`作为工具函数库，比如日志，字符串操作等常用函数。
-5. 使用`Husky` 搭简易分词服务的服务器框架。
+4. 使用 [Limonp]作为工具函数库，比如日志，字符串操作等常用函数。
+5. 使用 [Husky] 搭简易分词服务的服务器框架。
 
+[Limonp]:http://github.com/aszxqw/limonp.git
+[Husky]:http://github.com/aszxqw/husky.git
