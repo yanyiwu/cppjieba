@@ -80,7 +80,7 @@ namespace Husky
                 _contentLength = 0;
             }
         public:
-            bool parseHeaders(const char* buffer, size_t len) 
+            bool parseHeader(const char* buffer, size_t len) 
             {
                 string headerStr(buffer, len);
                 size_t lpos = 0, rpos = 0;

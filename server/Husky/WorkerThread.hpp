@@ -82,7 +82,11 @@ namespace Husky
                 {
                     if(!httpInfo.isHeaderFinished()) 
                     {
-                        httpInfo.parseHeaders(recvBuf, n);
+                        if(!httpInfo.parseHeader(recvBuf, n)) 
+                        {
+                            LogError("parseHeader failed. ");
+                            return false;
+                        }
                         continue;
                     }
                     httpInfo.appendBody(recvBuf, n);
