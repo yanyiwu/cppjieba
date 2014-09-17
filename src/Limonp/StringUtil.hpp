@@ -26,27 +26,6 @@
 namespace Limonp
 {
     using namespace std;
-
-    inline void string_format(string& res, const char* fmt, ...)
-    {
-        int size = 256;
-        va_list ap;
-        res.clear();
-        while (1) {
-            res.resize(size);
-            va_start(ap, fmt);
-            int n = vsnprintf((char *)res.c_str(), size, fmt, ap);
-            va_end(ap);
-            if (n > -1 && n < size) {
-                res.resize(n);
-                return;
-            }
-            if (n > -1)
-              size = n + 1;
-            else
-              size *= 2;
-        }
-    }
     inline string string_format(const char* fmt, ...) 
     {
         int size = 256;

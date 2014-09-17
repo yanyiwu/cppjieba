@@ -57,7 +57,7 @@ namespace Husky
                         LogError("do_POST failed.");
                         break;
                     }
-                    string_format(strSnd, HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
+                    strSnd = string_format(HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
 
                     if(!_send(_sockfd, strSnd))
                     {
