@@ -146,8 +146,8 @@ namespace CppJieba
                     {
                         _userDictSingleChineseWord.insert(nodeInfo.word[0]);
                     }
-                    nodeInfo.weight = (buf.size() == DICT_COLUMN_NUM ? atoi(buf[1].c_str()) : defaultWeight); 
-                    nodeInfo.tag = (buf.size() == DICT_COLUMN_NUM ? buf[2] : defaultTag);
+                    nodeInfo.weight = defaultWeight;
+                    nodeInfo.tag = (buf.size() == 2 ? buf[1] : defaultTag);
                     _nodeInfos.push_back(nodeInfo);
                 }
                 LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
