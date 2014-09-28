@@ -24,6 +24,7 @@ namespace CppJieba
     const char* const UNKNOWN_TAG = "x";
 
 
+
     struct DictUnit
     {
         Unicode word;
@@ -82,7 +83,7 @@ namespace CppJieba
             bool init(const string& dictPath, const string& userDictPath = "")
             {
                 assert(!_trie);
-                _loadDict(dictPath, _nodeInfos);
+                _loadDict(dictPath);
                 _calculateWeight(_nodeInfos);
                 _minWeight = _findMinWeight(_nodeInfos);
                 
@@ -92,7 +93,7 @@ namespace CppJieba
                     _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG);
                 }
                 _shrink(_nodeInfos);
-                _trie = _creatTrie(_nodeInfos);
+                _trie = _createTrie(_nodeInfos);
                 assert(_trie);
                 return true;
             }
@@ -109,7 +110,7 @@ namespace CppJieba
 
 
         private:
-            TrieType * _creatTrie(const vector<DictUnit>& dictUnits)
+            TrieType * _createTrie(const vector<DictUnit>& dictUnits)
             {
                 assert(dictUnits.size());
                 vector<Unicode> words;
@@ -129,10 +130,14 @@ namespace CppJieba
                 assert(ifs);
                 string line;
                 DictUnit nodeInfo;
+                vector<string> buf;
                 size_t lineno;
                 for(lineno = 0; getline(ifs, line); lineno++)
                 {
-                    if(!TransCode::decode(line, nodeInfo.word))
+                    buf.clear();
+                    split(line, buf, " ");
+                    assert(buf.size() >= 1);
+                    if(!TransCode::decode(buf[0], nodeInfo.word))
                     {
                         LogError("line[%u:%s] illegal.", lineno, line.c_str());
                         continue;
@@ -141,13 +146,13 @@ namespace CppJieba
                     {
                         _userDictSingleChineseWord.insert(nodeInfo.word[0]);
                     }
-                    nodeInfo.weight = defaultWeight; 
-                    nodeInfo.tag = defaultTag;
+                    nodeInfo.weight = (buf.size() == DICT_COLUMN_NUM ? atoi(buf[1].c_str()) : defaultWeight); 
+                    nodeInfo.tag = (buf.size() == DICT_COLUMN_NUM ? buf[2] : defaultTag);
                     _nodeInfos.push_back(nodeInfo);
                 }
                 LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
             }
-            void _loadDict(const string& filePath, vector<DictUnit>& nodeInfos) const
+            void _loadDict(const string& filePath) 
             {
                 ifstream ifs(filePath.c_str());
                 assert(ifs);
@@ -168,7 +173,7 @@ namespace CppJieba
                     nodeInfo.weight = atof(buf[1].c_str());
                     nodeInfo.tag = buf[2];
                     
-                    nodeInfos.push_back(nodeInfo);
+                    _nodeInfos.push_back(nodeInfo);
                 }
             }
             double _findMinWeight(const vector<DictUnit>& nodeInfos) const

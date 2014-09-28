@@ -30,7 +30,7 @@ namespace CppJieba
 
     class MPSegment: public SegmentBase
     {
-        protected:
+        private:
             DictTrie _dictTrie;
 
         public:
