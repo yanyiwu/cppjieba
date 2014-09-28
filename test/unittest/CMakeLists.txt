@@ -16,7 +16,13 @@ ADD_LIBRARY(gtest STATIC ${GTEST_ROOT_DIR}/src/gtest-all.cc)
 #ADD_EXECUTABLE(keyword.test gtest_main.cpp TKeywordExtractor.cpp)
 #TARGET_LINK_LIBRARIES(keyword.test gtest pthread)
 
-ADD_EXECUTABLE(test.run gtest_main.cpp TKeywordExtractor.cpp TTrie.cpp TSegments.cpp )
+ADD_EXECUTABLE(test.run 
+    gtest_main.cpp 
+    TKeywordExtractor.cpp 
+    TTrie.cpp 
+    TSegments.cpp 
+    TPosTagger.cpp
+)
 TARGET_LINK_LIBRARIES(gtest pthread)
 TARGET_LINK_LIBRARIES(test.run gtest pthread)
 

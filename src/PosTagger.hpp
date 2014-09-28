@@ -17,13 +17,16 @@ namespace CppJieba
 
         public:
             PosTagger(){};
-            PosTagger(const string& dictPath, const string& hmmFilePath, const string& charStatus, const string& startProb, const string& emitProb, const string& endProb, const string& transProb)
+            PosTagger(
+                const string& dictPath, 
+                const string& hmmFilePath
+            )
             {
-                LIMONP_CHECK(init(dictPath, hmmFilePath, charStatus, startProb, emitProb, endProb, transProb));
+                LIMONP_CHECK(init(dictPath, hmmFilePath));
             };
             ~PosTagger(){};
         public:
-            bool init(const string& dictPath, const string& hmmFilePath, const string& charStatus, const string& startProb, const string& emitProb, const string& endProb, const string& transProb)
+            bool init(const string& dictPath, const string& hmmFilePath)
             {
                 LIMONP_CHECK(_dictTrie.init(dictPath));
                 LIMONP_CHECK(_segment.init(dictPath, hmmFilePath));
