@@ -8,7 +8,9 @@ script:
   - make
   - ./test/test.run
   - ./load_test
-
+os:
+  - linux
+  - osx
 compiler:
   - clang
   - gcc
