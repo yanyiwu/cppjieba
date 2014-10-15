@@ -16,6 +16,7 @@ CppJieba是"结巴"中文分词的C++版本
 + 内置分词服务`server/server.cpp`，在linux环境下可安装使用。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
++ 支持 `linux` , `mac osx` 操作系统。
 
 ## 用法
 
@@ -32,9 +33,6 @@ cd cppjieba
 mkdir build
 cd build
 cmake ..
-# 默认是utf8编码，如果要使用gbk编码则使用下句cmake命令
-# cmake .. -DENC=GBK
-# 需要注意的是，单元测试都是针对utf8的测试，如果是使用gbk选项的话，此测试不通过。
 make
 ```
 
@@ -234,14 +232,14 @@ curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
 sudo make install
 ```
 
-### 服务启动和停止
+### 服务启动和停止(仅限 linux 系统)
 
 ```
 /etc/init.d/cjserver.start >> /dev/null 2>&1
 /etc/init.d/cjserver.stop
 ```
 
-### 卸载服务
+### 卸载服务(仅限 linux 系统)
 
 ```sh
 cd build/
@@ -276,11 +274,11 @@ cat install_manifest.txt | sudo xargs rm -rf
 
 [libcppjieba] 是最简单易懂的CppJieba头文件库使用示例。
 
-### `keyword_server`
+### keyword\_server
 
 [KeywordServer] 50行搭建一个**中文关键词抽取服务**。
 
-### `ngx_http_cppjieba_module`
+### ngx\_http\_cppjieba\_module
 
 如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
 
