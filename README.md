@@ -248,6 +248,9 @@ cd build/
 cat install_manifest.txt | sudo xargs rm -rf
 ```
 
+## 词典资料
+
++ [dict.367W.utf8.tar.gz] iLife(`562193561@qq.com`)
 
 ## 应用
 
@@ -312,3 +315,4 @@ https://github.com/fxsjy/jieba
 [exjieba]:https://github.com/falood/exjieba
 [KeywordServer]:https://github.com/aszxqw/keyword_server
 [ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
+[dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
