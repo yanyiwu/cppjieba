@@ -1,7 +1,4 @@
-[![Build Status](https://travis-ci.org/aszxqw/cppjieba.png?branch=master)](https://travis-ci.org/aszxqw/cppjieba)
-- - -
-
-# CppJieba
+# CppJieba [![Build Status](https://travis-ci.org/aszxqw/cppjieba.png?branch=master)](https://travis-ci.org/aszxqw/cppjieba)
 
 ## 简介
 
@@ -307,7 +304,7 @@ https://github.com/fxsjy/jieba
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
 [simhash]:https://github.com/aszxqw/simhash
-[代码详解]:http://yanyiwu.com/work/2014/02/10/cppjieba-dai-ma-xiang-jie.html
+[代码详解]:https://github.com/aszxqw/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
 [libcppjieba]:https://github.com/aszxqw/libcppjieba
 [issue25]:https://github.com/aszxqw/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
