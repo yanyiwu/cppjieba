@@ -42,6 +42,102 @@ make
 
 详细请看 `test/segment_demo.cpp`.
 
+
+## 服务使用
+
+### 启动服务
+
+```
+./bin/cjserver ../test/testdata/server.conf
+```
+
+### 客户端请求示例
+
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥"
+```
+
+```
+["南京市", "长江大桥"]
+```
+
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
+```
+
+```
+南京市 长江大桥
+```
+
+用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
+
+
+同时，也支持HTTP POST模式，使用如下调用:
+
+```
+curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
+```
+
+返回结果如下：
+
+```
+["南京市", "长江大桥"]
+```
+
+如果有需要**安装使用**的，可以按照如下操作：
+
+### 安装服务
+
+```
+sudo make install
+```
+
+### 服务启动和停止(仅限 linux 系统)
+
+```
+/etc/init.d/cjserver.start >> /dev/null 2>&1
+/etc/init.d/cjserver.stop
+```
+
+### 卸载服务(仅限 linux 系统)
+
+```sh
+cd build/
+cat install_manifest.txt | sudo xargs rm -rf
+```
+
+## Docker 示例
+
+安装和启动
+
+```
+sudo docker pull yanyiwu/cppjieba
+sudo docker run -d -P yanyiwu/cppjieba
+```
+
+```
+sudo docker ps
+```
+
+```
+CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS              PORTS                      NAMES
+7c29325e9c20        yanyiwu/cppjieba:latest   "./bin/cjserver ../t   4 minutes ago       Up 4 minutes        0.0.0.0:49160->11200/tcp   angry_wilson        
+```
+
+可以看到正在运行的 Docker 容器(容器内运行着 `cjserver` 服务)，并且服务的端口号被映射为 `0.0.0.0:49160` 。
+
+所以现在可以来一发测试了：
+
+```
+curl "http://0.0.0.0:49160/?key=南京市长江大桥"
+```
+
+预期结果如下：
+
+```
+["南京市", "长江大桥"]
+```
+
 ### 分词结果示例
 
 **MPSegment**
@@ -180,102 +276,6 @@ make && ./keyword.demo
 ```
 ["我:r", "是:v", "蓝翔:nz", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:x", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
-
-## 服务使用
-
-### 启动服务
-
-```
-./bin/cjserver ../test/testdata/server.conf
-```
-
-### 客户端请求示例
-
-```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥"
-```
-
-```
-["南京市", "长江大桥"]
-```
-
-```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
-```
-
-```
-南京市 长江大桥
-```
-
-用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
-
-
-同时，也支持HTTP POST模式，使用如下调用:
-
-```
-curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
-```
-
-返回结果如下：
-
-```
-["南京市", "长江大桥"]
-```
-
-如果有需要**安装使用**的，可以按照如下操作：
-
-### 安装服务
-
-```
-sudo make install
-```
-
-### 服务启动和停止(仅限 linux 系统)
-
-```
-/etc/init.d/cjserver.start >> /dev/null 2>&1
-/etc/init.d/cjserver.stop
-```
-
-### 卸载服务(仅限 linux 系统)
-
-```sh
-cd build/
-cat install_manifest.txt | sudo xargs rm -rf
-```
-
-## Docker 示例
-
-安装和启动
-
-```
-sudo docker pull yanyiwu/cppjieba
-sudo docker run -d -P yanyiwu/cppjieba
-```
-
-```
-sudo docker ls
-```
-
-```
-CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS              PORTS                      NAMES
-7c29325e9c20        yanyiwu/cppjieba:latest   "./bin/cjserver ../t   4 minutes ago       Up 4 minutes        0.0.0.0:49160->11200/tcp   angry_wilson        
-```
-
-可以看到正在运行的 Docker 容器(容器内运行着 `cjserver` 服务)，并且服务的端口号被映射为 `0.0.0.0:49160` 。
-
-所以现在可以来一发测试了：
-
-```
-curl "http://0.0.0.0:49160/?key=南京市长江大桥"
-```
-
-预期结果如下：
-
-```
-["南京市", "长江大桥"]
-```
-
 
 ## 词典资料
 

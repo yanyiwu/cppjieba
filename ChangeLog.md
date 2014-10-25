@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## v2.4.3 (upcoming)
+## v2.4.3
 
 1. 更新 [Husky] 服务代码，新 [Husky] 为基于线程池的服务器简易框架。并且修复当 HTTP POST 请求时 body 过长数据可能丢失的问题。
 2. 修改 PosTagger 的参数结构，删除暂时无用的参数。并添加使用自定义字典的参数，也就是支持 **自定义词性**。
