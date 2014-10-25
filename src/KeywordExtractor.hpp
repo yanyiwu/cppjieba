@@ -74,7 +74,7 @@ namespace CppJieba
                 {
                     if(_stopWords.end() != _stopWords.find(itr->first))
                     {
-                        wordmap.erase(itr++);
+                        itr = wordmap.erase(itr);
                         continue;
                     }
 
