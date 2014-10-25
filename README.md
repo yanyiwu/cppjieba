@@ -14,6 +14,7 @@ CppJieba是"结巴"中文分词的C++版本
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 + 支持 `linux` , `mac osx` 操作系统。
++ 支持 `Docker`。
 
 ## 用法
 
@@ -242,6 +243,39 @@ sudo make install
 cd build/
 cat install_manifest.txt | sudo xargs rm -rf
 ```
+
+## Docker 示例
+
+安装和启动
+
+```
+sudo docker pull yanyiwu/cppjieba
+sudo docker run -d -P yanyiwu/cppjieba
+```
+
+```
+sudo docker ls
+```
+
+```
+CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS              PORTS                      NAMES
+7c29325e9c20        yanyiwu/cppjieba:latest   "./bin/cjserver ../t   4 minutes ago       Up 4 minutes        0.0.0.0:49160->11200/tcp   angry_wilson        
+```
+
+可以看到正在运行的 Docker 容器(容器内运行着 `cjserver` 服务)，并且服务的端口号被映射为 `0.0.0.0:49160` 。
+
+所以现在可以来一发测试了：
+
+```
+curl "http://0.0.0.0:49160/?key=南京市长江大桥"
+```
+
+预期结果如下：
+
+```
+["南京市", "长江大桥"]
+```
+
 
 ## 词典资料
 
