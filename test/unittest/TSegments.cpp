@@ -36,7 +36,7 @@ TEST(MixSegmentTest, NoUserDict)
 }
 TEST(MixSegmentTest, UserDict)
 {
-    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/user.dict.utf8");
     {
         const char* str = "令狐冲是云计算方面的专家";
         vector<string> words;
