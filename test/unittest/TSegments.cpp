@@ -37,11 +37,23 @@ TEST(MixSegmentTest, NoUserDict)
 TEST(MixSegmentTest, UserDict)
 {
     MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
-    const char* str = "令狐冲是云计算方面的专家";
-    vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
-    string res;
-    ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
+    {
+        const char* str = "令狐冲是云计算方面的专家";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
+    }
+    {
+        const char* str = "小明先就职于IBM,后在日本京都大学深造";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        res << words;
+        print(res);
+        exit(1);
+        ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res);
+    }
     
 }
 
@@ -97,11 +109,21 @@ TEST(MPSegmentTest, Test2)
 TEST(HMMSegmentTest, Test1)
 {
     HMMSegment segment("../dict/hmm_model.utf8");;
-    const char* str = "我来自北京邮电大学。。。学号123456";
-    const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
-    vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
-    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    {
+        const char* str = "我来自北京邮电大学。。。学号123456";
+        const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    }
+    
+    {
+        const char* str = "IBM,1.2,123";
+        const char* res[] = {"IBM", ",", "1.2", ",", "123"};
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+    }
 }
 
 TEST(FullSegment, Test1)
