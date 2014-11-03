@@ -50,11 +50,43 @@ TEST(MixSegmentTest, UserDict)
         ASSERT_TRUE(segment.cut(str, words));
         string res;
         res << words;
-        print(res);
-        exit(1);
-        ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res);
+        ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"IBM\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
     }
-    
+    {
+        const char* str = "IBM,3.14";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        res << words;
+        ASSERT_EQ("[\"IBM\", \",\", \"3.14\"]", res);
+    }
+}
+TEST(MixSegmentTest, UserDict2)
+{
+    MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+    {
+        const char* str = "令狐冲是云计算方面的专家";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
+    }
+    {
+        const char* str = "小明先就职于IBM,后在日本京都大学深造";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        res << words;
+        ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"I\", \"B\", \"M\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
+    }
+    {
+        const char* str = "IBM,3.14";
+        vector<string> words;
+        ASSERT_TRUE(segment.cut(str, words));
+        string res;
+        res << words;
+        ASSERT_EQ("[\"I\", \"B\", \"M\", \",\", \"3.14\"]", res);
+    }
 }
 
 TEST(MPSegmentTest, Test1)
