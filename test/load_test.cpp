@@ -8,7 +8,7 @@
 
 using namespace CppJieba;
 
-void cut(size_t times = 20)
+void cut(size_t times = 50)
 {
     MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
     vector<string> res;
