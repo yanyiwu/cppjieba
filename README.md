@@ -34,6 +34,13 @@ cmake ..
 make
 ```
 
+有兴趣的可以跑跑测试(可选):
+
+```
+./test/test.run
+./load_test
+```
+
 ## 演示
 
 ```
@@ -301,6 +308,10 @@ make && ./keyword.demo
 
 如果有需要在`erlang`中使用分词的话，不妨试一下[exjieba]。
 
+### jiebaR
+
+如果有需要在`R`中使用分词的话，不妨试一下[jiebaR]。
+
 ### libcppjieba
 
 [libcppjieba] 是最简单易懂的CppJieba头文件库使用示例。
@@ -337,6 +348,7 @@ https://github.com/fxsjy/jieba
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
 [cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
 [NodeJieba]:https://github.com/aszxqw/nodejieba
+[jiebaR]:https://github.com/qinwf/jiebaR
 [simhash]:https://github.com/aszxqw/simhash
 [代码详解]:https://github.com/aszxqw/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
 [libcppjieba]:https://github.com/aszxqw/libcppjieba

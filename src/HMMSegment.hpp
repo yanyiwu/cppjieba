@@ -74,10 +74,19 @@ namespace CppJieba
                             return false;
                         }
                         left = right;
-                        while(*right < 0x80 && right != end)
-                        {
-                            right++;
-                        }
+                        do {
+                            right = _sequentialLetterRule(left, end);
+                            if(right != left)
+                            {
+                                break;
+                            }
+                            right = _numbersRule(left, end);
+                            if(right != left)
+                            {
+                                break;
+                            }
+                            right ++;
+                        } while(false);
                         res.push_back(Unicode(left, right));
                         left = right;
                     }
@@ -93,6 +102,50 @@ namespace CppJieba
                 return true;
             }
         private:
+            // sequential letters rule
+            Unicode::const_iterator _sequentialLetterRule(Unicode::const_iterator begin, Unicode::const_iterator end) const
+            {
+                Unicode::value_type x;
+                while(begin != end)
+                {
+                    x = *begin;
+                    if(('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z'))
+                    {
+                        begin ++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return begin;
+            }
+            // 
+            Unicode::const_iterator _numbersRule(Unicode::const_iterator begin, Unicode::const_iterator end) const
+            {
+                Unicode::value_type x = *begin;
+                if('0' <= x && x <= '9')
+                {
+                    begin ++;
+                }
+                else
+                {
+                    return begin;
+                }
+                while(begin != end)
+                {
+                    x = *begin;
+                    if( ('0' <= x && x <= '9') || x == '.')
+                    {
+                        begin++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return begin;
+            }
             bool _cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const 
             {
                 vector<size_t> status; 
@@ -231,7 +284,6 @@ namespace CppJieba
                 for(size_t j = 0; j< tmp.size(); j++)
                 {
                     _startProb[j] = atof(tmp[j].c_str());
-                    //cout<<_startProb[j]<<endl;
                 }
 
                 //load _transProb
@@ -250,7 +302,6 @@ namespace CppJieba
                     for(size_t j =0; j < STATUS_SUM; j++)
                     {
                         _transProb[i][j] = atof(tmp[j].c_str());
-                        //cout<<_transProb[i][j]<<endl;
                     }
                 }
 

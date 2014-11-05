@@ -12,7 +12,7 @@ using namespace CppJieba;
 const char * const TEST_FILE = "../test/testdata/testlines.utf8";
 const char * const JIEBA_DICT_FILE = "../dict/jieba.dict.utf8";
 const char * const HMM_DICT_FILE = "../dict/hmm_model.utf8";
-const char * const USER_DICT_FILE = "../test/testdata/userdict.utf8";
+const char * const USER_DICT_FILE = "../dict/user.dict.utf8";
 
 void cut(const ISegment& seg, const char * const filePath)
 {
