@@ -92,8 +92,8 @@ namespace CppJieba
                 {
                     segmentChars[i].uniCh = *(begin + i);
                     segmentChars[i].dag.clear();
+                    segmentChars[i].dag.push_back(std::pair<size_t, const DictUnit*>(i, NULL));
                     _dictTrie.find(begin + i, end, segmentChars[i].dag, i);
-                    segmentChars[i].dag.insert(pair<DagType::key_type, DagType::mapped_type>(i, NULL));
                 }
 
                 _calcDP(segmentChars);

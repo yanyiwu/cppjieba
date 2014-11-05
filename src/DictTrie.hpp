@@ -39,7 +39,7 @@ namespace CppJieba
         return os << string_format("%s %s %.3lf", s.c_str(), unit.tag.c_str(), unit.weight);
     }
 
-    typedef map<size_t, const DictUnit*> DagType;
+    typedef std::vector<std::pair<size_t, const DictUnit*> > DagType;
 
     class DictTrie
     {

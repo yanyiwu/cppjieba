@@ -34,22 +34,22 @@ TEST(DictTrieTest, Test1)
     EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
     word = "清华大学";
     vector<pair<size_t, const DictUnit*> > res;
-    map<size_t, const DictUnit* > resMap;
-    map<size_t, const DictUnit* > mp;
+    //vector<pair<size_t, const DictUnit* > resMap;
+    vector<pair<size_t, const DictUnit*> > res2;
     const char * words[] = {"清", "清华", "清华大学"};
     for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
         ASSERT_TRUE(TransCode::decode(words[i], uni));
         res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
-        resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
+        //resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
     }
     //DictUnit
     //res.push_back(make_pair(0, ))
 
     vector<pair<size_t, const DictUnit*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
-    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), mp, 0));
-    ASSERT_EQ(mp, resMap);
+    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), res2, 0));
+    ASSERT_EQ(res, res2);
 }
 
 TEST(DictTrieTest, UserDict)

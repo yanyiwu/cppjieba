@@ -56,11 +56,14 @@ namespace CppJieba
                     }
                     return ptNode->ptValue;
                 }
-                bool find(typename KeyContainerType::const_iterator begin, typename KeyContainerType::const_iterator end, map<typename KeyContainerType::size_type, const ValueType* >& ordererMap, size_t offset = 0) const
+                bool find(
+                            typename KeyContainerType::const_iterator begin, 
+                            typename KeyContainerType::const_iterator end, 
+                            std::vector<std::pair<typename KeyContainerType::size_type, const ValueType* > >& res, 
+                            size_t offset = 0) const
                 {
                     const TrieNodeType * ptNode = _root;
                     typename TrieNodeType::KeyMapType::const_iterator citer;
-                    ordererMap.clear();
                     for(typename KeyContainerType::const_iterator itr = begin; itr != end ; itr++)
                     {
                         assert(ptNode);
@@ -71,10 +74,17 @@ namespace CppJieba
                         ptNode = citer->second;
                         if(ptNode->ptValue)
                         {
-                            ordererMap[itr - begin + offset] = ptNode->ptValue;
+                            if(itr == begin && res.size() == 1) // first singleword
+                            {
+                                res[0].second = ptNode->ptValue;
+                            }
+                            else
+                            {
+                                res.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(itr - begin + offset, ptNode->ptValue));
+                            }
                         }
                     }
-                    return ordererMap.size();
+                    return !res.empty();
                 }
             private:
                 void _createTrie(const KeysContainerType& keys, const ValueContainerType& valuePointers)
