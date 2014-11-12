@@ -76,11 +76,7 @@ namespace CppJieba
 
                 _calcDP(segmentChars);
 
-                if(!_cut(segmentChars, res))
-                {
-                    LogError("_cut failed.");
-                    return false;
-                }
+                _cut(segmentChars, res);
 
                 return true;
             }
@@ -127,7 +123,7 @@ namespace CppJieba
                     }
                 }
             }
-            bool _cut(const vector<SegmentChar>& segmentChars, vector<Unicode>& res)const
+            void _cut(const vector<SegmentChar>& segmentChars, vector<Unicode>& res) const
             {
                 size_t i = 0;
                 while(i < segmentChars.size())
@@ -144,7 +140,6 @@ namespace CppJieba
                         i++;
                     }
                 }
-                return true;
             }
 
 

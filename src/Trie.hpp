@@ -87,6 +87,7 @@ namespace CppJieba
                     }
                     return ptNode->ptValue;
                 }
+                // aho-corasick-automation 
                 void find(
                             typename KeyContainerType::const_iterator begin, 
                             typename KeyContainerType::const_iterator end, 
@@ -96,26 +97,32 @@ namespace CppJieba
                     res.resize(end - begin);
                     const TrieNodeType * now = _root;
                     typename TrieNodeType::NextMap::const_iterator iter;
-                    for (size_t i = 0; i < end - begin; i++) {
+                    for (size_t i = 0; i < end - begin; i++) 
+                    {
                         bool flag = false;
                         res[i].uniCh = *(begin + i);
                         assert(res[i].dag.empty());
-                        res[i].dag.reserve(4);//TODO
-                        while( now != _root && (now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end())) {
+                        res[i].dag.reserve(2);
+                        while( now != _root && (now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end())) 
+                        {
                             now = now->fail;
                         }
-                        if(now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end()) {
+                        if(now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end()) 
+                        {
                             now = _root;
-                        } else {
+                        } 
+                        else 
+                        {
                             now = iter->second;
                             const TrieNodeType * temp = now;
-                            while(temp != _root) {
-                                if (temp->ptValue) {
-                                    string str;
-                                    TransCode::encode(temp->ptValue->word, str);
+                            while(temp != _root) 
+                            {
+                                if (temp->ptValue) 
+                                {
                                     size_t pos = i - temp->ptValue->word.size() + 1;
                                     res[pos].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, temp->ptValue));
-                                    if(temp->ptValue->word.size() == 1) {
+                                    if(pos == i) 
+                                    {
                                         flag = true;
                                     }
                                 }
@@ -123,7 +130,8 @@ namespace CppJieba
                                 assert(temp);
                             }
                         }
-                        if(!flag) {
+                        if(!flag) 
+                        {
                             res[i].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, NULL));
                         }
                     }
