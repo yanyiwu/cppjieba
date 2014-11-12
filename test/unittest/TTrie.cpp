@@ -34,9 +34,9 @@ TEST(DictTrieTest, Test1)
     
     EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
     word = "清华大学";
-    vector<pair<size_t, const DictUnit*> > res;
+    LocalVector<pair<size_t, const DictUnit*> > res;
     //vector<pair<size_t, const DictUnit* > resMap;
-    vector<pair<size_t, const DictUnit*> > res2;
+    LocalVector<pair<size_t, const DictUnit*> > res2;
     const char * words[] = {"清", "清华", "清华大学"};
     for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
@@ -50,7 +50,9 @@ TEST(DictTrieTest, Test1)
     vector<pair<size_t, const DictUnit*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
     ASSERT_TRUE(trie.find(uni.begin(), uni.end(), res2, 0));
-    ASSERT_EQ(res, res2);
+    s1 << res;
+    s2 << res;
+    ASSERT_EQ(s1, s2);
 }
 
 TEST(DictTrieTest, UserDict)

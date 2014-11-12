@@ -23,7 +23,7 @@ namespace CppJieba
         return os << string_format("%s %s %.3lf", s.c_str(), unit.tag.c_str(), unit.weight);
     }
 
-    typedef std::vector<std::pair<size_t, const DictUnit*> > DagType;
+    typedef LocalVector<std::pair<size_t, const DictUnit*> > DagType;
 
     struct SegmentChar 
     {
@@ -33,6 +33,8 @@ namespace CppJieba
         double weight;
         size_t nextPos;
         SegmentChar():uniCh(0), pInfo(NULL), weight(0.0), nextPos(0)
+        {}
+        ~SegmentChar() 
         {}
     };
 
@@ -45,6 +47,20 @@ namespace CppJieba
                 TrieNode * fail;
                 NextMap * next;
                 const ValueType * ptValue;
+            public:
+                const TrieNode * findNext(KeyType key) const
+                {
+                    if(next == NULL)
+                    {
+                        return NULL;
+                    }
+                    typename NextMap::const_iterator iter = next->find(key);
+                    if(iter == next->end()) 
+                    {
+                        return NULL;
+                    }
+                    return iter->second;
+                }
             public:
                 TrieNode(): fail(NULL), next(NULL), ptValue(NULL) {
                 }
@@ -96,24 +112,42 @@ namespace CppJieba
                 {
                     res.resize(end - begin);
                     const TrieNodeType * now = _root;
-                    typename TrieNodeType::NextMap::const_iterator iter;
+                    //typename TrieNodeType::NextMap::const_iterator iter;
+                    const TrieNodeType* node;
                     for (size_t i = 0; i < end - begin; i++) 
                     {
-                        res[i].uniCh = *(begin + i);
+                        Unicode::value_type ch = *(begin + i);
+                        res[i].uniCh = ch;
                         assert(res[i].dag.empty());
-                        res[i].dag.reserve(2);
                         res[i].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, NULL));
-                        while( now != _root && (now->next == NULL || (iter = now->next->find(res[i].uniCh)) == now->next->end())) 
+                        bool flag = false;
+
+                        // rollback
+                        while( now != _root )
                         {
-                            now = now->fail;
+                            node = now->findNext(ch);
+                            if (node != NULL) 
+                            {
+                                flag = true;
+                                break;
+                            }
+                            else 
+                            {
+                                now = now->fail;
+                            }
                         }
-                        if(now->next == NULL || (iter = now->next->find(res[i].uniCh)) == now->next->end()) 
+
+                        if(!flag)
+                        {
+                            node = now->findNext(ch);
+                        }
+                        if(node == NULL) 
                         {
                             now = _root;
                         } 
                         else 
                         {
-                            now = iter->second;
+                            now = node;
                             const TrieNodeType * temp = now;
                             while(temp != _root) 
                             {
@@ -135,7 +169,7 @@ namespace CppJieba
                 bool find(
                             typename KeyContainerType::const_iterator begin, 
                             typename KeyContainerType::const_iterator end, 
-                            std::vector<std::pair<typename KeyContainerType::size_type, const ValueType* > >& res, 
+                            DagType & res,
                             size_t offset = 0) const
                 {
                     const TrieNodeType * ptNode = _root;
