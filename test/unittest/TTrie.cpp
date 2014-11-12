@@ -1,4 +1,5 @@
 #include "src/DictTrie.hpp"
+#include "src/MPSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
@@ -63,4 +64,15 @@ TEST(DictTrieTest, UserDict)
     string res ;
     res << *unit;
     ASSERT_EQ("[\"20113\", \"35745\", \"31639\"] x -2.975", res);
+}
+
+TEST(DictTrieTest, automation)
+{
+    DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
+    //string word = "yasherhs";
+    string word = "abcderf";
+    Unicode unicode;
+    ASSERT_TRUE(TransCode::decode(word, unicode));
+    vector<struct SegmentChar> res;
+    trie.find(unicode.begin(), unicode.end(), res);
 }

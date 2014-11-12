@@ -23,24 +23,6 @@ namespace CppJieba
     const size_t DICT_COLUMN_NUM = 3;
     const char* const UNKNOWN_TAG = "x";
 
-
-
-    struct DictUnit
-    {
-        Unicode word;
-        double weight; 
-        string tag;
-    };
-
-    inline ostream & operator << (ostream& os, const DictUnit& unit)
-    {
-        string s;
-        s << unit.word;
-        return os << string_format("%s %s %.3lf", s.c_str(), unit.tag.c_str(), unit.weight);
-    }
-
-    typedef std::vector<std::pair<size_t, const DictUnit*> > DagType;
-
     class DictTrie
     {
         public:
@@ -106,6 +88,14 @@ namespace CppJieba
             bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType& dag, size_t offset = 0) const
             {
                 return _trie->find(begin, end, dag, offset);
+            }
+            void find(
+                        Unicode::const_iterator begin, 
+                        Unicode::const_iterator end, 
+                        vector<SegmentChar>& res
+                        ) const
+            {
+                _trie->find(begin, end, res);
             }
 
 
