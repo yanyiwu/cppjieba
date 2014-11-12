@@ -99,15 +99,15 @@ namespace CppJieba
                     typename TrieNodeType::NextMap::const_iterator iter;
                     for (size_t i = 0; i < end - begin; i++) 
                     {
-                        bool flag = false;
                         res[i].uniCh = *(begin + i);
                         assert(res[i].dag.empty());
                         res[i].dag.reserve(2);
-                        while( now != _root && (now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end())) 
+                        res[i].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, NULL));
+                        while( now != _root && (now->next == NULL || (iter = now->next->find(res[i].uniCh)) == now->next->end())) 
                         {
                             now = now->fail;
                         }
-                        if(now->next == NULL || (iter = now->next->find(*(begin + i))) == now->next->end()) 
+                        if(now->next == NULL || (iter = now->next->find(res[i].uniCh)) == now->next->end()) 
                         {
                             now = _root;
                         } 
@@ -123,16 +123,12 @@ namespace CppJieba
                                     res[pos].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, temp->ptValue));
                                     if(pos == i) 
                                     {
-                                        flag = true;
+                                        res[pos].dag[0].second = temp->ptValue;
                                     }
                                 }
                                 temp = temp->fail;
                                 assert(temp);
                             }
-                        }
-                        if(!flag) 
-                        {
-                            res[i].dag.push_back(pair<typename KeysContainerType::size_type, const ValueType* >(i, NULL));
                         }
                     }
                 }
