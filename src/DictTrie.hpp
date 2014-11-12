@@ -25,11 +25,9 @@ namespace CppJieba
 
     class DictTrie
     {
-        public:
-            typedef Trie<Unicode::value_type, DictUnit, Unicode, vector<Unicode>, vector<const DictUnit*> > TrieType;
         private:
             vector<DictUnit> _nodeInfos;
-            TrieType * _trie;
+            Trie * _trie;
 
             double _minWeight;
         private:
@@ -100,7 +98,7 @@ namespace CppJieba
 
 
         private:
-            TrieType * _createTrie(const vector<DictUnit>& dictUnits)
+            Trie * _createTrie(const vector<DictUnit>& dictUnits)
             {
                 assert(dictUnits.size());
                 vector<Unicode> words;
@@ -111,7 +109,7 @@ namespace CppJieba
                     valuePointers.push_back(&dictUnits[i]);
                 }
 
-                TrieType * trie = new TrieType(words, valuePointers);
+                Trie * trie = new Trie(words, valuePointers);
                 return trie;
             }
             void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag)
