@@ -21,7 +21,6 @@ TEST(MixSegmentTest, Test1)
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
     ASSERT_TRUE(segment.cut(str2, words));
     ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));
-    //exit(0);
 }
 
 TEST(MixSegmentTest, NoUserDict)

@@ -1,4 +1,5 @@
 #include "src/DictTrie.hpp"
+#include "src/MPSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
@@ -33,23 +34,25 @@ TEST(DictTrieTest, Test1)
     
     EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
     word = "清华大学";
-    vector<pair<size_t, const DictUnit*> > res;
-    map<size_t, const DictUnit* > resMap;
-    map<size_t, const DictUnit* > mp;
+    LocalVector<pair<size_t, const DictUnit*> > res;
+    //vector<pair<size_t, const DictUnit* > resMap;
+    LocalVector<pair<size_t, const DictUnit*> > res2;
     const char * words[] = {"清", "清华", "清华大学"};
     for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++)
     {
         ASSERT_TRUE(TransCode::decode(words[i], uni));
         res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
-        resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
+        //resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
     }
     //DictUnit
     //res.push_back(make_pair(0, ))
 
     vector<pair<size_t, const DictUnit*> > vec;
     ASSERT_TRUE(TransCode::decode(word, uni));
-    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), mp, 0));
-    ASSERT_EQ(mp, resMap);
+    ASSERT_TRUE(trie.find(uni.begin(), uni.end(), res2, 0));
+    s1 << res;
+    s2 << res;
+    ASSERT_EQ(s1, s2);
 }
 
 TEST(DictTrieTest, UserDict)
@@ -63,4 +66,15 @@ TEST(DictTrieTest, UserDict)
     string res ;
     res << *unit;
     ASSERT_EQ("[\"20113\", \"35745\", \"31639\"] x -2.975", res);
+}
+
+TEST(DictTrieTest, automation)
+{
+    DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
+    //string word = "yasherhs";
+    string word = "abcderf";
+    Unicode unicode;
+    ASSERT_TRUE(TransCode::decode(word, unicode));
+    vector<struct SegmentChar> res;
+    trie.find(unicode.begin(), unicode.end(), res);
 }
