@@ -65,7 +65,7 @@ TEST(DictTrieTest, UserDict)
     ASSERT_TRUE(unit);
     string res ;
     res << *unit;
-    ASSERT_EQ("[\"20113\", \"35745\", \"31639\"] x -2.975", res);
+    ASSERT_EQ("[\"20113\", \"35745\", \"31639\"]  -2.975", res);
 }
 
 TEST(DictTrieTest, automation)
