@@ -112,7 +112,8 @@ namespace CppJieba
                 const TrieNode * now = _root;
                 //typename TrieNode::NextMap::const_iterator iter;
                 const TrieNode* node;
-                for (size_t i = 0; i < end - begin; i++) 
+                // compiler will complain warnings if only "i < end - begin" .
+                for (size_t i = 0; i < size_t(end - begin); i++) 
                 {
                     Unicode::value_type ch = *(begin + i);
                     res[i].uniCh = ch;
