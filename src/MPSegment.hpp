@@ -6,7 +6,6 @@
 #include <cassert>
 #include "Limonp/Logger.hpp"
 #include "DictTrie.hpp"
-#include "DictTrie.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
 
