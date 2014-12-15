@@ -15,6 +15,7 @@ CppJieba是"结巴"中文分词的C++版本
 + 支持载自定义用户词典。
 + 支持 `linux` , `mac osx` 操作系统。
 + 支持 `Docker`。
++ 提供 C语言 api接口调用 [cjieba]。
 
 ## 用法
 
@@ -324,6 +325,10 @@ make && ./keyword.demo
 
 如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
 
+### cjieba
+
+如果有需要在 C语言 中使用分词模块的话，不妨试一下[cjieba].
+
 ## 线上演示
 
 http://cppjieba-webdemo.herokuapp.com/
@@ -357,3 +362,4 @@ https://github.com/fxsjy/jieba
 [KeywordServer]:https://github.com/aszxqw/keyword_server
 [ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
 [dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
+[cjieba]:http://github.com/aszxqw/cjieba
