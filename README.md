@@ -333,6 +333,10 @@ make && ./keyword.demo
 
 如果有需要在 Ruby 中使用分词模块的话，不妨试一下[jieba_rb]。
 
+### iosjieba
+
+如果有需要在 iOS 开发中使用分词模块的话，不妨参考一下 [iosjieba]。
+
 ## 线上演示
 
 http://cppjieba-webdemo.herokuapp.com/
@@ -368,3 +372,4 @@ https://github.com/fxsjy/jieba
 [dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
 [cjieba]:http://github.com/aszxqw/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
+[iosjieba]:https://github.com/aszxqw/iosjieba
