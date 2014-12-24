@@ -323,11 +323,15 @@ make && ./keyword.demo
 
 ### ngx\_http\_cppjieba\_module
 
-如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
+如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module]。
 
 ### cjieba
 
-如果有需要在 C语言 中使用分词模块的话，不妨试一下[cjieba].
+如果有需要在 C语言 中使用分词模块的话，不妨试一下[cjieba]。
+
+### jieba\_rb
+
+如果有需要在 Ruby 中使用分词模块的话，不妨试一下[jieba_rb]。
 
 ## 线上演示
 
@@ -363,3 +367,4 @@ https://github.com/fxsjy/jieba
 [ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
 [dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
 [cjieba]:http://github.com/aszxqw/cjieba
+[jieba_rb]:https://github.com/altkatz/jieba_rb
