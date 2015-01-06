@@ -353,7 +353,7 @@ https://github.com/fxsjy/jieba
 
 ## 作者
 
-- aszxqw https://github.com/aszxqw wuyanyi09@foxmail.com
+- aszxqw https://github.com/aszxqw i@yanyiwu.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
