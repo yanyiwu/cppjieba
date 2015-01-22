@@ -344,7 +344,9 @@ http://cppjieba-webdemo.herokuapp.com/
 
 ## 客服
 
-`wuyanyi09@foxmail.com`
+`i@yanyiwu.com`
+
+![image](http://yanyiwu.com/weedfs/2/5a7d1b5c0d/yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
@@ -353,7 +355,7 @@ https://github.com/fxsjy/jieba
 
 ## 作者
 
-- aszxqw https://github.com/aszxqw i@yanyiwu.com
+- yanyiwu https://github.com/aszxqw i@yanyiwu.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
 
 [CppJieba]:https://github.com/aszxqw/cppjieba
