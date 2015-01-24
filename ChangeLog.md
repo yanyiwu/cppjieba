@@ -1,5 +1,10 @@
 # CppJieba ChangeLog
 
+## v2.4.5 (untagged)
+
+1. 使得 QuerySegment 支持自定义词典（可选参数）。
+2. 使得 KeywordExtractor 支持自定义词典（可选参数）。
+
 ## v2.4.4
 
 1. 修改两条更细粒度的特殊过滤规则，将连续的数字（包括浮点数）和连续的字母单独切分出来（而不会混在一起）。
