@@ -20,13 +20,13 @@ TEST(KeywordExtractorTest, Test1)
     }
 
     {
-        string s("我毕业于蓝翔，日薪一部iPhone6");
+        string s("一部iPhone6");
         string res;
         vector<pair<string, double> > wordweights;
         size_t topN = 5;
         extractor.extract(s, wordweights, topN);
         res << wordweights;
-        ASSERT_EQ(res, "[\"蓝翔:11.7392\", \"日薪:11.7392\", \"iPhone:11.7392\", \"一部:6.47592\", \"毕业:6.23165\"]");
+        ASSERT_EQ(res, "[\"iPhone:11.7392\", \"一部:6.47592\"]");
     }
 }
 
@@ -45,12 +45,12 @@ TEST(KeywordExtractorTest, Test2)
     }
 
     {
-        string s("我毕业于蓝翔，日薪一部iPhone6");
+        string s("一部iPhone6");
         string res;
         vector<pair<string, double> > wordweights;
         size_t topN = 5;
         extractor.extract(s, wordweights, topN);
         res << wordweights;
-        ASSERT_EQ(res, "[\"蓝翔:11.7392\", \"日薪:11.7392\", \"iPhone6:11.7392\", \"一部:6.47592\", \"毕业:6.23165\"]");
+        ASSERT_EQ(res, "[\"iPhone6:11.7392\", \"一部:6.47592\"]");
     }
 }
