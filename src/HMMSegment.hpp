@@ -265,7 +265,6 @@ namespace CppJieba
             }
             bool _loadModel(const char* const filePath)
             {
-                LogDebug("loadModel [%s] start ...", filePath);
                 ifstream ifile(filePath);
                 string line;
                 vector<string> tmp;
@@ -328,8 +327,6 @@ namespace CppJieba
                 {
                     return false;
                 }
-
-                LogDebug("loadModel [%s] end.", filePath);
 
                 return true;
             }
