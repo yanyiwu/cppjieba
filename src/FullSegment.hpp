@@ -14,9 +14,6 @@ namespace CppJieba
 {
     class FullSegment: public SegmentBase
     {
-        private:
-            const DictTrie* _dictTrie;
-            bool _isBorrowed;
         public:
             FullSegment()
             {
@@ -41,7 +38,6 @@ namespace CppJieba
                 }
 
             };
-        public:
             bool init(const string& dictPath)
             {
                 assert(_dictTrie == NULL);
@@ -58,10 +54,7 @@ namespace CppJieba
                 return true;
             }
 
-        public:
             using SegmentBase::cut;
-
-        public:
             bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 assert(_dictTrie);
@@ -147,6 +140,9 @@ namespace CppJieba
 
                 return true;
             }
+        private:
+            const DictTrie* _dictTrie;
+            bool _isBorrowed;
     };
 }
 

@@ -14,8 +14,6 @@ namespace CppJieba
 
     class MPSegment: public SegmentBase
     {
-        private:
-            DictTrie _dictTrie;
 
         public:
             MPSegment(){};
@@ -24,7 +22,7 @@ namespace CppJieba
                 LIMONP_CHECK(init(dictPath, userDictPath));
             };
             virtual ~MPSegment(){};
-        public:
+
             bool init(const string& dictPath, const string& userDictPath = "")
             {
                 LIMONP_CHECK(_dictTrie.init(dictPath, userDictPath));
@@ -35,7 +33,7 @@ namespace CppJieba
             {
                 return _dictTrie.isUserDictSingleChineseWord(value);
             }
-        public:
+
             using SegmentBase::cut;
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
             {
@@ -141,6 +139,8 @@ namespace CppJieba
                 }
             }
 
+        private:
+            DictTrie _dictTrie;
 
     };
 }

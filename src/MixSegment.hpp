@@ -10,17 +10,17 @@ namespace CppJieba
 {
     class MixSegment: public SegmentBase
     {
-        private:
-            MPSegment _mpSeg;
-            HMMSegment _hmmSeg;
         public:
-            MixSegment(){};
+            MixSegment()
+            {
+            }
             MixSegment(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
             {
                 LIMONP_CHECK(init(mpSegDict, hmmSegDict, userDict));
             }
-            virtual ~MixSegment(){}
-        public:
+            virtual ~MixSegment()
+            {
+            }
             bool init(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "")
             {
                 LIMONP_CHECK(_mpSeg.init(mpSegDict, userDict));
@@ -28,9 +28,7 @@ namespace CppJieba
                 LogInfo("MixSegment init(%s, %s)", mpSegDict.c_str(), hmmSegDict.c_str());
                 return true;
             }
-        public:
             using SegmentBase::cut;
-        public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
             {
                 vector<Unicode> words;
@@ -115,6 +113,9 @@ namespace CppJieba
             {
                 return _mpSeg.getDictTrie();
             }
+        private:
+            MPSegment _mpSeg;
+            HMMSegment _hmmSeg;
     };
 }
 

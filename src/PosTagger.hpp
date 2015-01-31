@@ -15,13 +15,10 @@ namespace CppJieba
 
     class PosTagger
     {
-        private:
-            MixSegment _segment;
-            const DictTrie * _dictTrie;
-
         public:
             PosTagger()
-            {}
+            {
+            }
             PosTagger(
                 const string& dictPath, 
                 const string& hmmFilePath,
@@ -29,9 +26,10 @@ namespace CppJieba
             )
             {
                 init(dictPath, hmmFilePath, userDictPath);
-            };
-            ~PosTagger(){};
-        public:
+            }
+            ~PosTagger()
+            {
+            }
             void init(
                 const string& dictPath, 
                 const string& hmmFilePath,
@@ -103,6 +101,9 @@ namespace CppJieba
                 // the ascii chars contain english letter
                 return POS_ENG;
             }
+        private:
+            MixSegment _segment;
+            const DictTrie * _dictTrie;
     };
 }
 

@@ -24,15 +24,6 @@ namespace CppJieba
              * 0:B, 1:E, 2:M, 3:S
              * */
             enum {B = 0, E = 1, M = 2, S = 3, STATUS_SUM = 4};
-        private:
-            char _statMap[STATUS_SUM];
-            double _startProb[STATUS_SUM];
-            double _transProb[STATUS_SUM][STATUS_SUM];
-            EmitProbMap _emitProbB;
-            EmitProbMap _emitProbE;
-            EmitProbMap _emitProbM;
-            EmitProbMap _emitProbS;
-            vector<EmitProbMap* > _emitProbVec;
 
         public:
             HMMSegment(){}
@@ -98,6 +89,30 @@ namespace CppJieba
                 if(left != right && !_cut(left, right, res))
                 {
                     return false;
+                }
+                return true;
+            }
+        public:
+            virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
+            {
+                if(begin == end)
+                {
+                    return false;
+                }
+                vector<Unicode> words;
+                words.reserve(end - begin);
+                if(!cut(begin, end, words))
+                {
+                    return false;
+                }
+                size_t offset = res.size();
+                res.resize(res.size() + words.size());
+                for(size_t i = 0; i < words.size(); i++)
+                {
+                    if(!TransCode::encode(words[i], res[offset + i]))
+                    {
+                        LogError("encode failed.");
+                    }
                 }
                 return true;
             }
@@ -168,32 +183,7 @@ namespace CppJieba
                 }
                 return true;
             }
-        public:
-            virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const
-            {
-                if(begin == end)
-                {
-                    return false;
-                }
-                vector<Unicode> words;
-                words.reserve(end - begin);
-                if(!cut(begin, end, words))
-                {
-                    return false;
-                }
-                size_t offset = res.size();
-                res.resize(res.size() + words.size());
-                for(size_t i = 0; i < words.size(); i++)
-                {
-                    if(!TransCode::encode(words[i], res[offset + i]))
-                    {
-                        LogError("encode failed.");
-                    }
-                }
-                return true;
-            }
 
-        private:
             bool _viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<size_t>& status)const
             {
                 if(begin == end)
@@ -384,6 +374,15 @@ namespace CppJieba
 
             }
 
+        private:
+            char _statMap[STATUS_SUM];
+            double _startProb[STATUS_SUM];
+            double _transProb[STATUS_SUM][STATUS_SUM];
+            EmitProbMap _emitProbB;
+            EmitProbMap _emitProbE;
+            EmitProbMap _emitProbM;
+            EmitProbMap _emitProbS;
+            vector<EmitProbMap* > _emitProbVec;
 
     };
 }

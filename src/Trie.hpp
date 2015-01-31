@@ -44,12 +44,6 @@ namespace CppJieba
     class TrieNode
     {
         public:
-            typedef unordered_map<TrieKey,  TrieNode*> NextMap;
-        public:
-            TrieNode * fail;
-            NextMap * next;
-            const DictUnit * ptValue;
-        public:
             TrieNode(): fail(NULL), next(NULL), ptValue(NULL) 
             {}
             const TrieNode * findNext(TrieKey key) const
@@ -65,12 +59,15 @@ namespace CppJieba
                 }
                 return iter->second;
             }
+        public:
+            typedef unordered_map<TrieKey,  TrieNode*> NextMap;
+            TrieNode * fail;
+            NextMap * next;
+            const DictUnit * ptValue;
     };
 
     class Trie
     {
-        private:
-            TrieNode* _root;
         public:
             Trie(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers)
             {
@@ -230,7 +227,6 @@ namespace CppJieba
                     }
                 }
             }
-        private:
             void _createTrie(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers)
             {
                 if(valuePointers.empty() || keys.empty())
@@ -244,7 +240,6 @@ namespace CppJieba
                     _insertNode(keys[i], valuePointers[i]);
                 }
             }
-        private:
             void _insertNode(const Unicode& key, const DictUnit* ptValue)
             {
                 TrieNode* ptNode  = _root;
@@ -291,6 +286,8 @@ namespace CppJieba
                 }
                 delete node;
             }
+        private:
+            TrieNode* _root;
     };
 }
 

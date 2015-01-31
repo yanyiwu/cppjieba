@@ -12,13 +12,6 @@ namespace CppJieba
     /*utf8*/
     class KeywordExtractor
     {
-        private:
-            MixSegment _segment;
-        private:
-            unordered_map<string, double> _idfMap;
-            double _idfAverage;
-
-            unordered_set<string> _stopWords;
         public:
             KeywordExtractor(){};
             KeywordExtractor(const string& dictPath, const string& hmmFilePath, const string& idfPath, const string& stopWordPath, const string& userDict = "")
@@ -27,14 +20,12 @@ namespace CppJieba
             };
             ~KeywordExtractor(){};
 
-        public:
             void init(const string& dictPath, const string& hmmFilePath, const string& idfPath, const string& stopWordPath, const string& userDict = "")
             {
                 _loadIdfDict(idfPath);
                 _loadStopWordDict(stopWordPath);
                 LIMONP_CHECK(_segment.init(dictPath, hmmFilePath, userDict));
             };
-        public:
 
             bool extract(const string& str, vector<string>& keywords, size_t topN) const
             {
@@ -148,7 +139,7 @@ namespace CppJieba
                 }
                 assert(_stopWords.size());
             }
-        private:
+
             bool _isSingleWord(const string& str) const
             {
                 Unicode unicode;
@@ -158,12 +149,17 @@ namespace CppJieba
                 return false;
             }
 
-        private:
             static bool _cmp(const pair<string, double>& lhs, const pair<string, double>& rhs)
             {
                 return lhs.second > rhs.second;
             }
             
+        private:
+            MixSegment _segment;
+            unordered_map<string, double> _idfMap;
+            double _idfAverage;
+
+            unordered_set<string> _stopWords;
     };
 }
 

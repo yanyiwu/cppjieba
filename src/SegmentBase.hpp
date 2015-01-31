@@ -25,19 +25,6 @@ namespace CppJieba
         public:
             SegmentBase(){_loadSpecialSymbols();};
             virtual ~SegmentBase(){};
-        private:
-            unordered_set<UnicodeValueType> _specialSymbols;
-        private:
-            void _loadSpecialSymbols()
-            {
-                size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
-                for(size_t i = 0; i < size; i ++)
-                {
-                    _specialSymbols.insert(SPECIAL_SYMBOL[i]);
-                }
-                assert(_specialSymbols.size());
-            }
-
         public:
             virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const = 0;
             virtual bool cut(const string& str, vector<string>& res) const
@@ -72,6 +59,19 @@ namespace CppJieba
                 
                 return true;
             }
+        private:
+            void _loadSpecialSymbols()
+            {
+                size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
+                for(size_t i = 0; i < size; i ++)
+                {
+                    _specialSymbols.insert(SPECIAL_SYMBOL[i]);
+                }
+                assert(_specialSymbols.size());
+            }
+        private:
+            unordered_set<UnicodeValueType> _specialSymbols;
+
     };
 }
 
