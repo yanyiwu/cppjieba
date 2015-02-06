@@ -26,7 +26,7 @@ TEST(KeywordExtractorTest, Test1)
         size_t topN = 5;
         extractor.extract(s, wordweights, topN);
         res << wordweights;
-        ASSERT_EQ(res, "[\"iPhone:11.7392\", \"一部:6.47592\"]");
+        ASSERT_EQ(res, "[\"iPhone6:11.7392\", \"一部:6.47592\"]");
     }
 }
 
