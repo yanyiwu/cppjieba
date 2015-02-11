@@ -82,5 +82,5 @@
 4. 使用 [Limonp]作为工具函数库，比如日志，字符串操作等常用函数。
 5. 使用 [Husky] 搭简易分词服务的服务器框架。
 
-[Limonp]:http://github.com/aszxqw/limonp.git
-[Husky]:http://github.com/aszxqw/husky.git
+[Limonp]:http://github.com/yanyiwu/limonp.git
+[Husky]:http://github.com/yanyiwu/husky.git

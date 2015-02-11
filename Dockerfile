@@ -1,8 +1,8 @@
 FROM ubuntu:14.04
-MAINTAINER yanyiwu <wuyanyi09@foxmail.com>
+MAINTAINER yanyiwu <i@yanyiwu.com>
 RUN apt-get update
 RUN apt-get install -y g++ cmake git
-RUN git clone https://github.com/aszxqw/cppjieba.git
+RUN git clone https://github.com/yanyiwu/cppjieba.git
 RUN mkdir cppjieba/build
 WORKDIR /cppjieba/build
 RUN cmake .. 

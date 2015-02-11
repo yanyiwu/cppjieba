@@ -1,4 +1,4 @@
-# CppJieba [![Build Status](https://travis-ci.org/aszxqw/cppjieba.png?branch=master)](https://travis-ci.org/aszxqw/cppjieba)
+# CppJieba [![Build Status](https://travis-ci.org/yanyiwu/cppjieba.png?branch=master)](https://travis-ci.org/yanyiwu/cppjieba)
 
 ## 简介
 
@@ -27,7 +27,7 @@ CppJieba是"结巴"中文分词的C++版本
 ### 下载和编译
 
 ```sh
-git clone --depth=10 --branch=master git://github.com/aszxqw/cppjieba.git
+git clone --depth=10 --branch=master git://github.com/yanyiwu/cppjieba.git
 cd cppjieba
 mkdir build
 cd build
@@ -356,23 +356,23 @@ https://github.com/fxsjy/jieba
 
 ## 作者
 
-- yanyiwu https://github.com/aszxqw i@yanyiwu.com
+- yanyiwu https://github.com/yanyiwu i@yanyiwu.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
 
-[CppJieba]:https://github.com/aszxqw/cppjieba
+[CppJieba]:https://github.com/yanyiwu/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
-[cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
-[NodeJieba]:https://github.com/aszxqw/nodejieba
+[cppjiebapy_discussion]:https://github.com/yanyiwu/cppjieba/issues/1
+[NodeJieba]:https://github.com/yanyiwu/nodejieba
 [jiebaR]:https://github.com/qinwf/jiebaR
-[simhash]:https://github.com/aszxqw/simhash
-[代码详解]:https://github.com/aszxqw/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
-[libcppjieba]:https://github.com/aszxqw/libcppjieba
-[issue25]:https://github.com/aszxqw/cppjieba/issues/25
+[simhash]:https://github.com/yanyiwu/simhash
+[代码详解]:https://github.com/yanyiwu/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
+[libcppjieba]:https://github.com/yanyiwu/libcppjieba
+[issue25]:https://github.com/yanyiwu/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
-[KeywordServer]:https://github.com/aszxqw/keyword_server
-[ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
+[KeywordServer]:https://github.com/yanyiwu/keyword_server
+[ngx_http_cppjieba_module]:https://github.com/yanyiwu/ngx_http_cppjieba_module
 [dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
-[cjieba]:http://github.com/aszxqw/cjieba
+[cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
-[iosjieba]:https://github.com/aszxqw/iosjieba
+[iosjieba]:https://github.com/yanyiwu/iosjieba
