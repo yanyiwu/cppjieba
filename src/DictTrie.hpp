@@ -21,26 +21,12 @@ namespace CppJieba
     const double MIN_DOUBLE = -3.14e+100;
     const double MAX_DOUBLE = 3.14e+100;
     const size_t DICT_COLUMN_NUM = 3;
-    const char* const UNKNOWN_TAG = "x";
+    const char* const UNKNOWN_TAG = "";
 
     class DictTrie
     {
-        private:
-            vector<DictUnit> _nodeInfos;
-            Trie * _trie;
+        public:
 
-            double _minWeight;
-        private:
-            unordered_set<Unicode::value_type> _userDictSingleChineseWord;
-        public:
-            bool isUserDictSingleChineseWord(const Unicode::value_type& word) const
-            {
-                return isIn(_userDictSingleChineseWord, word);
-            }
-        public:
-            double getMinWeight() const {return _minWeight;};
-
-        public:
             DictTrie()
             {
                 _trie = NULL;
@@ -59,7 +45,6 @@ namespace CppJieba
                 }
             }
             
-        public:
             bool init(const string& dictPath, const string& userDictPath = "")
             {
                 assert(!_trie);
@@ -78,7 +63,6 @@ namespace CppJieba
                 return true;
             }
 
-        public:
             const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const
             {
                 return _trie->find(begin, end);
@@ -95,6 +79,11 @@ namespace CppJieba
             {
                 _trie->find(begin, end, res);
             }
+            bool isUserDictSingleChineseWord(const Unicode::value_type& word) const
+            {
+                return isIn(_userDictSingleChineseWord, word);
+            }
+            double getMinWeight() const {return _minWeight;};
 
 
         private:
@@ -115,7 +104,7 @@ namespace CppJieba
             void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag)
             {
                 ifstream ifs(filePath.c_str());
-                assert(ifs);
+                assert(ifs.is_open());
                 string line;
                 DictUnit nodeInfo;
                 vector<string> buf;
@@ -143,7 +132,7 @@ namespace CppJieba
             void _loadDict(const string& filePath) 
             {
                 ifstream ifs(filePath.c_str());
-                assert(ifs);
+                assert(ifs.is_open());
                 string line;
                 vector<string> buf;
 
@@ -204,7 +193,12 @@ namespace CppJieba
                 vector<DictUnit>(units.begin(), units.end()).swap(units);
             }
 
+        private:
+            vector<DictUnit> _nodeInfos;
+            Trie * _trie;
 
+            double _minWeight;
+            unordered_set<Unicode::value_type> _userDictSingleChineseWord;
     };
 }
 

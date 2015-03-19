@@ -17,32 +17,22 @@ namespace CppJieba
 {
     class QuerySegment: public SegmentBase
     {
-    private:
-        MixSegment _mixSeg;
-        FullSegment _fullSeg;
-        size_t _maxWordLen;
-
     public:
         QuerySegment(){};
-        QuerySegment(const string& dict, const string& model, size_t maxWordLen)
+        QuerySegment(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "")
         {
-            init(dict, model, maxWordLen);
+            init(dict, model, maxWordLen, userDict);
         };
         virtual ~QuerySegment(){};
-    public:
-        bool init(const string& dict, const string& model, size_t maxWordLen)
+        bool init(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "")
         {
-            LIMONP_CHECK(_mixSeg.init(dict, model));
+            LIMONP_CHECK(_mixSeg.init(dict, model, userDict));
             LIMONP_CHECK(_fullSeg.init(_mixSeg.getDictTrie()));
             assert(maxWordLen);
             _maxWordLen = maxWordLen;
             return true;
         }
-
-    public:
         using SegmentBase::cut;
-
-    public:
         bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const
         {
             if (begin >= end)
@@ -117,6 +107,11 @@ namespace CppJieba
 
             return true;
         }
+    private:
+        MixSegment _mixSeg;
+        FullSegment _fullSeg;
+        size_t _maxWordLen;
+
     };
 }
 

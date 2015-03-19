@@ -16,7 +16,7 @@ compiler:
   - gcc
 notifications:
   recipients:
-    - wuyanyi09@foxmail.com
+    - i@yanyiwu.com
   email:
     on_success: change
     on_failure: always

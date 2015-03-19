@@ -1,4 +1,4 @@
-# CppJieba [![Build Status](https://travis-ci.org/aszxqw/cppjieba.png?branch=master)](https://travis-ci.org/aszxqw/cppjieba)
+# CppJieba [![Build Status](https://travis-ci.org/yanyiwu/cppjieba.png?branch=master)](https://travis-ci.org/yanyiwu/cppjieba)
 
 ## 简介
 
@@ -9,12 +9,13 @@ CppJieba是"结巴"中文分词的C++版本
 ## 特性
 
 + 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
-+ 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码。
++ 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码， 因为`gbk`编码缺少严格测试，慎用。
 + 内置分词服务`server/server.cpp`，在linux环境下可安装使用。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 + 支持 `linux` , `mac osx` 操作系统。
 + 支持 `Docker`。
++ 提供 C语言 api接口调用 [cjieba]。
 
 ## 用法
 
@@ -26,7 +27,7 @@ CppJieba是"结巴"中文分词的C++版本
 ### 下载和编译
 
 ```sh
-git clone --depth=10 --branch=master git://github.com/aszxqw/cppjieba.git
+git clone --depth=10 --branch=master git://github.com/yanyiwu/cppjieba.git
 cd cppjieba
 mkdir build
 cd build
@@ -91,10 +92,11 @@ curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
 ["南京市", "长江大桥"]
 ```
 
-如果有需要**安装使用**的，可以按照如下操作：
+因为 HTTP GET 请求有长度限制，如果需要请求长文的，请使用POST请求。
 
 ### 安装服务
 
+如果有需要**安装使用**的，可以按照如下操作：
 ```
 sudo make install
 ```
@@ -268,7 +270,7 @@ make && ./keyword.demo
 详情请看 `test/tagging_demo.cpp`.
 
 ```
-["我:r", "是:v", "蓝翔:x", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:x", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
+["我:r", "是:v", "蓝翔:x", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:eng", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
 
 支持自定义词性。
@@ -281,10 +283,10 @@ make && ./keyword.demo
 结果如下：
 
 ```
-["我:r", "是:v", "蓝翔:nz", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:x", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
+["我:r", "是:v", "蓝翔:nz", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:eng", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
 
-## 词典资料
+## 其它词典资料分享
 
 + [dict.367W.utf8.tar.gz] iLife(`562193561@qq.com`)
 
@@ -322,7 +324,19 @@ make && ./keyword.demo
 
 ### ngx\_http\_cppjieba\_module
 
-如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module].
+如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module]。
+
+### cjieba
+
+如果有需要在 C语言 中使用分词模块的话，不妨试一下[cjieba]。
+
+### jieba\_rb
+
+如果有需要在 Ruby 中使用分词模块的话，不妨试一下[jieba_rb]。
+
+### iosjieba
+
+如果有需要在 iOS 开发中使用分词模块的话，不妨参考一下 [iosjieba]。
 
 ## 线上演示
 
@@ -331,7 +345,9 @@ http://cppjieba-webdemo.herokuapp.com/
 
 ## 客服
 
-`wuyanyi09@foxmail.com`
+`i@yanyiwu.com`
+
+![image](http://yanyiwu.com/weedfs/2/5a7d1b5c0d/yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
@@ -340,20 +356,23 @@ https://github.com/fxsjy/jieba
 
 ## 作者
 
-- aszxqw https://github.com/aszxqw wuyanyi09@foxmail.com
+- yanyiwu https://github.com/yanyiwu i@yanyiwu.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
 
-[CppJieba]:https://github.com/aszxqw/cppjieba
+[CppJieba]:https://github.com/yanyiwu/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
-[cppjiebapy_discussion]:https://github.com/aszxqw/cppjieba/issues/1
-[NodeJieba]:https://github.com/aszxqw/nodejieba
+[cppjiebapy_discussion]:https://github.com/yanyiwu/cppjieba/issues/1
+[NodeJieba]:https://github.com/yanyiwu/nodejieba
 [jiebaR]:https://github.com/qinwf/jiebaR
-[simhash]:https://github.com/aszxqw/simhash
-[代码详解]:https://github.com/aszxqw/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
-[libcppjieba]:https://github.com/aszxqw/libcppjieba
-[issue25]:https://github.com/aszxqw/cppjieba/issues/25
+[simhash]:https://github.com/yanyiwu/simhash
+[代码详解]:https://github.com/yanyiwu/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
+[libcppjieba]:https://github.com/yanyiwu/libcppjieba
+[issue25]:https://github.com/yanyiwu/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
-[KeywordServer]:https://github.com/aszxqw/keyword_server
-[ngx_http_cppjieba_module]:https://github.com/aszxqw/ngx_http_cppjieba_module
+[KeywordServer]:https://github.com/yanyiwu/keyword_server
+[ngx_http_cppjieba_module]:https://github.com/yanyiwu/ngx_http_cppjieba_module
 [dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
+[cjieba]:http://github.com/yanyiwu/cjieba
+[jieba_rb]:https://github.com/altkatz/jieba_rb
+[iosjieba]:https://github.com/yanyiwu/iosjieba
