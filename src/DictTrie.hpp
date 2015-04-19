@@ -11,7 +11,8 @@
 #include "Limonp/StringUtil.hpp"
 #include "Limonp/Logger.hpp"
 #include "TransCode.hpp"
-#include "Trie.hpp"
+//#include "Trie.hpp"
+#include "UglyTrie.hpp"
 
 
 
@@ -87,7 +88,7 @@ namespace CppJieba
 
 
         private:
-            Trie * _createTrie(const vector<DictUnit>& dictUnits)
+            UglyTrie * _createTrie(const vector<DictUnit>& dictUnits)
             {
                 assert(dictUnits.size());
                 vector<Unicode> words;
@@ -98,7 +99,7 @@ namespace CppJieba
                     valuePointers.push_back(&dictUnits[i]);
                 }
 
-                Trie * trie = new Trie(words, valuePointers);
+                UglyTrie * trie = new UglyTrie(words, valuePointers);
                 return trie;
             }
             void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag)
@@ -195,7 +196,7 @@ namespace CppJieba
 
         private:
             vector<DictUnit> _nodeInfos;
-            Trie * _trie;
+            UglyTrie * _trie;
 
             double _minWeight;
             unordered_set<Unicode::value_type> _userDictSingleChineseWord;
