@@ -347,12 +347,16 @@ http://cppjieba-webdemo.herokuapp.com/
 
 `i@yanyiwu.com`
 
-![image](http://yanyiwu.com/weedfs/2/5a7d1b5c0d/yanyiwu_personal_qrcodes.jpg)
+![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
 "结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
+
+## 许可证
+
+MIT http://yanyiwu.mit-license.org
 
 ## 作者
 
