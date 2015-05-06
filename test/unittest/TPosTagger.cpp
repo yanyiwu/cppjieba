@@ -12,32 +12,30 @@ static const char * const QUERY_TEST3 = "iPhone6手机的最大特点是很容�
 static const char * const ANS_TEST3 = "[\"iPhone6:eng\", \"手机:n\", \"的:uj\", \"最大:a\", \"特点:n\", \"是:v\", \"很:zg\", \"容易:a\", \"弯曲:v\", \"。:x\"]";
 //static const char * const ANS_TEST3 = "";
 
-TEST(PosTaggerTest, Test)
-{
-    PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
-    {
-        vector<pair<string, string> > res;
-        tagger.tag(QUERY_TEST1, res);
-        string s;
-        s << res;
-        ASSERT_TRUE(s == ANS_TEST1);
-    }
+TEST(PosTaggerTest, Test) {
+  PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
+  {
+    vector<pair<string, string> > res;
+    tagger.tag(QUERY_TEST1, res);
+    string s;
+    s << res;
+    ASSERT_TRUE(s == ANS_TEST1);
+  }
 }
-TEST(PosTagger, TestUserDict)
-{
-    PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
-    {
-        vector<pair<string, string> > res;
-        tagger.tag(QUERY_TEST2, res);
-        string s;
-        s << res;
-        ASSERT_EQ(s, ANS_TEST2);
-    }
-    {
-        vector<pair<string, string> > res;
-        tagger.tag(QUERY_TEST3, res);
-        string s;
-        s << res;
-        ASSERT_EQ(s, ANS_TEST3);
-    }
+TEST(PosTagger, TestUserDict) {
+  PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+  {
+    vector<pair<string, string> > res;
+    tagger.tag(QUERY_TEST2, res);
+    string s;
+    s << res;
+    ASSERT_EQ(s, ANS_TEST2);
+  }
+  {
+    vector<pair<string, string> > res;
+    tagger.tag(QUERY_TEST3, res);
+    string s;
+    s << res;
+    ASSERT_EQ(s, ANS_TEST3);
+  }
 }
