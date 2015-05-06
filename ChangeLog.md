@@ -4,6 +4,7 @@
 
 1. 使得 QuerySegment 支持自定义词典（可选参数）。
 2. 使得 KeywordExtractor 支持自定义词典（可选参数）。
+3. 修改 Code Style ，参照 google code style 。 
 
 ## v2.4.4
 
