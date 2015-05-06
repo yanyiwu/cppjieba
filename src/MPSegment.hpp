@@ -21,12 +21,12 @@ class MPSegment: public SegmentBase {
   virtual ~MPSegment() {};
 
   bool init(const string& dictPath, const string& userDictPath = "") {
-    LIMONP_CHECK(_dictTrie.init(dictPath, userDictPath));
+    LIMONP_CHECK(dictTrie_.init(dictPath, userDictPath));
     LogInfo("MPSegment init(%s) ok", dictPath.c_str());
     return true;
   }
   bool isUserDictSingleChineseWord(const Unicode::value_type & value) const {
-    return _dictTrie.isUserDictSingleChineseWord(value);
+    return dictTrie_.isUserDictSingleChineseWord(value);
   }
 
   using SegmentBase::cut;
@@ -57,20 +57,20 @@ class MPSegment: public SegmentBase {
     }
     vector<SegmentChar> segmentChars;
 
-    _dictTrie.find(begin, end, segmentChars);
+    dictTrie_.find(begin, end, segmentChars);
 
-    _calcDP(segmentChars);
+    calcDP_(segmentChars);
 
-    _cut(segmentChars, res);
+    cut_(segmentChars, res);
 
     return true;
   }
   const DictTrie* getDictTrie() const {
-    return &_dictTrie;
+    return &dictTrie_;
   }
 
  private:
-  void _calcDP(vector<SegmentChar>& segmentChars) const {
+  void calcDP_(vector<SegmentChar>& segmentChars) const {
     size_t nextPos;
     const DictUnit* p;
     double val;
@@ -90,7 +90,7 @@ class MPSegment: public SegmentBase {
         if(p) {
           val += p->weight;
         } else {
-          val += _dictTrie.getMinWeight();
+          val += dictTrie_.getMinWeight();
         }
         if(val > segmentChars[i].weight) {
           segmentChars[i].pInfo = p;
@@ -99,7 +99,7 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void _cut(const vector<SegmentChar>& segmentChars, vector<Unicode>& res) const {
+  void cut_(const vector<SegmentChar>& segmentChars, vector<Unicode>& res) const {
     size_t i = 0;
     while(i < segmentChars.size()) {
       const DictUnit* p = segmentChars[i].pInfo;
@@ -114,7 +114,7 @@ class MPSegment: public SegmentBase {
   }
 
  private:
-  DictTrie _dictTrie;
+  DictTrie dictTrie_;
 
 };
 }

@@ -30,16 +30,16 @@ class PosTagger {
     const string& hmmFilePath,
     const string& userDictPath = ""
   ) {
-    LIMONP_CHECK(_segment.init(dictPath, hmmFilePath, userDictPath));
-    _dictTrie = _segment.getDictTrie();
-    LIMONP_CHECK(_dictTrie);
+    LIMONP_CHECK(segment_.init(dictPath, hmmFilePath, userDictPath));
+    dictTrie_ = segment_.getDictTrie();
+    LIMONP_CHECK(dictTrie_);
   };
 
 
   bool tag(const string& src, vector<pair<string, string> >& res) const {
     vector<string> cutRes;
-    if (!_segment.cut(src, cutRes)) {
-      LogError("_mixSegment cut failed");
+    if (!segment_.cut(src, cutRes)) {
+      LogError("mixSegment_ cut failed");
       return false;
     }
 
@@ -50,9 +50,9 @@ class PosTagger {
         LogError("decode failed.");
         return false;
       }
-      tmp = _dictTrie->find(unico.begin(), unico.end());
+      tmp = dictTrie_->find(unico.begin(), unico.end());
       if(tmp == NULL || tmp->tag.empty()) {
-        res.push_back(make_pair(*itr, _specialRule(unico)));
+        res.push_back(make_pair(*itr, specialRule_(unico)));
       } else {
         res.push_back(make_pair(*itr, tmp->tag));
       }
@@ -60,7 +60,7 @@ class PosTagger {
     return !res.empty();
   }
  private:
-  const char* _specialRule(const Unicode& unicode) const {
+  const char* specialRule_(const Unicode& unicode) const {
     size_t m = 0;
     size_t eng = 0;
     for(size_t i = 0; i < unicode.size() && eng < unicode.size() / 2; i++) {
@@ -83,8 +83,8 @@ class PosTagger {
     return POS_ENG;
   }
  private:
-  MixSegment _segment;
-  const DictTrie * _dictTrie;
+  MixSegment segment_;
+  const DictTrie * dictTrie_;
 };
 }
 

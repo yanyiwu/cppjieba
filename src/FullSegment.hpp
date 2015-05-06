@@ -14,40 +14,40 @@ namespace CppJieba {
 class FullSegment: public SegmentBase {
  public:
   FullSegment() {
-    _dictTrie = NULL;
-    _isBorrowed = false;
+    dictTrie_ = NULL;
+    isBorrowed_ = false;
   }
   explicit FullSegment(const string& dictPath) {
-    _dictTrie = NULL;
+    dictTrie_ = NULL;
     init(dictPath);
   }
   explicit FullSegment(const DictTrie* dictTrie) {
-    _dictTrie = NULL;
+    dictTrie_ = NULL;
     init(dictTrie);
   }
   virtual ~FullSegment() {
-    if(_dictTrie && ! _isBorrowed) {
-      delete _dictTrie;
+    if(dictTrie_ && ! isBorrowed_) {
+      delete dictTrie_;
     }
 
   };
   bool init(const string& dictPath) {
-    assert(_dictTrie == NULL);
-    _dictTrie = new DictTrie(dictPath);
-    _isBorrowed = false;
+    assert(dictTrie_ == NULL);
+    dictTrie_ = new DictTrie(dictPath);
+    isBorrowed_ = false;
     return true;
   }
   bool init(const DictTrie* dictTrie) {
-    assert(_dictTrie == NULL);
+    assert(dictTrie_ == NULL);
     assert(dictTrie);
-    _dictTrie = dictTrie;
-    _isBorrowed = true;
+    dictTrie_ = dictTrie;
+    isBorrowed_ = true;
     return true;
   }
 
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
-    assert(_dictTrie);
+    assert(dictTrie_);
     if (begin >= end) {
       LogError("begin >= end");
       return false;
@@ -66,7 +66,7 @@ class FullSegment: public SegmentBase {
     int wordLen = 0;
     for (Unicode::const_iterator uItr = begin; uItr != end; uItr++) {
       //find word start from uItr
-      if (_dictTrie->find(uItr, end, tRes, 0)) {
+      if (dictTrie_->find(uItr, end, tRes, 0)) {
         for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
           //for (vector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
         {
@@ -93,7 +93,7 @@ class FullSegment: public SegmentBase {
   }
 
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
-    assert(_dictTrie);
+    assert(dictTrie_);
     if (begin >= end) {
       LogError("begin >= end");
       return false;
@@ -117,8 +117,8 @@ class FullSegment: public SegmentBase {
     return true;
   }
  private:
-  const DictTrie* _dictTrie;
-  bool _isBorrowed;
+  const DictTrie* dictTrie_;
+  bool isBorrowed_;
 };
 }
 

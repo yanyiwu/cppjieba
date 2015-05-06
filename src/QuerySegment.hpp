@@ -22,10 +22,10 @@ class QuerySegment: public SegmentBase {
   };
   virtual ~QuerySegment() {};
   bool init(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "") {
-    LIMONP_CHECK(_mixSeg.init(dict, model, userDict));
-    LIMONP_CHECK(_fullSeg.init(_mixSeg.getDictTrie()));
+    LIMONP_CHECK(mixSeg_.init(dict, model, userDict));
+    LIMONP_CHECK(fullSeg_.init(mixSeg_.getDictTrie()));
     assert(maxWordLen);
-    _maxWordLen = maxWordLen;
+    maxWordLen_ = maxWordLen;
     return true;
   }
   using SegmentBase::cut;
@@ -37,17 +37,17 @@ class QuerySegment: public SegmentBase {
 
     //use mix cut first
     vector<Unicode> mixRes;
-    if (!_mixSeg.cut(begin, end, mixRes)) {
-      LogError("_mixSeg cut failed.");
+    if (!mixSeg_.cut(begin, end, mixRes)) {
+      LogError("mixSeg_ cut failed.");
       return false;
     }
 
     vector<Unicode> fullRes;
     for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
 
-      // if it's too long, cut with _fullSeg, put fullRes in res
-      if (mixResItr->size() > _maxWordLen) {
-        if (_fullSeg.cut(mixResItr->begin(), mixResItr->end(), fullRes)) {
+      // if it's too long, cut with fullSeg_, put fullRes in res
+      if (mixResItr->size() > maxWordLen_) {
+        if (fullSeg_.cut(mixResItr->begin(), mixResItr->end(), fullRes)) {
           for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
             res.push_back(*fullResItr);
           }
@@ -88,9 +88,9 @@ class QuerySegment: public SegmentBase {
     return true;
   }
  private:
-  MixSegment _mixSeg;
-  FullSegment _fullSeg;
-  size_t _maxWordLen;
+  MixSegment mixSeg_;
+  FullSegment fullSeg_;
+  size_t maxWordLen_;
 
 };
 }

@@ -22,7 +22,7 @@ const UnicodeValueType SPECIAL_SYMBOL[] = {32u, 9u, 10u};
 class SegmentBase: public ISegment, public NonCopyable {
  public:
   SegmentBase() {
-    _loadSpecialSymbols();
+    loadSpecialSymbols_();
   };
   virtual ~SegmentBase() {};
  public:
@@ -39,7 +39,7 @@ class SegmentBase: public ISegment, public NonCopyable {
     Unicode::const_iterator right;
 
     for(right = unicode.begin(); right != unicode.end(); right++) {
-      if(isIn(_specialSymbols, *right)) {
+      if(isIn(specialSymbols_, *right)) {
         if(left != right) {
           cut(left, right, res);
         }
@@ -55,15 +55,15 @@ class SegmentBase: public ISegment, public NonCopyable {
     return true;
   }
  private:
-  void _loadSpecialSymbols() {
+  void loadSpecialSymbols_() {
     size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
     for(size_t i = 0; i < size; i ++) {
-      _specialSymbols.insert(SPECIAL_SYMBOL[i]);
+      specialSymbols_.insert(SPECIAL_SYMBOL[i]);
     }
-    assert(_specialSymbols.size());
+    assert(specialSymbols_.size());
   }
  private:
-  unordered_set<UnicodeValueType> _specialSymbols;
+  unordered_set<UnicodeValueType> specialSymbols_;
 
 };
 }

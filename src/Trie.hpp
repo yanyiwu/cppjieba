@@ -61,19 +61,19 @@ class TrieNode {
 class Trie {
  public:
   Trie(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers) {
-    _root = new TrieNode;
-    _createTrie(keys, valuePointers);
-    _build();// build automation
+    root_ = new TrieNode;
+    createTrie_(keys, valuePointers);
+    build_();// build automation
   }
   ~Trie() {
-    if(_root) {
-      _deleteNode(_root);
+    if(root_) {
+      deleteNode_(root_);
     }
   }
  public:
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     TrieNode::NextMap::const_iterator citer;
-    const TrieNode* ptNode = _root;
+    const TrieNode* ptNode = root_;
     for(Unicode::const_iterator it = begin; it != end; it++) {
       // build automation
       assert(ptNode);
@@ -91,7 +91,7 @@ class Trie {
     vector<struct SegmentChar>& res
   ) const {
     res.resize(end - begin);
-    const TrieNode * now = _root;
+    const TrieNode * now = root_;
     const TrieNode* node;
     // compiler will complain warnings if only "i < end - begin" .
     for (size_t i = 0; i < size_t(end - begin); i++) {
@@ -102,7 +102,7 @@ class Trie {
       bool flag = false;
 
       // rollback
-      while( now != _root ) {
+      while( now != root_ ) {
         node = now->findNext(ch);
         if (node != NULL) {
           flag = true;
@@ -116,11 +116,11 @@ class Trie {
         node = now->findNext(ch);
       }
       if(node == NULL) {
-        now = _root;
+        now = root_;
       } else {
         now = node;
         const TrieNode * temp = now;
-        while(temp != _root) {
+        while(temp != root_) {
           if (temp->ptValue) {
             size_t pos = i - temp->ptValue->word.size() + 1;
             res[pos].dag.push_back(pair<vector<Unicode >::size_type, const DictUnit* >(i, temp->ptValue));
@@ -139,7 +139,7 @@ class Trie {
     Unicode::const_iterator end,
     DagType & res,
     size_t offset = 0) const {
-    const TrieNode * ptNode = _root;
+    const TrieNode * ptNode = root_;
     TrieNode::NextMap::const_iterator citer;
     for(Unicode::const_iterator itr = begin; itr != end ; itr++) {
       assert(ptNode);
@@ -158,13 +158,13 @@ class Trie {
     return !res.empty();
   }
  private:
-  void _build() {
+  void build_() {
     queue<TrieNode*> que;
-    assert(_root->ptValue == NULL);
-    assert(_root->next);
-    _root->fail = NULL;
-    for(TrieNode::NextMap::iterator iter = _root->next->begin(); iter != _root->next->end(); iter++) {
-      iter->second->fail = _root;
+    assert(root_->ptValue == NULL);
+    assert(root_->next);
+    root_->fail = NULL;
+    for(TrieNode::NextMap::iterator iter = root_->next->begin(); iter != root_->next->end(); iter++) {
+      iter->second->fail = root_;
       que.push(iter->second);
     }
     TrieNode* back = NULL;
@@ -185,24 +185,24 @@ class Trie {
           back = back->fail;
         }
         if(back == NULL) {
-          iter->second->fail = _root;
+          iter->second->fail = root_;
         }
         que.push(iter->second);
       }
     }
   }
-  void _createTrie(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers) {
+  void createTrie_(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers) {
     if(valuePointers.empty() || keys.empty()) {
       return;
     }
     assert(keys.size() == valuePointers.size());
 
     for(size_t i = 0; i < keys.size(); i++) {
-      _insertNode(keys[i], valuePointers[i]);
+      insertNode_(keys[i], valuePointers[i]);
     }
   }
-  void _insertNode(const Unicode& key, const DictUnit* ptValue) {
-    TrieNode* ptNode  = _root;
+  void insertNode_(const Unicode& key, const DictUnit* ptValue) {
+    TrieNode* ptNode  = root_;
 
     TrieNode::NextMap::const_iterator kmIter;
 
@@ -224,21 +224,21 @@ class Trie {
     }
     ptNode->ptValue = ptValue;
   }
-  void _deleteNode(TrieNode* node) {
+  void deleteNode_(TrieNode* node) {
     if(!node) {
       return;
     }
     if(node->next) {
       TrieNode::NextMap::iterator it;
       for(it = node->next->begin(); it != node->next->end(); it++) {
-        _deleteNode(it->second);
+        deleteNode_(it->second);
       }
       delete node->next;
     }
     delete node;
   }
  private:
-  TrieNode* _root;
+  TrieNode* root_;
 };
 }
 

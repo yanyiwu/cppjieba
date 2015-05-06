@@ -26,60 +26,60 @@ class DictTrie {
  public:
 
   DictTrie() {
-    _trie = NULL;
-    _minWeight = MAX_DOUBLE;
+    trie_ = NULL;
+    minWeight_ = MAX_DOUBLE;
   }
   DictTrie(const string& dictPath, const string& userDictPath = "") {
     new (this) DictTrie();
     init(dictPath, userDictPath);
   }
   ~DictTrie() {
-    if(_trie) {
-      delete _trie;
+    if(trie_) {
+      delete trie_;
     }
   }
 
   bool init(const string& dictPath, const string& userDictPath = "") {
-    if(_trie != NULL) {
+    if(trie_ != NULL) {
       LogFatal("trie already initted");
     }
-    _loadDict(dictPath);
-    _calculateWeight(_nodeInfos);
-    _minWeight = _findMinWeight(_nodeInfos);
+    loadDict_(dictPath);
+    calculateWeight_(nodeInfos_);
+    minWeight_ = findMinWeight_(nodeInfos_);
 
     if(userDictPath.size()) {
-      double maxWeight = _findMaxWeight(_nodeInfos);
-      _loadUserDict(userDictPath, maxWeight, UNKNOWN_TAG);
+      double maxWeight = findMaxWeight_(nodeInfos_);
+      loadUserDict_(userDictPath, maxWeight, UNKNOWN_TAG);
     }
-    _shrink(_nodeInfos);
-    _trie = _createTrie(_nodeInfos);
-    assert(_trie);
+    shrink_(nodeInfos_);
+    trie_ = createTrie_(nodeInfos_);
+    assert(trie_);
     return true;
   }
 
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
-    return _trie->find(begin, end);
+    return trie_->find(begin, end);
   }
   bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType& dag, size_t offset = 0) const {
-    return _trie->find(begin, end, dag, offset);
+    return trie_->find(begin, end, dag, offset);
   }
   void find(
     Unicode::const_iterator begin,
     Unicode::const_iterator end,
     vector<SegmentChar>& res
   ) const {
-    _trie->find(begin, end, res);
+    trie_->find(begin, end, res);
   }
   bool isUserDictSingleChineseWord(const Unicode::value_type& word) const {
-    return isIn(_userDictSingleChineseWord, word);
+    return isIn(userDictSingleChineseWord_, word);
   }
   double getMinWeight() const {
-    return _minWeight;
+    return minWeight_;
   };
 
 
  private:
-  Trie * _createTrie(const vector<DictUnit>& dictUnits) {
+  Trie * createTrie_(const vector<DictUnit>& dictUnits) {
     assert(dictUnits.size());
     vector<Unicode> words;
     vector<const DictUnit*> valuePointers;
@@ -91,7 +91,7 @@ class DictTrie {
     Trie * trie = new Trie(words, valuePointers);
     return trie;
   }
-  void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag) {
+  void loadUserDict_(const string& filePath, double defaultWeight, const string& defaultTag) {
     ifstream ifs(filePath.c_str());
     if(!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
@@ -111,15 +111,15 @@ class DictTrie {
         continue;
       }
       if(nodeInfo.word.size() == 1) {
-        _userDictSingleChineseWord.insert(nodeInfo.word[0]);
+        userDictSingleChineseWord_.insert(nodeInfo.word[0]);
       }
       nodeInfo.weight = defaultWeight;
       nodeInfo.tag = (buf.size() == 2 ? buf[1] : defaultTag);
-      _nodeInfos.push_back(nodeInfo);
+      nodeInfos_.push_back(nodeInfo);
     }
     LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
   }
-  void _loadDict(const string& filePath) {
+  void loadDict_(const string& filePath) {
     ifstream ifs(filePath.c_str());
     if(!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
@@ -141,17 +141,17 @@ class DictTrie {
       nodeInfo.weight = atof(buf[1].c_str());
       nodeInfo.tag = buf[2];
 
-      _nodeInfos.push_back(nodeInfo);
+      nodeInfos_.push_back(nodeInfo);
     }
   }
-  double _findMinWeight(const vector<DictUnit>& nodeInfos) const {
+  double findMinWeight_(const vector<DictUnit>& nodeInfos) const {
     double ret = MAX_DOUBLE;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       ret = min(nodeInfos[i].weight, ret);
     }
     return ret;
   }
-  double _findMaxWeight(const vector<DictUnit>& nodeInfos) const {
+  double findMaxWeight_(const vector<DictUnit>& nodeInfos) const {
     double ret = MIN_DOUBLE;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       ret = max(nodeInfos[i].weight, ret);
@@ -159,7 +159,7 @@ class DictTrie {
     return ret;
   }
 
-  void _calculateWeight(vector<DictUnit>& nodeInfos) const {
+  void calculateWeight_(vector<DictUnit>& nodeInfos) const {
     double sum = 0.0;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       sum += nodeInfos[i].weight;
@@ -172,16 +172,16 @@ class DictTrie {
     }
   }
 
-  void _shrink(vector<DictUnit>& units) const {
+  void shrink_(vector<DictUnit>& units) const {
     vector<DictUnit>(units.begin(), units.end()).swap(units);
   }
 
  private:
-  vector<DictUnit> _nodeInfos;
-  Trie * _trie;
+  vector<DictUnit> nodeInfos_;
+  Trie * trie_;
 
-  double _minWeight;
-  unordered_set<Unicode::value_type> _userDictSingleChineseWord;
+  double minWeight_;
+  unordered_set<Unicode::value_type> userDictSingleChineseWord_;
 };
 }
 
