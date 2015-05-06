@@ -47,7 +47,10 @@ namespace CppJieba
             
             bool init(const string& dictPath, const string& userDictPath = "")
             {
-                assert(!_trie);
+                if(_trie != NULL) 
+                {
+                    LogFatal("trie already initted");
+                }
                 _loadDict(dictPath);
                 _calculateWeight(_nodeInfos);
                 _minWeight = _findMinWeight(_nodeInfos);
@@ -104,7 +107,10 @@ namespace CppJieba
             void _loadUserDict(const string& filePath, double defaultWeight, const string& defaultTag)
             {
                 ifstream ifs(filePath.c_str());
-                assert(ifs.is_open());
+                if(!ifs.is_open()) 
+                {
+                    LogFatal("file %s open failed.", filePath.c_str());
+                }
                 string line;
                 DictUnit nodeInfo;
                 vector<string> buf;
@@ -113,7 +119,10 @@ namespace CppJieba
                 {
                     buf.clear();
                     split(line, buf, " ");
-                    assert(buf.size() >= 1);
+                    if(buf.size() < 1) 
+                    {
+                        LogFatal("split [%s] result illegal", line.c_str());
+                    }
                     if(!TransCode::decode(buf[0], nodeInfo.word))
                     {
                         LogError("line[%u:%s] illegal.", lineno, line.c_str());
@@ -132,15 +141,21 @@ namespace CppJieba
             void _loadDict(const string& filePath) 
             {
                 ifstream ifs(filePath.c_str());
-                assert(ifs.is_open());
+                if(!ifs.is_open()) 
+                {
+                    LogFatal("file %s open failed.", filePath.c_str());
+                }
                 string line;
                 vector<string> buf;
 
                 DictUnit nodeInfo;
-                for(size_t lineno = 0 ; getline(ifs, line); lineno++)
+                for(size_t lineno = 0; getline(ifs, line); lineno++)
                 {
                     split(line, buf, " ");
-                    assert(buf.size() == DICT_COLUMN_NUM);
+                    if(buf.size() != DICT_COLUMN_NUM) 
+                    {
+                        LogFatal("split result illegal, line: %s, result size: %u", line.c_str(), buf.size());
+                    }
                     
                     if(!TransCode::decode(buf[0], nodeInfo.word))
                     {

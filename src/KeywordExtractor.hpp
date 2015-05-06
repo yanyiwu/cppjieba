@@ -91,10 +91,9 @@ namespace CppJieba
             void _loadIdfDict(const string& idfPath)
             {
                 ifstream ifs(idfPath.c_str());
-                if(!ifs)
+                if(!ifs.is_open())
                 {
-                    LogError("open %s failed.", idfPath.c_str());
-                    assert(false);
+                    LogFatal("open %s failed.", idfPath.c_str());
                 }
                 string line ;
                 vector<string> buf;
@@ -127,10 +126,9 @@ namespace CppJieba
             void _loadStopWordDict(const string& filePath)
             {
                 ifstream ifs(filePath.c_str());
-                if(!ifs)
+                if(!ifs.is_open())
                 {
-                    LogError("open %s failed.", filePath.c_str());
-                    assert(false);
+                    LogFatal("open %s failed.", filePath.c_str());
                 }
                 string line ;
                 while(getline(ifs, line))
