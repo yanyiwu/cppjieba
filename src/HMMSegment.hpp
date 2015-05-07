@@ -6,7 +6,6 @@
 #include <memory.h>
 #include <cassert>
 #include "Limonp/StringUtil.hpp"
-#include "Limonp/Logger.hpp"
 #include "TransCode.hpp"
 #include "ISegment.hpp"
 #include "SegmentBase.hpp"
@@ -26,11 +25,11 @@ class HMMSegment: public SegmentBase {
  public:
   HMMSegment() {}
   explicit HMMSegment(const string& filePath) {
-    LIMONP_CHECK(init(filePath));
+    init(filePath);
   }
   virtual ~HMMSegment() {}
  public:
-  bool init(const string& filePath) {
+  void init(const string& filePath) {
     memset(startProb_, 0, sizeof(startProb_));
     memset(transProb_, 0, sizeof(transProb_));
     statMap_[0] = 'B';
@@ -41,9 +40,8 @@ class HMMSegment: public SegmentBase {
     emitProbVec_.push_back(&emitProbE_);
     emitProbVec_.push_back(&emitProbM_);
     emitProbVec_.push_back(&emitProbS_);
-    LIMONP_CHECK(loadModel_(filePath.c_str()));
+    loadModel_(filePath.c_str());
     LogInfo("HMMSegment init(%s) ok.", filePath.c_str());
-    return true;
   }
  public:
   using SegmentBase::cut;
@@ -212,19 +210,21 @@ class HMMSegment: public SegmentBase {
 
     return true;
   }
-  bool loadModel_(const char* const filePath) {
+  void loadModel_(const char* const filePath) {
     ifstream ifile(filePath);
+    if(!ifile.is_open()) {
+      LogFatal("open %s failed.", filePath);
+    }
     string line;
     vector<string> tmp;
     vector<string> tmp2;
     //load startProb_
     if(!getLine_(ifile, line)) {
-      return false;
+      LogFatal("load startProb_");
     }
     split(line, tmp, " ");
     if(tmp.size() != STATUS_SUM) {
-      LogError("start_p illegal");
-      return false;
+      LogFatal("start_p illegal");
     }
     for(size_t j = 0; j< tmp.size(); j++) {
       startProb_[j] = atof(tmp[j].c_str());
@@ -233,12 +233,11 @@ class HMMSegment: public SegmentBase {
     //load transProb_
     for(size_t i = 0; i < STATUS_SUM; i++) {
       if(!getLine_(ifile, line)) {
-        return false;
+        LogFatal("load transProb_ failed.");
       }
       split(line, tmp, " ");
       if(tmp.size() != STATUS_SUM) {
-        LogError("trans_p illegal");
-        return false;
+        LogFatal("trans_p illegal");
       }
       for(size_t j =0; j < STATUS_SUM; j++) {
         transProb_[i][j] = atof(tmp[j].c_str());
@@ -247,25 +246,23 @@ class HMMSegment: public SegmentBase {
 
     //load emitProbB_
     if(!getLine_(ifile, line) || !loadEmitProb_(line, emitProbB_)) {
-      return false;
+      LogFatal("load emitProbB_ failed.");
     }
 
     //load emitProbE_
     if(!getLine_(ifile, line) || !loadEmitProb_(line, emitProbE_)) {
-      return false;
+      LogFatal("load emitProbE_ failed.");
     }
 
     //load emitProbM_
     if(!getLine_(ifile, line) || !loadEmitProb_(line, emitProbM_)) {
-      return false;
+      LogFatal("load emitProbM_ failed.");
     }
 
     //load emitProbS_
     if(!getLine_(ifile, line) || !loadEmitProb_(line, emitProbS_)) {
-      return false;
+      LogFatal("load emitProbS_ failed.");
     }
-
-    return true;
   }
   bool getLine_(ifstream& ifile, string& line) {
     while(getline(ifile, line)) {

@@ -16,14 +16,13 @@ class MPSegment: public SegmentBase {
  public:
   MPSegment() {};
   MPSegment(const string& dictPath, const string& userDictPath = "") {
-    LIMONP_CHECK(init(dictPath, userDictPath));
+    init(dictPath, userDictPath);
   };
   virtual ~MPSegment() {};
 
-  bool init(const string& dictPath, const string& userDictPath = "") {
-    LIMONP_CHECK(dictTrie_.init(dictPath, userDictPath));
+  void init(const string& dictPath, const string& userDictPath = "") {
+    dictTrie_.init(dictPath, userDictPath);
     LogInfo("MPSegment init(%s) ok", dictPath.c_str());
-    return true;
   }
   bool isUserDictSingleChineseWord(const Unicode::value_type & value) const {
     return dictTrie_.isUserDictSingleChineseWord(value);

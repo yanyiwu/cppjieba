@@ -12,15 +12,14 @@ class MixSegment: public SegmentBase {
   MixSegment() {
   }
   MixSegment(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "") {
-    LIMONP_CHECK(init(mpSegDict, hmmSegDict, userDict));
+    init(mpSegDict, hmmSegDict, userDict);
   }
   virtual ~MixSegment() {
   }
-  bool init(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "") {
-    LIMONP_CHECK(mpSeg_.init(mpSegDict, userDict));
-    LIMONP_CHECK(hmmSeg_.init(hmmSegDict));
+  void init(const string& mpSegDict, const string& hmmSegDict, const string& userDict = "") {
+    mpSeg_.init(mpSegDict, userDict);
+    hmmSeg_.init(hmmSegDict);
     LogInfo("MixSegment init(%s, %s)", mpSegDict.c_str(), hmmSegDict.c_str());
-    return true;
   }
   using SegmentBase::cut;
   virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {

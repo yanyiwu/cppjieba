@@ -39,7 +39,7 @@ class DictTrie {
     }
   }
 
-  bool init(const string& dictPath, const string& userDictPath = "") {
+  void init(const string& dictPath, const string& userDictPath = "") {
     if(trie_ != NULL) {
       LogFatal("trie already initted");
     }
@@ -54,7 +54,6 @@ class DictTrie {
     shrink_(nodeInfos_);
     trie_ = createTrie_(nodeInfos_);
     assert(trie_);
-    return true;
   }
 
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {

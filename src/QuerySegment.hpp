@@ -21,12 +21,11 @@ class QuerySegment: public SegmentBase {
     init(dict, model, maxWordLen, userDict);
   };
   virtual ~QuerySegment() {};
-  bool init(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "") {
-    LIMONP_CHECK(mixSeg_.init(dict, model, userDict));
-    LIMONP_CHECK(fullSeg_.init(mixSeg_.getDictTrie()));
+  void init(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "") {
+    mixSeg_.init(dict, model, userDict);
+    fullSeg_.init(mixSeg_.getDictTrie());
     assert(maxWordLen);
     maxWordLen_ = maxWordLen;
-    return true;
   }
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {

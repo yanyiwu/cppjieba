@@ -18,7 +18,7 @@ TEST(DictTrieTest, Test1) {
 
   string s1, s2;
   DictTrie trie;
-  ASSERT_TRUE(trie.init(DICT_FILE));
+  trie.init(DICT_FILE);
   ASSERT_LT(trie.getMinWeight() + 15.6479, 0.001);
   string word("来到");
   Unicode uni;

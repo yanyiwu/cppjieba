@@ -30,7 +30,7 @@ class PosTagger {
     const string& hmmFilePath,
     const string& userDictPath = ""
   ) {
-    LIMONP_CHECK(segment_.init(dictPath, hmmFilePath, userDictPath));
+    segment_.init(dictPath, hmmFilePath, userDictPath);
     dictTrie_ = segment_.getDictTrie();
     LIMONP_CHECK(dictTrie_);
   };

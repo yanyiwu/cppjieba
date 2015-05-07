@@ -20,7 +20,7 @@ class KeywordExtractor {
   void init(const string& dictPath, const string& hmmFilePath, const string& idfPath, const string& stopWordPath, const string& userDict = "") {
     loadIdfDict_(idfPath);
     loadStopWordDict_(stopWordPath);
-    LIMONP_CHECK(segment_.init(dictPath, hmmFilePath, userDict));
+    segment_.init(dictPath, hmmFilePath, userDict);
   };
 
   bool extract(const string& str, vector<string>& keywords, size_t topN) const {
