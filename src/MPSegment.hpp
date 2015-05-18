@@ -74,11 +74,11 @@ class MPSegment: public SegmentBase {
     const DictUnit* p;
     double val;
 
-    for(ssize_t i = segmentChars.size() - 1; i >= 0; i--) {
-      segmentChars[i].pInfo = NULL;
-      segmentChars[i].weight = MIN_DOUBLE;
-      assert(!segmentChars[i].dag.empty());
-      for(DagType::const_iterator it = segmentChars[i].dag.begin(); it != segmentChars[i].dag.end(); it++) {
+    for(vector<SegmentChar>::reverse_iterator rit = segmentChars.rbegin(); rit != segmentChars.rend(); rit++) {
+      rit->pInfo = NULL;
+      rit->weight = MIN_DOUBLE;
+      assert(!rit->dag.empty());
+      for(DagType::const_iterator it = rit->dag.begin(); it != rit->dag.end(); it++) {
         nextPos = it->first;
         p = it->second;
         val = 0.0;
@@ -91,9 +91,9 @@ class MPSegment: public SegmentBase {
         } else {
           val += dictTrie_.getMinWeight();
         }
-        if(val > segmentChars[i].weight) {
-          segmentChars[i].pInfo = p;
-          segmentChars[i].weight = val;
+        if(val > rit->weight) {
+          rit->pInfo = p;
+          rit->weight = val;
         }
       }
     }
