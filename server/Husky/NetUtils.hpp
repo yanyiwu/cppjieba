@@ -16,7 +16,7 @@
 #include <vector>
 
 #include "Limonp/StdExtension.hpp"
-#include "Limonp/HandyMacro.hpp"
+#include "Limonp/Logger.hpp"
 
 namespace Husky {
 static const size_t LISTEN_QUEUE_LEN = 1024;
@@ -25,22 +25,25 @@ typedef int SocketFd;
 SocketFd CreateAndListenSocket(int port) {
   SocketFd sock;
   sock = socket(AF_INET, SOCK_STREAM, 0);
-  LIMONP_CHECK(sock != -1);
+  if (sock == -1) {
+    LogFatal("create socket failed");
+  }
 
   int optval = 1; // nozero
-  int ret;
-  ret = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-  LIMONP_CHECK(-1 != ret);
+  if (-1 == setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval))) {
+    LogFatal("setsockopt failed");
+  }
 
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
-  ret = ::bind(sock, (sockaddr*)&addr, sizeof(addr));
-  LIMONP_CHECK(-1 != ret);
-
-  ret = listen(sock, LISTEN_QUEUE_LEN);
-  LIMONP_CHECK(-1 != ret);
+  if (-1 == ::bind(sock, (sockaddr*)&addr, sizeof(addr))) {
+    LogFatal(strerror(errno));
+  }
+  if (-1 == ::listen(sock, LISTEN_QUEUE_LEN)) {
+    LogFatal(strerror(errno));
+  }
 
   return sock;
 }
