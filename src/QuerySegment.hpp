@@ -29,11 +29,6 @@ class QuerySegment: public SegmentBase {
   }
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
     //use mix cut first
     vector<Unicode> mixRes;
     if (!mixSeg_.cut(begin, end, mixRes)) {
@@ -64,11 +59,6 @@ class QuerySegment: public SegmentBase {
 
 
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
     vector<Unicode> uRes;
     if (!cut(begin, end, uRes)) {
       LogError("get unicode cut result error.");
@@ -77,11 +67,8 @@ class QuerySegment: public SegmentBase {
 
     string tmp;
     for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++) {
-      if (TransCode::encode(*uItr, tmp)) {
-        res.push_back(tmp);
-      } else {
-        LogError("encode failed.");
-      }
+      TransCode::encode(*uItr, tmp);
+      res.push_back(tmp);
     }
 
     return true;

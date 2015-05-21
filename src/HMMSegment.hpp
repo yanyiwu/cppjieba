@@ -90,9 +90,7 @@ class HMMSegment: public SegmentBase {
     size_t offset = res.size();
     res.resize(res.size() + words.size());
     for(size_t i = 0; i < words.size(); i++) {
-      if(!TransCode::encode(words[i], res[offset + i])) {
-        LogError("encode failed.");
-      }
+      TransCode::encode(words[i], res[offset + i]);
     }
     return true;
   }

@@ -83,9 +83,7 @@ class MixSegment: public SegmentBase {
     size_t offset = res.size();
     res.resize(res.size() + uRes.size());
     for(size_t i = 0; i < uRes.size(); i ++, offset++) {
-      if(!TransCode::encode(uRes[i], res[offset])) {
-        LogError("encode failed.");
-      }
+      TransCode::encode(uRes[i], res[offset]);
     }
     return true;
   }

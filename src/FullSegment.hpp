@@ -47,12 +47,6 @@ class FullSegment: public SegmentBase {
 
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
-    assert(dictTrie_);
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
     //resut of searching in trie tree
     DagType tRes;
 
@@ -64,6 +58,7 @@ class FullSegment: public SegmentBase {
 
     //tmp variables
     int wordLen = 0;
+    assert(dictTrie_);
     for (Unicode::const_iterator uItr = begin; uItr != end; uItr++) {
       //find word start from uItr
       if (dictTrie_->find(uItr, end, tRes, 0)) {
@@ -93,12 +88,6 @@ class FullSegment: public SegmentBase {
   }
 
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
-    assert(dictTrie_);
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
     vector<Unicode> uRes;
     if (!cut(begin, end, uRes)) {
       LogError("get unicode cut result error.");
@@ -107,11 +96,8 @@ class FullSegment: public SegmentBase {
 
     string tmp;
     for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++) {
-      if (TransCode::encode(*uItr, tmp)) {
-        res.push_back(tmp);
-      } else {
-        LogError("encode failed.");
-      }
+      TransCode::encode(*uItr, tmp);
+      res.push_back(tmp);
     }
 
     return true;

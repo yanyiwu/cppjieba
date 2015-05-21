@@ -42,10 +42,7 @@ class MPSegment: public SegmentBase {
     size_t offset = res.size();
     res.resize(res.size() + words.size());
     for(size_t i = 0; i < words.size(); i++) {
-      if(!TransCode::encode(words[i], res[i + offset])) {
-        LogError("encode failed.");
-        res[i + offset].clear();
-      }
+      TransCode::encode(words[i], res[i + offset]);
     }
     return true;
   }
