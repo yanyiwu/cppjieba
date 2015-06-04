@@ -14,27 +14,15 @@ static const char* const POS_X = "x";
 
 class PosTagger {
  public:
-  PosTagger() {
-  }
-  PosTagger(
-    const string& dictPath,
+  PosTagger(const string& dictPath,
     const string& hmmFilePath,
-    const string& userDictPath = ""
-  ) {
-    init(dictPath, hmmFilePath, userDictPath);
+    const string& userDictPath = "")
+    : segment_(dictPath, hmmFilePath, userDictPath) {
+    dictTrie_ = segment_.getDictTrie();
+    LIMONP_CHECK(dictTrie_);
   }
   ~PosTagger() {
   }
-  void init(
-    const string& dictPath,
-    const string& hmmFilePath,
-    const string& userDictPath = ""
-  ) {
-    segment_.init(dictPath, hmmFilePath, userDictPath);
-    dictTrie_ = segment_.getDictTrie();
-    LIMONP_CHECK(dictTrie_);
-  };
-
 
   bool tag(const string& src, vector<pair<string, string> >& res) const {
     vector<string> cutRes;

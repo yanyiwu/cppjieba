@@ -16,17 +16,14 @@
 namespace CppJieba {
 class QuerySegment: public SegmentBase {
  public:
-  QuerySegment() {};
-  QuerySegment(const string& dict, const string& model, size_t maxWordLen = 4, const string& userDict = "") {
-    init(dict, model, maxWordLen, userDict);
-  };
-  virtual ~QuerySegment() {};
-  void init(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "") {
-    mixSeg_.init(dict, model, userDict);
-    fullSeg_.init(mixSeg_.getDictTrie());
+  QuerySegment(const string& dict, const string& model, size_t maxWordLen = 4, 
+        const string& userDict = "")
+    : mixSeg_(dict, model, userDict),
+      fullSeg_(mixSeg_.getDictTrie()) {
     assert(maxWordLen);
     maxWordLen_ = maxWordLen;
-  }
+  };
+  virtual ~QuerySegment() {};
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     //use mix cut first
