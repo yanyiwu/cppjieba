@@ -15,6 +15,9 @@ class MixSegment: public SegmentBase {
       hmmSeg_(hmmSegDict) {
     LogInfo("MixSegment init %s, %s", mpSegDict.c_str(), hmmSegDict.c_str());
   }
+  MixSegment(const DictTrie* dictTrie, const HMMModel* model) 
+    : mpSeg_(dictTrie), hmmSeg_(model) {
+  }
   virtual ~MixSegment() {
   }
   using SegmentBase::cut;
@@ -90,7 +93,9 @@ class MixSegment: public SegmentBase {
  private:
   MPSegment mpSeg_;
   HMMSegment hmmSeg_;
-};
-}
+
+}; // class MixSegment
+
+} // namespace CppJieba
 
 #endif

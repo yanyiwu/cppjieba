@@ -12,9 +12,17 @@ namespace CppJieba {
 
 class HMMSegment: public SegmentBase {
  public:
-  explicit HMMSegment(const string& filePath): model_(filePath) {
+  HMMSegment(const string& filePath) {
+    model_ = new HMMModel(filePath);
   }
-  virtual ~HMMSegment() {}
+  HMMSegment(const HMMModel* model) 
+  : model_(model), isNeedDestroy_(false) {
+  }
+  virtual ~HMMSegment() {
+    if(isNeedDestroy_) {
+      delete model_;
+    }
+  }
 
   using SegmentBase::cut;
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const {
@@ -138,7 +146,7 @@ class HMMSegment: public SegmentBase {
 
     //start
     for(size_t y = 0; y < Y; y++) {
-      weight[0 + y * X] = model_.startProb[y] + model_.getEmitProb(model_.emitProbVec[y], *begin, MIN_DOUBLE);
+      weight[0 + y * X] = model_->startProb[y] + model_->getEmitProb(model_->emitProbVec[y], *begin, MIN_DOUBLE);
       path[0 + y * X] = -1;
     }
 
@@ -149,10 +157,10 @@ class HMMSegment: public SegmentBase {
         now = x + y*X;
         weight[now] = MIN_DOUBLE;
         path[now] = HMMModel::E; // warning
-        emitProb = model_.getEmitProb(model_.emitProbVec[y], *(begin+x), MIN_DOUBLE);
+        emitProb = model_->getEmitProb(model_->emitProbVec[y], *(begin+x), MIN_DOUBLE);
         for(size_t preY = 0; preY < Y; preY++) {
           old = x - 1 + preY * X;
-          tmp = weight[old] + model_.transProb[preY][y] + emitProb;
+          tmp = weight[old] + model_->transProb[preY][y] + emitProb;
           if(tmp > weight[now]) {
             weight[now] = tmp;
             path[now] = preY;
@@ -179,7 +187,9 @@ class HMMSegment: public SegmentBase {
     return true;
   }
 
-  HMMModel model_;
+ private:
+  const HMMModel* model_;
+  bool isNeedDestroy_;
 }; // class HMMSegment
 
 } // namespace CppJieba

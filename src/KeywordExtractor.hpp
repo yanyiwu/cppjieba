@@ -20,6 +20,14 @@ class KeywordExtractor {
     loadIdfDict_(idfPath);
     loadStopWordDict_(stopWordPath);
   }
+  KeywordExtractor(const DictTrie* dictTrie, 
+        const HMMModel* model,
+        const string& idfPath, 
+        const string& stopWordPath) 
+    : segment_(dictTrie, model){
+    loadIdfDict_(idfPath);
+    loadStopWordDict_(stopWordPath);
+  }
   ~KeywordExtractor() {
   }
 

@@ -12,28 +12,28 @@
 namespace CppJieba {
 
 class MPSegment: public SegmentBase {
-
  public:
-  MPSegment() {};
   MPSegment(const string& dictPath, const string& userDictPath = "") {
-    init(dictPath, userDictPath);
-  };
-  virtual ~MPSegment() {};
-
-  void init(const string& dictPath, const string& userDictPath = "") {
-    dictTrie_.init(dictPath, userDictPath);
+    dictTrie_ = new DictTrie(dictPath, userDictPath);
+    isNeedDestroy_ = true;
     LogInfo("MPSegment init(%s) ok", dictPath.c_str());
   }
+  MPSegment(const DictTrie* dictTrie)
+    : dictTrie_(dictTrie), isNeedDestroy_(false) {
+    assert(dictTrie_);
+  }
+  virtual ~MPSegment() {
+    if(isNeedDestroy_) {
+      delete dictTrie_;
+    }
+  }
+
   bool isUserDictSingleChineseWord(const Unicode::value_type & value) const {
-    return dictTrie_.isUserDictSingleChineseWord(value);
+    return dictTrie_->isUserDictSingleChineseWord(value);
   }
 
   using SegmentBase::cut;
   virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const {
-    if(begin == end) {
-      return false;
-    }
-
     vector<Unicode> words;
     words.reserve(end - begin);
     if(!cut(begin, end, words)) {
@@ -48,12 +48,9 @@ class MPSegment: public SegmentBase {
   }
 
   bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const {
-    if(end == begin) {
-      return false;
-    }
     vector<SegmentChar> segmentChars;
 
-    dictTrie_.find(begin, end, segmentChars);
+    dictTrie_->find(begin, end, segmentChars);
 
     calcDP_(segmentChars);
 
@@ -62,7 +59,7 @@ class MPSegment: public SegmentBase {
     return true;
   }
   const DictTrie* getDictTrie() const {
-    return &dictTrie_;
+    return dictTrie_;
   }
 
  private:
@@ -86,7 +83,7 @@ class MPSegment: public SegmentBase {
         if(p) {
           val += p->weight;
         } else {
-          val += dictTrie_.getMinWeight();
+          val += dictTrie_->getMinWeight();
         }
         if(val > rit->weight) {
           rit->pInfo = p;
@@ -95,7 +92,8 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void cut_(const vector<SegmentChar>& segmentChars, vector<Unicode>& res) const {
+  void cut_(const vector<SegmentChar>& segmentChars, 
+        vector<Unicode>& res) const {
     size_t i = 0;
     while(i < segmentChars.size()) {
       const DictUnit* p = segmentChars[i].pInfo;
@@ -110,9 +108,10 @@ class MPSegment: public SegmentBase {
   }
 
  private:
-  DictTrie dictTrie_;
+  const DictTrie* dictTrie_;
+  bool isNeedDestroy_;
+}; // class MPSegment
 
-};
-}
+} // namespace CppJieba
 
 #endif

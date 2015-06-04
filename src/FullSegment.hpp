@@ -13,40 +13,23 @@
 namespace CppJieba {
 class FullSegment: public SegmentBase {
  public:
-  FullSegment() {
-    dictTrie_ = NULL;
-    isBorrowed_ = false;
+  FullSegment(const string& dictPath) {
+    dictTrie_ = new DictTrie(dictPath);
+    isNeedDestroy_ = true;
+    LogInfo("FullSegment init %s ok", dictPath.c_str());
   }
-  explicit FullSegment(const string& dictPath) {
-    dictTrie_ = NULL;
-    init(dictPath);
-  }
-  explicit FullSegment(const DictTrie* dictTrie) {
-    dictTrie_ = NULL;
-    init(dictTrie);
+  FullSegment(const DictTrie* dictTrie)
+    : dictTrie_(dictTrie), isNeedDestroy_(false) {
+    assert(dictTrie_);
   }
   virtual ~FullSegment() {
-    if(dictTrie_ && ! isBorrowed_) {
+    if(isNeedDestroy_) {
       delete dictTrie_;
     }
-
-  };
-  bool init(const string& dictPath) {
-    assert(dictTrie_ == NULL);
-    dictTrie_ = new DictTrie(dictPath);
-    isBorrowed_ = false;
-    return true;
   }
-  bool init(const DictTrie* dictTrie) {
-    assert(dictTrie_ == NULL);
-    assert(dictTrie);
-    dictTrie_ = dictTrie;
-    isBorrowed_ = true;
-    return true;
-  }
-
   using SegmentBase::cut;
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
+        vector<Unicode>& res) const {
     //resut of searching in trie tree
     DagType tRes;
 
@@ -87,7 +70,8 @@ class FullSegment: public SegmentBase {
     return true;
   }
 
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
+  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
+        vector<string>& res) const {
     vector<Unicode> uRes;
     if (!cut(begin, end, uRes)) {
       LogError("get unicode cut result error.");
@@ -95,7 +79,8 @@ class FullSegment: public SegmentBase {
     }
 
     string tmp;
-    for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++) {
+    for (vector<Unicode>::const_iterator uItr = uRes.begin(); 
+          uItr != uRes.end(); uItr++) {
       TransCode::encode(*uItr, tmp);
       res.push_back(tmp);
     }
@@ -104,7 +89,7 @@ class FullSegment: public SegmentBase {
   }
  private:
   const DictTrie* dictTrie_;
-  bool isBorrowed_;
+  bool isNeedDestroy_;
 };
 }
 
