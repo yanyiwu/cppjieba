@@ -5,18 +5,19 @@
 #include <string.h>
 #include "Limonp/Config.hpp"
 #include "Husky/ThreadPoolServer.hpp"
-#include "MPSegment.hpp"
-#include "HMMSegment.hpp"
 #include "MixSegment.hpp"
+#include "QuerySegment.hpp"
+#include "FullSegment.hpp"
 
 using namespace Husky;
 using namespace CppJieba;
 
 class ReqHandler: public IRequestHandler {
  public:
-  ReqHandler(const string& dictPath, const string& modelPath, const string& userDictPath): _segment(dictPath, modelPath, userDictPath) {};
+  ReqHandler(const ISegment& segment): _segment(segment) {
+  }
   virtual ~ReqHandler() {};
- public:
+
   virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd) const {
     string sentence, tmp;
     vector<string> words;
@@ -37,7 +38,7 @@ class ReqHandler: public IRequestHandler {
     return true;
   }
  private:
-  MixSegment _segment;
+  const ISegment& _segment;
 };
 
 bool run(int argc, char** argv) {
@@ -65,7 +66,15 @@ bool run(int argc, char** argv) {
 
   LogInfo("config info: %s", conf.getConfigInfo().c_str());
 
-  ReqHandler reqHandler(dictPath, modelPath, userDictPath);
+  /*
+   * segment can be one of (MPSegment, HMMSegment, MixSegment, QuerySegment ...)
+  */
+  //MPSegment segment(dictPath, userDictPath);
+  //HMMSegment segment(modelPath);
+  MixSegment segment(dictPath, modelPath, userDictPath);
+  //QuerySegment segment(dictPath, modelPath);
+  
+  ReqHandler reqHandler(segment);
   ThreadPoolServer sf(threadNumber, queueMaxSize, port, reqHandler);
   return sf.start();
 
