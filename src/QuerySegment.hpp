@@ -17,7 +17,7 @@ namespace CppJieba {
 class QuerySegment: public SegmentBase {
  public:
   QuerySegment() {};
-  QuerySegment(const string& dict, const string& model, size_t maxWordLen, const string& userDict = "") {
+  QuerySegment(const string& dict, const string& model, size_t maxWordLen = 4, const string& userDict = "") {
     init(dict, model, maxWordLen, userDict);
   };
   virtual ~QuerySegment() {};
