@@ -10,7 +10,7 @@ CppJieba是"结巴"中文分词的C++版本
 
 + 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码， 因为`gbk`编码缺少严格测试，慎用。
-+ 内置分词服务`server/server.cpp`，在linux环境下可安装使用(可选)。
++ 内置分词服务`server/server.cpp`，在linux环境下可安装使用(可选)，可通过http参数选择不同分词算法进行分词。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 + 支持 `linux` , `mac osx` 操作系统。
@@ -59,7 +59,7 @@ make
 ### 启动服务
 
 ```
-./bin/cjserver ../test/testdata/server.conf
+./bin/cjserver ../conf/server_example.conf
 ```
 
 ### 客户端请求示例
@@ -80,8 +80,18 @@ curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
 南京市 长江大桥
 ```
 
-用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
+默认切词算法是MixSegment切词算法，如果想要使用其他算法切词，可以使用参数method来设置。
+示例如下：
 
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MP"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=HMM"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MIX"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=FULL"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=QUERY"
+```
+
+用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
 
 同时，也支持HTTP POST模式，使用如下调用:
 
@@ -107,15 +117,15 @@ sudo make install
 ### 服务启动和停止(仅限 linux 系统)
 
 ```
-/etc/init.d/cjserver.start >> /dev/null 2>&1
-/etc/init.d/cjserver.stop
+cd /usr/local/cppjieba
+./script/cjserver.start
+./script/cjserver.stop
 ```
 
 ### 卸载服务(仅限 linux 系统)
 
 ```sh
-cd build/
-cat install_manifest.txt | sudo xargs rm -rf
+rm -rf /usr/local/cppjieba
 ```
 
 ## Docker 示例

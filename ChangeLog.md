@@ -7,6 +7,8 @@
 3. 修改 Code Style ，参照 google code style 。 
 4. 增加更详细的错误日志，在初始化过程中合理使用LogFatal。
 5. 增加 Application 这个类，整合了所有CppJieba的功能进去，以后用户只需要使用这个类即可。
+6. 修改 cjserver 服务，可以通过http参数使用不同切词算法进行切词。
+7. 修改 make install 的安装目录，统一安装到同一个目录 /usr/local/cppjieba 。
 
 ## v2.4.4
 

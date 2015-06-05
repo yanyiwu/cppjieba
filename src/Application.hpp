@@ -17,9 +17,13 @@ enum CutMethod {
 
 class Application {
  public:
-  Application(const string& dictDir) 
-    : dictTrie_(pathJoin(dictDir, "jieba.dict.utf8")),
-      model_(pathJoin(dictDir, "hmm_model.utf8")),
+  Application(const string& dictPath, 
+              const string& modelPath, 
+              const string& userDictPath,
+              const string& idfPath,
+              const string& stopWordsPath) 
+    : dictTrie_(dictPath, userDictPath),
+      model_(modelPath),
       mpSeg_(&dictTrie_),
       hmmSeg_(&model_),
       mixSeg_(&dictTrie_, &model_),
@@ -28,8 +32,8 @@ class Application {
       tagger_(&dictTrie_, &model_), 
       extractor_(&dictTrie_, 
                  &model_, 
-                 pathJoin(dictDir, "idf.utf8"), 
-                 pathJoin(dictDir, "stop_words.utf8")) {
+                 idfPath,
+                 stopWordsPath) {
   }
   void cut(const string& sentence, vector<string>& words, 
         CutMethod method) const {

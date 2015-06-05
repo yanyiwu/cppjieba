@@ -16,7 +16,11 @@ void LoadSentences(const string& filepath, vector<string>& sentences) {
 }
 
 int main(int argc, char** argv) {
-  CppJieba::Application app("../dict/");
+  CppJieba::Application app("../dict/jieba.dict.utf8",
+                            "../dict/hmm_model.utf8",
+                            "../dict/user.dict.utf8",
+                            "../dict/idf.utf8",
+                            "../dict/stop_words.utf8");
   vector<string> words;
   string result;
   string s;
