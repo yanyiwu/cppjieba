@@ -4,7 +4,7 @@
 using namespace CppJieba;
 
 TEST(KeywordExtractorTest, Test1) {
-  KeywordExtractor extractor("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");
+  KeywordExtractor extractor("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");
 
   {
     string s("我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。");
@@ -28,7 +28,7 @@ TEST(KeywordExtractorTest, Test1) {
 }
 
 TEST(KeywordExtractorTest, Test2) {
-  KeywordExtractor extractor("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8", "../test/testdata/userdict.utf8");
+  KeywordExtractor extractor("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8", "../test/testdata/userdict.utf8");
 
   {
     string s("蓝翔优秀毕业生");

@@ -4,7 +4,7 @@
 
 using namespace CppJieba;
 
-static const char* const DICT_FILE = "../dict/extra_dict/jieba.dict.small.utf8";
+static const char* const DICT_FILE = "../test/testdata/extra_dict/jieba.dict.small.utf8";
 
 TEST(DictTrieTest, NewAndDelete) {
   DictTrie * trie;

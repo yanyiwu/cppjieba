@@ -23,7 +23,7 @@ TEST(MixSegmentTest, Test1) {
 }
 
 TEST(MixSegmentTest, NoUserDict) {
-  MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
+  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
   const char* str = "令狐冲是云计算方面的专家";
   vector<string> words;
   ASSERT_TRUE(segment.cut(str, words));
@@ -32,7 +32,7 @@ TEST(MixSegmentTest, NoUserDict) {
 
 }
 TEST(MixSegmentTest, UserDict) {
-  MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/user.dict.utf8");
+  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/user.dict.utf8");
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
@@ -58,7 +58,7 @@ TEST(MixSegmentTest, UserDict) {
   }
 }
 TEST(MixSegmentTest, UserDict2) {
-  MixSegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
@@ -102,7 +102,7 @@ TEST(MPSegmentTest, Test1) {
 }
 
 TEST(MPSegmentTest, Test2) {
-  MPSegment segment("../dict/extra_dict/jieba.dict.small.utf8");
+  MPSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
   string line;
   ifstream ifs("../test/testdata/review.100");
   vector<string> words;
@@ -150,7 +150,7 @@ TEST(HMMSegmentTest, Test1) {
 }
 
 TEST(FullSegment, Test1) {
-  FullSegment segment("../dict/extra_dict/jieba.dict.small.utf8");
+  FullSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
   const char* str = "我来自北京邮电大学";
   vector<string> words;
 
@@ -162,7 +162,7 @@ TEST(FullSegment, Test1) {
 }
 
 TEST(QuerySegment, Test1) {
-  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "", 3);
   const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
   vector<string> words;
 
@@ -176,7 +176,7 @@ TEST(QuerySegment, Test1) {
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8", 3);
 
   {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
