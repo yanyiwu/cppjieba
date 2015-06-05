@@ -162,7 +162,7 @@ TEST(FullSegment, Test1) {
 }
 
 TEST(QuerySegment, Test1) {
-  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", 3);
+  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "", 3);
   const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
   vector<string> words;
 
@@ -176,7 +176,7 @@ TEST(QuerySegment, Test1) {
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", 3, "../test/testdata/userdict.utf8");
+  QuerySegment segment("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8", 3);
 
   {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";

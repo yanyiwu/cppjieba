@@ -16,8 +16,7 @@
 namespace CppJieba {
 class QuerySegment: public SegmentBase {
  public:
-  QuerySegment(const string& dict, const string& model, size_t maxWordLen = 4, 
-        const string& userDict = "")
+  QuerySegment(const string& dict, const string& model, const string& userDict = "", size_t maxWordLen = 4)
     : mixSeg_(dict, model, userDict),
       fullSeg_(mixSeg_.getDictTrie()),
       maxWordLen_(maxWordLen) {
