@@ -23,8 +23,8 @@ class QuerySegment: public SegmentBase {
       maxWordLen_(maxWordLen) {
     assert(maxWordLen_);
   }
-  QuerySegment(const DictTrie* dictTrie, const HMMModel* model)
-    : mixSeg_(dictTrie, model), fullSeg_(dictTrie) {
+  QuerySegment(const DictTrie* dictTrie, const HMMModel* model, size_t maxWordLen = 4)
+    : mixSeg_(dictTrie, model), fullSeg_(dictTrie), maxWordLen_(maxWordLen) {
   }
   virtual ~QuerySegment() {
   }
@@ -39,7 +39,6 @@ class QuerySegment: public SegmentBase {
 
     vector<Unicode> fullRes;
     for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
-
       // if it's too long, cut with fullSeg_, put fullRes in res
       if (mixResItr->size() > maxWordLen_) {
         if (fullSeg_.cut(mixResItr->begin(), mixResItr->end(), fullRes)) {

@@ -43,6 +43,10 @@ inline string encode(Unicode::const_iterator begin, Unicode::const_iterator end)
   return res;
 }
 
+inline string encode(const Unicode& unicode) {
+  return encode(unicode.begin(), unicode.end());
+}
+
 // compiler is expected to optimized this function to avoid return value copy
 inline Unicode decode(const string& str) {
   Unicode unicode;
@@ -50,7 +54,8 @@ inline Unicode decode(const string& str) {
   decode(str, unicode);
   return unicode;
 }
-}
-}
+
+} // namespace TransCode
+} // namespace CppJieba
 
 #endif

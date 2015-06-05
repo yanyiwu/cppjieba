@@ -1,11 +1,12 @@
 # CppJieba ChangeLog
 
-## v2.5.0 (untagged)
+## v3.0.0 (untagged)
 
 1. 使得 QuerySegment 支持自定义词典（可选参数）。
 2. 使得 KeywordExtractor 支持自定义词典（可选参数）。
 3. 修改 Code Style ，参照 google code style 。 
 4. 增加更详细的错误日志，在初始化过程中合理使用LogFatal。
+5. 增加 Application 这个类，整合了所有CppJieba的功能进去，以后用户只需要使用这个类即可。
 
 ## v2.4.4
 

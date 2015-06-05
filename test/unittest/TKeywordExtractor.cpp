@@ -3,8 +3,6 @@
 
 using namespace CppJieba;
 
-
-
 TEST(KeywordExtractorTest, Test1) {
   KeywordExtractor extractor("../dict/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");
 
