@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## v3.0.0 (untagged)
+## v3.0.0
 
 1. 使得 QuerySegment 支持自定义词典（可选参数）。
 2. 使得 KeywordExtractor 支持自定义词典（可选参数）。
