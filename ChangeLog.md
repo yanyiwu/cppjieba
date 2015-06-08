@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v3.0.1(untagged)
+
+1. 提升兼容性，修复在某些特定环境下的编译错误问题。 
+
 ## v3.0.0
 
 1. 使得 QuerySegment 支持自定义词典（可选参数）。
