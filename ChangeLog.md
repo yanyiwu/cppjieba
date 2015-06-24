@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## v3.0.1(untagged)
+## v3.0.1
 
 1. 提升兼容性，修复在某些特定环境下的编译错误问题。 
 
