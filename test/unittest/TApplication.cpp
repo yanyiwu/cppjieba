@@ -11,6 +11,10 @@ TEST(ApplicationTest, Test1) {
                             "../dict/stop_words.utf8");
   vector<string> words;
   string result;
+
+  app.cut("他来到了网易杭研大厦", words);
+  result << words;
+  ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
   
   app.cut("我来自北京邮电大学。", words, METHOD_MP);
   result << words;
@@ -46,3 +50,11 @@ TEST(ApplicationTest, Test1) {
   result << keywordres;
   ASSERT_EQ(result, "[\"CEO:11.7392\", \"升职:10.8562\", \"加薪:10.6426\", \"手扶拖拉机:10.0089\", \"巅峰:9.49396\"]");
 }
+
+//TEST(ApplicationTest, InsertUserWord) {
+//  CppJieba::Application app("../dict/jieba.dict.utf8",
+//                            "../dict/hmm_model.utf8",
+//                            "../dict/user.dict.utf8",
+//                            "../dict/idf.utf8",
+//                            "../dict/stop_words.utf8");
+//}
