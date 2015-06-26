@@ -57,8 +57,8 @@ class Application {
         LogError("argument method is illegal.");
     }
   }
-  void insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
-    dictTrie_.insertUserWord(word, tag);
+  bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
+    return dictTrie_.insertUserWord(word, tag);
   }
   void tag(const string& str, vector<pair<string, string> >& res) const {
     tagger_.tag(str, res);

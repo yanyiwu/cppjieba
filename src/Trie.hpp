@@ -85,13 +85,11 @@ class Trie {
     return ptNode->ptValue;
   }
   // aho-corasick-automation
-  void find(
-    Unicode::const_iterator begin,
+  void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
-    vector<struct SegmentChar>& res
-  ) const {
+    vector<struct SegmentChar>& res) const {
     res.resize(end - begin);
-    const TrieNode * now = root_;
+    const TrieNode* now = root_;
     const TrieNode* node;
     // compiler will complain warnings if only "i < end - begin" .
     for (size_t i = 0; i < size_t(end - begin); i++) {
@@ -134,8 +132,7 @@ class Trie {
       }
     }
   }
-  bool find(
-    Unicode::const_iterator begin,
+  bool find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
     DagType & res,
     size_t offset = 0) const {
@@ -156,6 +153,9 @@ class Trie {
       }
     }
     return !res.empty();
+  }
+  void insertNode(const Unicode& key, const DictUnit* ptValue) {
+    insertNode_(key, ptValue);
   }
  private:
   void build_() {
@@ -191,7 +191,8 @@ class Trie {
       }
     }
   }
-  void createTrie_(const vector<Unicode>& keys, const vector<const DictUnit*> & valuePointers) {
+  void createTrie_(const vector<Unicode>& keys, 
+        const vector<const DictUnit*> & valuePointers) {
     if(valuePointers.empty() || keys.empty()) {
       return;
     }

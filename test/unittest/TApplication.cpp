@@ -51,10 +51,22 @@ TEST(ApplicationTest, Test1) {
   ASSERT_EQ(result, "[\"CEO:11.7392\", \"升职:10.8562\", \"加薪:10.6426\", \"手扶拖拉机:10.0089\", \"巅峰:9.49396\"]");
 }
 
-//TEST(ApplicationTest, InsertUserWord) {
-//  CppJieba::Application app("../dict/jieba.dict.utf8",
-//                            "../dict/hmm_model.utf8",
-//                            "../dict/user.dict.utf8",
-//                            "../dict/idf.utf8",
-//                            "../dict/stop_words.utf8");
-//}
+TEST(ApplicationTest, InsertUserWord) {
+  CppJieba::Application app("../dict/jieba.dict.utf8",
+                            "../dict/hmm_model.utf8",
+                            "../dict/user.dict.utf8",
+                            "../dict/idf.utf8",
+                            "../dict/stop_words.utf8");
+  vector<string> words;
+  string result;
+
+  app.cut("男默女泪", words);
+  result << words;
+  ASSERT_EQ("[\"男默\", \"女泪\"]", result);
+
+  //ASSERT_TRUE(app.insertUserWord("男默女泪"));
+
+  //app.cut("男默女泪", words);
+  //result << words;
+  //ASSERT_EQ("[\"男默女泪\"]", result);
+}
