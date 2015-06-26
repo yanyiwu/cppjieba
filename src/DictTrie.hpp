@@ -46,10 +46,10 @@ class DictTrie {
     loadDict_(dictPath);
     calculateWeight_(nodeInfos_);
     minWeight_ = findMinWeight_(nodeInfos_);
+    maxWeight_ = findMaxWeight_(nodeInfos_);
 
     if(userDictPath.size()) {
-      double maxWeight = findMaxWeight_(nodeInfos_);
-      loadUserDict_(userDictPath, maxWeight, UNKNOWN_TAG);
+      loadUserDict_(userDictPath);
     }
     shrink_(nodeInfos_);
     trie_ = createTrie_(nodeInfos_);
@@ -62,13 +62,25 @@ class DictTrie {
   bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType& dag, size_t offset = 0) const {
     return trie_->find(begin, end, dag, offset);
   }
-  void find(
-    Unicode::const_iterator begin,
+  void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
-    vector<SegmentChar>& res
-  ) const {
+    vector<SegmentChar>& res) const {
     trie_->find(begin, end, res);
   }
+  bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
+    DictUnit nodeInfo;
+    if(!TransCode::decode(word, nodeInfo.word)) {
+      LogError("decode %s failed.", word.c_str());
+      return false;
+    }
+    if(nodeInfo.word.size() == 1) {
+      userDictSingleChineseWord_.insert(nodeInfo.word[0]);
+    }
+    nodeInfo.weight = maxWeight_;
+    nodeInfo.tag = tag;
+    nodeInfos_.push_back(nodeInfo);
+    return true;
+  } 
   bool isUserDictSingleChineseWord(const Unicode::value_type& word) const {
     return isIn(userDictSingleChineseWord_, word);
   }
@@ -90,7 +102,7 @@ class DictTrie {
     Trie * trie = new Trie(words, valuePointers);
     return trie;
   }
-  void loadUserDict_(const string& filePath, double defaultWeight, const string& defaultTag) {
+  void loadUserDict_(const string& filePath) {
     ifstream ifs(filePath.c_str());
     if(!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
@@ -105,18 +117,20 @@ class DictTrie {
       if(buf.size() < 1) {
         LogFatal("split [%s] result illegal", line.c_str());
       }
-      if(!TransCode::decode(buf[0], nodeInfo.word)) {
-        LogError("line[%u:%s] illegal.", lineno, line.c_str());
-        continue;
-      }
-      if(nodeInfo.word.size() == 1) {
-        userDictSingleChineseWord_.insert(nodeInfo.word[0]);
-      }
-      nodeInfo.weight = defaultWeight;
-      nodeInfo.tag = (buf.size() == 2 ? buf[1] : defaultTag);
-      nodeInfos_.push_back(nodeInfo);
+      insertUserWord(buf[0], (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
     }
     LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
+  }
+  bool insertWord_(const string& word, double weight, const string& tag) {
+    DictUnit nodeInfo;
+    if(!TransCode::decode(word, nodeInfo.word)) {
+      LogError("decode %s failed.", word.c_str());
+      return false;
+    }
+    nodeInfo.weight = weight;
+    nodeInfo.tag = tag;
+    nodeInfos_.push_back(nodeInfo);
+    return true;
   }
   void loadDict_(const string& filePath) {
     ifstream ifs(filePath.c_str());
@@ -132,15 +146,7 @@ class DictTrie {
       if(buf.size() != DICT_COLUMN_NUM) {
         LogFatal("split result illegal, line: %s, result size: %u", line.c_str(), buf.size());
       }
-
-      if(!TransCode::decode(buf[0], nodeInfo.word)) {
-        LogError("line[%u:%s] illegal.", lineno, line.c_str());
-        continue;
-      }
-      nodeInfo.weight = atof(buf[1].c_str());
-      nodeInfo.tag = buf[2];
-
-      nodeInfos_.push_back(nodeInfo);
+      insertWord_(buf[0], atof(buf[1].c_str()), buf[2]);
     }
   }
   double findMinWeight_(const vector<DictUnit>& nodeInfos) const {
@@ -180,6 +186,7 @@ class DictTrie {
   Trie * trie_;
 
   double minWeight_;
+  double maxWeight_;
   unordered_set<Unicode::value_type> userDictSingleChineseWord_;
 };
 }
