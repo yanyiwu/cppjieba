@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v3.1.0
 
 1. 新增可动态增加词典的API: insertUserWord
 2. cut函数增加默认参数，默认使用Mix切词算法。关于切词算法详见README.md
