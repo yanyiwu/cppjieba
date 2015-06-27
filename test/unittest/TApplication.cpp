@@ -69,4 +69,13 @@ TEST(ApplicationTest, InsertUserWord) {
   app.cut("男默女泪", words);
   result << words;
   ASSERT_EQ("[\"男默女泪\"]", result);
+
+  for(size_t i = 0; i < 100; i++) {
+    string newWord;
+    newWord << rand();
+    ASSERT_TRUE(app.insertUserWord(newWord));
+    app.cut(newWord, words);
+    result << words;
+    ASSERT_EQ(result, string_format("[\"%s\"]", newWord.c_str()));
+  }
 }
