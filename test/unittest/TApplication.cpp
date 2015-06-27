@@ -64,9 +64,9 @@ TEST(ApplicationTest, InsertUserWord) {
   result << words;
   ASSERT_EQ("[\"男默\", \"女泪\"]", result);
 
-  //ASSERT_TRUE(app.insertUserWord("男默女泪"));
+  ASSERT_TRUE(app.insertUserWord("男默女泪"));
 
-  //app.cut("男默女泪", words);
-  //result << words;
-  //ASSERT_EQ("[\"男默女泪\"]", result);
+  app.cut("男默女泪", words);
+  result << words;
+  ASSERT_EQ("[\"男默女泪\"]", result);
 }

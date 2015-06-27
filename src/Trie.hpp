@@ -155,18 +155,24 @@ class Trie {
     return !res.empty();
   }
   void insertNode(const Unicode& key, const DictUnit* ptValue) {
-    insertNode_(key, ptValue);
+    TrieNode* newAddedNode = insertNode_(key, ptValue);
+    if (newAddedNode) {
+      build_(newAddedNode);
+    }
   }
  private:
   void build_() {
-    queue<TrieNode*> que;
     assert(root_->ptValue == NULL);
     assert(root_->next);
     root_->fail = NULL;
     for(TrieNode::NextMap::iterator iter = root_->next->begin(); iter != root_->next->end(); iter++) {
-      iter->second->fail = root_;
-      que.push(iter->second);
+      build_(iter->second);
     }
+  }
+  void build_(TrieNode* node) {
+    node->fail = root_;
+    queue<TrieNode*> que;
+    que.push(node);
     TrieNode* back = NULL;
     TrieNode::NextMap::iterator backiter;
     while(!que.empty()) {
@@ -202,8 +208,9 @@ class Trie {
       insertNode_(keys[i], valuePointers[i]);
     }
   }
-  void insertNode_(const Unicode& key, const DictUnit* ptValue) {
+  TrieNode* insertNode_(const Unicode& key, const DictUnit* ptValue) {
     TrieNode* ptNode  = root_;
+    TrieNode* newAddedNode = NULL;
 
     TrieNode::NextMap::const_iterator kmIter;
 
@@ -217,6 +224,9 @@ class Trie {
         nextNode->next = NULL;
         nextNode->ptValue = NULL;
 
+        if(newAddedNode == NULL) {
+          newAddedNode = nextNode;
+        }
         (*ptNode->next)[*citer] = nextNode;
         ptNode = nextNode;
       } else {
@@ -224,6 +234,7 @@ class Trie {
       }
     }
     ptNode->ptValue = ptValue;
+    return newAddedNode;
   }
   void deleteNode_(TrieNode* node) {
     if(!node) {
