@@ -5,64 +5,40 @@
 #include <fstream>
 #include <memory.h>
 #include <cassert>
-#include "Limonp/StringUtil.hpp"
-#include "Limonp/Logger.hpp"
-#include "TransCode.hpp"
-#include "ISegment.hpp"
+#include "HMMModel.hpp"
 #include "SegmentBase.hpp"
-#include "DictTrie.hpp"
 
 namespace CppJieba {
-using namespace Limonp;
-typedef unordered_map<uint16_t, double> EmitProbMap;
 class HMMSegment: public SegmentBase {
  public:
-  /*
-   * STATUS:
-   * 0:B, 1:E, 2:M, 3:S
-   * */
-  enum {B = 0, E = 1, M = 2, S = 3, STATUS_SUM = 4};
+  HMMSegment(const string& filePath) {
+    model_ = new HMMModel(filePath);
+  }
+  HMMSegment(const HMMModel* model) 
+  : model_(model), isNeedDestroy_(false) {
+  }
+  virtual ~HMMSegment() {
+    if(isNeedDestroy_) {
+      delete model_;
+    }
+  }
 
- public:
-  HMMSegment() {}
-  explicit HMMSegment(const string& filePath) {
-    LIMONP_CHECK(init(filePath));
-  }
-  virtual ~HMMSegment() {}
- public:
-  bool init(const string& filePath) {
-    memset(_startProb, 0, sizeof(_startProb));
-    memset(_transProb, 0, sizeof(_transProb));
-    _statMap[0] = 'B';
-    _statMap[1] = 'E';
-    _statMap[2] = 'M';
-    _statMap[3] = 'S';
-    _emitProbVec.push_back(&_emitProbB);
-    _emitProbVec.push_back(&_emitProbE);
-    _emitProbVec.push_back(&_emitProbM);
-    _emitProbVec.push_back(&_emitProbS);
-    LIMONP_CHECK(_loadModel(filePath.c_str()));
-    LogInfo("HMMSegment init(%s) ok.", filePath.c_str());
-    return true;
-  }
- public:
   using SegmentBase::cut;
- public:
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const {
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right = begin;
     while(right != end) {
       if(*right < 0x80) {
-        if(left != right && !_cut(left, right, res)) {
+        if(left != right && !cut_(left, right, res)) {
           return false;
         }
         left = right;
         do {
-          right = _sequentialLetterRule(left, end);
+          right = sequentialLetterRule_(left, end);
           if(right != left) {
             break;
           }
-          right = _numbersRule(left, end);
+          right = numbersRule_(left, end);
           if(right != left) {
             break;
           }
@@ -74,12 +50,11 @@ class HMMSegment: public SegmentBase {
         right++;
       }
     }
-    if(left != right && !_cut(left, right, res)) {
+    if(left != right && !cut_(left, right, res)) {
       return false;
     }
     return true;
   }
- public:
   virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const {
     if(begin == end) {
       return false;
@@ -92,15 +67,13 @@ class HMMSegment: public SegmentBase {
     size_t offset = res.size();
     res.resize(res.size() + words.size());
     for(size_t i = 0; i < words.size(); i++) {
-      if(!TransCode::encode(words[i], res[offset + i])) {
-        LogError("encode failed.");
-      }
+      TransCode::encode(words[i], res[offset + i]);
     }
     return true;
   }
  private:
   // sequential letters rule
-  Unicode::const_iterator _sequentialLetterRule(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+  Unicode::const_iterator sequentialLetterRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     Unicode::value_type x = *begin;
     if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
       begin ++;
@@ -118,7 +91,7 @@ class HMMSegment: public SegmentBase {
     return begin;
   }
   //
-  Unicode::const_iterator _numbersRule(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+  Unicode::const_iterator numbersRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     Unicode::value_type x = *begin;
     if('0' <= x && x <= '9') {
       begin ++;
@@ -135,17 +108,17 @@ class HMMSegment: public SegmentBase {
     }
     return begin;
   }
-  bool _cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  bool cut_(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<size_t> status;
-    if(!_viterbi(begin, end, status)) {
-      LogError("_viterbi failed.");
+    if(!viterbi_(begin, end, status)) {
+      LogError("viterbi_ failed.");
       return false;
     }
 
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right;
     for(size_t i = 0; i < status.size(); i++) {
-      if(status[i] % 2) { //if(E == status[i] || S == status[i])
+      if(status[i] % 2) { //if(HMMModel::E == status[i] || HMMModel::S == status[i])
         right = begin + i + 1;
         res.push_back(Unicode(left, right));
         left = right;
@@ -154,12 +127,13 @@ class HMMSegment: public SegmentBase {
     return true;
   }
 
-  bool _viterbi(Unicode::const_iterator begin, Unicode::const_iterator end, vector<size_t>& status)const {
+  bool viterbi_(Unicode::const_iterator begin, Unicode::const_iterator end, 
+        vector<size_t>& status) const {
     if(begin == end) {
       return false;
     }
 
-    size_t Y = STATUS_SUM;
+    size_t Y = HMMModel::STATUS_SUM;
     size_t X = end - begin;
 
     size_t XYSize = X * Y;
@@ -171,10 +145,9 @@ class HMMSegment: public SegmentBase {
 
     //start
     for(size_t y = 0; y < Y; y++) {
-      weight[0 + y * X] = _startProb[y] + _getEmitProb(_emitProbVec[y], *begin, MIN_DOUBLE);
+      weight[0 + y * X] = model_->startProb[y] + model_->getEmitProb(model_->emitProbVec[y], *begin, MIN_DOUBLE);
       path[0 + y * X] = -1;
     }
-
 
     double emitProb;
 
@@ -182,11 +155,11 @@ class HMMSegment: public SegmentBase {
       for(size_t y = 0; y < Y; y++) {
         now = x + y*X;
         weight[now] = MIN_DOUBLE;
-        path[now] = E; // warning
-        emitProb = _getEmitProb(_emitProbVec[y], *(begin+x), MIN_DOUBLE);
+        path[now] = HMMModel::E; // warning
+        emitProb = model_->getEmitProb(model_->emitProbVec[y], *(begin+x), MIN_DOUBLE);
         for(size_t preY = 0; preY < Y; preY++) {
           old = x - 1 + preY * X;
-          tmp = weight[old] + _transProb[preY][y] + emitProb;
+          tmp = weight[old] + model_->transProb[preY][y] + emitProb;
           if(tmp > weight[now]) {
             weight[now] = tmp;
             path[now] = preY;
@@ -195,13 +168,13 @@ class HMMSegment: public SegmentBase {
       }
     }
 
-    endE = weight[X-1+E*X];
-    endS = weight[X-1+S*X];
+    endE = weight[X-1+HMMModel::E*X];
+    endS = weight[X-1+HMMModel::S*X];
     stat = 0;
     if(endE >= endS) {
-      stat = E;
+      stat = HMMModel::E;
     } else {
-      stat = S;
+      stat = HMMModel::S;
     }
 
     status.resize(X);
@@ -212,115 +185,12 @@ class HMMSegment: public SegmentBase {
 
     return true;
   }
-  bool _loadModel(const char* const filePath) {
-    ifstream ifile(filePath);
-    string line;
-    vector<string> tmp;
-    vector<string> tmp2;
-    //load _startProb
-    if(!_getLine(ifile, line)) {
-      return false;
-    }
-    split(line, tmp, " ");
-    if(tmp.size() != STATUS_SUM) {
-      LogError("start_p illegal");
-      return false;
-    }
-    for(size_t j = 0; j< tmp.size(); j++) {
-      _startProb[j] = atof(tmp[j].c_str());
-    }
-
-    //load _transProb
-    for(size_t i = 0; i < STATUS_SUM; i++) {
-      if(!_getLine(ifile, line)) {
-        return false;
-      }
-      split(line, tmp, " ");
-      if(tmp.size() != STATUS_SUM) {
-        LogError("trans_p illegal");
-        return false;
-      }
-      for(size_t j =0; j < STATUS_SUM; j++) {
-        _transProb[i][j] = atof(tmp[j].c_str());
-      }
-    }
-
-    //load _emitProbB
-    if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbB)) {
-      return false;
-    }
-
-    //load _emitProbE
-    if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbE)) {
-      return false;
-    }
-
-    //load _emitProbM
-    if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbM)) {
-      return false;
-    }
-
-    //load _emitProbS
-    if(!_getLine(ifile, line) || !_loadEmitProb(line, _emitProbS)) {
-      return false;
-    }
-
-    return true;
-  }
-  bool _getLine(ifstream& ifile, string& line) {
-    while(getline(ifile, line)) {
-      trim(line);
-      if(line.empty()) {
-        continue;
-      }
-      if(startsWith(line, "#")) {
-        continue;
-      }
-      return true;
-    }
-    return false;
-  }
-  bool _loadEmitProb(const string& line, EmitProbMap& mp) {
-    if(line.empty()) {
-      return false;
-    }
-    vector<string> tmp, tmp2;
-    Unicode unicode;
-    split(line, tmp, ",");
-    for(size_t i = 0; i < tmp.size(); i++) {
-      split(tmp[i], tmp2, ":");
-      if(2 != tmp2.size()) {
-        LogError("_emitProb illegal.");
-        return false;
-      }
-      if(!TransCode::decode(tmp2[0], unicode) || unicode.size() != 1) {
-        LogError("TransCode failed.");
-        return false;
-      }
-      mp[unicode[0]] = atof(tmp2[1].c_str());
-    }
-    return true;
-  }
-  double _getEmitProb(const EmitProbMap* ptMp, uint16_t key, double defVal)const {
-    EmitProbMap::const_iterator cit = ptMp->find(key);
-    if(cit == ptMp->end()) {
-      return defVal;
-    }
-    return cit->second;
-
-  }
 
  private:
-  char _statMap[STATUS_SUM];
-  double _startProb[STATUS_SUM];
-  double _transProb[STATUS_SUM][STATUS_SUM];
-  EmitProbMap _emitProbB;
-  EmitProbMap _emitProbE;
-  EmitProbMap _emitProbM;
-  EmitProbMap _emitProbS;
-  vector<EmitProbMap* > _emitProbVec;
+  const HMMModel* model_;
+  bool isNeedDestroy_;
+}; // class HMMSegment
 
-};
-}
+} // namespace CppJieba
 
 #endif

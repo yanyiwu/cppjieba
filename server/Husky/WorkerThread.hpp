@@ -27,13 +27,13 @@ class WorkerThread: public ITask {
   void run() {
     do {
       if(!_setsockopt(_sockfd)) {
-        LogFatal("_getsockopt failed.");
+        LogError("_getsockopt failed.");
         break;
       }
       string strSnd, strRetByHandler;
       HttpReqInfo httpReq;
       if(!_receive(_sockfd, httpReq)) {
-        LogFatal("_receive failed.");
+        LogError("_receive failed.");
         break;
       }
 

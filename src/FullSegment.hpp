@@ -13,46 +13,23 @@
 namespace CppJieba {
 class FullSegment: public SegmentBase {
  public:
-  FullSegment() {
-    _dictTrie = NULL;
-    _isBorrowed = false;
+  FullSegment(const string& dictPath) {
+    dictTrie_ = new DictTrie(dictPath);
+    isNeedDestroy_ = true;
+    LogInfo("FullSegment init %s ok", dictPath.c_str());
   }
-  explicit FullSegment(const string& dictPath) {
-    _dictTrie = NULL;
-    init(dictPath);
-  }
-  explicit FullSegment(const DictTrie* dictTrie) {
-    _dictTrie = NULL;
-    init(dictTrie);
+  FullSegment(const DictTrie* dictTrie)
+    : dictTrie_(dictTrie), isNeedDestroy_(false) {
+    assert(dictTrie_);
   }
   virtual ~FullSegment() {
-    if(_dictTrie && ! _isBorrowed) {
-      delete _dictTrie;
+    if(isNeedDestroy_) {
+      delete dictTrie_;
     }
-
-  };
-  bool init(const string& dictPath) {
-    assert(_dictTrie == NULL);
-    _dictTrie = new DictTrie(dictPath);
-    _isBorrowed = false;
-    return true;
   }
-  bool init(const DictTrie* dictTrie) {
-    assert(_dictTrie == NULL);
-    assert(dictTrie);
-    _dictTrie = dictTrie;
-    _isBorrowed = true;
-    return true;
-  }
-
   using SegmentBase::cut;
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
-    assert(_dictTrie);
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
+  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
+        vector<Unicode>& res) const {
     //resut of searching in trie tree
     DagType tRes;
 
@@ -64,9 +41,10 @@ class FullSegment: public SegmentBase {
 
     //tmp variables
     int wordLen = 0;
+    assert(dictTrie_);
     for (Unicode::const_iterator uItr = begin; uItr != end; uItr++) {
       //find word start from uItr
-      if (_dictTrie->find(uItr, end, tRes, 0)) {
+      if (dictTrie_->find(uItr, end, tRes, 0)) {
         for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
           //for (vector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
         {
@@ -92,13 +70,8 @@ class FullSegment: public SegmentBase {
     return true;
   }
 
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
-    assert(_dictTrie);
-    if (begin >= end) {
-      LogError("begin >= end");
-      return false;
-    }
-
+  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
+        vector<string>& res) const {
     vector<Unicode> uRes;
     if (!cut(begin, end, uRes)) {
       LogError("get unicode cut result error.");
@@ -106,19 +79,17 @@ class FullSegment: public SegmentBase {
     }
 
     string tmp;
-    for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++) {
-      if (TransCode::encode(*uItr, tmp)) {
-        res.push_back(tmp);
-      } else {
-        LogError("encode failed.");
-      }
+    for (vector<Unicode>::const_iterator uItr = uRes.begin(); 
+          uItr != uRes.end(); uItr++) {
+      TransCode::encode(*uItr, tmp);
+      res.push_back(tmp);
     }
 
     return true;
   }
  private:
-  const DictTrie* _dictTrie;
-  bool _isBorrowed;
+  const DictTrie* dictTrie_;
+  bool isNeedDestroy_;
 };
 }
 

@@ -1,1 +1,6 @@
-INSTALL(PROGRAMS cjserver.start cjserver.stop DESTINATION /etc/init.d/)
+INSTALL(PROGRAMS 
+    cjserver.start 
+    cjserver.stop 
+    DESTINATION 
+    script
+)

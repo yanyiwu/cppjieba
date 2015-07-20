@@ -1,1 +1,1 @@
-INSTALL(FILES server.conf DESTINATION /etc/CppJieba)
+INSTALL(FILES server.conf DESTINATION conf)

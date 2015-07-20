@@ -22,7 +22,7 @@
 #define LogInfo(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_INFO, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogWarn(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_WARN, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
 #define LogError(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_ERROR, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
-#define LogFatal(fmt, ...) Limonp::Logger::LoggingF(Limonp::LL_FATAL, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__)
+#define LogFatal(fmt, ...) {Limonp::Logger::LoggingF(Limonp::LL_FATAL, FILE_BASENAME, __LINE__, fmt, ## __VA_ARGS__); abort();}
 
 namespace Limonp {
 using namespace std;

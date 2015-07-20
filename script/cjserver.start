@@ -7,6 +7,6 @@ if [ ! -z "${PID}" ]
 then
     echo "please stop cjserver first."
 else
-    cjserver /etc/CppJieba/server.conf &
+    /usr/local/cppjieba/bin/cjserver /usr/local/cppjieba/conf/server.conf >> /dev/null 2>&1 &
     echo "service started."
 fi

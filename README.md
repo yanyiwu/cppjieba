@@ -10,7 +10,7 @@ CppJieba是"结巴"中文分词的C++版本
 
 + 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码， 因为`gbk`编码缺少严格测试，慎用。
-+ 内置分词服务`server/server.cpp`，在linux环境下可安装使用。
++ 内置分词服务`server/server.cpp`，在linux环境下可安装使用(可选)，可通过http参数选择不同分词算法进行分词。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典。
 + 支持 `linux` , `mac osx` 操作系统。
@@ -42,21 +42,50 @@ make
 ./load_test
 ```
 
-## 演示
+## Demo
 
 ```
-./segment.demo
+./demo
 ```
 
-详细请看 `test/segment_demo.cpp`.
+结果示例：
+
+```
+[demo] METHOD_MP
+我/是/拖拉机/学院/手扶拖拉机/专业/的/。/不用/多久/，/我/就/会/升职/加薪/，/当/上/C/E/O/，/走上/人生/巅峰/。
+
+[demo] METHOD_HMM
+我/是/拖拉机/学院/手/扶/拖拉机/专业/的/。/不用/多久/，/我/就/会升/职加薪/，/当上/CEO/，/走上/人生/巅峰/。
+
+[demo] METHOD_MIX
+我/是/拖拉机/学院/手扶拖拉机/专业/的/。/不用/多久/，/我/就/会/升职/加薪/，/当上/CEO/，/走上/人生/巅峰/。
+
+[demo] METHOD_FULL
+我/是/拖拉/拖拉机/学院/手扶/手扶拖拉机/拖拉/拖拉机/专业/的/。/不用/多久/，/我/就/会升/升职/加薪/，/当上/C/E/O/，/走上/人生/巅峰/。
+[demo] METHOD_QUERY
+我/是/拖拉机/学院/手扶/手扶拖拉机/拖拉/拖拉机/专业/的/。/不用/多久/，/我/就/会/升职/加薪/，/当上/CEO/，/走上/人生/巅峰/。
+
+[demo] TAGGING
+我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
+["我:r", "是:v", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当上:t", "CEO:eng", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
+
+[demo] KEYWORD
+我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
+["CEO:11.7392", "升职:10.8562", "加薪:10.6426", "手扶拖拉机:10.0089", "巅峰:9.49396"]
+```
+
+详细请看 `test/demo.cpp`.
 
 
 ## 服务使用
 
+服务默认使用 MixSegment 切词方式，如果想要修改成其他方式，请参考 `server/server.cpp` 源码文件。
+将对应的方式的代码行注释去掉，重新编译即可。
+
 ### 启动服务
 
 ```
-./bin/cjserver ../test/testdata/server.conf
+./bin/cjserver ../conf/server_example.conf
 ```
 
 ### 客户端请求示例
@@ -77,8 +106,18 @@ curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
 南京市 长江大桥
 ```
 
-用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
+默认切词算法是MixSegment切词算法，如果想要使用其他算法切词，可以使用参数method来设置。
+示例如下：
 
+```
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MP"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=HMM"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MIX"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=FULL"
+curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=QUERY"
+```
+
+用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
 
 同时，也支持HTTP POST模式，使用如下调用:
 
@@ -94,7 +133,7 @@ curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
 
 因为 HTTP GET 请求有长度限制，如果需要请求长文的，请使用POST请求。
 
-### 安装服务
+### 安装服务(仅限 linux 系统)
 
 如果有需要**安装使用**的，可以按照如下操作：
 ```
@@ -104,15 +143,15 @@ sudo make install
 ### 服务启动和停止(仅限 linux 系统)
 
 ```
-/etc/init.d/cjserver.start >> /dev/null 2>&1
-/etc/init.d/cjserver.stop
+cd /usr/local/cppjieba
+./script/cjserver.start
+./script/cjserver.stop
 ```
 
 ### 卸载服务(仅限 linux 系统)
 
 ```sh
-cd build/
-cat install_manifest.txt | sudo xargs rm -rf
+rm -rf /usr/local/cppjieba
 ```
 
 ## Docker 示例
@@ -230,9 +269,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ### 自定义用户词典
 
-自定义词典示例请看`test/testdata/userdict.utf8`。
-
-载入自定义词典示例请看`test/segment.cpp`，产生的可执行文件示例请见 `build/segment.demo`
+自定义词典示例请看`dict/user.dict.utf8`。
 
 没有使用自定义用户词典时的结果:
 
@@ -249,29 +286,20 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 ### 关键词抽取
 
 ```
-make && ./keyword.demo
-```
-
-你将看到如下结果：
-
-```
 我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
 ["CEO:11.7392", "升职:10.8562", "加薪:10.6426", "手扶拖拉机:10.0089", "巅峰:9.49396"]
 ```
 
-详细请见 `test/keyword_demo.cpp`.
+详细请见 `test/demo.cpp`.
 
 ### 词性标注
 
 ```
-./tagging.demo
-```
-
-详情请看 `test/tagging_demo.cpp`.
-
-```
+我是蓝翔技工拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上总经理，出任CEO，迎娶白富美，走上人生巅峰。
 ["我:r", "是:v", "蓝翔:x", "技工:n", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当:t", "上:f", "总经理:n", "，:x", "出任:v", "CEO:eng", "，:x", "迎娶:v", "白富美:x", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
+
+详细请看 `test/demo.cpp`.
 
 支持自定义词性。
 比如在(`dict/user.dict.utf8`)增加一行
@@ -343,16 +371,24 @@ make && ./keyword.demo
 http://cppjieba-webdemo.herokuapp.com/
 (建议使用chrome打开)
 
+## 性能评测
+
+[Jieba中文分词系列性能评测]
+
 ## 客服
 
 `i@yanyiwu.com`
 
-![image](http://yanyiwu.com/weedfs/2/5a7d1b5c0d/yanyiwu_personal_qrcodes.jpg)
+![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
 "结巴"中文分词作者: SunJunyi  
 https://github.com/fxsjy/jieba
+
+## 许可证
+
+MIT http://yanyiwu.mit-license.org
 
 ## 作者
 
@@ -376,3 +412,5 @@ https://github.com/fxsjy/jieba
 [cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
+
+[Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
