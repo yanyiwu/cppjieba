@@ -32,9 +32,7 @@ TEST(DictTrieTest, Test1) {
 
   EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
   word = "清华大学";
-  LocalVector<pair<size_t, const DictUnit*> > res;
-  //vector<pair<size_t, const DictUnit* > resMap;
-  LocalVector<pair<size_t, const DictUnit*> > res2;
+  LocalVector<pair<size_t, const DictUnit*> > res, res2;
   const char * words[] = {"清", "清华", "清华大学"};
   for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
     ASSERT_TRUE(TransCode::decode(words[i], uni));
@@ -70,6 +68,6 @@ TEST(DictTrieTest, automation) {
   string word = "abcderf";
   Unicode unicode;
   ASSERT_TRUE(TransCode::decode(word, unicode));
-  vector<struct SegmentChar> res;
+  vector<struct Dag> res;
   trie.find(unicode.begin(), unicode.end(), res);
 }

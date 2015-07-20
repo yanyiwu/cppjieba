@@ -48,7 +48,7 @@ class MPSegment: public SegmentBase {
   }
 
   bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const {
-    vector<SegmentChar> segmentChars;
+    vector<Dag> segmentChars;
 
     dictTrie_->find(begin, end, segmentChars);
 
@@ -63,16 +63,16 @@ class MPSegment: public SegmentBase {
   }
 
  private:
-  void calcDP_(vector<SegmentChar>& segmentChars) const {
+  void calcDP_(vector<Dag>& segmentChars) const {
     size_t nextPos;
     const DictUnit* p;
     double val;
 
-    for(vector<SegmentChar>::reverse_iterator rit = segmentChars.rbegin(); rit != segmentChars.rend(); rit++) {
+    for(vector<Dag>::reverse_iterator rit = segmentChars.rbegin(); rit != segmentChars.rend(); rit++) {
       rit->pInfo = NULL;
       rit->weight = MIN_DOUBLE;
-      assert(!rit->dag.empty());
-      for(DagType::const_iterator it = rit->dag.begin(); it != rit->dag.end(); it++) {
+      assert(!rit->nexts.empty());
+      for(LocalVector<pair<size_t, const DictUnit*> >::const_iterator it = rit->nexts.begin(); it != rit->nexts.end(); it++) {
         nextPos = it->first;
         p = it->second;
         val = 0.0;
@@ -92,7 +92,7 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void cut_(const vector<SegmentChar>& segmentChars, 
+  void cut_(const vector<Dag>& segmentChars, 
         vector<Unicode>& res) const {
     size_t i = 0;
     while(i < segmentChars.size()) {

@@ -66,12 +66,12 @@ class DictTrie {
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     return trie_->find(begin, end);
   }
-  bool find(Unicode::const_iterator begin, Unicode::const_iterator end, DagType& dag, size_t offset = 0) const {
-    return trie_->find(begin, end, dag, offset);
+  bool find(Unicode::const_iterator begin, Unicode::const_iterator end, LocalVector<pair<size_t, const DictUnit*> >& nexts, size_t offset = 0) const {
+    return trie_->find(begin, end, nexts, offset);
   }
   void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
-    vector<SegmentChar>& res) const {
+    vector<Dag>& res) const {
     trie_->find(begin, end, res);
   }
   bool isUserDictSingleChineseWord(const Unicode::value_type& word) const {
@@ -79,7 +79,7 @@ class DictTrie {
   }
   double getMinWeight() const {
     return minWeight_;
-  };
+  }
 
  private:
   void createTrie_(const vector<DictUnit>& dictUnits) {

@@ -56,7 +56,6 @@ class QuerySegment: public SegmentBase {
     return true;
   }
 
-
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
     vector<Unicode> uRes;
     if (!cut(begin, end, uRes)) {

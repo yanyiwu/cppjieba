@@ -21,16 +21,14 @@ inline ostream & operator << (ostream& os, const DictUnit& unit) {
   return os << string_format("%s %s %.3lf", s.c_str(), unit.tag.c_str(), unit.weight);
 }
 
-typedef LocalVector<std::pair<size_t, const DictUnit*> > DagType;
-
-struct SegmentChar {
+struct Dag {
   uint16_t uniCh;
-  DagType dag;
+  LocalVector<pair<size_t, const DictUnit*> > nexts;
   const DictUnit * pInfo;
   double weight;
   size_t nextPos;
-  SegmentChar() : uniCh(), pInfo(NULL), weight(0.0), nextPos(0) {}
-  ~SegmentChar() {}
+  Dag():uniCh(0), pInfo(NULL), weight(0.0), nextPos(0) {
+  }
 };
 
 typedef Unicode::value_type TrieKey;
@@ -47,10 +45,23 @@ class TrieNode {
 class Trie {
  public:
   static const size_t BASE_SIZE = (1 << (8 * (sizeof(TrieKey))));
- public:
   Trie(const vector<Unicode>& keys, const vector<const DictUnit*>& valuePointers) {
     _createTrie(keys, valuePointers);
   }
+  ~Trie() {
+    for (size_t i = 0; i < BASE_SIZE; i++) {
+      if (_base[i].next == NULL) {
+        continue;
+      }
+      for (TrieNode::NextMap::iterator it = _base[i].next->begin(); it != _base[i].next->end(); it++) {
+        _deleteNode(it->second);
+        it->second = NULL;
+      }
+      delete _base[i].next;
+      _base[i].next = NULL;
+    }
+  }
+
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     if (begin == end) {
       return NULL;
@@ -71,11 +82,9 @@ class Trie {
     return ptNode->ptValue;
   }
 
-  void find(
-    Unicode::const_iterator begin,
+  void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
-    vector<struct SegmentChar>& res
-  ) const {
+    vector<struct Dag>& res) const {
     res.resize(end - begin);
 
     const TrieNode *ptNode = NULL;
@@ -106,7 +115,7 @@ class Trie {
   bool find(
     Unicode::const_iterator begin,
     Unicode::const_iterator end,
-    DagType & res,
+    LocalVector<pair<size_t, const DictUnit*> > & res,
     size_t offset = 0) const {
     if (begin == end) {
       return !res.empty();
@@ -135,20 +144,6 @@ class Trie {
     }
     return !res.empty();
   }
-  ~Trie() {
-    for (size_t i = 0; i < BASE_SIZE; i++) {
-      if (_base[i].next == NULL) {
-        continue;
-      }
-      for (TrieNode::NextMap::iterator it = _base[i].next->begin(); it != _base[i].next->end(); it++) {
-        _deleteNode(it->second);
-        it->second = NULL;
-      }
-      delete _base[i].next;
-      _base[i].next = NULL;
-    }
-  }
-
   void insertNode(const Unicode& key, const DictUnit* ptValue) {
     if (key.begin() == key.end()) {
       return;

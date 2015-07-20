@@ -31,7 +31,7 @@ class FullSegment: public SegmentBase {
   bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
         vector<Unicode>& res) const {
     //resut of searching in trie tree
-    DagType tRes;
+    LocalVector<pair<size_t, const DictUnit*> > tRes;
 
     //max index of res's words
     int maxIdx = 0;
@@ -45,9 +45,7 @@ class FullSegment: public SegmentBase {
     for (Unicode::const_iterator uItr = begin; uItr != end; uItr++) {
       //find word start from uItr
       if (dictTrie_->find(uItr, end, tRes, 0)) {
-        for(DagType::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
-          //for (vector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++)
-        {
+        for(LocalVector<pair<size_t, const DictUnit*> >::const_iterator itr = tRes.begin(); itr != tRes.end(); itr++) {
           wordLen = itr->second->word.size();
           if (wordLen >= 2 || (tRes.size() == 1 && maxIdx <= uIdx)) {
             res.push_back(itr->second->word);
