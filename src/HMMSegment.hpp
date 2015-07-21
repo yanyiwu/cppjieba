@@ -9,7 +9,6 @@
 #include "SegmentBase.hpp"
 
 namespace CppJieba {
-
 class HMMSegment: public SegmentBase {
  public:
   HMMSegment(const string& filePath) {
