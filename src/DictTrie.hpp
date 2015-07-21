@@ -66,9 +66,6 @@ class DictTrie {
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     return trie_->find(begin, end);
   }
-  bool find(Unicode::const_iterator begin, Unicode::const_iterator end, LocalVector<pair<size_t, const DictUnit*> >& nexts, size_t offset = 0) const {
-    return trie_->find(begin, end, nexts, offset);
-  }
   void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
     vector<Dag>& res) const {

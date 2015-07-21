@@ -48,13 +48,13 @@ class MPSegment: public SegmentBase {
   }
 
   bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const {
-    vector<Dag> segmentChars;
+    vector<Dag> dags;
 
-    dictTrie_->find(begin, end, segmentChars);
+    dictTrie_->find(begin, end, dags);
 
-    calcDP_(segmentChars);
+    calcDP_(dags);
 
-    cut_(segmentChars, res);
+    cut_(dags, res);
 
     return true;
   }
@@ -63,12 +63,12 @@ class MPSegment: public SegmentBase {
   }
 
  private:
-  void calcDP_(vector<Dag>& segmentChars) const {
+  void calcDP_(vector<Dag>& dags) const {
     size_t nextPos;
     const DictUnit* p;
     double val;
 
-    for(vector<Dag>::reverse_iterator rit = segmentChars.rbegin(); rit != segmentChars.rend(); rit++) {
+    for(vector<Dag>::reverse_iterator rit = dags.rbegin(); rit != dags.rend(); rit++) {
       rit->pInfo = NULL;
       rit->weight = MIN_DOUBLE;
       assert(!rit->nexts.empty());
@@ -76,8 +76,8 @@ class MPSegment: public SegmentBase {
         nextPos = it->first;
         p = it->second;
         val = 0.0;
-        if(nextPos + 1 < segmentChars.size()) {
-          val += segmentChars[nextPos + 1].weight;
+        if(nextPos + 1 < dags.size()) {
+          val += dags[nextPos + 1].weight;
         }
 
         if(p) {
@@ -92,16 +92,16 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void cut_(const vector<Dag>& segmentChars, 
+  void cut_(const vector<Dag>& dags, 
         vector<Unicode>& res) const {
     size_t i = 0;
-    while(i < segmentChars.size()) {
-      const DictUnit* p = segmentChars[i].pInfo;
+    while(i < dags.size()) {
+      const DictUnit* p = dags[i].pInfo;
       if(p) {
         res.push_back(p->word);
         i += p->word.size();
       } else { //single chinese word
-        res.push_back(Unicode(1, segmentChars[i].uniCh));
+        res.push_back(Unicode(1, dags[i].uniCh));
         i++;
       }
     }

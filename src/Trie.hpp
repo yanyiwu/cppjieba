@@ -93,9 +93,9 @@ class Trie {
       Unicode::value_type ch = *(begin + i);
       ptNode = _base + ch;
       res[i].uniCh = ch;
-      assert(res[i].dag.empty());
+      assert(res[i].nexts.empty());
 
-      res[i].dag.push_back(DagType::value_type(i, ptNode->ptValue));
+      res[i].nexts.push_back(pair<size_t, const DictUnit*>(i, ptNode->ptValue));
 
       for (size_t j = i + 1; j < size_t(end - begin); j++) {
         if (ptNode->next == NULL) {
@@ -107,42 +107,10 @@ class Trie {
         }
         ptNode = citer->second;
         if (NULL != ptNode->ptValue) {
-          res[i].dag.push_back(DagType::value_type(j, ptNode->ptValue));
+          res[i].nexts.push_back(pair<size_t, const DictUnit*>(j, ptNode->ptValue));
         }
       }
     }
-  }
-  bool find(
-    Unicode::const_iterator begin,
-    Unicode::const_iterator end,
-    LocalVector<pair<size_t, const DictUnit*> > & res,
-    size_t offset = 0) const {
-    if (begin == end) {
-      return !res.empty();
-    }
-
-    const TrieNode* ptNode = _base + (*(begin++));
-    if (ptNode->ptValue != NULL && res.size() == 1) {
-      res[0].second = ptNode->ptValue;
-    } else if (ptNode->ptValue != NULL) {
-      res.push_back(DagType::value_type(offset, ptNode->ptValue));
-    }
-
-    TrieNode::NextMap::const_iterator citer;
-    for (Unicode::const_iterator itr = begin; itr != end; itr++) {
-      if (NULL == ptNode->next) {
-        break;
-      }
-      citer = ptNode->next->find(*itr);
-      if (citer == ptNode->next->end()) {
-        break;
-      }
-      ptNode = citer->second;
-      if (NULL != ptNode->ptValue) {
-        res.push_back(DagType::value_type(itr - begin + offset, ptNode->ptValue));
-      }
-    }
-    return !res.empty();
   }
   void insertNode(const Unicode& key, const DictUnit* ptValue) {
     if (key.begin() == key.end()) {

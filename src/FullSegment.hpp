@@ -42,6 +42,23 @@ class FullSegment: public SegmentBase {
     //tmp variables
     int wordLen = 0;
     assert(dictTrie_);
+    vector<struct Dag> dags;
+    dictTrie_->find(begin, end, dags);
+    for (size_t i = 0; i < dags.size(); i++) {
+      for (size_t j = 0; j < dags[i].nexts.size(); j++) {
+        const DictUnit* du = dags[i].nexts[j].second;
+        if (du == NULL) {
+          continue;
+        }
+        wordLen = du->word.size();
+        if (wordLen >= 2 || (dags[i].nexts.size() == 1 && maxIdx <= uIdx)) {
+          res.push_back(du->word);
+        }
+        maxIdx = uIdx + wordLen > maxIdx ? uIdx + wordLen : maxIdx;
+      }
+      uIdx++;
+    }
+    /*
     for (Unicode::const_iterator uItr = begin; uItr != end; uItr++) {
       //find word start from uItr
       if (dictTrie_->find(uItr, end, tRes, 0)) {
@@ -64,6 +81,7 @@ class FullSegment: public SegmentBase {
       }
       ++uIdx;
     }
+    */
 
     return true;
   }
