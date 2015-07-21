@@ -22,16 +22,16 @@ inline ostream & operator << (ostream& os, const DictUnit& unit) {
 }
 
 struct Dag {
-  uint16_t uniCh;
+  uint16_t rune;
   LocalVector<pair<size_t, const DictUnit*> > nexts;
   const DictUnit * pInfo;
   double weight;
   size_t nextPos;
-  Dag():uniCh(0), pInfo(NULL), weight(0.0), nextPos(0) {
+  Dag():rune(0), pInfo(NULL), weight(0.0), nextPos(0) {
   }
 };
 
-typedef Unicode::value_type TrieKey;
+typedef Rune TrieKey;
 
 class TrieNode {
  public :
@@ -90,9 +90,9 @@ class Trie {
     const TrieNode *ptNode = NULL;
     TrieNode::NextMap::const_iterator citer;
     for (size_t i = 0; i < size_t(end - begin); i++) {
-      Unicode::value_type ch = *(begin + i);
+      Rune ch = *(begin + i);
       ptNode = _base + ch;
-      res[i].uniCh = ch;
+      res[i].rune = ch;
       assert(res[i].nexts.empty());
 
       res[i].nexts.push_back(pair<size_t, const DictUnit*>(i, ptNode->ptValue));

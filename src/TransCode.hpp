@@ -12,8 +12,10 @@
 namespace CppJieba {
 
 using namespace Limonp;
-typedef uint16_t UnicodeValueType;
-typedef Limonp::LocalVector<UnicodeValueType> Unicode;
+
+typedef uint16_t Rune;
+typedef Limonp::LocalVector<Rune> Unicode;
+
 namespace TransCode {
 inline bool decode(const string& str, Unicode& res) {
 #ifdef CPPJIEBA_GBK

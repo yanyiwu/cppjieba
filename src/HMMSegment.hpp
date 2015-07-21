@@ -74,7 +74,7 @@ class HMMSegment: public SegmentBase {
  private:
   // sequential letters rule
   Unicode::const_iterator sequentialLetterRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
-    Unicode::value_type x = *begin;
+    Rune x = *begin;
     if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
       begin ++;
     } else {
@@ -92,7 +92,7 @@ class HMMSegment: public SegmentBase {
   }
   //
   Unicode::const_iterator numbersRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
-    Unicode::value_type x = *begin;
+    Rune x = *begin;
     if('0' <= x && x <= '9') {
       begin ++;
     } else {

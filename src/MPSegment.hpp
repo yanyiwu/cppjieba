@@ -28,7 +28,7 @@ class MPSegment: public SegmentBase {
     }
   }
 
-  bool isUserDictSingleChineseWord(const Unicode::value_type & value) const {
+  bool isUserDictSingleChineseWord(const Rune & value) const {
     return dictTrie_->isUserDictSingleChineseWord(value);
   }
 
@@ -101,7 +101,7 @@ class MPSegment: public SegmentBase {
         res.push_back(p->word);
         i += p->word.size();
       } else { //single chinese word
-        res.push_back(Unicode(1, dags[i].uniCh));
+        res.push_back(Unicode(1, dags[i].rune));
         i++;
       }
     }

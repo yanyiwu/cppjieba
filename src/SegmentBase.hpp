@@ -14,9 +14,9 @@ using namespace Limonp;
 
 //const char* const SPECIAL_CHARS = " \t\n";
 #ifndef CPPJIEBA_GBK
-const UnicodeValueType SPECIAL_SYMBOL[] = {32u, 9u, 10u, 12290u, 65292u};
+const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u, 12290u, 65292u};
 #else
-const UnicodeValueType SPECIAL_SYMBOL[] = {32u, 9u, 10u};
+const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u};
 #endif
 
 class SegmentBase: public ISegment, public NonCopyable {
@@ -63,7 +63,7 @@ class SegmentBase: public ISegment, public NonCopyable {
     assert(specialSymbols_.size());
   }
  private:
-  unordered_set<UnicodeValueType> specialSymbols_;
+  unordered_set<Rune> specialSymbols_;
 
 };
 }

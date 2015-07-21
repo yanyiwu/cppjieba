@@ -71,7 +71,7 @@ class DictTrie {
     vector<Dag>& res) const {
     trie_->find(begin, end, res);
   }
-  bool isUserDictSingleChineseWord(const Unicode::value_type& word) const {
+  bool isUserDictSingleChineseWord(const Rune& word) const {
     return isIn(userDictSingleChineseWord_, word);
   }
   double getMinWeight() const {
@@ -198,7 +198,7 @@ class DictTrie {
 
   double minWeight_;
   double maxWeight_;
-  unordered_set<Unicode::value_type> userDictSingleChineseWord_;
+  unordered_set<Rune> userDictSingleChineseWord_;
 };
 }
 
