@@ -8,6 +8,9 @@
 namespace CppJieba {
 using namespace std;
 
+const size_t MIN_WORD_LENGTH = 1;
+const size_t MAX_WORD_LENGTH = 512;
+
 struct DictUnit {
   Unicode word;
   double weight;
@@ -35,7 +38,8 @@ typedef Rune TrieKey;
 
 class TrieNode {
  public :
-  TrieNode(): next(NULL), ptValue(NULL) {}
+  TrieNode(): next(NULL), ptValue(NULL) {
+  }
  public:
   typedef unordered_map<TrieKey, TrieNode*> NextMap;
   NextMap *next;
@@ -82,22 +86,32 @@ class Trie {
     return ptNode->ptValue;
   }
 
-  void find(Unicode::const_iterator begin,
-    Unicode::const_iterator end,
-    vector<struct Dag>& res) const {
+  void findByLimit(Unicode::const_iterator begin, 
+        Unicode::const_iterator end, 
+        vector<struct Dag>&res, 
+        size_t min_word_len, 
+        size_t max_word_len) const {
     res.resize(end - begin);
+
+    // min_word_len start from 1;
+    if (min_word_len < 1) {
+      min_word_len = 1;
+    }
 
     const TrieNode *ptNode = NULL;
     TrieNode::NextMap::const_iterator citer;
     for (size_t i = 0; i < size_t(end - begin); i++) {
-      Rune ch = *(begin + i);
-      ptNode = _base + ch;
-      res[i].rune = ch;
+      Rune rune = *(begin + i);
+      ptNode = _base + rune;
+      res[i].rune = rune;
       assert(res[i].nexts.empty());
 
-      res[i].nexts.push_back(pair<size_t, const DictUnit*>(i, ptNode->ptValue));
+      if (min_word_len <= 1) {
+        res[i].nexts.push_back(pair<size_t, const DictUnit*>(i, ptNode->ptValue));
+      }
 
-      for (size_t j = i + 1; j < size_t(end - begin); j++) {
+      // min_word_len start from 1;
+      for (size_t j = i + 1; j < size_t(end - begin) && (j - i + 1) <= max_word_len ; j++) {
         if (ptNode->next == NULL) {
           break;
         }
@@ -106,11 +120,17 @@ class Trie {
           break;
         }
         ptNode = citer->second;
-        if (NULL != ptNode->ptValue) {
+        if (NULL != ptNode->ptValue && (j - i + 1) >= min_word_len) {
           res[i].nexts.push_back(pair<size_t, const DictUnit*>(j, ptNode->ptValue));
         }
       }
     }
+  }
+
+  void find(Unicode::const_iterator begin,
+    Unicode::const_iterator end,
+    vector<struct Dag>& res) const {
+    findByLimit(begin, end, res, MIN_WORD_LENGTH, MAX_WORD_LENGTH);
   }
   void insertNode(const Unicode& key, const DictUnit* ptValue) {
     if (key.begin() == key.end()) {

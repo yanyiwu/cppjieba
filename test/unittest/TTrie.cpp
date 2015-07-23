@@ -6,6 +6,20 @@ using namespace CppJieba;
 
 static const char* const DICT_FILE = "../test/testdata/extra_dict/jieba.dict.small.utf8";
 
+TEST(TrieTest, Empty) {
+  vector<Unicode> keys;
+  vector<const DictUnit*> values;
+  Trie trie(keys, values);
+}
+
+TEST(TrieTest, Construct) {
+  vector<Unicode> keys;
+  vector<const DictUnit*> values;
+  keys.push_back(TransCode::decode("你"));
+  values.push_back((const DictUnit*)(NULL));
+  Trie trie(keys, values);
+}
+
 TEST(DictTrieTest, NewAndDelete) {
   DictTrie * trie;
   trie = new DictTrie(DICT_FILE);
@@ -13,6 +27,7 @@ TEST(DictTrieTest, NewAndDelete) {
   trie = new DictTrie();
   delete trie;
 }
+
 
 TEST(DictTrieTest, Test1) {
   string s1, s2;
@@ -99,6 +114,36 @@ TEST(DictTrieTest, Dag) {
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
     trie.find(unicode.begin(), unicode.end(), res);
+
+    size_t nexts_sizes[] = {3, 1, 2, 1};
+    ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
+    for (size_t i = 0; i < res.size(); i++) {
+      ASSERT_EQ(res[i].nexts.size(), nexts_sizes[i]);
+    }
+  }
+
+  //findByLimit [2, 3]
+  {
+    string word = "长江大桥";
+    Unicode unicode;
+    ASSERT_TRUE(TransCode::decode(word, unicode));
+    vector<struct Dag> res;
+    trie.findByLimit(unicode.begin(), unicode.end(), res, 2, 3);
+
+    size_t nexts_sizes[] = {1, 0, 1, 0};
+    ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
+    for (size_t i = 0; i < res.size(); i++) {
+      ASSERT_EQ(res[i].nexts.size(), nexts_sizes[i]);
+    }
+  }
+
+  //findByLimit [0, 4]
+  {
+    string word = "长江大桥";
+    Unicode unicode;
+    ASSERT_TRUE(TransCode::decode(word, unicode));
+    vector<struct Dag> res;
+    trie.findByLimit(unicode.begin(), unicode.end(), res, 0, 4);
 
     size_t nexts_sizes[] = {3, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
