@@ -55,22 +55,6 @@ class HMMSegment: public SegmentBase {
     }
     return true;
   }
-  virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const {
-    if(begin == end) {
-      return false;
-    }
-    vector<Unicode> words;
-    words.reserve(end - begin);
-    if(!cut(begin, end, words)) {
-      return false;
-    }
-    size_t offset = res.size();
-    res.resize(res.size() + words.size());
-    for(size_t i = 0; i < words.size(); i++) {
-      TransCode::encode(words[i], res[offset + i]);
-    }
-    return true;
-  }
  private:
   // sequential letters rule
   Unicode::const_iterator sequentialLetterRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {

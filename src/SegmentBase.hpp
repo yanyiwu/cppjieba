@@ -24,9 +24,10 @@ class SegmentBase: public ISegment, public NonCopyable {
   SegmentBase() {
     loadSpecialSymbols_();
   };
-  virtual ~SegmentBase() {};
+  virtual ~SegmentBase() {
+  };
  public:
-  virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const = 0;
+  virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const = 0;
   virtual bool cut(const string& str, vector<string>& res) const {
     res.clear();
 
@@ -52,6 +53,26 @@ class SegmentBase: public ISegment, public NonCopyable {
       cut(left, right, res);
     }
 
+    return true;
+  }
+  virtual bool cut(Unicode::const_iterator begin, 
+                   Unicode::const_iterator end, 
+                   vector<string>& res) const {
+    if(begin == end) {
+      return false;
+    }
+
+    vector<Unicode> uRes;
+    uRes.reserve(end - begin);
+    if (!cut(begin, end, uRes)) {
+      return false;
+    }
+
+    size_t offset = res.size();
+    res.resize(res.size() + uRes.size());
+    for(size_t i = 0; i < uRes.size(); i ++, offset++) {
+      TransCode::encode(uRes[i], res[offset]);
+    }
     return true;
   }
  private:

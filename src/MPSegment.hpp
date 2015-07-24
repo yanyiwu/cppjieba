@@ -33,20 +33,6 @@ class MPSegment: public SegmentBase {
   }
 
   using SegmentBase::cut;
-  virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res)const {
-    vector<Unicode> words;
-    words.reserve(end - begin);
-    if(!cut(begin, end, words)) {
-      return false;
-    }
-    size_t offset = res.size();
-    res.resize(res.size() + words.size());
-    for(size_t i = 0; i < words.size(); i++) {
-      TransCode::encode(words[i], res[i + offset]);
-    }
-    return true;
-  }
-
   bool cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<Dag> dags;
 

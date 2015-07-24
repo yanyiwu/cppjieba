@@ -55,22 +55,6 @@ class QuerySegment: public SegmentBase {
 
     return true;
   }
-
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<string>& res) const {
-    vector<Unicode> uRes;
-    if (!cut(begin, end, uRes)) {
-      LogError("get unicode cut result error.");
-      return false;
-    }
-
-    string tmp;
-    for (vector<Unicode>::const_iterator uItr = uRes.begin(); uItr != uRes.end(); uItr++) {
-      TransCode::encode(*uItr, tmp);
-      res.push_back(tmp);
-    }
-
-    return true;
-  }
  private:
   MixSegment mixSeg_;
   FullSegment fullSeg_;
