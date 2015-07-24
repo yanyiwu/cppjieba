@@ -21,13 +21,10 @@ class MixSegment: public SegmentBase {
   virtual ~MixSegment() {
   }
   using SegmentBase::cut;
-  virtual bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  virtual void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<Unicode> words;
     words.reserve(end - begin);
-    if(!mpSeg_.cut(begin, end, words)) {
-      LogError("mpSeg cutDAG failed.");
-      return false;
-    }
+    mpSeg_.cut(begin, end, words);
 
     vector<Unicode> hmmRes;
     hmmRes.reserve(end - begin);
@@ -48,10 +45,7 @@ class MixSegment: public SegmentBase {
       }
 
       // cut the sequence with hmm
-      if (!hmmSeg_.cut(piece.begin(), piece.end(), hmmRes)) {
-        LogError("hmmSeg_ cut failed.");
-        return false;
-      }
+      hmmSeg_.cut(piece.begin(), piece.end(), hmmRes);
 
       //put hmm result to result
       for (size_t k = 0; k < hmmRes.size(); k++) {
@@ -65,7 +59,6 @@ class MixSegment: public SegmentBase {
       //let i jump over this piece
       i = j - 1;
     }
-    return true;
   }
 
   const DictTrie* getDictTrie() const {

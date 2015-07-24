@@ -24,13 +24,13 @@ class HMMSegment: public SegmentBase {
   }
 
   using SegmentBase::cut;
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const {
+  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const {
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right = begin;
     while(right != end) {
       if(*right < 0x80) {
-        if(left != right && !cut_(left, right, res)) {
-          return false;
+        if(left != right) {
+          cut_(left, right, res);
         }
         left = right;
         do {
@@ -50,10 +50,9 @@ class HMMSegment: public SegmentBase {
         right++;
       }
     }
-    if(left != right && !cut_(left, right, res)) {
-      return false;
+    if(left != right) {
+      cut_(left, right, res);
     }
-    return true;
   }
  private:
   // sequential letters rule
@@ -92,12 +91,9 @@ class HMMSegment: public SegmentBase {
     }
     return begin;
   }
-  bool cut_(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void cut_(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<size_t> status;
-    if(!viterbi_(begin, end, status)) {
-      LogError("viterbi_ failed.");
-      return false;
-    }
+    viterbi_(begin, end, status);
 
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right;
@@ -108,15 +104,11 @@ class HMMSegment: public SegmentBase {
         left = right;
       }
     }
-    return true;
   }
 
-  bool viterbi_(Unicode::const_iterator begin, Unicode::const_iterator end, 
+  void viterbi_(Unicode::const_iterator begin, 
+        Unicode::const_iterator end, 
         vector<size_t>& status) const {
-    if(begin == end) {
-      return false;
-    }
-
     size_t Y = HMMModel::STATUS_SUM;
     size_t X = end - begin;
 
@@ -166,8 +158,6 @@ class HMMSegment: public SegmentBase {
       status[x] = stat;
       stat = path[x + stat*X];
     }
-
-    return true;
   }
 
  private:

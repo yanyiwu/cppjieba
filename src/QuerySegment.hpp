@@ -28,32 +28,26 @@ class QuerySegment: public SegmentBase {
   virtual ~QuerySegment() {
   }
   using SegmentBase::cut;
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     //use mix cut first
     vector<Unicode> mixRes;
-    if (!mixSeg_.cut(begin, end, mixRes)) {
-      LogError("mixSeg_ cut failed.");
-      return false;
-    }
+    mixSeg_.cut(begin, end, mixRes);
 
     vector<Unicode> fullRes;
     for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
       // if it's too long, cut with fullSeg_, put fullRes in res
       if (mixResItr->size() > maxWordLen_) {
-        if (fullSeg_.cut(mixResItr->begin(), mixResItr->end(), fullRes)) {
-          for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
-            res.push_back(*fullResItr);
-          }
-
-          //clear tmp res
-          fullRes.clear();
+        fullSeg_.cut(mixResItr->begin(), mixResItr->end(), fullRes);
+        for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
+          res.push_back(*fullResItr);
         }
+
+        //clear tmp res
+        fullRes.clear();
       } else { // just use the mix result
         res.push_back(*mixResItr);
       }
     }
-
-    return true;
   }
  private:
   MixSegment mixSeg_;

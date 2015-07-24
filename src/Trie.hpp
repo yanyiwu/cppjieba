@@ -88,9 +88,9 @@ class Trie {
 
   void findByLimit(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
-        vector<struct Dag>&res, 
         size_t min_word_len, 
-        size_t max_word_len) const {
+        size_t max_word_len,
+        vector<struct Dag>&res) const {
     res.resize(end - begin);
 
     // min_word_len start from 1;
@@ -130,7 +130,7 @@ class Trie {
   void find(Unicode::const_iterator begin,
     Unicode::const_iterator end,
     vector<struct Dag>& res) const {
-    findByLimit(begin, end, res, MIN_WORD_LENGTH, MAX_WORD_LENGTH);
+    findByLimit(begin, end, MIN_WORD_LENGTH, MAX_WORD_LENGTH, res);
   }
   void insertNode(const Unicode& key, const DictUnit* ptValue) {
     if (key.begin() == key.end()) {

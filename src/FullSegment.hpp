@@ -28,7 +28,8 @@ class FullSegment: public SegmentBase {
     }
   }
   using SegmentBase::cut;
-  bool cut(Unicode::const_iterator begin, Unicode::const_iterator end, 
+  virtual void cut(Unicode::const_iterator begin, 
+        Unicode::const_iterator end, 
         vector<Unicode>& res) const {
     //resut of searching in trie tree
     LocalVector<pair<size_t, const DictUnit*> > tRes;
@@ -58,7 +59,6 @@ class FullSegment: public SegmentBase {
       }
       uIdx++;
     }
-    return true;
   }
  private:
   const DictTrie* dictTrie_;

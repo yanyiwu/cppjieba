@@ -128,7 +128,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.findByLimit(unicode.begin(), unicode.end(), res, 2, 3);
+    trie.findByLimit(unicode.begin(), unicode.end(), 2, 3, res);
 
     size_t nexts_sizes[] = {1, 0, 1, 0};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
@@ -143,7 +143,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.findByLimit(unicode.begin(), unicode.end(), res, 0, 4);
+    trie.findByLimit(unicode.begin(), unicode.end(), 0, 4, res);
 
     size_t nexts_sizes[] = {3, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
