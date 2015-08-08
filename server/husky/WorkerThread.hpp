@@ -1,11 +1,11 @@
 #ifndef HUSKY_WORKER_HPP
 #define HUSKY_WORKER_HPP
 
-#include "Limonp/ThreadPool.hpp"
+#include "limonp/ThreadPool.hpp"
 #include "IRequestHandler.hpp"
 #include "NetUtils.hpp"
 
-namespace Husky {
+namespace husky {
 const char* const CLIENT_IP_K = "CLIENT_IP";
 const size_t RECV_BUFFER_SIZE = 16 * 1024;
 
@@ -14,14 +14,11 @@ const struct timeval SOCKET_TIMEOUT = {16, 0};
 
 class WorkerThread: public ITask {
  public:
-  WorkerThread(int sockfs, const IRequestHandler& reqHandler):
+  WorkerThread(int sockfs, IRequestHandler& reqHandler):
     _sockfd(sockfs), _reqHandler(reqHandler) {
   }
   virtual ~WorkerThread() {
   }
- private:
-  int _sockfd;
-  const IRequestHandler& _reqHandler;
 
  public:
   void run() {
@@ -37,12 +34,12 @@ class WorkerThread: public ITask {
         break;
       }
 
-      if(httpReq.isGET() && !_reqHandler.do_GET(httpReq, strRetByHandler)) {
-        LogError("do_GET failed.");
+      if(httpReq.isGET() && !_reqHandler.doGET(httpReq, strRetByHandler)) {
+        LogError("doGET failed.");
         break;
       }
-      if(httpReq.isPOST() && !_reqHandler.do_POST(httpReq, strRetByHandler)) {
-        LogError("do_POST failed.");
+      if(httpReq.isPOST() && !_reqHandler.doPOST(httpReq, strRetByHandler)) {
+        LogError("doPOST failed.");
         break;
       }
       strSnd = string_format(HTTP_FORMAT, CHARSET_UTF8, strRetByHandler.length(), strRetByHandler.c_str());
@@ -101,7 +98,9 @@ class WorkerThread: public ITask {
     }
     return true;
   }
-
+ private:
+  int _sockfd;
+  IRequestHandler& _reqHandler;
 };
 }
 

@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <string>
-#include "Limonp/Logger.hpp"
-#include "Limonp/StringUtil.hpp"
+#include "limonp/Logger.hpp"
+#include "limonp/StringUtil.hpp"
 
-namespace Husky {
-using namespace Limonp;
+namespace husky {
+using namespace limonp;
 using namespace std;
 
 static const char* const KEY_METHOD = "METHOD";
@@ -62,7 +62,7 @@ class HttpReqInfo {
     _isBodyFinished = false;
     _contentLength = 0;
   }
- public:
+
   bool parseHeader(const string& buffer) {
     return parseHeader(buffer.c_str(), buffer.size());
   }
@@ -77,7 +77,8 @@ class HttpReqInfo {
     }
     string firstline(headerStr, lpos, rpos - lpos);
     trim(firstline);
-    if(!split(firstline, buf, " ") || 3 != buf.size()) {
+    split(firstline, buf, " ");
+    if (3 != buf.size()) {
       LogError("parse header firstline[%s] failed.", firstline.c_str());
       return false;
     }
@@ -141,7 +142,7 @@ class HttpReqInfo {
   bool isBodyFinished() const {
     return _isBodyFinished;
   }
- public:
+
   const string& set(const string& key, const string& value) {
     return _headerMap[key] = value;
   }
@@ -149,8 +150,30 @@ class HttpReqInfo {
     return _find(_headerMap, key, res);
   }
   bool GET(const string& argKey, string& res)const {
-    return _find(_methodGetMap, argKey, res);
+    string tmp;
+    if (!_find(_methodGetMap, argKey, tmp)) {
+      return false;
+    }
+    URLDecode(tmp, res);
+    return true;
   }
+  bool GET(const string& argKey, int& res) const {
+    string tmp;
+    if (!GET(argKey, tmp)) {
+      return false;
+    }
+    res = atoi(tmp.c_str());
+    return true;
+  }
+  bool GET(const string& argKey, size_t& res) const {
+    int tmp = 0;
+    if (!GET(argKey, tmp) || tmp < 0) {
+      return false;
+    }
+    res = tmp;
+    return true;
+  }
+
   //const string& getMethod() const
   //{
   //    return _headerMap.find(KEY_METHOD)->second;
@@ -190,7 +213,7 @@ class HttpReqInfo {
   string _path;
   string _body;
   friend ostream& operator<<(ostream& os, const HttpReqInfo& obj);
- private:
+
   bool _find(const std::unordered_map<string, string>& mp, const string& key, string& res)const {
     std::unordered_map<string, string>::const_iterator it = mp.find(key);
     if(it == mp.end()) {
@@ -199,7 +222,7 @@ class HttpReqInfo {
     res = it->second;
     return true;
   }
- private:
+
   void _parseUri(const string& uri, string& path, std::unordered_map<string, string>& mp) {
     if(uri.empty()) {
       return;
@@ -235,7 +258,7 @@ class HttpReqInfo {
   }
 };
 
-inline std::ostream& operator << (std::ostream& os, const Husky::HttpReqInfo& obj) {
+inline std::ostream& operator << (std::ostream& os, const husky::HttpReqInfo& obj) {
   return os << obj._headerMap << obj._methodGetMap/* << obj._methodPostMap*/ << obj._path << obj._body ;
 }
 

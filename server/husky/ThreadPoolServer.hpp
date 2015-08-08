@@ -4,21 +4,17 @@
 #include "NetUtils.hpp"
 #include "WorkerThread.hpp"
 
-namespace Husky {
-using namespace Limonp;
+namespace husky {
+using namespace limonp;
 
 class ThreadPoolServer {
- private:
-  ThreadPool _pool;
-  const IRequestHandler & _reqHandler;
-  int _host_socket;
  public:
-  ThreadPoolServer(size_t thread_number, size_t queue_max_size, size_t port, const IRequestHandler & handler):
+  ThreadPoolServer(size_t thread_number, size_t queue_max_size, size_t port, IRequestHandler & handler):
     _pool(thread_number, queue_max_size), _reqHandler(handler), _host_socket(-1) {
     _host_socket = CreateAndListenSocket(port);
   }
   ~ThreadPoolServer() {};
- public:
+
   bool start() {
     _pool.start();
     sockaddr_in clientaddr;
@@ -30,10 +26,16 @@ class ThreadPoolServer {
         LogError(strerror(errno));
         break;
       }
-      _pool.add(CreateTask<WorkerThread,int, const IRequestHandler&>(clientSock, _reqHandler));
+      _pool.add(CreateTask<WorkerThread,int, IRequestHandler&>(clientSock, _reqHandler));
     }
     return true;
   }
-};
-}
+
+ private:
+  ThreadPool _pool;
+  IRequestHandler & _reqHandler;
+  int _host_socket;
+}; // class ThreadPoolServer
+} // namespace husky
+
 #endif

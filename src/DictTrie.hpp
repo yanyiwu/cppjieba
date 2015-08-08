@@ -8,13 +8,13 @@
 #include <stdint.h>
 #include <cmath>
 #include <limits>
-#include "Limonp/StringUtil.hpp"
-#include "Limonp/Logger.hpp"
+#include "limonp/StringUtil.hpp"
+#include "limonp/Logger.hpp"
 #include "TransCode.hpp"
 #include "Trie.hpp"
 
 namespace CppJieba {
-using namespace Limonp;
+using namespace limonp;
 const double MIN_DOUBLE = -3.14e+100;
 const double MAX_DOUBLE = 3.14e+100;
 const size_t DICT_COLUMN_NUM = 3;

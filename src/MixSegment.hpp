@@ -4,7 +4,7 @@
 #include <cassert>
 #include "MPSegment.hpp"
 #include "HMMSegment.hpp"
-#include "Limonp/StringUtil.hpp"
+#include "limonp/StringUtil.hpp"
 
 namespace CppJieba {
 class MixSegment: public SegmentBase {

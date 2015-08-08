@@ -3,11 +3,11 @@
 #include <string>
 #include <ctype.h>
 #include <string.h>
-#include "Limonp/Config.hpp"
-#include "Husky/ThreadPoolServer.hpp"
+#include "limonp/Config.hpp"
+#include "husky/ThreadPoolServer.hpp"
 #include "Application.hpp"
 
-using namespace Husky;
+using namespace husky;
 using namespace CppJieba;
 
 class ReqHandler: public IRequestHandler {
@@ -17,7 +17,7 @@ class ReqHandler: public IRequestHandler {
   virtual ~ReqHandler() {
   }
 
-  virtual bool do_GET(const HttpReqInfo& httpReq, string& strSnd) const {
+  virtual bool doGET(const HttpReqInfo& httpReq, string& strSnd) {
     string sentence, method, format;
     string tmp;
     vector<string> words;
@@ -30,7 +30,7 @@ class ReqHandler: public IRequestHandler {
     return true;
   }
 
-  virtual bool do_POST(const HttpReqInfo& httpReq, string& strSnd) const {
+  virtual bool doPOST(const HttpReqInfo& httpReq, string& strSnd) {
     vector<string> words;
     run(httpReq.getBody(), "MIX", "simple", strSnd);
     return true;

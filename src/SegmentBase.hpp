@@ -2,15 +2,15 @@
 #define CPPJIEBA_SEGMENTBASE_H
 
 #include "TransCode.hpp"
-#include "Limonp/Logger.hpp"
-#include "Limonp/NonCopyable.hpp"
-#include "Limonp/HandyMacro.hpp"
+#include "limonp/Logger.hpp"
+#include "limonp/NonCopyable.hpp"
+#include "limonp/HandyMacro.hpp"
 #include "ISegment.hpp"
 #include <cassert>
 
 
 namespace CppJieba {
-using namespace Limonp;
+using namespace limonp;
 
 //const char* const SPECIAL_CHARS = " \t\n";
 #ifndef CPPJIEBA_GBK

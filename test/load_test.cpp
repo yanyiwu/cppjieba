@@ -5,7 +5,7 @@
 #include "../src/HMMSegment.hpp"
 #include "../src/MixSegment.hpp"
 #include "../src/KeywordExtractor.hpp"
-#include "../src/Limonp/Colors.hpp"
+#include "../src/limonp/Colors.hpp"
 
 using namespace CppJieba;
 

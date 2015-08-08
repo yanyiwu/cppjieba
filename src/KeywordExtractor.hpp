@@ -6,7 +6,7 @@
 #include <set>
 
 namespace CppJieba {
-using namespace Limonp;
+using namespace limonp;
 
 /*utf8*/
 class KeywordExtractor {
@@ -96,7 +96,8 @@ class KeywordExtractor {
         LogError("line[%d] empty. skipped.", lineno);
         continue;
       }
-      if(!split(line, buf, " ") || buf.size() != 2) {
+      split(line, buf, " ");
+      if (buf.size() != 2) {
         LogError("line %d [%s] illegal. skipped.", lineno, line.c_str());
         continue;
       }

@@ -2,11 +2,11 @@
 #define CPPJIEBA_POS_TAGGING_H
 
 #include "MixSegment.hpp"
-#include "Limonp/StringUtil.hpp"
+#include "limonp/StringUtil.hpp"
 #include "DictTrie.hpp"
 
 namespace CppJieba {
-using namespace Limonp;
+using namespace limonp;
 
 static const char* const POS_M = "m";
 static const char* const POS_ENG = "eng";
