@@ -3,6 +3,7 @@
 ## next version
 
 1. 使用工程上比较 tricky 的 Trie树优化办法。废弃了之前的 `Aho-Corasick-Automation` 实现，可读性更好，性能更高。
+2. 新增层次分词器: LevelSegment
 
 ## v3.1.0
 
