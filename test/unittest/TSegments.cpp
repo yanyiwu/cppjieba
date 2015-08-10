@@ -4,6 +4,7 @@
 #include "src/HMMSegment.hpp"
 #include "src/FullSegment.hpp"
 #include "src/QuerySegment.hpp"
+#include "src/LevelSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace CppJieba;
@@ -86,50 +87,52 @@ TEST(MixSegmentTest, UserDict2) {
 
 TEST(MPSegmentTest, Test1) {
   MPSegment segment("../dict/jieba.dict.utf8");;
-  const char* str = "我来自北京邮电大学。";
-  const char* res[] = {"我", "来自", "北京邮电大学", "。"};
+  string s;
   vector<string> words;
-  ASSERT_TRUE(segment.cut(str, words));
-  ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+  ASSERT_TRUE(segment.cut("我来自北京邮电大学。", words));
+  ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", s << words);
 
-  {
-    const char* str = "B超 T恤";
-    const char * res[] = {"B超", " ", "T恤"};
-    vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
-    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
-  }
+  ASSERT_TRUE(segment.cut("B超 T恤", words));
+  ASSERT_EQ(s << words, "[\"B超\", \" \", \"T恤\"]");
+
+  ASSERT_TRUE(segment.cut("南京市长江大桥", words));
+  ASSERT_EQ("[\"南京市\", \"长江大桥\"]", s << words);
+
+  // MaxWordLen
+  //ASSERT_TRUE(segment.cut("南京市长江大桥", words, 3));
+  //ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", s << words);
 }
 
-TEST(MPSegmentTest, Test2) {
-  MPSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
-  string line;
-  ifstream ifs("../test/testdata/review.100");
-  vector<string> words;
+//TEST(MPSegmentTest, Test2) {
+//  MPSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
+//  string line;
+//  ifstream ifs("../test/testdata/review.100");
+//  vector<string> words;
+//
+//  string eRes;
+//  {
+//    ifstream ifs("../test/testdata/review.100.res");
+//    ASSERT_TRUE(!!ifs);
+//    eRes << ifs;
+//  }
+//  string res;
+//
+//  while(getline(ifs, line)) {
+//    res += line;
+//    res += '\n';
+//
+//    segment.cut(line, words);
+//    string s;
+//    s << words;
+//    res += s;
+//    res += '\n';
+//  }
+//  ofstream ofs("../test/testdata/review.100.res");
+//  ASSERT_TRUE(!!ofs);
+//  ofs << res;
+//
+//}
 
-  string eRes;
-  {
-    ifstream ifs("../test/testdata/review.100.res");
-    ASSERT_TRUE(!!ifs);
-    eRes << ifs;
-  }
-  string res;
-
-  while(getline(ifs, line)) {
-    res += line;
-    res += '\n';
-
-    segment.cut(line, words);
-    string s;
-    s << words;
-    res += s;
-    res += '\n';
-  }
-  ofstream ofs("../test/testdata/review.100.res");
-  ASSERT_TRUE(!!ofs);
-  ofs << res;
-
-}
 TEST(HMMSegmentTest, Test1) {
   HMMSegment segment("../dict/hmm_model.utf8");;
   {
@@ -202,4 +205,16 @@ TEST(QuerySegment, Test2) {
     ASSERT_EQ(s1, s2);
   }
 
+}
+
+TEST(LevelSegmentTest, Test0) {
+  string s;
+  LevelSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
+  vector<pair<string, size_t> > words;
+  segment.cut("南京市长江大桥", words);
+  ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", s << words);
+
+  vector<string> res;
+  segment.cut("南京市长江大桥", res);
+  ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", s << res);
 }

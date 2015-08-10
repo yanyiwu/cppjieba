@@ -66,21 +66,18 @@ class DictTrie {
   const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     return trie_->find(begin, end);
   }
-  void find(Unicode::const_iterator begin,
-    Unicode::const_iterator end,
-    vector<Dag>& res) const {
-    trie_->find(begin, end, res);
-  }
-  void findByLimit(Unicode::const_iterator begin, 
+
+  void find(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
-        size_t min_word_len, 
-        size_t max_word_len,
-        vector<struct Dag>&res) const {
-    trie_->findByLimit(begin, end, min_word_len, max_word_len, res);
+        vector<struct Dag>&res,
+        size_t max_word_len = MAX_WORD_LENGTH) const {
+    trie_->find(begin, end, res, max_word_len);
   }
+
   bool isUserDictSingleChineseWord(const Rune& word) const {
     return isIn(userDictSingleChineseWord_, word);
   }
+
   double getMinWeight() const {
     return minWeight_;
   }

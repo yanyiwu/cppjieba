@@ -6,7 +6,7 @@ namespace CppJieba {
 class ISegment {
  public:
   virtual ~ISegment() {
-  };
+  }
   virtual bool cut(const string& str, vector<string>& res) const = 0;
 };
 

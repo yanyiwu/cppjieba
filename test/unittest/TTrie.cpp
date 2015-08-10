@@ -122,28 +122,26 @@ TEST(DictTrieTest, Dag) {
     }
   }
 
-  //findByLimit [2, 3]
   {
     string word = "长江大桥";
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.findByLimit(unicode.begin(), unicode.end(), 2, 3, res);
+    trie.find(unicode.begin(), unicode.end(), res, 3);
 
-    size_t nexts_sizes[] = {1, 0, 1, 0};
+    size_t nexts_sizes[] = {2, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
     for (size_t i = 0; i < res.size(); i++) {
       ASSERT_EQ(res[i].nexts.size(), nexts_sizes[i]);
     }
   }
 
-  //findByLimit [0, 4]
   {
     string word = "长江大桥";
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.findByLimit(unicode.begin(), unicode.end(), 0, 4, res);
+    trie.find(unicode.begin(), unicode.end(), res, 4);
 
     size_t nexts_sizes[] = {3, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));

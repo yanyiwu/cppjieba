@@ -44,14 +44,13 @@ class MPSegment: public SegmentBase {
   }
   void cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,
-           size_t min_word_len,
-           size_t max_word_len,
-           vector<Unicode>&res) const {
+           vector<Unicode>& res,
+           size_t max_word_len) const {
     vector<Dag> dags;
-    dictTrie_->findByLimit(begin, end, 
-          min_word_len, 
-          max_word_len,
-          dags);
+    dictTrie_->find(begin, 
+          end, 
+          dags,
+          max_word_len);
     calcDP_(dags);
     cut_(dags, res);
   }
