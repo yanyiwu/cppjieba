@@ -21,6 +21,7 @@ class LevelSegment: public ISegment {
   void cut(Unicode::const_iterator begin,
         Unicode::const_iterator end, 
         vector<pair<Unicode, size_t> >& res) const {
+    res.clear();
     vector<Unicode> words;
     vector<Unicode> smallerWords;
     words.reserve(end - begin);
@@ -48,6 +49,7 @@ class LevelSegment: public ISegment {
 
   void cut(const string& sentence, 
         vector<pair<string, size_t> >& words) const {
+    words.clear();
     Unicode unicode;
     TransCode::decode(sentence, unicode);
     vector<pair<Unicode, size_t> > unicodeWords;
@@ -63,6 +65,7 @@ class LevelSegment: public ISegment {
         vector<string>& res) const {
     vector<pair<string, size_t> > words;
     cut(sentence, words);
+    res.clear();
     res.reserve(words.size());
     for (size_t i = 0; i < words.size(); i++) {
       res.push_back(words[i].first);

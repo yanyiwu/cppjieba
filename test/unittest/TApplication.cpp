@@ -40,6 +40,15 @@ TEST(ApplicationTest, Test1) {
   result << words;
   ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
 
+  app.cut("南京市长江大桥", words, METHOD_LEVEL);
+  result << words;
+  ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", result);
+
+  vector<pair<string, size_t> > word_levels;
+  app.cut("南京市长江大桥", word_levels);
+  result << word_levels;
+  ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
+
   vector<pair<string, string> > tagres;
   app.tag("iPhone6手机的最大特点是很容易弯曲。", tagres);
   result << tagres;
