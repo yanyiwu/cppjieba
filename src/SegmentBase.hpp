@@ -22,7 +22,7 @@ const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u};
 class SegmentBase: public ISegment, public NonCopyable {
  public:
   SegmentBase() {
-    loadSpecialSymbols_();
+    LoadSpecialSymbols();
   };
   virtual ~SegmentBase() {
   };
@@ -69,17 +69,18 @@ class SegmentBase: public ISegment, public NonCopyable {
     }
   }
  private:
-  void loadSpecialSymbols_() {
+  void LoadSpecialSymbols() {
     size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
     for(size_t i = 0; i < size; i ++) {
       specialSymbols_.insert(SPECIAL_SYMBOL[i]);
     }
     assert(specialSymbols_.size());
   }
- private:
+
   unordered_set<Rune> specialSymbols_;
 
-};
-}
+}; // class SegmentBase
+
+} // CppJieba
 
 #endif

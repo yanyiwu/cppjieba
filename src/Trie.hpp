@@ -49,7 +49,7 @@ class Trie {
  public:
   static const size_t BASE_SIZE = (1 << (8 * (sizeof(TrieKey))));
   Trie(const vector<Unicode>& keys, const vector<const DictUnit*>& valuePointers) {
-    _createTrie(keys, valuePointers);
+    CreateTrie(keys, valuePointers);
   }
   ~Trie() {
     for (size_t i = 0; i < BASE_SIZE; i++) {
@@ -57,7 +57,7 @@ class Trie {
         continue;
       }
       for (TrieNode::NextMap::iterator it = _base[i].next->begin(); it != _base[i].next->end(); it++) {
-        _deleteNode(it->second);
+        DeleteNode(it->second);
         it->second = NULL;
       }
       delete _base[i].next;
@@ -143,7 +143,7 @@ class Trie {
   }
 
  private:
-  void _createTrie(const vector<Unicode>& keys, const vector<const DictUnit*>& valuePointers) {
+  void CreateTrie(const vector<Unicode>& keys, const vector<const DictUnit*>& valuePointers) {
     if (valuePointers.empty() || keys.empty()) {
       return;
     }
@@ -154,14 +154,14 @@ class Trie {
     }
   }
 
-  void _deleteNode(TrieNode* node) {
+  void DeleteNode(TrieNode* node) {
     if (NULL == node) {
       return;
     }
     if (NULL != node->next) {
       TrieNode::NextMap::iterator it;
       for (it = node->next->begin(); it != node->next->end(); it++) {
-        _deleteNode(it->second);
+        DeleteNode(it->second);
       }
       delete node->next;
       node->next = NULL;

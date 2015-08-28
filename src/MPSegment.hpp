@@ -38,9 +38,9 @@ class MPSegment: public SegmentBase {
 
     dictTrie_->find(begin, end, dags);
 
-    calcDP_(dags);
+    CalcDP(dags);
 
-    cut_(dags, res);
+    Cut(dags, res);
   }
   void cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,
@@ -51,15 +51,15 @@ class MPSegment: public SegmentBase {
           end, 
           dags,
           max_word_len);
-    calcDP_(dags);
-    cut_(dags, res);
+    CalcDP(dags);
+    Cut(dags, res);
   }
   const DictTrie* getDictTrie() const {
     return dictTrie_;
   }
 
  private:
-  void calcDP_(vector<Dag>& dags) const {
+  void CalcDP(vector<Dag>& dags) const {
     size_t nextPos;
     const DictUnit* p;
     double val;
@@ -88,7 +88,7 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void cut_(const vector<Dag>& dags, 
+  void Cut(const vector<Dag>& dags, 
         vector<Unicode>& res) const {
     size_t i = 0;
     while(i < dags.size()) {
@@ -103,7 +103,6 @@ class MPSegment: public SegmentBase {
     }
   }
 
- private:
   const DictTrie* dictTrie_;
   bool isNeedDestroy_;
 }; // class MPSegment

@@ -41,21 +41,21 @@ class DictTrie {
     if(trie_ != NULL) {
       LogFatal("trie already initted");
     }
-    loadDict_(dictPath);
-    calculateWeight_(staticNodeInfos_);
-    minWeight_ = findMinWeight_(staticNodeInfos_);
-    maxWeight_ = findMaxWeight_(staticNodeInfos_);
+    LoadDict(dictPath);
+    CalculateWeight(staticNodeInfos_);
+    minWeight_ = FindMinWeight(staticNodeInfos_);
+    maxWeight_ = FindMaxWeight(staticNodeInfos_);
 
     if(userDictPath.size()) {
-      loadUserDict_(userDictPath);
+      LoadUserDict(userDictPath);
     }
-    shrink_(staticNodeInfos_);
-    createTrie_(staticNodeInfos_);
+    Shrink(staticNodeInfos_);
+    CreateTrie(staticNodeInfos_);
   }
   
   bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     DictUnit nodeInfo;
-    if(!makeUserNodeInfo_(nodeInfo, word, tag)) {
+    if(!MakeUserNodeInfo(nodeInfo, word, tag)) {
       return false;
     }
     activeNodeInfos_.push_back(nodeInfo);
@@ -83,7 +83,7 @@ class DictTrie {
   }
 
  private:
-  void createTrie_(const vector<DictUnit>& dictUnits) {
+  void CreateTrie(const vector<DictUnit>& dictUnits) {
     assert(dictUnits.size());
     vector<Unicode> words;
     vector<const DictUnit*> valuePointers;
@@ -94,7 +94,7 @@ class DictTrie {
 
     trie_ = new Trie(words, valuePointers);
   }
-  void loadUserDict_(const string& filePath) {
+  void LoadUserDict(const string& filePath) {
     ifstream ifs(filePath.c_str());
     if(!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
@@ -110,13 +110,13 @@ class DictTrie {
         LogFatal("split [%s] result illegal", line.c_str());
       }
       DictUnit nodeInfo;
-      makeUserNodeInfo_(nodeInfo, buf[0], 
+      MakeUserNodeInfo(nodeInfo, buf[0], 
             (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
       staticNodeInfos_.push_back(nodeInfo);
     }
     LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
   }
-  bool makeNodeInfo(DictUnit& nodeInfo,
+  bool MakeNodeInfo(DictUnit& nodeInfo,
         const string& word, 
         double weight, 
         const string& tag) {
@@ -128,7 +128,7 @@ class DictTrie {
     nodeInfo.tag = tag;
     return true;
   }
-  bool makeUserNodeInfo_(DictUnit& nodeInfo, 
+  bool MakeUserNodeInfo(DictUnit& nodeInfo, 
         const string& word, 
         const string& tag = UNKNOWN_TAG) {
     if(!TransCode::decode(word, nodeInfo.word)) {
@@ -142,7 +142,7 @@ class DictTrie {
     nodeInfo.tag = tag;
     return true;
   }
-  void loadDict_(const string& filePath) {
+  void LoadDict(const string& filePath) {
     ifstream ifs(filePath.c_str());
     if(!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
@@ -156,21 +156,21 @@ class DictTrie {
       if(buf.size() != DICT_COLUMN_NUM) {
         LogFatal("split result illegal, line: %s, result size: %u", line.c_str(), buf.size());
       }
-      makeNodeInfo(nodeInfo, 
+      MakeNodeInfo(nodeInfo, 
             buf[0], 
             atof(buf[1].c_str()), 
             buf[2]);
       staticNodeInfos_.push_back(nodeInfo);
     }
   }
-  double findMinWeight_(const vector<DictUnit>& nodeInfos) const {
+  double FindMinWeight(const vector<DictUnit>& nodeInfos) const {
     double ret = MAX_DOUBLE;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       ret = min(nodeInfos[i].weight, ret);
     }
     return ret;
   }
-  double findMaxWeight_(const vector<DictUnit>& nodeInfos) const {
+  double FindMaxWeight(const vector<DictUnit>& nodeInfos) const {
     double ret = MIN_DOUBLE;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       ret = max(nodeInfos[i].weight, ret);
@@ -178,7 +178,7 @@ class DictTrie {
     return ret;
   }
 
-  void calculateWeight_(vector<DictUnit>& nodeInfos) const {
+  void CalculateWeight(vector<DictUnit>& nodeInfos) const {
     double sum = 0.0;
     for(size_t i = 0; i < nodeInfos.size(); i++) {
       sum += nodeInfos[i].weight;
@@ -191,11 +191,10 @@ class DictTrie {
     }
   }
 
-  void shrink_(vector<DictUnit>& units) const {
+  void Shrink(vector<DictUnit>& units) const {
     vector<DictUnit>(units.begin(), units.end()).swap(units);
   }
 
- private:
   vector<DictUnit> staticNodeInfos_;
   deque<DictUnit> activeNodeInfos_; // must not be vector
   Trie * trie_;

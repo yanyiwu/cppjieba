@@ -30,15 +30,15 @@ class HMMSegment: public SegmentBase {
     while(right != end) {
       if(*right < 0x80) {
         if(left != right) {
-          cut_(left, right, res);
+          Cut(left, right, res);
         }
         left = right;
         do {
-          right = sequentialLetterRule_(left, end);
+          right = SequentialLetterRule(left, end);
           if(right != left) {
             break;
           }
-          right = numbersRule_(left, end);
+          right = NumbersRule(left, end);
           if(right != left) {
             break;
           }
@@ -51,12 +51,12 @@ class HMMSegment: public SegmentBase {
       }
     }
     if(left != right) {
-      cut_(left, right, res);
+      Cut(left, right, res);
     }
   }
  private:
   // sequential letters rule
-  Unicode::const_iterator sequentialLetterRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+  Unicode::const_iterator SequentialLetterRule(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     Rune x = *begin;
     if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
       begin ++;
@@ -74,7 +74,7 @@ class HMMSegment: public SegmentBase {
     return begin;
   }
   //
-  Unicode::const_iterator numbersRule_(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+  Unicode::const_iterator NumbersRule(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     Rune x = *begin;
     if('0' <= x && x <= '9') {
       begin ++;
@@ -91,9 +91,9 @@ class HMMSegment: public SegmentBase {
     }
     return begin;
   }
-  void cut_(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<size_t> status;
-    viterbi_(begin, end, status);
+    Viterbi(begin, end, status);
 
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right;
@@ -106,7 +106,7 @@ class HMMSegment: public SegmentBase {
     }
   }
 
-  void viterbi_(Unicode::const_iterator begin, 
+  void Viterbi(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
         vector<size_t>& status) const {
     size_t Y = HMMModel::STATUS_SUM;
@@ -160,7 +160,6 @@ class HMMSegment: public SegmentBase {
     }
   }
 
- private:
   const HMMModel* model_;
   bool isNeedDestroy_;
 }; // class HMMSegment
