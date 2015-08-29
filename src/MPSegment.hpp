@@ -28,23 +28,35 @@ class MPSegment: public SegmentBase {
     }
   }
 
-  bool isUserDictSingleChineseWord(const Rune & value) const {
-    return dictTrie_->isUserDictSingleChineseWord(value);
-  }
-
   using SegmentBase::cut;
-  void cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& res) const {
+  void cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& words) const {
     vector<Dag> dags;
 
     dictTrie_->find(begin, end, dags);
 
     CalcDP(dags);
 
-    Cut(dags, res);
+    Cut(dags, words);
+  }
+  bool cut(const string& sentence, 
+        vector<string>& words, 
+        size_t max_word_len) const {
+    Unicode unicode;
+    if (!TransCode::decode(sentence, unicode)) {
+      return false;
+    }
+    vector<Unicode> unicodeWords;
+    cut(unicode.begin(), unicode.end(), 
+          unicodeWords, max_word_len);
+    words.resize(unicodeWords.size());
+    for (size_t i = 0; i < words.size(); i++) {
+      TransCode::encode(unicodeWords[i], words[i]);
+    }
+    return true;
   }
   void cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,
-           vector<Unicode>& res,
+           vector<Unicode>& words,
            size_t max_word_len) const {
     vector<Dag> dags;
     dictTrie_->find(begin, 
@@ -52,12 +64,15 @@ class MPSegment: public SegmentBase {
           dags,
           max_word_len);
     CalcDP(dags);
-    Cut(dags, res);
+    Cut(dags, words);
   }
   const DictTrie* getDictTrie() const {
     return dictTrie_;
   }
 
+  bool isUserDictSingleChineseWord(const Rune & value) const {
+    return dictTrie_->isUserDictSingleChineseWord(value);
+  }
  private:
   void CalcDP(vector<Dag>& dags) const {
     size_t nextPos;
@@ -89,15 +104,15 @@ class MPSegment: public SegmentBase {
     }
   }
   void Cut(const vector<Dag>& dags, 
-        vector<Unicode>& res) const {
+        vector<Unicode>& words) const {
     size_t i = 0;
     while(i < dags.size()) {
       const DictUnit* p = dags[i].pInfo;
       if(p) {
-        res.push_back(p->word);
+        words.push_back(p->word);
         i += p->word.size();
       } else { //single chinese word
-        res.push_back(Unicode(1, dags[i].rune));
+        words.push_back(Unicode(1, dags[i].rune));
         i++;
       }
     }
