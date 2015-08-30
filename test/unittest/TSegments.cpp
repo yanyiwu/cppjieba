@@ -154,14 +154,17 @@ TEST(HMMSegmentTest, Test1) {
 
 TEST(FullSegment, Test1) {
   FullSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
-  const char* str = "我来自北京邮电大学";
   vector<string> words;
-
-  ASSERT_EQ(segment.cut(str, words), true);
-
   string s;
+
+  ASSERT_TRUE(segment.cut("我来自北京邮电大学", words));
   s << words;
   ASSERT_EQ(s, "[\"我\", \"来自\", \"北京\", \"北京邮电大学\", \"邮电\", \"电大\", \"大学\"]");
+
+  
+  ASSERT_TRUE(segment.cut("上市公司CEO", words));
+  s << words;
+  ASSERT_EQ(s, "[\"上市\", \"公司\", \"C\", \"E\", \"O\"]");
 }
 
 TEST(QuerySegment, Test1) {
