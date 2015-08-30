@@ -101,6 +101,9 @@ TEST(MPSegmentTest, Test1) {
   // MaxWordLen
   ASSERT_TRUE(segment.cut("南京市长江大桥", words, 3));
   ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", s << words);
+
+  ASSERT_TRUE(segment.cut("南京市长江大桥", words, 0));
+  ASSERT_EQ("[\"南\", \"京\", \"市\", \"长\", \"江\", \"大\", \"桥\"]", s << words);
 }
 
 //TEST(MPSegmentTest, Test2) {

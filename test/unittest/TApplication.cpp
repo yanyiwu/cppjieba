@@ -20,6 +20,9 @@ TEST(ApplicationTest, Test1) {
   result << words;
   ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", result);
 
+  app.cut("南京市长江大桥", words, 3);
+  ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", result << words);
+
   app.cut("我来自北京邮电大学。。。学号123456", words, METHOD_HMM);
   result << words;
   ASSERT_EQ("[\"我来\", \"自北京\", \"邮电大学\", \"。\", \"。\", \"。\", \"学号\", \"123456\"]", result);
