@@ -38,8 +38,7 @@ make
 有兴趣的可以跑跑测试(可选):
 
 ```
-./test/test.run
-./load_test
+make test
 ```
 
 ## Demo

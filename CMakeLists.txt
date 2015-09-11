@@ -24,4 +24,5 @@ ADD_SUBDIRECTORY(conf)
 ADD_SUBDIRECTORY(test)
 
 ENABLE_TESTING()
-ADD_TEST(NAME test.run COMMAND test.run)
+ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
+ADD_TEST(NAME ./load_test COMMAND ./load_test)
