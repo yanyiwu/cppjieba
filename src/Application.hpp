@@ -34,13 +34,13 @@ class Application {
         CutMethod method = METHOD_MIX) const {
     switch(method) {
       case METHOD_MP:
-        jieba_.Cut(sentence, false, words);
+        jieba_.Cut(sentence, words);
         break;
       case METHOD_HMM:
         jieba_.CutHMM(sentence, words);
         break;
       case METHOD_MIX:
-        jieba_.Cut(sentence, true, words);
+        jieba_.Cut(sentence, words);
         break;
       case METHOD_FULL:
         jieba_.CutAll(sentence, words);

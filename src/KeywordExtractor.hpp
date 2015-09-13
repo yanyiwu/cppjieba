@@ -31,9 +31,9 @@ class KeywordExtractor {
   ~KeywordExtractor() {
   }
 
-  bool extract(const string& str, vector<string>& keywords, size_t topN) const {
+  bool extract(const string& sentence, vector<string>& keywords, size_t topN) const {
     vector<pair<string, double> > topWords;
-    if(!extract(str, topWords, topN)) {
+    if(!extract(sentence, topWords, topN)) {
       return false;
     }
     for(size_t i = 0; i < topWords.size(); i++) {
@@ -42,9 +42,9 @@ class KeywordExtractor {
     return true;
   }
 
-  bool extract(const string& str, vector<pair<string, double> >& keywords, size_t topN) const {
+  bool extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
     vector<string> words;
-    segment_.cut(str, words);
+    segment_.cut(sentence, words);
 
     map<string, double> wordmap;
     for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) {

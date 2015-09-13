@@ -21,23 +21,25 @@ class MixSegment: public SegmentBase {
   ~MixSegment() {
   }
 
-  void cut(const string& sentence, 
-        vector<string>& words) const {
+  void cut(const string& sentence, vector<string>& words, bool hmm = true) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<Unicode> uwords;
     uwords.reserve(sentence.size());
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      cut(range.begin, range.end, uwords);
+      cut(range.begin, range.end, uwords, hmm);
     }
     TransCode::encode(uwords, words);
   }
 
-  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res, bool hmm) const {
     vector<Unicode> words;
     words.reserve(end - begin);
     mpSeg_.cut(begin, end, words);
+    if (!hmm) {
+      return;
+    }
 
     vector<Unicode> hmmRes;
     hmmRes.reserve(end - begin);

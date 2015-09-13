@@ -21,18 +21,14 @@ class Jieba {
   ~Jieba() {
   }
 
-  void Cut(const string& sentence, bool hmm, vector<string>& words) const {
-    if (hmm) {
-      mix_seg_.cut(sentence, words);
-    } else {
-      mp_seg_.cut(sentence, words);
-    }
+  void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
+    mix_seg_.cut(sentence, words, hmm);
   }
   void CutAll(const string& sentence, vector<string>& words) const {
     full_seg_.cut(sentence, words);
   }
-  void CutForSearch(const string& sentence, vector<string>& words) const {
-    query_seg_.cut(sentence, words);
+  void CutForSearch(const string& sentence, vector<string>& words, bool hmm = true) const {
+    query_seg_.cut(sentence, words, hmm);
   }
   void CutHMM(const string& sentence, vector<string>& words) const {
     hmm_seg_.cut(sentence, words);
