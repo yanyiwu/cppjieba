@@ -23,6 +23,7 @@ ADD_EXECUTABLE(test.run
     TSegments.cpp 
     TPosTagger.cpp
     TApplication.cpp
+    TPreFilter.cpp
 )
 TARGET_LINK_LIBRARIES(gtest pthread)
 TARGET_LINK_LIBRARIES(test.run gtest pthread)

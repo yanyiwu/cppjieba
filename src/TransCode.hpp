@@ -57,6 +57,13 @@ inline Unicode decode(const string& str) {
   return unicode;
 }
 
+inline void encode(const vector<Unicode>& input, vector<string>& output) {
+  output.resize(input.size());
+  for (size_t i = 0; i < output.size(); i++) {
+    encode(input[i], output[i]);
+  }
+}
+
 } // namespace TransCode
 } // namespace CppJieba
 

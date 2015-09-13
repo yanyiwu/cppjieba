@@ -23,9 +23,9 @@ class SegmentBase: public ISegment, public NonCopyable {
  public:
   SegmentBase() {
     LoadSpecialSymbols();
-  };
+  }
   virtual ~SegmentBase() {
-  };
+  }
  public:
   virtual void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const = 0;
   virtual bool cut(const string& str, vector<string>& res) const {
