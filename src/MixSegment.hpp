@@ -34,12 +34,13 @@ class MixSegment: public SegmentBase {
   }
 
   void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res, bool hmm) const {
+    if (!hmm) {
+      mpSeg_.cut(begin, end, res);
+      return;
+    }
     vector<Unicode> words;
     words.reserve(end - begin);
     mpSeg_.cut(begin, end, words);
-    if (!hmm) {
-      return;
-    }
 
     vector<Unicode> hmmRes;
     hmmRes.reserve(end - begin);

@@ -12,15 +12,42 @@ using namespace CppJieba;
 
 TEST(MixSegmentTest, Test1) {
   MixSegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");;
-  const char* str = "我来自北京邮电大学。。。学号123456，用AK47";
-  const char* res[] = {"我", "来自", "北京邮电大学", "。","。","。", "学号", "123456","，","用","AK47"};
-  const char* str2 = "B超 T恤";
-  const char* res2[] = {"B超"," ", "T恤"};
+  string sentence;
   vector<string> words;
-  segment.cut(str, words);
-  ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
-  segment.cut(str2, words);
-  ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));
+  string actual;
+  string expected;
+
+  {
+    sentence = "我来自北京邮电大学。。。学号123456，用AK47";
+    expected = "我/来自/北京邮电大学/。/。/。/学号/123456/，/用/AK47";
+    segment.cut(sentence, words);
+    actual = join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
+    sentence = "B超 T恤";
+    expected = "B超/ /T恤";
+    segment.cut(sentence, words);
+    actual = join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
+    sentence = "他来到了网易杭研大厦";
+    expected = "他/来到/了/网易/杭/研/大厦";
+    segment.cut(sentence, words, false);
+    actual = join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
+    sentence = "他来到了网易杭研大厦";
+    expected = "他/来到/了/网易/杭研/大厦";
+    segment.cut(sentence, words);
+    actual = join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
 }
 
 TEST(MixSegmentTest, NoUserDict) {
