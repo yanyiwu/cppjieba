@@ -18,6 +18,7 @@ TEST(MixSegmentTest, Test1) {
   const char* res2[] = {"B超"," ", "T恤"};
   vector<string> words;
   ASSERT_TRUE(segment.cut(str, words));
+  cout << words << endl;
   ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   ASSERT_TRUE(segment.cut(str2, words));
   ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));

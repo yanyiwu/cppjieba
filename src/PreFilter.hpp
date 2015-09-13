@@ -5,7 +5,16 @@
 
 namespace CppJieba {
 
-const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u, 12290u, 65292u};
+//class PreFilterIterator {
+// public:
+//  PreFilterIterator() {
+//  }
+//  ~PreFilterIterator() {
+//  }
+//  
+// private:
+//  const unordered_set<Rune>& specialSymbols_;
+//}; // PreFilterIterator
 
 class PreFilter {
  public:
@@ -14,17 +23,14 @@ class PreFilter {
     Unicode::const_iterator end;
   }; // struct Range
 
-  PreFilter() {
-    LoadSpecialSymbols();
-  }
-  ~PreFilter() {
-  }
-
-  void Reset(const string& sentence) {
+  PreFilter(const unordered_set<Rune>& symbols, 
+        const string& sentence)
+    : symbols_(symbols) {
     TransCode::decode(sentence, sentence_);
     cursor_ = sentence_.begin();
   }
-  
+  ~PreFilter() {
+  }
   bool HasNext() const {
     return cursor_ != sentence_.end();
   }
@@ -32,7 +38,7 @@ class PreFilter {
     Range range;
     range.begin = cursor_;
     while (cursor_ != sentence_.end()) {
-      if (isIn(specialSymbols_, *cursor_)) {
+      if (isIn(symbols_, *cursor_)) {
         if (range.begin == cursor_) {
           cursor_ ++;
         }
@@ -45,18 +51,9 @@ class PreFilter {
     return range;
   }
  private:
-  Unicode sentence_;
   Unicode::const_iterator cursor_;
-
-  void LoadSpecialSymbols() {
-    size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
-    for(size_t i = 0; i < size; i ++) {
-      specialSymbols_.insert(SPECIAL_SYMBOL[i]);
-    }
-    assert(specialSymbols_.size());
-  }
-
-  unordered_set<Rune> specialSymbols_;
+  Unicode sentence_;
+  const unordered_set<Rune>& symbols_;
 }; // class PreFilter
 
 } // namespace CppJieba
