@@ -17,9 +17,9 @@ TEST(MixSegmentTest, Test1) {
   const char* str2 = "B超 T恤";
   const char* res2[] = {"B超"," ", "T恤"};
   vector<string> words;
-  ASSERT_TRUE(segment.cut(str, words));
+  segment.cut(str, words);
   ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
-  ASSERT_TRUE(segment.cut(str2, words));
+  segment.cut(str2, words);
   ASSERT_EQ(words, vector<string>(res2, res2 + sizeof(res2)/sizeof(res2[0])));
 }
 
@@ -27,7 +27,7 @@ TEST(MixSegmentTest, NoUserDict) {
   MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
   const char* str = "令狐冲是云计算方面的专家";
   vector<string> words;
-  ASSERT_TRUE(segment.cut(str, words));
+  segment.cut(str, words);
   string res;
   ASSERT_EQ("[\"令狐冲\", \"是\", \"云\", \"计算\", \"方面\", \"的\", \"专家\"]", res << words);
 
@@ -37,14 +37,14 @@ TEST(MixSegmentTest, UserDict) {
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
   }
   {
     const char* str = "小明先就职于IBM,后在日本京都大学深造";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"IBM\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
@@ -52,7 +52,7 @@ TEST(MixSegmentTest, UserDict) {
   {
     const char* str = "IBM,3.14";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"IBM\", \",\", \"3.14\"]", res);
@@ -63,14 +63,14 @@ TEST(MixSegmentTest, UserDict2) {
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
   }
   {
     const char* str = "小明先就职于IBM,后在日本京都大学深造";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"I\", \"B\", \"M\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
@@ -78,7 +78,7 @@ TEST(MixSegmentTest, UserDict2) {
   {
     const char* str = "IBM,3.14";
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"I\", \"B\", \"M\", \",\", \"3.14\"]", res);
@@ -89,20 +89,20 @@ TEST(MPSegmentTest, Test1) {
   MPSegment segment("../dict/jieba.dict.utf8");;
   string s;
   vector<string> words;
-  ASSERT_TRUE(segment.cut("我来自北京邮电大学。", words));
+  segment.cut("我来自北京邮电大学。", words);
   ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", s << words);
 
-  ASSERT_TRUE(segment.cut("B超 T恤", words));
+  segment.cut("B超 T恤", words);
   ASSERT_EQ(s << words, "[\"B超\", \" \", \"T恤\"]");
 
-  ASSERT_TRUE(segment.cut("南京市长江大桥", words));
+  segment.cut("南京市长江大桥", words);
   ASSERT_EQ("[\"南京市\", \"长江大桥\"]", s << words);
 
   // MaxWordLen
-  ASSERT_TRUE(segment.cut("南京市长江大桥", words, 3));
+  segment.cut("南京市长江大桥", words, 3);
   ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", s << words);
 
-  ASSERT_TRUE(segment.cut("南京市长江大桥", words, 0));
+  segment.cut("南京市长江大桥", words, 0);
   ASSERT_EQ("[\"南\", \"京\", \"市\", \"长\", \"江\", \"大\", \"桥\"]", s << words);
 }
 
@@ -142,7 +142,7 @@ TEST(HMMSegmentTest, Test1) {
     const char* str = "我来自北京邮电大学。。。学号123456";
     const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   }
 
@@ -150,7 +150,7 @@ TEST(HMMSegmentTest, Test1) {
     const char* str = "IBM,1.2,123";
     const char* res[] = {"IBM", ",", "1.2", ",", "123"};
     vector<string> words;
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   }
 }
@@ -160,12 +160,12 @@ TEST(FullSegment, Test1) {
   vector<string> words;
   string s;
 
-  ASSERT_TRUE(segment.cut("我来自北京邮电大学", words));
+  segment.cut("我来自北京邮电大学", words);
   s << words;
   ASSERT_EQ(s, "[\"我\", \"来自\", \"北京\", \"北京邮电大学\", \"邮电\", \"电大\", \"大学\"]");
 
   
-  ASSERT_TRUE(segment.cut("上市公司CEO", words));
+  segment.cut("上市公司CEO", words);
   s << words;
   ASSERT_EQ(s, "[\"上市\", \"公司\", \"C\", \"E\", \"O\"]");
 }
@@ -175,7 +175,7 @@ TEST(QuerySegment, Test1) {
   const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
   vector<string> words;
 
-  ASSERT_TRUE(segment.cut(str, words));
+  segment.cut(str, words);
 
   string s1, s2;
   s1 << words;
@@ -191,7 +191,7 @@ TEST(QuerySegment, Test2) {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
     vector<string> words;
 
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
 
     string s1, s2;
     s1 << words;
@@ -203,7 +203,7 @@ TEST(QuerySegment, Test2) {
     const char* str = "小明硕士毕业于中国科学院计算所iPhone6";
     vector<string> words;
 
-    ASSERT_TRUE(segment.cut(str, words));
+    segment.cut(str, words);
 
     string s1, s2;
     s1 << words;

@@ -6,7 +6,6 @@
 #include <cassert>
 #include "limonp/Logger.hpp"
 #include "DictTrie.hpp"
-#include "ISegment.hpp"
 #include "SegmentBase.hpp"
 #include "TransCode.hpp"
 
@@ -22,13 +21,24 @@ class FullSegment: public SegmentBase {
     : dictTrie_(dictTrie), isNeedDestroy_(false) {
     assert(dictTrie_);
   }
-  virtual ~FullSegment() {
+  ~FullSegment() {
     if(isNeedDestroy_) {
       delete dictTrie_;
     }
   }
-  using SegmentBase::cut;
-  virtual void cut(Unicode::const_iterator begin, 
+  void cut(const string& sentence, 
+        vector<string>& words) const {
+    PreFilter pre_filter(symbols_, sentence);
+    PreFilter::Range range;
+    vector<Unicode> uwords;
+    uwords.reserve(sentence.size());
+    while (pre_filter.HasNext()) {
+      range = pre_filter.Next();
+      cut(range.begin, range.end, uwords);
+    }
+    TransCode::encode(uwords, words);
+  }
+  void cut(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
         vector<Unicode>& res) const {
     //resut of searching in trie tree

@@ -5,7 +5,7 @@
 
 namespace CppJieba {
 
-class LevelSegment: public ISegment {
+class LevelSegment: public SegmentBase{
  public:
   LevelSegment(const string& dictPath, 
                const string& userDictPath = "")
@@ -15,7 +15,7 @@ class LevelSegment: public ISegment {
   LevelSegment(const DictTrie* dictTrie) 
     : mpSeg_(dictTrie) {
   }
-  virtual ~LevelSegment() {
+  ~LevelSegment() {
   }
 
   void cut(Unicode::const_iterator begin,

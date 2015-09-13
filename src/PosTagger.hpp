@@ -27,10 +27,7 @@ class PosTagger {
 
   bool tag(const string& src, vector<pair<string, string> >& res) const {
     vector<string> cutRes;
-    if (!segment_.cut(src, cutRes)) {
-      LogError("mixSegment_ cut failed");
-      return false;
-    }
+    segment_.cut(src, cutRes);
 
     const DictUnit *tmp = NULL;
     Unicode unico;

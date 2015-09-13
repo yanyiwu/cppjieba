@@ -17,14 +17,25 @@ class HMMSegment: public SegmentBase {
   HMMSegment(const HMMModel* model) 
   : model_(model), isNeedDestroy_(false) {
   }
-  virtual ~HMMSegment() {
+  ~HMMSegment() {
     if(isNeedDestroy_) {
       delete model_;
     }
   }
 
-  using SegmentBase::cut;
-  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res)const {
+  void cut(const string& sentence, 
+        vector<string>& words) const {
+    PreFilter pre_filter(symbols_, sentence);
+    PreFilter::Range range;
+    vector<Unicode> uwords;
+    uwords.reserve(sentence.size());
+    while (pre_filter.HasNext()) {
+      range = pre_filter.Next();
+      cut(range.begin, range.end, uwords);
+    }
+    TransCode::encode(uwords, words);
+  }
+  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right = begin;
     while(right != end) {

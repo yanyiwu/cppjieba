@@ -6,7 +6,6 @@
 #include <cassert>
 #include "limonp/Logger.hpp"
 #include "DictTrie.hpp"
-#include "ISegment.hpp"
 #include "SegmentBase.hpp"
 #include "FullSegment.hpp"
 #include "MixSegment.hpp"
@@ -25,9 +24,20 @@ class QuerySegment: public SegmentBase {
   QuerySegment(const DictTrie* dictTrie, const HMMModel* model, size_t maxWordLen = 4)
     : mixSeg_(dictTrie, model), fullSeg_(dictTrie), maxWordLen_(maxWordLen) {
   }
-  virtual ~QuerySegment() {
+  ~QuerySegment() {
   }
-  using SegmentBase::cut;
+  void cut(const string& sentence, 
+        vector<string>& words) const {
+    PreFilter pre_filter(symbols_, sentence);
+    PreFilter::Range range;
+    vector<Unicode> uwords;
+    uwords.reserve(sentence.size());
+    while (pre_filter.HasNext()) {
+      range = pre_filter.Next();
+      cut(range.begin, range.end, uwords);
+    }
+    TransCode::encode(uwords, words);
+  }
   void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     //use mix cut first
     vector<Unicode> mixRes;

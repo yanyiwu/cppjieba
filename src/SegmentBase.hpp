@@ -3,7 +3,6 @@
 
 #include "limonp/Logger.hpp"
 #include "PreFilter.hpp"
-#include "ISegment.hpp"
 #include <cassert>
 
 
@@ -14,16 +13,17 @@ const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u, 65292u, 12290u};
 
 using namespace limonp;
 
-class SegmentBase: public ISegment {
+class SegmentBase {
  public:
   SegmentBase() {
     LoadSpecialSymbols();
   }
-  virtual ~SegmentBase() {
+  ~SegmentBase() {
   }
+  /*
  public:
-  virtual void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const = 0;
-  virtual bool cut(const string& sentence, vector<string>& words) const {
+  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const = 0;
+  bool cut(const string& sentence, vector<string>& words) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<Unicode> uwords;
@@ -32,14 +32,12 @@ class SegmentBase: public ISegment {
       range = pre_filter.Next();
       cut(range.begin, range.end, uwords);
     }
-    words.resize(uwords.size());
-    for (size_t i = 0; i < uwords.size(); i++) {
-      TransCode::encode(uwords[i], words[i]);
-    }
+    TransCode::encode(uwords, words);
     return true;
   }
+  */
 
- private:
+ protected:
   void LoadSpecialSymbols() {
     size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
     for(size_t i = 0; i < size; i ++) {
@@ -47,7 +45,6 @@ class SegmentBase: public ISegment {
     }
     assert(symbols_.size());
   }
-
   unordered_set<Rune> symbols_;
 }; // class SegmentBase
 

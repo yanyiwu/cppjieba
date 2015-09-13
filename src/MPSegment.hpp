@@ -6,7 +6,6 @@
 #include <cassert>
 #include "limonp/Logger.hpp"
 #include "DictTrie.hpp"
-#include "ISegment.hpp"
 #include "SegmentBase.hpp"
 
 namespace CppJieba {
@@ -22,50 +21,38 @@ class MPSegment: public SegmentBase {
     : dictTrie_(dictTrie), isNeedDestroy_(false) {
     assert(dictTrie_);
   }
-  virtual ~MPSegment() {
+  ~MPSegment() {
     if(isNeedDestroy_) {
       delete dictTrie_;
     }
   }
 
-  using SegmentBase::cut;
-  void cut(Unicode::const_iterator begin , Unicode::const_iterator end, vector<Unicode>& words) const {
-    vector<Dag> dags;
-
-    dictTrie_->find(begin, end, dags);
-
-    CalcDP(dags);
-
-    Cut(dags, words);
-  }
-  bool cut(const string& sentence, 
+  void cut(const string& sentence, 
         vector<string>& words, 
-        size_t max_word_len) const {
-    Unicode unicode;
-    if (!TransCode::decode(sentence, unicode)) {
-      return false;
+        size_t max_word_len = MAX_WORD_LENGTH) const {
+    PreFilter pre_filter(symbols_, sentence);
+    PreFilter::Range range;
+    vector<Unicode> uwords;
+    uwords.reserve(sentence.size());
+    while (pre_filter.HasNext()) {
+      range = pre_filter.Next();
+      cut(range.begin, range.end, uwords, max_word_len);
     }
-    vector<Unicode> unicodeWords;
-    cut(unicode.begin(), unicode.end(), 
-          unicodeWords, max_word_len);
-    words.resize(unicodeWords.size());
-    for (size_t i = 0; i < words.size(); i++) {
-      TransCode::encode(unicodeWords[i], words[i]);
-    }
-    return true;
+    TransCode::encode(uwords, words);
   }
   void cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,
            vector<Unicode>& words,
-           size_t max_word_len) const {
+           size_t max_word_len = MAX_WORD_LENGTH) const {
     vector<Dag> dags;
     dictTrie_->find(begin, 
           end, 
           dags,
           max_word_len);
     CalcDP(dags);
-    Cut(dags, words);
+    CutByDag(dags, words);
   }
+
   const DictTrie* getDictTrie() const {
     return dictTrie_;
   }
@@ -103,7 +90,7 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void Cut(const vector<Dag>& dags, 
+  void CutByDag(const vector<Dag>& dags, 
         vector<Unicode>& words) const {
     size_t i = 0;
     while(i < dags.size()) {
