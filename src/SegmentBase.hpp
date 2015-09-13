@@ -17,6 +17,7 @@ using namespace limonp;
 class SegmentBase: public ISegment {
  public:
   SegmentBase() {
+    LoadSpecialSymbols();
   }
   virtual ~SegmentBase() {
   }
@@ -65,8 +66,6 @@ class SegmentBase: public ISegment {
     res.resize(res.size() + uRes.size());
     for(size_t i = 0; i < uRes.size(); i ++, offset++) {
       TransCode::encode(uRes[i], res[offset]);
-      cout << __FILE__ << __LINE__ << endl;
-      cout << res[offset] << endl;
     }
   }
  private:
