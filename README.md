@@ -319,6 +319,10 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ## 应用
 
+### GoJieba
+
+如果有需要在 Go 中使用分词，不妨试一下 [GoJieba] 。
+
 ### 关于CppJieba的跨语言包装使用
 
 收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
@@ -394,6 +398,7 @@ MIT http://yanyiwu.mit-license.org
 - yanyiwu https://github.com/yanyiwu i@yanyiwu.com
 - aholic https://github.com/aholic ruochen.xu@gmail.com
 
+[GoJieba]:https://github.com/yanyiwu/gojieba
 [CppJieba]:https://github.com/yanyiwu/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
@@ -411,5 +416,4 @@ MIT http://yanyiwu.mit-license.org
 [cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
-
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
