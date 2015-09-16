@@ -2,9 +2,9 @@ PROJECT(CPPJIEBA)
 
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
-#if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-#endif()
-set (CMAKE_INSTALL_PREFIX "/usr/local/cppjieba" CACHE PATH "default install path" FORCE )
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set (CMAKE_INSTALL_PREFIX "/usr/local/cppjieba" CACHE PATH "default install path" FORCE )
+endif()
 
 ADD_DEFINITIONS(-O3 -Wall -g)
 IF(APPLE) # mac os
