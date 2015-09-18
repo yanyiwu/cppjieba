@@ -9,7 +9,6 @@
 
 using namespace CppJieba;
 
-
 TEST(MixSegmentTest, Test1) {
   MixSegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");;
   string sentence;
@@ -131,6 +130,14 @@ TEST(MPSegmentTest, Test1) {
 
   segment.cut("南京市长江大桥", words, 0);
   ASSERT_EQ("[\"南\", \"京\", \"市\", \"长\", \"江\", \"大\", \"桥\"]", s << words);
+
+  segment.cut("湖南长沙市天心区", words);
+  s = join(words.begin(), words.end(), "/");
+  ASSERT_EQ("湖南长沙市/天心区", s);
+
+  segment.cut("湖南长沙市天心区", words, 3);
+  s = join(words.begin(), words.end(), "/");
+  ASSERT_EQ("湖南/长沙市/天心区", s);
 }
 
 //TEST(MPSegmentTest, Test2) {
