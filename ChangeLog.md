@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v3.2.1
+
+1. 修复 Jieba.hpp 头文件保护写错导致的 bug。
+
 ## v3.2.0
 
 1. 使用工程上比较 tricky 的 Trie树优化办法。废弃了之前的 `Aho-Corasick-Automation` 实现，可读性更好，性能更高。
