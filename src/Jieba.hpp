@@ -1,3 +1,4 @@
+#ifndef CPPJIEAB_JIEBA_H
 #define CPPJIEAB_JIEBA_H
 
 #include "QuerySegment.hpp"
@@ -65,6 +66,8 @@ class Jieba {
   QuerySegment query_seg_;
   LevelSegment level_seg_;
   
-}; // class 
+}; // class Jieba
 
-} // namespace 
+} // namespace Jieba
+
+#endif // CPPJIEAB_JIEBA_H
