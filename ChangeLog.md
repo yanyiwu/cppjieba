@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
+1. 用户词典的载入支持多词典载入，多词典路径用英文冒号(:)作为分隔符，就当坐是向环境变量PATH致敬，哈哈。
+
 ## v3.2.1
 
 1. 修复 Jieba.hpp 头文件保护写错导致的 bug。

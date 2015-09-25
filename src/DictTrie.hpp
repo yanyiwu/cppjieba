@@ -27,15 +27,15 @@ class DictTrie {
     trie_ = NULL;
     minWeight_ = MAX_DOUBLE;
   }
-  DictTrie(const string& dictPath, const string& userDictPath = "") {
+  DictTrie(const string& dictPath, const string& userDictPaths = "") {
     new (this) DictTrie();
-    init(dictPath, userDictPath);
+    init(dictPath, userDictPaths);
   }
   ~DictTrie() {
     delete trie_;
   }
 
-  void init(const string& dictPath, const string& userDictPath = "") {
+  void init(const string& dictPath, const string& userDictPaths = "") {
     if(trie_ != NULL) {
       LogFatal("trie already initted");
     }
@@ -44,8 +44,8 @@ class DictTrie {
     minWeight_ = FindMinWeight(staticNodeInfos_);
     maxWeight_ = FindMaxWeight(staticNodeInfos_);
 
-    if(userDictPath.size()) {
-      LoadUserDict(userDictPath);
+    if(userDictPaths.size()) {
+      LoadUserDict(userDictPaths);
     }
     Shrink(staticNodeInfos_);
     CreateTrie(staticNodeInfos_);
@@ -92,27 +92,30 @@ class DictTrie {
 
     trie_ = new Trie(words, valuePointers);
   }
-  void LoadUserDict(const string& filePath) {
-    ifstream ifs(filePath.c_str());
-    if(!ifs.is_open()) {
-      LogFatal("file %s open failed.", filePath.c_str());
-    }
-    string line;
-    DictUnit nodeInfo;
-    vector<string> buf;
-    size_t lineno;
-    for(lineno = 0; getline(ifs, line); lineno++) {
-      buf.clear();
-      split(line, buf, " ");
-      if(buf.size() < 1) {
-        LogFatal("split [%s] result illegal", line.c_str());
+  void LoadUserDict(const string& filePaths) {
+    vector<string> files = limonp::split(filePaths, ":");
+    size_t lineno = 0;
+    for (size_t i = 0; i < files.size(); i++) {
+      ifstream ifs(files[i].c_str());
+      if(!ifs.is_open()) {
+        LogFatal("file %s open failed.", files[i].c_str());
       }
+      string line;
       DictUnit nodeInfo;
-      MakeUserNodeInfo(nodeInfo, buf[0], 
-            (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
-      staticNodeInfos_.push_back(nodeInfo);
+      vector<string> buf;
+      for(; getline(ifs, line); lineno++) {
+        buf.clear();
+        split(line, buf, " ");
+        if(buf.size() < 1) {
+          LogFatal("split [%s] result illegal", line.c_str());
+        }
+        DictUnit nodeInfo;
+        MakeUserNodeInfo(nodeInfo, buf[0], 
+              (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
+        staticNodeInfos_.push_back(nodeInfo);
+      }
     }
-    LogInfo("load userdict[%s] ok. lines[%u]", filePath.c_str(), lineno);
+    LogInfo("load userdicts[%s] ok. lines[%u]", filePaths.c_str(), lineno);
   }
   bool MakeNodeInfo(DictUnit& nodeInfo,
         const string& word, 
