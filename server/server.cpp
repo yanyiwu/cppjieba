@@ -5,15 +5,17 @@
 #include <string.h>
 #include "limonp/Config.hpp"
 #include "husky/ThreadPoolServer.hpp"
-#include "Application.hpp"
+#include "Jieba.hpp"
 
 using namespace husky;
 using namespace CppJieba;
 
 class ReqHandler: public IRequestHandler {
  public:
-  ReqHandler(const CppJieba::Application& app): app_(app) {
+  ReqHandler(const CppJieba::Jieba& jieba)
+   : jieba_(jieba) {
   }
+
   virtual ~ReqHandler() {
   }
 
@@ -24,35 +26,35 @@ class ReqHandler: public IRequestHandler {
     httpReq.GET("key", tmp);
     URLDecode(tmp, sentence);
     httpReq.GET("method", method);
-    app_.cut(sentence, words, CppJieba::METHOD_MIX);
+    jieba_.Cut(sentence, words, true);
     httpReq.GET("format", format);
-    run(sentence, method, format, strSnd);
+    Run(sentence, method, format, strSnd);
     return true;
   }
 
   virtual bool doPOST(const HttpReqInfo& httpReq, string& strSnd) {
     vector<string> words;
-    run(httpReq.getBody(), "MIX", "simple", strSnd);
+    Run(httpReq.getBody(), "MIX", "simple", strSnd);
     return true;
   }
 
-  void run(const string& sentence, 
+  void Run(const string& sentence, 
            const string& method, 
            const string& format,
            string& strSnd) const {
     vector<string> words;
     if ("MP" == method) {
-      app_.cut(sentence, words, CppJieba::METHOD_MP);
+      jieba_.Cut(sentence, words, false);
     } else if ("HMM" == method) {
-      app_.cut(sentence, words, CppJieba::METHOD_HMM);
+      jieba_.CutHMM(sentence, words);
     } else if ("MIX" == method) {
-      app_.cut(sentence, words, CppJieba::METHOD_MIX);
+      jieba_.Cut(sentence, words, true);
     } else if ("FULL" == method) {
-      app_.cut(sentence, words, CppJieba::METHOD_FULL);
+      jieba_.CutAll(sentence, words);
     } else if ("QUERY" == method) {
-      app_.cut(sentence, words, CppJieba::METHOD_QUERY);
+      jieba_.CutForSearch(sentence, words);
     } else { // default
-      app_.cut(sentence, words, CppJieba::METHOD_MIX);
+      jieba_.Cut(sentence, words, false);
     }
     if (format == "simple") {
       join(words.begin(), words.end(), strSnd, " ");
@@ -61,10 +63,10 @@ class ReqHandler: public IRequestHandler {
     }
   }
  private:
-  const CppJieba::Application& app_;
+  const CppJieba::Jieba& jieba_;
 };
 
-bool run(int argc, char** argv) {
+bool Run(int argc, char** argv) {
   if (argc < 2) {
     return false;
   }
@@ -78,24 +80,20 @@ bool run(int argc, char** argv) {
   string dictPath = conf.get("dict_path", "");
   string modelPath = conf.get("model_path", "");
   string userDictPath = conf.get("user_dict_path", "");
-  string idfPath = conf.get("idf_path", "");
-  string stopWordsPath = conf.get("stop_words_path", "");
 
   LogInfo("config info: %s", conf.getConfigInfo().c_str());
   
-  CppJieba::Application app(dictPath, 
+  CppJieba::Jieba jieba(dictPath, 
         modelPath, 
-        userDictPath, 
-        idfPath, 
-        stopWordsPath);
+        userDictPath);
   
-  ReqHandler reqHandler(app);
+  ReqHandler reqHandler(jieba);
   ThreadPoolServer sf(threadNumber, queueMaxSize, port, reqHandler);
   return sf.start();
 }
 
 int main(int argc, char* argv[]) {
-  if (!run(argc, argv)) {
+  if (!Run(argc, argv)) {
     printf("usage: %s <config_file>\n", argv[0]);
     return EXIT_FAILURE;
   }
