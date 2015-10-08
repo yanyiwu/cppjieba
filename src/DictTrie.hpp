@@ -30,25 +30,48 @@ class DictTrie {
     Max,
   }; // enum UserWordWeightOption
 
-  DictTrie() {
-    trie_ = NULL;
-    min_weight_ = MAX_DOUBLE;
+  DictTrie(const string& dict_path, const string& user_dict_paths = "", UserWordWeightOption user_word_weight_opt = Median) {
+    Init(dict_path, user_dict_paths, user_word_weight_opt);
   }
-  DictTrie(const string& dict_path, const string& user_dict_paths = "") {
-    new (this) DictTrie();
-    init(dict_path, user_dict_paths);
-  }
+
   ~DictTrie() {
     delete trie_;
   }
 
-  void init(const string& dict_path, const string& user_dict_paths = "") {
-    if (trie_ != NULL) {
-      LogFatal("trie already initted");
+  bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
+    DictUnit node_info;
+    if (!MakeNodeInfo(node_info, word, max_weight_, tag)) {
+      return false;
     }
+    active_node_infos_.push_back(node_info);
+    trie_->insertNode(node_info.word, &active_node_infos_.back());
+    return true;
+  }
+
+  const DictUnit* Find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+    return trie_->Find(begin, end);
+  }
+
+  void Find(Unicode::const_iterator begin, 
+        Unicode::const_iterator end, 
+        vector<struct Dag>&res,
+        size_t max_word_len = MAX_WORD_LENGTH) const {
+    trie_->Find(begin, end, res, max_word_len);
+  }
+
+  bool IsUserDictSingleChineseWord(const Rune& word) const {
+    return isIn(user_dict_single_chinese_word_, word);
+  }
+
+  double GetMinWeight() const {
+    return min_weight_;
+  }
+
+ private:
+  void Init(const string& dict_path, const string& user_dict_paths, UserWordWeightOption user_word_weight_opt) {
     LoadDict(dict_path);
     CalculateWeight(static_node_infos_);
-    SetStaticWordWeights();
+    SetStaticWordWeights(user_word_weight_opt);
 
     if (user_dict_paths.size()) {
       LoadUserDict(user_dict_paths);
@@ -57,36 +80,6 @@ class DictTrie {
     CreateTrie(static_node_infos_);
   }
   
-  bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
-    DictUnit node_info;
-    if (!MakeUserNodeInfo(node_info, word, tag)) {
-      return false;
-    }
-    active_node_infos_.push_back(node_info);
-    trie_->insertNode(node_info.word, &active_node_infos_.back());
-    return true;
-  }
-
-  const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
-    return trie_->find(begin, end);
-  }
-
-  void find(Unicode::const_iterator begin, 
-        Unicode::const_iterator end, 
-        vector<struct Dag>&res,
-        size_t max_word_len = MAX_WORD_LENGTH) const {
-    trie_->find(begin, end, res, max_word_len);
-  }
-
-  bool isUserDictSingleChineseWord(const Rune& word) const {
-    return isIn(user_dict_single_chinese_word_, word);
-  }
-
-  double getMinWeight() const {
-    return min_weight_;
-  }
-
- private:
   void CreateTrie(const vector<DictUnit>& dictUnits) {
     assert(dictUnits.size());
     vector<Unicode> words;
@@ -98,6 +91,7 @@ class DictTrie {
 
     trie_ = new Trie(words, valuePointers);
   }
+
   void LoadUserDict(const string& filePaths) {
     vector<string> files = limonp::split(filePaths, ":");
     size_t lineno = 0;
@@ -116,13 +110,19 @@ class DictTrie {
           LogFatal("split [%s] result illegal", line.c_str());
         }
         DictUnit node_info;
-        MakeUserNodeInfo(node_info, buf[0], 
+        MakeNodeInfo(node_info, 
+              buf[0], 
+              max_weight_,
               (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
         static_node_infos_.push_back(node_info);
+        if (node_info.word.size() == 1) {
+          user_dict_single_chinese_word_.insert(node_info.word[0]);
+        }
       }
     }
     LogInfo("load userdicts[%s] ok. lines[%u]", filePaths.c_str(), lineno);
   }
+
   bool MakeNodeInfo(DictUnit& node_info,
         const string& word, 
         double weight, 
@@ -135,20 +135,7 @@ class DictTrie {
     node_info.tag = tag;
     return true;
   }
-  bool MakeUserNodeInfo(DictUnit& node_info, 
-        const string& word, 
-        const string& tag = UNKNOWN_TAG) {
-    if (!TransCode::decode(word, node_info.word)) {
-      LogError("decode %s failed.", word.c_str());
-      return false;
-    }
-    if (node_info.word.size() == 1) {
-      user_dict_single_chinese_word_.insert(node_info.word[0]);
-    }
-    node_info.weight = max_weight_;
-    node_info.tag = tag;
-    return true;
-  }
+
   void LoadDict(const string& filePath) {
     ifstream ifs(filePath.c_str());
     if (!ifs.is_open()) {
@@ -175,7 +162,7 @@ class DictTrie {
     return lhs.weight < rhs.weight;
   }
 
-  void SetStaticWordWeights() {
+  void SetStaticWordWeights(UserWordWeightOption option) {
     if (static_node_infos_.empty()) {
       LogFatal("something must be wrong");
     }
@@ -184,6 +171,17 @@ class DictTrie {
     min_weight_ = x[0].weight;
     max_weight_ = x[x.size() - 1].weight;
     median_weight_ = x[x.size() / 2].weight;
+    switch (option) {
+     case Min:
+       user_word_default_weight_ = min_weight_;
+       break;
+     case Median:
+       user_word_default_weight_ = median_weight_;
+       break;
+     default:
+       user_word_default_weight_ = max_weight_;
+       break;
+    }
   }
 
   void CalculateWeight(vector<DictUnit>& node_infos) const {
@@ -210,6 +208,7 @@ class DictTrie {
   double min_weight_;
   double max_weight_;
   double median_weight_;
+  double user_word_default_weight_;
   unordered_set<Rune> user_dict_single_chinese_word_;
 };
 }

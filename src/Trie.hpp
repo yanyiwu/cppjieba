@@ -65,7 +65,7 @@ class Trie {
     }
   }
 
-  const DictUnit* find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
+  const DictUnit* Find(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     if (begin == end) {
       return NULL;
     }
@@ -85,7 +85,7 @@ class Trie {
     return ptNode->ptValue;
   }
 
-  void find(Unicode::const_iterator begin, 
+  void Find(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
         vector<struct Dag>&res, 
         size_t max_word_len = MAX_WORD_LENGTH) const {

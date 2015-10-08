@@ -24,16 +24,12 @@ TEST(DictTrieTest, NewAndDelete) {
   DictTrie * trie;
   trie = new DictTrie(DICT_FILE);
   delete trie;
-  trie = new DictTrie();
-  delete trie;
 }
-
 
 TEST(DictTrieTest, Test1) {
   string s1, s2;
-  DictTrie trie;
-  trie.init(DICT_FILE);
-  ASSERT_LT(trie.getMinWeight() + 15.6479, 0.001);
+  DictTrie trie(DICT_FILE);
+  ASSERT_LT(trie.GetMinWeight() + 15.6479, 0.001);
   string word("来到");
   Unicode uni;
   ASSERT_TRUE(TransCode::decode(word, uni));
@@ -42,7 +38,7 @@ TEST(DictTrieTest, Test1) {
   nodeInfo.tag = "v";
   nodeInfo.weight = -8.87033;
   s1 << nodeInfo;
-  s2 << (*trie.find(uni.begin(), uni.end()));
+  s2 << (*trie.Find(uni.begin(), uni.end()));
 
   EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
   word = "清华大学";
@@ -50,13 +46,13 @@ TEST(DictTrieTest, Test1) {
   const char * words[] = {"清", "清华", "清华大学"};
   for (size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
     ASSERT_TRUE(TransCode::decode(words[i], uni));
-    res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
-    //resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());
+    res.push_back(make_pair(uni.size() - 1, trie.Find(uni.begin(), uni.end())));
+    //resMap[uni.size() - 1] = trie.Find(uni.begin(), uni.end());
   }
   vector<pair<size_t, const DictUnit*> > vec;
   vector<struct Dag> dags;
   ASSERT_TRUE(TransCode::decode(word, uni));
-  trie.find(uni.begin(), uni.end(), dags);
+  trie.Find(uni.begin(), uni.end(), dags);
   ASSERT_EQ(dags.size(), uni.size());
   ASSERT_NE(dags.size(), 0u);
   s1 << res;
@@ -70,7 +66,7 @@ TEST(DictTrieTest, UserDict) {
   string word = "云计算";
   Unicode unicode;
   ASSERT_TRUE(TransCode::decode(word, unicode));
-  const DictUnit * unit = trie.find(unicode.begin(), unicode.end());
+  const DictUnit * unit = trie.Find(unicode.begin(), unicode.end());
   ASSERT_TRUE(unit);
   string res ;
   res << *unit;
@@ -85,7 +81,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.find(unicode.begin(), unicode.end(), res);
+    trie.Find(unicode.begin(), unicode.end(), res);
 
     size_t nexts_sizes[] = {3, 2, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
@@ -99,7 +95,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.find(unicode.begin(), unicode.end(), res);
+    trie.Find(unicode.begin(), unicode.end(), res);
 
     size_t nexts_sizes[] = {3, 1, 2, 2, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
@@ -113,7 +109,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.find(unicode.begin(), unicode.end(), res);
+    trie.Find(unicode.begin(), unicode.end(), res);
 
     size_t nexts_sizes[] = {3, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
@@ -127,7 +123,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.find(unicode.begin(), unicode.end(), res, 3);
+    trie.Find(unicode.begin(), unicode.end(), res, 3);
 
     size_t nexts_sizes[] = {2, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));
@@ -141,7 +137,7 @@ TEST(DictTrieTest, Dag) {
     Unicode unicode;
     ASSERT_TRUE(TransCode::decode(word, unicode));
     vector<struct Dag> res;
-    trie.find(unicode.begin(), unicode.end(), res, 4);
+    trie.Find(unicode.begin(), unicode.end(), res, 4);
 
     size_t nexts_sizes[] = {3, 1, 2, 1};
     ASSERT_EQ(res.size(), sizeof(nexts_sizes)/sizeof(nexts_sizes[0]));

@@ -20,22 +20,6 @@ class SegmentBase {
   }
   ~SegmentBase() {
   }
-  /*
- public:
-  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const = 0;
-  bool cut(const string& sentence, vector<string>& words) const {
-    PreFilter pre_filter(symbols_, sentence);
-    PreFilter::Range range;
-    vector<Unicode> uwords;
-    uwords.reserve(sentence.size());
-    while (pre_filter.HasNext()) {
-      range = pre_filter.Next();
-      cut(range.begin, range.end, uwords);
-    }
-    TransCode::encode(uwords, words);
-    return true;
-  }
-  */
 
  protected:
   void LoadSpecialSymbols() {

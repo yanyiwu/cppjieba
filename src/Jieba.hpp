@@ -44,7 +44,7 @@ class Jieba {
     mp_seg_.cut(sentence, words, max_word_len);
   }
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
-    return dict_trie_.insertUserWord(word, tag);
+    return dict_trie_.InsertUserWord(word, tag);
   }
 
   const DictTrie* GetDictTrie() const {

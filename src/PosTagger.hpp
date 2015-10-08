@@ -38,7 +38,7 @@ class PosTagger {
         LogError("decode failed.");
         return false;
       }
-      tmp = dict->find(unico.begin(), unico.end());
+      tmp = dict->Find(unico.begin(), unico.end());
       if (tmp == NULL || tmp->tag.empty()) {
         res.push_back(make_pair(*itr, SpecialRule(unico)));
       } else {

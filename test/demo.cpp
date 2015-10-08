@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
   cout << "[demo] Insert User Word" << endl;
   app.cut("男默女泪", words);
   cout << join(words.begin(), words.end(), "/") << endl;
-  app.insertUserWord("男默女泪");
+  app.InsertUserWord("男默女泪");
   app.cut("男默女泪", words);
   cout << join(words.begin(), words.end(), "/") << endl;
 

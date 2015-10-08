@@ -76,7 +76,7 @@ TEST(ApplicationTest, InsertUserWord) {
   result << words;
   ASSERT_EQ("[\"男默\", \"女泪\"]", result);
 
-  ASSERT_TRUE(app.insertUserWord("男默女泪"));
+  ASSERT_TRUE(app.InsertUserWord("男默女泪"));
 
   app.cut("男默女泪", words);
   result << words;
@@ -85,7 +85,7 @@ TEST(ApplicationTest, InsertUserWord) {
   for (size_t i = 0; i < 100; i++) {
     string newWord;
     newWord << rand();
-    ASSERT_TRUE(app.insertUserWord(newWord));
+    ASSERT_TRUE(app.InsertUserWord(newWord));
     app.cut(newWord, words);
     result << words;
     ASSERT_EQ(result, string_format("[\"%s\"]", newWord.c_str()));

@@ -54,7 +54,7 @@ class FullSegment: public SegmentBase {
     int wordLen = 0;
     assert(dictTrie_);
     vector<struct Dag> dags;
-    dictTrie_->find(begin, end, dags);
+    dictTrie_->Find(begin, end, dags);
     for (size_t i = 0; i < dags.size(); i++) {
       for (size_t j = 0; j < dags[i].nexts.size(); j++) {
         const DictUnit* du = dags[i].nexts[j].second;

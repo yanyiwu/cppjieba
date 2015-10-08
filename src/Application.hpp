@@ -63,7 +63,7 @@ class Application {
         vector<string>& words, size_t max_word_len) const {
     jieba_.CutSmall(sentence, words, max_word_len);
   }
-  bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
+  bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     return jieba_.InsertUserWord(word, tag);
   }
   void tag(const string& str, vector<pair<string, string> >& res) const {

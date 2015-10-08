@@ -48,14 +48,14 @@ class MixSegment: public SegmentBase {
     piece.reserve(end - begin);
     for (size_t i = 0, j = 0; i < words.size(); i++) {
       //if mp get a word, it's ok, put it into result
-      if (1 != words[i].size() || (words[i].size() == 1 && mpSeg_.isUserDictSingleChineseWord(words[i][0]))) {
+      if (1 != words[i].size() || (words[i].size() == 1 && mpSeg_.IsUserDictSingleChineseWord(words[i][0]))) {
         res.push_back(words[i]);
         continue;
       }
 
       // if mp get a single one and it is not in userdict, collect it in sequence
       j = i;
-      while (j < words.size() && 1 == words[j].size() && !mpSeg_.isUserDictSingleChineseWord(words[j][0])) {
+      while (j < words.size() && 1 == words[j].size() && !mpSeg_.IsUserDictSingleChineseWord(words[j][0])) {
         piece.push_back(words[j][0]);
         j++;
       }

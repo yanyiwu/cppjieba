@@ -45,7 +45,7 @@ class MPSegment: public SegmentBase {
            vector<Unicode>& words,
            size_t max_word_len = MAX_WORD_LENGTH) const {
     vector<Dag> dags;
-    dictTrie_->find(begin, 
+    dictTrie_->Find(begin, 
           end, 
           dags,
           max_word_len);
@@ -57,8 +57,8 @@ class MPSegment: public SegmentBase {
     return dictTrie_;
   }
 
-  bool isUserDictSingleChineseWord(const Rune & value) const {
-    return dictTrie_->isUserDictSingleChineseWord(value);
+  bool IsUserDictSingleChineseWord(const Rune& value) const {
+    return dictTrie_->IsUserDictSingleChineseWord(value);
   }
  private:
   void CalcDP(vector<Dag>& dags) const {
@@ -81,7 +81,7 @@ class MPSegment: public SegmentBase {
         if (p) {
           val += p->weight;
         } else {
-          val += dictTrie_->getMinWeight();
+          val += dictTrie_->GetMinWeight();
         }
         if (val > rit->weight) {
           rit->pInfo = p;
