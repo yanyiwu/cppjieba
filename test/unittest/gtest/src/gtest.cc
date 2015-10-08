@@ -1817,7 +1817,7 @@ void TestResult::RecordProperty(const TestProperty& test_property) {
   }
   internal::MutexLock lock(&test_properites_mutex_);
   const std::vector<TestProperty>::iterator property_with_matching_key =
-      std::find_if(test_properties_.begin(), test_properties_.end(),
+      std::find_if (test_properties_.begin(), test_properties_.end(),
                    internal::TestPropertyKeyIs(test_property.key()));
   if (property_with_matching_key == test_properties_.end()) {
     test_properties_.push_back(test_property);
@@ -4099,7 +4099,7 @@ TestCase* UnitTestImpl::GetTestCase(const char* test_case_name,
                                     Test::TearDownTestCaseFunc tear_down_tc) {
   // Can we find a TestCase with the given name?
   const std::vector<TestCase*>::const_iterator test_case =
-      std::find_if(test_cases_.begin(), test_cases_.end(),
+      std::find_if (test_cases_.begin(), test_cases_.end(),
                    TestCaseNameIs(test_case_name));
 
   if (test_case != test_cases_.end())

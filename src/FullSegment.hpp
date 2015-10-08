@@ -22,7 +22,7 @@ class FullSegment: public SegmentBase {
     assert(dictTrie_);
   }
   ~FullSegment() {
-    if(isNeedDestroy_) {
+    if (isNeedDestroy_) {
       delete dictTrie_;
     }
   }

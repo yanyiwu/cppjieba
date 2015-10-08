@@ -22,7 +22,7 @@ class MPSegment: public SegmentBase {
     assert(dictTrie_);
   }
   ~MPSegment() {
-    if(isNeedDestroy_) {
+    if (isNeedDestroy_) {
       delete dictTrie_;
     }
   }
@@ -66,24 +66,24 @@ class MPSegment: public SegmentBase {
     const DictUnit* p;
     double val;
 
-    for(vector<Dag>::reverse_iterator rit = dags.rbegin(); rit != dags.rend(); rit++) {
+    for (vector<Dag>::reverse_iterator rit = dags.rbegin(); rit != dags.rend(); rit++) {
       rit->pInfo = NULL;
       rit->weight = MIN_DOUBLE;
       assert(!rit->nexts.empty());
-      for(LocalVector<pair<size_t, const DictUnit*> >::const_iterator it = rit->nexts.begin(); it != rit->nexts.end(); it++) {
+      for (LocalVector<pair<size_t, const DictUnit*> >::const_iterator it = rit->nexts.begin(); it != rit->nexts.end(); it++) {
         nextPos = it->first;
         p = it->second;
         val = 0.0;
-        if(nextPos + 1 < dags.size()) {
+        if (nextPos + 1 < dags.size()) {
           val += dags[nextPos + 1].weight;
         }
 
-        if(p) {
+        if (p) {
           val += p->weight;
         } else {
           val += dictTrie_->getMinWeight();
         }
-        if(val > rit->weight) {
+        if (val > rit->weight) {
           rit->pInfo = p;
           rit->weight = val;
         }
@@ -93,9 +93,9 @@ class MPSegment: public SegmentBase {
   void CutByDag(const vector<Dag>& dags, 
         vector<Unicode>& words) const {
     size_t i = 0;
-    while(i < dags.size()) {
+    while (i < dags.size()) {
       const DictUnit* p = dags[i].pInfo;
-      if(p) {
+      if (p) {
         words.push_back(p->word);
         i += p->word.size();
       } else { //single chinese word

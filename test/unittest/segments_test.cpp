@@ -160,7 +160,7 @@ TEST(MPSegmentTest, Test1) {
 //  }
 //  string res;
 //
-//  while(getline(ifs, line)) {
+//  while (getline(ifs, line)) {
 //    res += line;
 //    res += '\n';
 //

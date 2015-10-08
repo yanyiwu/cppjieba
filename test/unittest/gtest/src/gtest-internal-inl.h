@@ -271,7 +271,7 @@ GTEST_API_ bool ShouldRunTestOnShard(
 // the given predicate.
 template <class Container, typename Predicate>
 inline int CountIf(const Container& c, Predicate predicate) {
-  // Implemented as an explicit loop since std::count_if() in libCstd on
+  // Implemented as an explicit loop since std::count_if () in libCstd on
   // Solaris has a non-standard signature.
   int count = 0;
   for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it) {

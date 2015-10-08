@@ -18,7 +18,7 @@ class HMMSegment: public SegmentBase {
   : model_(model), isNeedDestroy_(false) {
   }
   ~HMMSegment() {
-    if(isNeedDestroy_) {
+    if (isNeedDestroy_) {
       delete model_;
     }
   }
@@ -38,30 +38,30 @@ class HMMSegment: public SegmentBase {
   void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right = begin;
-    while(right != end) {
-      if(*right < 0x80) {
-        if(left != right) {
+    while (right != end) {
+      if (*right < 0x80) {
+        if (left != right) {
           Cut(left, right, res);
         }
         left = right;
         do {
           right = SequentialLetterRule(left, end);
-          if(right != left) {
+          if (right != left) {
             break;
           }
           right = NumbersRule(left, end);
-          if(right != left) {
+          if (right != left) {
             break;
           }
           right ++;
-        } while(false);
+        } while (false);
         res.push_back(Unicode(left, right));
         left = right;
       } else {
         right++;
       }
     }
-    if(left != right) {
+    if (left != right) {
       Cut(left, right, res);
     }
   }
@@ -74,9 +74,9 @@ class HMMSegment: public SegmentBase {
     } else {
       return begin;
     }
-    while(begin != end) {
+    while (begin != end) {
       x = *begin;
-      if(('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9')) {
+      if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9')) {
         begin ++;
       } else {
         break;
@@ -87,14 +87,14 @@ class HMMSegment: public SegmentBase {
   //
   Unicode::const_iterator NumbersRule(Unicode::const_iterator begin, Unicode::const_iterator end) const {
     Rune x = *begin;
-    if('0' <= x && x <= '9') {
+    if ('0' <= x && x <= '9') {
       begin ++;
     } else {
       return begin;
     }
-    while(begin != end) {
+    while (begin != end) {
       x = *begin;
-      if( ('0' <= x && x <= '9') || x == '.') {
+      if ( ('0' <= x && x <= '9') || x == '.') {
         begin++;
       } else {
         break;
@@ -108,8 +108,8 @@ class HMMSegment: public SegmentBase {
 
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right;
-    for(size_t i = 0; i < status.size(); i++) {
-      if(status[i] % 2) { //if(HMMModel::E == status[i] || HMMModel::S == status[i])
+    for (size_t i = 0; i < status.size(); i++) {
+      if (status[i] % 2) { //if (HMMModel::E == status[i] || HMMModel::S == status[i])
         right = begin + i + 1;
         res.push_back(Unicode(left, right));
         left = right;
@@ -131,23 +131,23 @@ class HMMSegment: public SegmentBase {
     vector<double> weight(XYSize);
 
     //start
-    for(size_t y = 0; y < Y; y++) {
+    for (size_t y = 0; y < Y; y++) {
       weight[0 + y * X] = model_->startProb[y] + model_->getEmitProb(model_->emitProbVec[y], *begin, MIN_DOUBLE);
       path[0 + y * X] = -1;
     }
 
     double emitProb;
 
-    for(size_t x = 1; x < X; x++) {
-      for(size_t y = 0; y < Y; y++) {
+    for (size_t x = 1; x < X; x++) {
+      for (size_t y = 0; y < Y; y++) {
         now = x + y*X;
         weight[now] = MIN_DOUBLE;
         path[now] = HMMModel::E; // warning
         emitProb = model_->getEmitProb(model_->emitProbVec[y], *(begin+x), MIN_DOUBLE);
-        for(size_t preY = 0; preY < Y; preY++) {
+        for (size_t preY = 0; preY < Y; preY++) {
           old = x - 1 + preY * X;
           tmp = weight[old] + model_->transProb[preY][y] + emitProb;
-          if(tmp > weight[now]) {
+          if (tmp > weight[now]) {
             weight[now] = tmp;
             path[now] = preY;
           }
@@ -158,14 +158,14 @@ class HMMSegment: public SegmentBase {
     endE = weight[X-1+HMMModel::E*X];
     endS = weight[X-1+HMMModel::S*X];
     stat = 0;
-    if(endE >= endS) {
+    if (endE >= endS) {
       stat = HMMModel::E;
     } else {
       stat = HMMModel::S;
     }
 
     status.resize(X);
-    for(int x = X -1 ; x >= 0; x--) {
+    for (int x = X -1 ; x >= 0; x--) {
       status[x] = stat;
       stat = path[x + stat*X];
     }

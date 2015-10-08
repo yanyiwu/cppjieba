@@ -54,7 +54,7 @@ class ReqHandler: public IRequestHandler {
     } else { // default
       app_.cut(sentence, words, CppJieba::METHOD_MIX);
     }
-    if(format == "simple") {
+    if (format == "simple") {
       join(words.begin(), words.end(), strSnd, " ");
     } else {
       strSnd << words;
@@ -65,11 +65,11 @@ class ReqHandler: public IRequestHandler {
 };
 
 bool run(int argc, char** argv) {
-  if(argc < 2) {
+  if (argc < 2) {
     return false;
   }
   Config conf(argv[1]);
-  if(!conf) {
+  if (!conf) {
     return false;
   }
   int port = conf.get("port", 1339);
@@ -95,7 +95,7 @@ bool run(int argc, char** argv) {
 }
 
 int main(int argc, char* argv[]) {
-  if(!run(argc, argv)) {
+  if (!run(argc, argv)) {
     printf("usage: %s <config_file>\n", argv[0]);
     return EXIT_FAILURE;
   }

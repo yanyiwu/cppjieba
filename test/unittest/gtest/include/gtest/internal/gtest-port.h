@@ -1106,7 +1106,7 @@ class Notification {
   // Blocks until the controller thread notifies. Must be called from a test
   // thread.
   void WaitForNotification() {
-    while(!notified_) {
+    while (!notified_) {
       SleepMilliseconds(10);
     }
   }

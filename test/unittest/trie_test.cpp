@@ -48,7 +48,7 @@ TEST(DictTrieTest, Test1) {
   word = "清华大学";
   LocalVector<pair<size_t, const DictUnit*> > res;
   const char * words[] = {"清", "清华", "清华大学"};
-  for(size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
+  for (size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
     ASSERT_TRUE(TransCode::decode(words[i], uni));
     res.push_back(make_pair(uni.size() - 1, trie.find(uni.begin(), uni.end())));
     //resMap[uni.size() - 1] = trie.find(uni.begin(), uni.end());

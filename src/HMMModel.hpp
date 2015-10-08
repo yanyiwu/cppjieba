@@ -32,73 +32,73 @@ struct HMMModel {
   }
   void loadModel(const string& filePath) {
     ifstream ifile(filePath.c_str());
-    if(!ifile.is_open()) {
+    if (!ifile.is_open()) {
       LogFatal("open %s failed.", filePath.c_str());
     }
     string line;
     vector<string> tmp;
     vector<string> tmp2;
     //load startProb
-    if(!getLine(ifile, line)) {
+    if (!getLine(ifile, line)) {
       LogFatal("load startProb");
     }
     split(line, tmp, " ");
-    if(tmp.size() != STATUS_SUM) {
+    if (tmp.size() != STATUS_SUM) {
       LogFatal("start_p illegal");
     }
-    for(size_t j = 0; j< tmp.size(); j++) {
+    for (size_t j = 0; j< tmp.size(); j++) {
       startProb[j] = atof(tmp[j].c_str());
     }
 
     //load transProb
-    for(size_t i = 0; i < STATUS_SUM; i++) {
-      if(!getLine(ifile, line)) {
+    for (size_t i = 0; i < STATUS_SUM; i++) {
+      if (!getLine(ifile, line)) {
         LogFatal("load transProb failed.");
       }
       split(line, tmp, " ");
-      if(tmp.size() != STATUS_SUM) {
+      if (tmp.size() != STATUS_SUM) {
         LogFatal("trans_p illegal");
       }
-      for(size_t j =0; j < STATUS_SUM; j++) {
+      for (size_t j =0; j < STATUS_SUM; j++) {
         transProb[i][j] = atof(tmp[j].c_str());
       }
     }
 
     //load emitProbB
-    if(!getLine(ifile, line) || !loadEmitProb(line, emitProbB)) {
+    if (!getLine(ifile, line) || !loadEmitProb(line, emitProbB)) {
       LogFatal("load emitProbB failed.");
     }
 
     //load emitProbE
-    if(!getLine(ifile, line) || !loadEmitProb(line, emitProbE)) {
+    if (!getLine(ifile, line) || !loadEmitProb(line, emitProbE)) {
       LogFatal("load emitProbE failed.");
     }
 
     //load emitProbM
-    if(!getLine(ifile, line) || !loadEmitProb(line, emitProbM)) {
+    if (!getLine(ifile, line) || !loadEmitProb(line, emitProbM)) {
       LogFatal("load emitProbM failed.");
     }
 
     //load emitProbS
-    if(!getLine(ifile, line) || !loadEmitProb(line, emitProbS)) {
+    if (!getLine(ifile, line) || !loadEmitProb(line, emitProbS)) {
       LogFatal("load emitProbS failed.");
     }
   }
   double getEmitProb(const EmitProbMap* ptMp, uint16_t key, 
         double defVal)const {
     EmitProbMap::const_iterator cit = ptMp->find(key);
-    if(cit == ptMp->end()) {
+    if (cit == ptMp->end()) {
       return defVal;
     }
     return cit->second;
   }
   bool getLine(ifstream& ifile, string& line) {
-    while(getline(ifile, line)) {
+    while (getline(ifile, line)) {
       trim(line);
-      if(line.empty()) {
+      if (line.empty()) {
         continue;
       }
-      if(startsWith(line, "#")) {
+      if (startsWith(line, "#")) {
         continue;
       }
       return true;
@@ -106,19 +106,19 @@ struct HMMModel {
     return false;
   }
   bool loadEmitProb(const string& line, EmitProbMap& mp) {
-    if(line.empty()) {
+    if (line.empty()) {
       return false;
     }
     vector<string> tmp, tmp2;
     Unicode unicode;
     split(line, tmp, ",");
-    for(size_t i = 0; i < tmp.size(); i++) {
+    for (size_t i = 0; i < tmp.size(); i++) {
       split(tmp[i], tmp2, ":");
-      if(2 != tmp2.size()) {
+      if (2 != tmp2.size()) {
         LogError("emitProb illegal.");
         return false;
       }
-      if(!TransCode::decode(tmp2[0], unicode) || unicode.size() != 1) {
+      if (!TransCode::decode(tmp2[0], unicode) || unicode.size() != 1) {
         LogError("TransCode failed.");
         return false;
       }

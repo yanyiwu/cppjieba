@@ -40,7 +40,7 @@ class SegmentBase {
  protected:
   void LoadSpecialSymbols() {
     size_t size = sizeof(SPECIAL_SYMBOL)/sizeof(*SPECIAL_SYMBOL);
-    for(size_t i = 0; i < size; i ++) {
+    for (size_t i = 0; i < size; i ++) {
       symbols_.insert(SPECIAL_SYMBOL[i]);
     }
     assert(symbols_.size());

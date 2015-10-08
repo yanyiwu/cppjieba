@@ -17,7 +17,7 @@ void cut(size_t times = 50) {
   assert(ifs);
   doc << ifs;
   long beginTime = clock();
-  for(size_t i = 0; i < times; i ++) {
+  for (size_t i = 0; i < times; i ++) {
     printf("process [%3.0lf %%]\r", 100.0*(i+1)/times);
     fflush(stdout);
     res.clear();
@@ -36,7 +36,7 @@ void extract(size_t times = 400) {
   assert(ifs);
   doc << ifs;
   long beginTime = clock();
-  for(size_t i = 0; i < times; i ++) {
+  for (size_t i = 0; i < times; i ++) {
     printf("process [%3.0lf %%]\r", 100.0*(i+1)/times);
     fflush(stdout);
     words.clear();

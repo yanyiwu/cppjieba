@@ -36,7 +36,7 @@ class DictTrie {
   }
 
   void init(const string& dictPath, const string& userDictPaths = "") {
-    if(trie_ != NULL) {
+    if (trie_ != NULL) {
       LogFatal("trie already initted");
     }
     LoadDict(dictPath);
@@ -44,7 +44,7 @@ class DictTrie {
     minWeight_ = FindMinWeight(staticNodeInfos_);
     maxWeight_ = FindMaxWeight(staticNodeInfos_);
 
-    if(userDictPaths.size()) {
+    if (userDictPaths.size()) {
       LoadUserDict(userDictPaths);
     }
     Shrink(staticNodeInfos_);
@@ -53,7 +53,7 @@ class DictTrie {
   
   bool insertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     DictUnit nodeInfo;
-    if(!MakeUserNodeInfo(nodeInfo, word, tag)) {
+    if (!MakeUserNodeInfo(nodeInfo, word, tag)) {
       return false;
     }
     activeNodeInfos_.push_back(nodeInfo);
@@ -85,7 +85,7 @@ class DictTrie {
     assert(dictUnits.size());
     vector<Unicode> words;
     vector<const DictUnit*> valuePointers;
-    for(size_t i = 0 ; i < dictUnits.size(); i ++) {
+    for (size_t i = 0 ; i < dictUnits.size(); i ++) {
       words.push_back(dictUnits[i].word);
       valuePointers.push_back(&dictUnits[i]);
     }
@@ -97,16 +97,16 @@ class DictTrie {
     size_t lineno = 0;
     for (size_t i = 0; i < files.size(); i++) {
       ifstream ifs(files[i].c_str());
-      if(!ifs.is_open()) {
+      if (!ifs.is_open()) {
         LogFatal("file %s open failed.", files[i].c_str());
       }
       string line;
       DictUnit nodeInfo;
       vector<string> buf;
-      for(; getline(ifs, line); lineno++) {
+      for (; getline(ifs, line); lineno++) {
         buf.clear();
         split(line, buf, " ");
-        if(buf.size() < 1) {
+        if (buf.size() < 1) {
           LogFatal("split [%s] result illegal", line.c_str());
         }
         DictUnit nodeInfo;
@@ -121,7 +121,7 @@ class DictTrie {
         const string& word, 
         double weight, 
         const string& tag) {
-    if(!TransCode::decode(word, nodeInfo.word)) {
+    if (!TransCode::decode(word, nodeInfo.word)) {
       LogError("decode %s failed.", word.c_str());
       return false;
     }
@@ -132,11 +132,11 @@ class DictTrie {
   bool MakeUserNodeInfo(DictUnit& nodeInfo, 
         const string& word, 
         const string& tag = UNKNOWN_TAG) {
-    if(!TransCode::decode(word, nodeInfo.word)) {
+    if (!TransCode::decode(word, nodeInfo.word)) {
       LogError("decode %s failed.", word.c_str());
       return false;
     }
-    if(nodeInfo.word.size() == 1) {
+    if (nodeInfo.word.size() == 1) {
       userDictSingleChineseWord_.insert(nodeInfo.word[0]);
     }
     nodeInfo.weight = maxWeight_;
@@ -145,16 +145,16 @@ class DictTrie {
   }
   void LoadDict(const string& filePath) {
     ifstream ifs(filePath.c_str());
-    if(!ifs.is_open()) {
+    if (!ifs.is_open()) {
       LogFatal("file %s open failed.", filePath.c_str());
     }
     string line;
     vector<string> buf;
 
     DictUnit nodeInfo;
-    for(size_t lineno = 0; getline(ifs, line); lineno++) {
+    for (size_t lineno = 0; getline(ifs, line); lineno++) {
       split(line, buf, " ");
-      if(buf.size() != DICT_COLUMN_NUM) {
+      if (buf.size() != DICT_COLUMN_NUM) {
         LogFatal("split result illegal, line: %s, result size: %u", line.c_str(), buf.size());
       }
       MakeNodeInfo(nodeInfo, 
@@ -166,14 +166,14 @@ class DictTrie {
   }
   double FindMinWeight(const vector<DictUnit>& nodeInfos) const {
     double ret = MAX_DOUBLE;
-    for(size_t i = 0; i < nodeInfos.size(); i++) {
+    for (size_t i = 0; i < nodeInfos.size(); i++) {
       ret = min(nodeInfos[i].weight, ret);
     }
     return ret;
   }
   double FindMaxWeight(const vector<DictUnit>& nodeInfos) const {
     double ret = MIN_DOUBLE;
-    for(size_t i = 0; i < nodeInfos.size(); i++) {
+    for (size_t i = 0; i < nodeInfos.size(); i++) {
       ret = max(nodeInfos[i].weight, ret);
     }
     return ret;
@@ -181,11 +181,11 @@ class DictTrie {
 
   void CalculateWeight(vector<DictUnit>& nodeInfos) const {
     double sum = 0.0;
-    for(size_t i = 0; i < nodeInfos.size(); i++) {
+    for (size_t i = 0; i < nodeInfos.size(); i++) {
       sum += nodeInfos[i].weight;
     }
     assert(sum);
-    for(size_t i = 0; i < nodeInfos.size(); i++) {
+    for (size_t i = 0; i < nodeInfos.size(); i++) {
       DictUnit& nodeInfo = nodeInfos[i];
       assert(nodeInfo.weight);
       nodeInfo.weight = log(double(nodeInfo.weight)/double(sum));
