@@ -7,7 +7,7 @@
 #include "../src/KeywordExtractor.hpp"
 #include "../src/limonp/Colors.hpp"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 void cut(size_t times = 50) {
   MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");

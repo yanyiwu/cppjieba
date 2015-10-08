@@ -5,7 +5,7 @@
 #include "limonp/StringUtil.hpp"
 #include "DictTrie.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 using namespace limonp;
 
 static const char* const POS_M = "m";
@@ -74,6 +74,6 @@ class PosTagger {
   MixSegment segment_;
 }; // class PosTagger
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif

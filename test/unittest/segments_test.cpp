@@ -7,7 +7,7 @@
 #include "src/LevelSegment.hpp"
 #include "gtest/gtest.h"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 TEST(MixSegmentTest, Test1) {
   MixSegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");;

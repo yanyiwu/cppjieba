@@ -8,7 +8,7 @@
 #include "HMMModel.hpp"
 #include "SegmentBase.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 class HMMSegment: public SegmentBase {
  public:
   HMMSegment(const string& filePath) {
@@ -175,6 +175,6 @@ class HMMSegment: public SegmentBase {
   bool isNeedDestroy_;
 }; // class HMMSegment
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif

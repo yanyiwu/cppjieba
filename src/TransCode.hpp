@@ -9,7 +9,7 @@
 #include "limonp/StringUtil.hpp"
 #include "limonp/LocalVector.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 using namespace limonp;
 
@@ -65,6 +65,6 @@ inline void encode(const vector<Unicode>& input, vector<string>& output) {
 }
 
 } // namespace TransCode
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif

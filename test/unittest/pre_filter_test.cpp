@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "src/PreFilter.hpp"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 TEST(PreFilterTest, Test1) {
   unordered_set<Rune> symbol;

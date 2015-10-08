@@ -8,7 +8,7 @@
 #include "DictTrie.hpp"
 #include "SegmentBase.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 class MPSegment: public SegmentBase {
  public:
@@ -109,6 +109,6 @@ class MPSegment: public SegmentBase {
   bool isNeedDestroy_;
 }; // class MPSegment
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif

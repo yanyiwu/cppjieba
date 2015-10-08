@@ -1,7 +1,7 @@
 #include "src/KeywordExtractor.hpp"
 #include "gtest/gtest.h"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 TEST(KeywordExtractorTest, Test1) {
   KeywordExtractor extractor("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");

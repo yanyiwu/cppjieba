@@ -12,7 +12,7 @@
 #include "TransCode.hpp"
 #include "DictTrie.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 class QuerySegment: public SegmentBase {
  public:
   QuerySegment(const string& dict, const string& model, const string& userDict = "", size_t maxWordLen = 4)

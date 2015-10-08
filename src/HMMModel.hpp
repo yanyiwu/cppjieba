@@ -3,7 +3,7 @@
 
 #include "limonp/StringUtil.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 using namespace limonp;
 typedef unordered_map<uint16_t, double> EmitProbMap;
@@ -137,6 +137,6 @@ struct HMMModel {
   vector<EmitProbMap* > emitProbVec;
 }; // struct HMMModel
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif

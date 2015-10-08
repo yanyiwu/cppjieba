@@ -5,7 +5,7 @@
 #include "PosTagger.hpp"
 #include "LevelSegment.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 class Jieba {
  public:

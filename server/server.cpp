@@ -8,11 +8,11 @@
 #include "Jieba.hpp"
 
 using namespace husky;
-using namespace CppJieba;
+using namespace cppjieba;
 
 class ReqHandler: public IRequestHandler {
  public:
-  ReqHandler(const CppJieba::Jieba& jieba)
+  ReqHandler(const cppjieba::Jieba& jieba)
    : jieba_(jieba) {
   }
 
@@ -63,7 +63,7 @@ class ReqHandler: public IRequestHandler {
     }
   }
  private:
-  const CppJieba::Jieba& jieba_;
+  const cppjieba::Jieba& jieba_;
 };
 
 bool Run(int argc, char** argv) {
@@ -83,7 +83,7 @@ bool Run(int argc, char** argv) {
 
   LogInfo("config info: %s", conf.getConfigInfo().c_str());
   
-  CppJieba::Jieba jieba(dictPath, 
+  cppjieba::Jieba jieba(dictPath, 
         modelPath, 
         userDictPath);
   

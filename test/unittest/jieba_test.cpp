@@ -1,10 +1,10 @@
 #include "src/Jieba.hpp"
 #include "gtest/gtest.h"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 TEST(JiebaTest, Test1) {
-  CppJieba::Jieba jieba("../dict/jieba.dict.utf8",
+  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
                             "../dict/hmm_model.utf8",
                             "../dict/user.dict.utf8");
   vector<string> words;
@@ -58,7 +58,7 @@ TEST(JiebaTest, Test1) {
 }
 
 TEST(JiebaTest, InsertUserWord) {
-  CppJieba::Jieba jieba("../dict/jieba.dict.utf8",
+  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
                             "../dict/hmm_model.utf8",
                             "../dict/user.dict.utf8");
   vector<string> words;

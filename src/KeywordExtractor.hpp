@@ -5,7 +5,7 @@
 #include <cmath>
 #include <set>
 
-namespace CppJieba {
+namespace cppjieba {
 using namespace limonp;
 
 /*utf8*/

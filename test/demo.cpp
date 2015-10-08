@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  CppJieba::Jieba jieba("../dict/jieba.dict.utf8",
+  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
                             "../dict/hmm_model.utf8",
                             "../dict/user.dict.utf8");
   vector<string> words;

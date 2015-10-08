@@ -2,7 +2,7 @@
 #include "src/MPSegment.hpp"
 #include "gtest/gtest.h"
 
-using namespace CppJieba;
+using namespace cppjieba;
 
 static const char* const DICT_FILE = "../test/testdata/extra_dict/jieba.dict.small.utf8";
 

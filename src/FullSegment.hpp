@@ -9,7 +9,7 @@
 #include "SegmentBase.hpp"
 #include "TransCode.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 class FullSegment: public SegmentBase {
  public:
   FullSegment(const string& dictPath) {

@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 
-namespace CppJieba {
+namespace cppjieba {
 using namespace std;
 
 const size_t MAX_WORD_LENGTH = 512;

@@ -6,7 +6,7 @@
 #include <cassert>
 
 
-namespace CppJieba {
+namespace cppjieba {
 
 //const char* const SPECIAL_CHARS = " \t\n，。";
 const Rune SPECIAL_SYMBOL[] = {32u, 9u, 10u, 65292u, 12290u};
@@ -32,6 +32,6 @@ class SegmentBase {
   unordered_set<Rune> symbols_;
 }; // class SegmentBase
 
-} // CppJieba
+} // cppjieba
 
 #endif

@@ -13,7 +13,7 @@
 #include "TransCode.hpp"
 #include "Trie.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 using namespace limonp;
 

@@ -3,7 +3,7 @@
 
 #include "MPSegment.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 
 class LevelSegment: public SegmentBase{
  public:
@@ -77,6 +77,6 @@ class LevelSegment: public SegmentBase{
   MPSegment mpSeg_;
 }; // class LevelSegment
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif // CPPJIEBA_LEVELSEGMENT_H

@@ -6,7 +6,7 @@
 #include "HMMSegment.hpp"
 #include "limonp/StringUtil.hpp"
 
-namespace CppJieba {
+namespace cppjieba {
 class MixSegment: public SegmentBase {
  public:
   MixSegment(const string& mpSegDict, const string& hmmSegDict, 
@@ -86,6 +86,6 @@ class MixSegment: public SegmentBase {
 
 }; // class MixSegment
 
-} // namespace CppJieba
+} // namespace cppjieba
 
 #endif
