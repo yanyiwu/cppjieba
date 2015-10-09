@@ -25,12 +25,12 @@ const char* const UNKNOWN_TAG = "";
 class DictTrie {
  public:
   enum UserWordWeightOption {
-    Min,
-    Median,
-    Max,
+    WordWeightMin,
+    WordWeightMedian,
+    WordWeightMax,
   }; // enum UserWordWeightOption
 
-  DictTrie(const string& dict_path, const string& user_dict_paths = "", UserWordWeightOption user_word_weight_opt = Median) {
+  DictTrie(const string& dict_path, const string& user_dict_paths = "", UserWordWeightOption user_word_weight_opt = WordWeightMedian) {
     Init(dict_path, user_dict_paths, user_word_weight_opt);
   }
 
@@ -40,7 +40,7 @@ class DictTrie {
 
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     DictUnit node_info;
-    if (!MakeNodeInfo(node_info, word, max_weight_, tag)) {
+    if (!MakeNodeInfo(node_info, word, user_word_default_weight_, tag)) {
       return false;
     }
     active_node_infos_.push_back(node_info);
@@ -112,7 +112,7 @@ class DictTrie {
         DictUnit node_info;
         MakeNodeInfo(node_info, 
               buf[0], 
-              max_weight_,
+              user_word_default_weight_,
               (buf.size() == 2 ? buf[1] : UNKNOWN_TAG));
         static_node_infos_.push_back(node_info);
         if (node_info.word.size() == 1) {
@@ -172,10 +172,10 @@ class DictTrie {
     max_weight_ = x[x.size() - 1].weight;
     median_weight_ = x[x.size() / 2].weight;
     switch (option) {
-     case Min:
+     case WordWeightMin:
        user_word_default_weight_ = min_weight_;
        break;
-     case Median:
+     case WordWeightMedian:
        user_word_default_weight_ = median_weight_;
        break;
      default:

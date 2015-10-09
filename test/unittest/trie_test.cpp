@@ -70,6 +70,18 @@ TEST(DictTrieTest, UserDict) {
   ASSERT_TRUE(unit);
   string res ;
   res << *unit;
+  ASSERT_EQ("[\"20113\", \"35745\", \"31639\"]  -14.100", res);
+}
+
+TEST(DictTrieTest, UserDictWithMaxWeight) {
+  DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8", DictTrie::WordWeightMax);
+  string word = "云计算";
+  Unicode unicode;
+  ASSERT_TRUE(TransCode::decode(word, unicode));
+  const DictUnit * unit = trie.Find(unicode.begin(), unicode.end());
+  ASSERT_TRUE(unit);
+  string res ;
+  res << *unit;
   ASSERT_EQ("[\"20113\", \"35745\", \"31639\"]  -2.975", res);
 }
 
