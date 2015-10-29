@@ -3,7 +3,8 @@
 ## next version
 
 1. QuerySegment切词时加一层判断，当长词满足IsAllAscii(比如英文单词)时，不进行细粒度分词。
-2. QuerySegment新增SetMaxWordLen和GetMaxWordLen接口。
+2. QuerySegment新增SetMaxWordLen和GetMaxWordLen接口，用来设置二次分词条件被触发的词长阈值。
+3. Jieba新增SetQuerySegmentThreshold设置CutForSearch函数的词长阈值。
 
 ## v4.0.0
 
