@@ -38,7 +38,7 @@ class MPSegment: public SegmentBase {
       range = pre_filter.Next();
       Cut(range.begin, range.end, uwords, max_word_len);
     }
-    TransCode::encode(uwords, words);
+    TransCode::Encode(uwords, words);
   }
   void Cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,

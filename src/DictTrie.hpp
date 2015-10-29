@@ -127,8 +127,8 @@ class DictTrie {
         const string& word, 
         double weight, 
         const string& tag) {
-    if (!TransCode::decode(word, node_info.word)) {
-      LogError("decode %s failed.", word.c_str());
+    if (!TransCode::Decode(word, node_info.word)) {
+      LogError("Decode %s failed.", word.c_str());
       return false;
     }
     node_info.weight = weight;

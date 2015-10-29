@@ -16,7 +16,7 @@ TEST(PosTaggerTest, Test) {
   PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
   {
     vector<pair<string, string> > res;
-    tagger.tag(QUERY_TEST1, res);
+    tagger.Tag(QUERY_TEST1, res);
     string s;
     s << res;
     ASSERT_TRUE(s == ANS_TEST1);
@@ -26,14 +26,14 @@ TEST(PosTagger, TestUserDict) {
   PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
   {
     vector<pair<string, string> > res;
-    tagger.tag(QUERY_TEST2, res);
+    tagger.Tag(QUERY_TEST2, res);
     string s;
     s << res;
     ASSERT_EQ(s, ANS_TEST2);
   }
   {
     vector<pair<string, string> > res;
-    tagger.tag(QUERY_TEST3, res);
+    tagger.Tag(QUERY_TEST3, res);
     string s;
     s << res;
     ASSERT_EQ(s, ANS_TEST3);

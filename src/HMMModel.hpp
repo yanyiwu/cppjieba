@@ -118,7 +118,7 @@ struct HMMModel {
         LogError("emitProb illegal.");
         return false;
       }
-      if (!TransCode::decode(tmp2[0], unicode) || unicode.size() != 1) {
+      if (!TransCode::Decode(tmp2[0], unicode) || unicode.size() != 1) {
         LogError("TransCode failed.");
         return false;
       }

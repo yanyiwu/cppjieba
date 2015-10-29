@@ -19,7 +19,7 @@ TEST(MixSegmentTest, Test1) {
   {
     sentence = "我来自北京邮电大学。。。学号123456，用AK47";
     expected = "我/来自/北京邮电大学/。/。/。/学号/123456/，/用/AK47";
-    segment.cut(sentence, words);
+    segment.Cut(sentence, words);
     actual = join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
@@ -27,7 +27,7 @@ TEST(MixSegmentTest, Test1) {
   {
     sentence = "B超 T恤";
     expected = "B超/ /T恤";
-    segment.cut(sentence, words);
+    segment.Cut(sentence, words);
     actual = join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
@@ -35,7 +35,7 @@ TEST(MixSegmentTest, Test1) {
   {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭/研/大厦";
-    segment.cut(sentence, words, false);
+    segment.Cut(sentence, words, false);
     actual = join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
@@ -43,7 +43,7 @@ TEST(MixSegmentTest, Test1) {
   {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭研/大厦";
-    segment.cut(sentence, words);
+    segment.Cut(sentence, words);
     actual = join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
@@ -53,7 +53,7 @@ TEST(MixSegmentTest, NoUserDict) {
   MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
   const char* str = "令狐冲是云计算方面的专家";
   vector<string> words;
-  segment.cut(str, words);
+  segment.Cut(str, words);
   string res;
   ASSERT_EQ("[\"令狐冲\", \"是\", \"云\", \"计算\", \"方面\", \"的\", \"专家\"]", res << words);
 
@@ -63,14 +63,14 @@ TEST(MixSegmentTest, UserDict) {
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
-    segment.cut(str, words);
+    segment.Cut(str, words);
     string res;
     ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
   }
   {
     const char* str = "小明先就职于IBM,后在日本京都大学深造";
     vector<string> words;
-    segment.cut(str, words);
+    segment.Cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"IBM\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
@@ -78,7 +78,7 @@ TEST(MixSegmentTest, UserDict) {
   {
     const char* str = "IBM,3.14";
     vector<string> words;
-    segment.cut(str, words);
+    segment.Cut(str, words);
     string res;
     res << words;
     ASSERT_EQ("[\"IBM\", \",\", \"3.14\"]", res);
@@ -90,18 +90,18 @@ TEST(MixSegmentTest, TestUserDict) {
   vector<string> words;
   string res;
 
-  segment.cut("令狐冲是云计算方面的专家", words);
+  segment.Cut("令狐冲是云计算方面的专家", words);
   ASSERT_EQ("[\"令狐冲\", \"是\", \"云计算\", \"方面\", \"的\", \"专家\"]", res << words);
 
-  segment.cut("小明先就职于IBM,后在日本京都大学深造", words);
+  segment.Cut("小明先就职于IBM,后在日本京都大学深造", words);
   res << words;
   ASSERT_EQ("[\"小明\", \"先\", \"就职\", \"于\", \"I\", \"B\", \"M\", \",\", \"后\", \"在\", \"日本\", \"京都大学\", \"深造\"]", res);
 
-  segment.cut("IBM,3.14", words);
+  segment.Cut("IBM,3.14", words);
   res << words;
   ASSERT_EQ("[\"I\", \"B\", \"M\", \",\", \"3.14\"]", res);
 
-  segment.cut("忽如一夜春风来，千树万树梨花开", words);
+  segment.Cut("忽如一夜春风来，千树万树梨花开", words);
   res = limonp::join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树/万树/梨花/开", res);
 }
@@ -112,7 +112,7 @@ TEST(MixSegmentTest, TestMultiUserDict) {
   vector<string> words;
   string res;
 
-  segment.cut("忽如一夜春风来，千树万树梨花开", words);
+  segment.Cut("忽如一夜春风来，千树万树梨花开", words);
   res = limonp::join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树万树梨花开", res);
 }
@@ -121,27 +121,27 @@ TEST(MPSegmentTest, Test1) {
   MPSegment segment("../dict/jieba.dict.utf8");;
   string s;
   vector<string> words;
-  segment.cut("我来自北京邮电大学。", words);
+  segment.Cut("我来自北京邮电大学。", words);
   ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", s << words);
 
-  segment.cut("B超 T恤", words);
+  segment.Cut("B超 T恤", words);
   ASSERT_EQ(s << words, "[\"B超\", \" \", \"T恤\"]");
 
-  segment.cut("南京市长江大桥", words);
+  segment.Cut("南京市长江大桥", words);
   ASSERT_EQ("[\"南京市\", \"长江大桥\"]", s << words);
 
   // MaxWordLen
-  segment.cut("南京市长江大桥", words, 3);
+  segment.Cut("南京市长江大桥", words, 3);
   ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", s << words);
 
-  segment.cut("南京市长江大桥", words, 0);
+  segment.Cut("南京市长江大桥", words, 0);
   ASSERT_EQ("[\"南\", \"京\", \"市\", \"长\", \"江\", \"大\", \"桥\"]", s << words);
 
-  segment.cut("湖南长沙市天心区", words);
+  segment.Cut("湖南长沙市天心区", words);
   s = join(words.begin(), words.end(), "/");
   ASSERT_EQ("湖南长沙市/天心区", s);
 
-  segment.cut("湖南长沙市天心区", words, 3);
+  segment.Cut("湖南长沙市天心区", words, 3);
   s = join(words.begin(), words.end(), "/");
   ASSERT_EQ("湖南/长沙市/天心区", s);
 }
@@ -164,7 +164,7 @@ TEST(MPSegmentTest, Test1) {
 //    res += line;
 //    res += '\n';
 //
-//    segment.cut(line, words);
+//    segment.Cut(line, words);
 //    string s;
 //    s << words;
 //    res += s;
@@ -182,7 +182,7 @@ TEST(HMMSegmentTest, Test1) {
     const char* str = "我来自北京邮电大学。。。学号123456";
     const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
     vector<string> words;
-    segment.cut(str, words);
+    segment.Cut(str, words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   }
 
@@ -190,7 +190,7 @@ TEST(HMMSegmentTest, Test1) {
     const char* str = "IBM,1.2,123";
     const char* res[] = {"IBM", ",", "1.2", ",", "123"};
     vector<string> words;
-    segment.cut(str, words);
+    segment.Cut(str, words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   }
 }
@@ -200,12 +200,12 @@ TEST(FullSegment, Test1) {
   vector<string> words;
   string s;
 
-  segment.cut("我来自北京邮电大学", words);
+  segment.Cut("我来自北京邮电大学", words);
   s << words;
   ASSERT_EQ(s, "[\"我\", \"来自\", \"北京\", \"北京邮电大学\", \"邮电\", \"电大\", \"大学\"]");
 
   
-  segment.cut("上市公司CEO", words);
+  segment.Cut("上市公司CEO", words);
   s << words;
   ASSERT_EQ(s, "[\"上市\", \"公司\", \"C\", \"E\", \"O\"]");
 }
@@ -215,7 +215,7 @@ TEST(QuerySegment, Test1) {
   const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
   vector<string> words;
 
-  segment.cut(str, words);
+  segment.Cut(str, words);
 
   string s1, s2;
   s1 << words;
@@ -231,7 +231,7 @@ TEST(QuerySegment, Test2) {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
     vector<string> words;
 
-    segment.cut(str, words);
+    segment.Cut(str, words);
 
     string s1, s2;
     s1 << words;
@@ -243,7 +243,7 @@ TEST(QuerySegment, Test2) {
     const char* str = "小明硕士毕业于中国科学院计算所iPhone6";
     vector<string> words;
 
-    segment.cut(str, words);
+    segment.Cut(str, words);
 
     string s1, s2;
     s1 << words;
@@ -257,10 +257,10 @@ TEST(LevelSegmentTest, Test0) {
   string s;
   LevelSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
   vector<pair<string, size_t> > words;
-  segment.cut("南京市长江大桥", words);
+  segment.Cut("南京市长江大桥", words);
   ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", s << words);
 
   vector<string> res;
-  segment.cut("南京市长江大桥", res);
+  segment.Cut("南京市长江大桥", res);
   ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", s << res);
 }

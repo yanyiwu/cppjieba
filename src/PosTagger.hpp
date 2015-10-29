@@ -25,7 +25,7 @@ class PosTagger {
   ~PosTagger() {
   }
 
-  bool tag(const string& src, vector<pair<string, string> >& res) const {
+  bool Tag(const string& src, vector<pair<string, string> >& res) const {
     vector<string> CutRes;
     segment_.Cut(src, CutRes);
 
@@ -34,8 +34,8 @@ class PosTagger {
     const DictTrie * dict = segment_.GetDictTrie();
     assert(dict != NULL);
     for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
-      if (!TransCode::decode(*itr, unico)) {
-        LogError("decode failed.");
+      if (!TransCode::Decode(*itr, unico)) {
+        LogError("Decode failed.");
         return false;
       }
       tmp = dict->Find(unico.begin(), unico.end());

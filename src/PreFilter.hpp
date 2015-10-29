@@ -26,7 +26,7 @@ class PreFilter {
   PreFilter(const unordered_set<Rune>& symbols, 
         const string& sentence)
     : symbols_(symbols) {
-    TransCode::decode(sentence, sentence_);
+    TransCode::Decode(sentence, sentence_);
     cursor_ = sentence_.begin();
   }
   ~PreFilter() {

@@ -51,12 +51,12 @@ class LevelSegment: public SegmentBase{
         vector<pair<string, size_t> >& words) const {
     words.clear();
     Unicode unicode;
-    TransCode::decode(sentence, unicode);
+    TransCode::Decode(sentence, unicode);
     vector<pair<Unicode, size_t> > unicodeWords;
     Cut(unicode.begin(), unicode.end(), unicodeWords);
     words.resize(unicodeWords.size());
     for (size_t i = 0; i < words.size(); i++) {
-      TransCode::encode(unicodeWords[i].first, words[i].first);
+      TransCode::Encode(unicodeWords[i].first, words[i].first);
       words[i].second = unicodeWords[i].second;
     }
   }

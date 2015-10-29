@@ -35,13 +35,13 @@ int main(int argc, char** argv) {
 
   //cout << "[demo] TAGGING" << endl;
   //vector<pair<string, string> > tagres;
-  //jieba.tag(s, tagres);
+  //jieba.Tag(s, tagres);
   //cout << s << endl;
   //cout << tagres << endl;;
 
   //cout << "[demo] KEYWORD" << endl;
   //vector<pair<string, double> > keywordres;
-  //jieba.extract(s, keywordres, 5);
+  //jieba.Extract(s, keywordres, 5);
   //cout << s << endl;
   //cout << keywordres << endl;
 

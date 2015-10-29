@@ -31,9 +31,9 @@ class KeywordExtractor {
   ~KeywordExtractor() {
   }
 
-  bool extract(const string& sentence, vector<string>& keywords, size_t topN) const {
+  bool Extract(const string& sentence, vector<string>& keywords, size_t topN) const {
     vector<pair<string, double> > topWords;
-    if (!extract(sentence, topWords, topN)) {
+    if (!Extract(sentence, topWords, topN)) {
       return false;
     }
     for (size_t i = 0; i < topWords.size(); i++) {
@@ -42,7 +42,7 @@ class KeywordExtractor {
     return true;
   }
 
-  bool extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
+  bool Extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
     vector<string> words;
     segment_.Cut(sentence, words);
 
@@ -122,7 +122,7 @@ class KeywordExtractor {
 
   bool IsSingleWord(const string& str) const {
     Unicode unicode;
-    TransCode::decode(str, unicode);
+    TransCode::Decode(str, unicode);
     if (unicode.size() == 1)
       return true;
     return false;

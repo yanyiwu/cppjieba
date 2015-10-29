@@ -33,7 +33,7 @@ class HMMSegment: public SegmentBase {
       range = pre_filter.Next();
       Cut(range.begin, range.end, uwords);
     }
-    TransCode::encode(uwords, words);
+    TransCode::Encode(uwords, words);
   }
   void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     Unicode::const_iterator left = begin;
@@ -41,7 +41,7 @@ class HMMSegment: public SegmentBase {
     while (right != end) {
       if (*right < 0x80) {
         if (left != right) {
-          Cut(left, right, res);
+          InternalCut(left, right, res);
         }
         left = right;
         do {
@@ -62,7 +62,7 @@ class HMMSegment: public SegmentBase {
       }
     }
     if (left != right) {
-      Cut(left, right, res);
+      InternalCut(left, right, res);
     }
   }
  private:
@@ -102,7 +102,7 @@ class HMMSegment: public SegmentBase {
     }
     return begin;
   }
-  void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void InternalCut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     vector<size_t> status;
     Viterbi(begin, end, status);
 

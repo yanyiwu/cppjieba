@@ -47,12 +47,12 @@ TEST(JiebaTest, Test1) {
   ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
 
   //vector<pair<string, string> > tagres;
-  //jieba.tag("iPhone6手机的最大特点是很容易弯曲。", tagres);
+  //jieba.Tag("iPhone6手机的最大特点是很容易弯曲。", tagres);
   //result << tagres;
   //ASSERT_EQ("[\"iPhone6:eng\", \"手机:n\", \"的:uj\", \"最大:a\", \"特点:n\", \"是:v\", \"很:zg\", \"容易:a\", \"弯曲:v\", \"。:x\"]", result);
 
   //vector<pair<string, double> > keywordres;
-  //jieba.extract("我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。", keywordres, 5);
+  //jieba.Extract("我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。", keywordres, 5);
   //result << keywordres;
   //ASSERT_EQ(result, "[\"CEO:11.7392\", \"升职:10.8562\", \"加薪:10.6426\", \"手扶拖拉机:10.0089\", \"巅峰:9.49396\"]");
 }
