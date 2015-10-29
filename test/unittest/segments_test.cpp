@@ -225,7 +225,7 @@ TEST(QuerySegment, Test1) {
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8:../test/testdata/userdict.english", 3);
 
   {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
@@ -251,6 +251,21 @@ TEST(QuerySegment, Test2) {
     ASSERT_EQ(s1, s2);
   }
 
+  {
+    vector<string> words;
+    segment.Cut("internal", words);
+    string s = join(words.begin(), words.end(), "/");
+    ASSERT_EQ("internal", s);
+  }
+
+  segment.SetMaxWordLen(5);
+
+  {
+    vector<string> words;
+    segment.Cut("中国科学院", words);
+    string s = join(words.begin(), words.end(), "/");
+    ASSERT_EQ("中国科学院", s);
+  }
 }
 
 TEST(LevelSegmentTest, Test0) {

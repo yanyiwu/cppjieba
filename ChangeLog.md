@@ -1,6 +1,11 @@
 # CppJieba ChangeLog
 
-# v4.0.0
+## next version
+
+1. QuerySegment切词时加一层判断，当长词满足IsAllAscii(比如英文单词)时，不进行细粒度分词。
+2. QuerySegment新增SetMaxWordLen和GetMaxWordLen接口。
+
+## v4.0.0
 
 1. 支持多个userdict载入，多词典路径用英文冒号(:)作为分隔符，就当是向环境变量PATH致敬，哈哈。
 2. userdict是不带权重的，之前对于新的userword默认设置词频权重为最大值，现已支持可配置，默认使用中位值。

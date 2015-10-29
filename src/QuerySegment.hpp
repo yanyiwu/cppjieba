@@ -45,7 +45,7 @@ class QuerySegment: public SegmentBase {
     vector<Unicode> fullRes;
     for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
       // if it's too long, Cut with fullSeg_, put fullRes in res
-      if (mixResItr->size() > maxWordLen_) {
+      if (mixResItr->size() > maxWordLen_ && !IsAllAscii(*mixResItr)) {
         fullSeg_.Cut(mixResItr->begin(), mixResItr->end(), fullRes);
         for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
           res.push_back(*fullResItr);
@@ -58,12 +58,26 @@ class QuerySegment: public SegmentBase {
       }
     }
   }
+  void SetMaxWordLen(size_t len) {
+    maxWordLen_ = len;
+  }
+  size_t GetMaxWordLen() const {
+    return maxWordLen_;
+  }
  private:
+  bool IsAllAscii(const Unicode& s) const {
+   for(size_t i = 0; i < s.size(); i++) {
+     if (s[i] >= 0x80) {
+       return false;
+     }
+   }
+   return true;
+  }
   MixSegment mixSeg_;
   FullSegment fullSeg_;
   size_t maxWordLen_;
+}; // QuerySegment
 
-};
-}
+} // namespace cppjieba
 
 #endif
