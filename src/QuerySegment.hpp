@@ -17,7 +17,7 @@ class QuerySegment: public SegmentBase {
  public:
   QuerySegment(const string& dict, const string& model, const string& userDict = "", size_t maxWordLen = 4)
     : mixSeg_(dict, model, userDict),
-      fullSeg_(mixSeg_.getDictTrie()),
+      fullSeg_(mixSeg_.GetDictTrie()),
       maxWordLen_(maxWordLen) {
     assert(maxWordLen_);
   }
@@ -26,27 +26,27 @@ class QuerySegment: public SegmentBase {
   }
   ~QuerySegment() {
   }
-  void cut(const string& sentence, vector<string>& words, bool hmm = true) const {
+  void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<Unicode> uwords;
     uwords.reserve(sentence.size());
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      cut(range.begin, range.end, uwords, hmm);
+      Cut(range.begin, range.end, uwords, hmm);
     }
     TransCode::encode(uwords, words);
   }
-  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res, bool hmm) const {
-    //use mix cut first
+  void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res, bool hmm) const {
+    //use mix Cut first
     vector<Unicode> mixRes;
-    mixSeg_.cut(begin, end, mixRes, hmm);
+    mixSeg_.Cut(begin, end, mixRes, hmm);
 
     vector<Unicode> fullRes;
     for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
-      // if it's too long, cut with fullSeg_, put fullRes in res
+      // if it's too long, Cut with fullSeg_, put fullRes in res
       if (mixResItr->size() > maxWordLen_) {
-        fullSeg_.cut(mixResItr->begin(), mixResItr->end(), fullRes);
+        fullSeg_.Cut(mixResItr->begin(), mixResItr->end(), fullRes);
         for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
           res.push_back(*fullResItr);
         }

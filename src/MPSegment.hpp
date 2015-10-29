@@ -27,7 +27,7 @@ class MPSegment: public SegmentBase {
     }
   }
 
-  void cut(const string& sentence, 
+  void Cut(const string& sentence, 
         vector<string>& words, 
         size_t max_word_len = MAX_WORD_LENGTH) const {
     PreFilter pre_filter(symbols_, sentence);
@@ -36,11 +36,11 @@ class MPSegment: public SegmentBase {
     uwords.reserve(sentence.size());
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      cut(range.begin, range.end, uwords, max_word_len);
+      Cut(range.begin, range.end, uwords, max_word_len);
     }
     TransCode::encode(uwords, words);
   }
-  void cut(Unicode::const_iterator begin,
+  void Cut(Unicode::const_iterator begin,
            Unicode::const_iterator end,
            vector<Unicode>& words,
            size_t max_word_len = MAX_WORD_LENGTH) const {
@@ -53,7 +53,7 @@ class MPSegment: public SegmentBase {
     CutByDag(dags, words);
   }
 
-  const DictTrie* getDictTrie() const {
+  const DictTrie* GetDictTrie() const {
     return dictTrie_;
   }
 

@@ -26,14 +26,14 @@ class PosTagger {
   }
 
   bool tag(const string& src, vector<pair<string, string> >& res) const {
-    vector<string> cutRes;
-    segment_.cut(src, cutRes);
+    vector<string> CutRes;
+    segment_.Cut(src, CutRes);
 
     const DictUnit *tmp = NULL;
     Unicode unico;
-    const DictTrie * dict = segment_.getDictTrie();
+    const DictTrie * dict = segment_.GetDictTrie();
     assert(dict != NULL);
-    for (vector<string>::iterator itr = cutRes.begin(); itr != cutRes.end(); ++itr) {
+    for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
       if (!TransCode::decode(*itr, unico)) {
         LogError("decode failed.");
         return false;

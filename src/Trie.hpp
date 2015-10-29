@@ -117,7 +117,7 @@ class Trie {
     }
   }
 
-  void insertNode(const Unicode& key, const DictUnit* ptValue) {
+  void InsertNode(const Unicode& key, const DictUnit* ptValue) {
     if (key.begin() == key.end()) {
       return;
     }
@@ -150,7 +150,7 @@ class Trie {
     assert(keys.size() == valuePointers.size());
 
     for (size_t i = 0; i < keys.size(); i++) {
-      insertNode(keys[i], valuePointers[i]);
+      InsertNode(keys[i], valuePointers[i]);
     }
   }
 

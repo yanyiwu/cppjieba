@@ -26,7 +26,7 @@ class FullSegment: public SegmentBase {
       delete dictTrie_;
     }
   }
-  void cut(const string& sentence, 
+  void Cut(const string& sentence, 
         vector<string>& words) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
@@ -34,11 +34,11 @@ class FullSegment: public SegmentBase {
     uwords.reserve(sentence.size());
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      cut(range.begin, range.end, uwords);
+      Cut(range.begin, range.end, uwords);
     }
     TransCode::encode(uwords, words);
   }
-  void cut(Unicode::const_iterator begin, 
+  void Cut(Unicode::const_iterator begin, 
         Unicode::const_iterator end, 
         vector<Unicode>& res) const {
     //resut of searching in trie tree

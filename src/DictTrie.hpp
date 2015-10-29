@@ -44,7 +44,7 @@ class DictTrie {
       return false;
     }
     active_node_infos_.push_back(node_info);
-    trie_->insertNode(node_info.word, &active_node_infos_.back());
+    trie_->InsertNode(node_info.word, &active_node_infos_.back());
     return true;
   }
 
@@ -120,7 +120,7 @@ class DictTrie {
         }
       }
     }
-    LogInfo("load userdicts[%s] ok. lines[%u]", filePaths.c_str(), lineno);
+    LogInfo("Load userdicts[%s] ok. lines[%u]", filePaths.c_str(), lineno);
   }
 
   bool MakeNodeInfo(DictUnit& node_info,

@@ -23,25 +23,25 @@ class Jieba {
   }
 
   void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
-    mix_seg_.cut(sentence, words, hmm);
+    mix_seg_.Cut(sentence, words, hmm);
   }
   void CutAll(const string& sentence, vector<string>& words) const {
-    full_seg_.cut(sentence, words);
+    full_seg_.Cut(sentence, words);
   }
   void CutForSearch(const string& sentence, vector<string>& words, bool hmm = true) const {
-    query_seg_.cut(sentence, words, hmm);
+    query_seg_.Cut(sentence, words, hmm);
   }
   void CutHMM(const string& sentence, vector<string>& words) const {
-    hmm_seg_.cut(sentence, words);
+    hmm_seg_.Cut(sentence, words);
   }
   void CutLevel(const string& sentence, vector<string>& words) const {
-    level_seg_.cut(sentence, words);
+    level_seg_.Cut(sentence, words);
   }
   void CutLevel(const string& sentence, vector<pair<string, size_t> >& words) const {
-    level_seg_.cut(sentence, words);
+    level_seg_.Cut(sentence, words);
   }
   void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
-    mp_seg_.cut(sentence, words, max_word_len);
+    mp_seg_.Cut(sentence, words, max_word_len);
   }
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     return dict_trie_.InsertUserWord(word, tag);

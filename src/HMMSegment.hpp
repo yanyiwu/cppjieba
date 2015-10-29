@@ -23,7 +23,7 @@ class HMMSegment: public SegmentBase {
     }
   }
 
-  void cut(const string& sentence, 
+  void Cut(const string& sentence, 
         vector<string>& words) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
@@ -31,11 +31,11 @@ class HMMSegment: public SegmentBase {
     uwords.reserve(sentence.size());
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      cut(range.begin, range.end, uwords);
+      Cut(range.begin, range.end, uwords);
     }
     TransCode::encode(uwords, words);
   }
-  void cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
+  void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res) const {
     Unicode::const_iterator left = begin;
     Unicode::const_iterator right = begin;
     while (right != end) {
@@ -132,7 +132,7 @@ class HMMSegment: public SegmentBase {
 
     //start
     for (size_t y = 0; y < Y; y++) {
-      weight[0 + y * X] = model_->startProb[y] + model_->getEmitProb(model_->emitProbVec[y], *begin, MIN_DOUBLE);
+      weight[0 + y * X] = model_->startProb[y] + model_->GetEmitProb(model_->emitProbVec[y], *begin, MIN_DOUBLE);
       path[0 + y * X] = -1;
     }
 
@@ -143,7 +143,7 @@ class HMMSegment: public SegmentBase {
         now = x + y*X;
         weight[now] = MIN_DOUBLE;
         path[now] = HMMModel::E; // warning
-        emitProb = model_->getEmitProb(model_->emitProbVec[y], *(begin+x), MIN_DOUBLE);
+        emitProb = model_->GetEmitProb(model_->emitProbVec[y], *(begin+x), MIN_DOUBLE);
         for (size_t preY = 0; preY < Y; preY++) {
           old = x - 1 + preY * X;
           tmp = weight[old] + model_->transProb[preY][y] + emitProb;

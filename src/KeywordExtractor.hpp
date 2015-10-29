@@ -44,7 +44,7 @@ class KeywordExtractor {
 
   bool extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
     vector<string> words;
-    segment_.cut(sentence, words);
+    segment_.Cut(sentence, words);
 
     map<string, double> wordmap;
     for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) {
