@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.1.0
 
 1. QuerySegment切词时加一层判断，当长词满足IsAllAscii(比如英文单词)时，不进行细粒度分词。
 2. QuerySegment新增SetMaxWordLen和GetMaxWordLen接口，用来设置二次分词条件被触发的词长阈值。
