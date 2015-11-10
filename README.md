@@ -380,7 +380,8 @@ http://cppjieba-webdemo.herokuapp.com/
 
 ## 客服
 
-`i@yanyiwu.com`
+Email: `i@yanyiwu.com`
+QQ: 64162451
 
 ![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
