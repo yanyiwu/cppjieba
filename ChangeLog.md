@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.1.1
 
 1. 在 class Jieba 中新增词性标注的接口函数 Jieba::Tag
 
