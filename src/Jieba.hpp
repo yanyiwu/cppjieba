@@ -17,7 +17,8 @@ class Jieba {
       mix_seg_(&dict_trie_, &model_),
       full_seg_(&dict_trie_),
       query_seg_(&dict_trie_, &model_),
-      level_seg_(&dict_trie_) {
+      level_seg_(&dict_trie_),
+      pos_tagger_(&dict_trie_, &model_) {
   }
   ~Jieba() {
   }
@@ -42,6 +43,9 @@ class Jieba {
   }
   void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
     mp_seg_.Cut(sentence, words, max_word_len);
+  }
+  void Tag(const string& sentence, vector<pair<string, string> >& words) const {
+    pos_tagger_.Tag(sentence, words);
   }
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     return dict_trie_.InsertUserWord(word, tag);
@@ -68,6 +72,8 @@ class Jieba {
   FullSegment full_seg_;
   QuerySegment query_seg_;
   LevelSegment level_seg_;
+  
+  PosTagger pos_tagger_;
   
 }; // class Jieba
 

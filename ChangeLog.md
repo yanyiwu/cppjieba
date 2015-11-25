@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
+1. 在 class Jieba 中新增词性标注的接口函数 Jieba::Tag
+
 ## v4.1.0
 
 1. QuerySegment切词时加一层判断，当长词满足IsAllAscii(比如英文单词)时，不进行细粒度分词。

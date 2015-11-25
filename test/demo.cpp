@@ -33,11 +33,11 @@ int main(int argc, char** argv) {
   jieba.Cut("男默女泪", words);
   cout << limonp::join(words.begin(), words.end(), "/") << endl;
 
-  //cout << "[demo] TAGGING" << endl;
-  //vector<pair<string, string> > tagres;
-  //jieba.Tag(s, tagres);
-  //cout << s << endl;
-  //cout << tagres << endl;;
+  cout << "[demo] TAGGING" << endl;
+  vector<pair<string, string> > tagres;
+  jieba.Tag(s, tagres);
+  cout << s << endl;
+  cout << tagres << endl;;
 
   //cout << "[demo] KEYWORD" << endl;
   //vector<pair<string, double> > keywordres;
