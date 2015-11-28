@@ -104,6 +104,8 @@ class DictTrie {
       DictUnit node_info;
       vector<string> buf;
       for (; getline(ifs, line); lineno++) {
+        if (line.size() == 0)
+          continue;
         buf.clear();
         split(line, buf, " ");
         if (buf.size() < 1) {
