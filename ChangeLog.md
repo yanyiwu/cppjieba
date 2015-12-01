@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.1.2
 
 1. 新增 Jieba::Locate 函数接口，作为计算分词结果的词语位置信息，在某些场景下有用，比如搜索结果高亮之类的。
 
