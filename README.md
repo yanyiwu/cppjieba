@@ -319,55 +319,19 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ## 应用
 
-### GoJieba
-
-如果有需要在 Go 中使用分词，不妨试一下 [GoJieba] 。
-
-### 关于CppJieba的跨语言包装使用
-
-收到邮件询问跨语言包装(ios应用开发)使用的问题，这方面我没有相关的经验，建议参考如下python使用cppjieba的项目：
-
-[jannson] 开发的供 python模块调用的项目 [cppjiebapy] ,  和相关讨论 [cppjiebapy_discussion] .
-
-### NodeJieba
-
-如果有需要在`node.js`中使用分词，不妨试一下[NodeJieba]。
-
-### simhash
-
-如果有需要在处理中文文档的的相似度计算，不妨试一下[simhash]。
-
-### exjieba
-
-如果有需要在`erlang`中使用分词的话，不妨试一下[exjieba]。
-
-### jiebaR
-
-如果有需要在`R`中使用分词的话，不妨试一下[jiebaR]。
-
-### libcppjieba
-
-[libcppjieba] 是最简单易懂的CppJieba头文件库使用示例。
-
-### keyword\_server
-
-[KeywordServer] 50行搭建一个**中文关键词抽取服务**。
-
-### ngx\_http\_cppjieba\_module
-
-如果有需要在`Nginx`中使用分词模块的话，不妨试一下[ngx_http_cppjieba_module]。
-
-### cjieba
-
-如果有需要在 C语言 中使用分词模块的话，不妨试一下[cjieba]。
-
-### jieba\_rb
-
-如果有需要在 Ruby 中使用分词模块的话，不妨试一下[jieba_rb]。
-
-### iosjieba
-
-如果有需要在 iOS 开发中使用分词模块的话，不妨参考一下 [iosjieba]。
++ [GoJieba] go语言版本的结巴中文分词。
++ [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
++ [NodeJieba] Node.js 版本的结巴中文分词。
++ [simhash] 中文文档的的相似度计算
++ [exjieba] Erlang 版本的结巴中文分词。
++ [jiebaR] R语言版本的结巴中文分词。
++ [libcppjieba] 是最简单易懂的CppJieba头文件库使用示例库。
++ [KeywordServer] 50行搭建一个中文关键词抽取服务。
++ [cjieba] C语言版本的结巴分词。
++ [jieba_rb] Ruby 版本的结巴分词。
++ [iosjieba] iOS 版本的结巴分词。
++ [pg_jieba] PostgreSQL 数据库的分词插件。
++ [ngx_http_cppjieba_module] Nginx 分词插件。
 
 ## 线上演示
 
@@ -380,15 +344,14 @@ http://cppjieba-webdemo.herokuapp.com/
 
 ## 客服
 
-Email: `i@yanyiwu.com`
-QQ: 64162451
++ Email: `i@yanyiwu.com`
++ QQ: 64162451
 
 ![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
-"结巴"中文分词作者: SunJunyi  
-https://github.com/fxsjy/jieba
+"结巴"中文分词作者: SunJunyi https://github.com/fxsjy/jieba
 
 ## 许可证
 
@@ -418,3 +381,4 @@ MIT http://yanyiwu.mit-license.org
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
+[pg_jieba]:https://github.com/jaiminpan/pg_jieba
