@@ -23,6 +23,12 @@ class Jieba {
   ~Jieba() {
   }
 
+  struct LocWord {
+    string word;
+    size_t begin;
+    size_t end;
+  }; // struct LocWord
+
   void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
     mix_seg_.Cut(sentence, words, hmm);
   }
@@ -44,6 +50,18 @@ class Jieba {
   void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
     mp_seg_.Cut(sentence, words, max_word_len);
   }
+  void Locate(const vector<string>& words, vector<LocWord>& loc_words) const {
+    loc_words.resize(words.size());
+    size_t begin = 0;
+    for (size_t i = 0; i < words.size(); i++) {
+      size_t len = TransCode::Decode(words[i]).size();
+      loc_words[i].word = words[i];
+      loc_words[i].begin = begin;
+      loc_words[i].end = loc_words[i].begin + len;
+      begin = loc_words[i].end;
+    }
+  }
+  
   void Tag(const string& sentence, vector<pair<string, string> >& words) const {
     pos_tagger_.Tag(sentence, words);
   }

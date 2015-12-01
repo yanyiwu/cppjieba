@@ -13,7 +13,7 @@ TEST(JiebaTest, Test1) {
   jieba.Cut("他来到了网易杭研大厦", words);
   result << words;
   ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
-  
+
   jieba.Cut("我来自北京邮电大学。", words, false);
   result << words;
   ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", result);
@@ -45,6 +45,17 @@ TEST(JiebaTest, Test1) {
   jieba.CutLevel("南京市长江大桥", word_levels);
   result << word_levels;
   ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
+
+  vector<Jieba::LocWord> loc_words;
+  jieba.Cut("南京市长江大桥", words);
+  jieba.Locate(words, loc_words);
+  ASSERT_EQ(loc_words.size(), 2u);
+  ASSERT_EQ(loc_words[0].word, "南京市");
+  ASSERT_EQ(loc_words[0].begin, 0u);
+  ASSERT_EQ(loc_words[0].end, 3u);
+  ASSERT_EQ(loc_words[1].word, "长江大桥");
+  ASSERT_EQ(loc_words[1].begin, 3u);
+  ASSERT_EQ(loc_words[1].end, 7u);
 
   //vector<pair<string, string> > tagres;
   //jieba.Tag("iPhone6手机的最大特点是很容易弯曲。", tagres);
