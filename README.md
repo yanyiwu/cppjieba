@@ -327,6 +327,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [iosjieba] iOS 版本的结巴分词。
 + [pg_jieba] PostgreSQL 数据库的分词插件。
 + [ngx_http_cppjieba_module] Nginx 分词插件。
++ [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
 
 ## 线上演示
 
@@ -377,3 +378,4 @@ MIT http://yanyiwu.mit-license.org
 [iosjieba]:https://github.com/yanyiwu/iosjieba
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
+[gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
