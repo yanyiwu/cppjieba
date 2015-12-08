@@ -108,7 +108,7 @@ TEST(MixSegmentTest, TestUserDict) {
 
 TEST(MixSegmentTest, TestMultiUserDict) {
   MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", 
-        "../test/testdata/userdict.utf8:../test/testdata/userdict.2.utf8");
+        "../test/testdata/userdict.utf8;../test/testdata/userdict.2.utf8");
   vector<string> words;
   string res;
 
@@ -225,7 +225,7 @@ TEST(QuerySegment, Test1) {
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8:../test/testdata/userdict.english", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english", 3);
 
   {
     const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";

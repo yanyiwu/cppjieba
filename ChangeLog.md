@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v4.2.0
+
+1. 修复[issue50]提到的多词典分隔符在Windows环境下存在的问题，从':'修改成'|'或';'。
+
 ## v4.1.2
 
 1. 新增 Jieba::Locate 函数接口，作为计算分词结果的词语位置信息，在某些场景下有用，比如搜索结果高亮之类的。
@@ -132,3 +136,4 @@
 
 [Limonp]:http://github.com/yanyiwu/limonp.git
 [Husky]:http://github.com/yanyiwu/husky.git
+[issue50]:https://github.com/yanyiwu/cppjieba/issues/50
