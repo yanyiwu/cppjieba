@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "limonp/Logger.hpp"
+#include "limonp/Logging.hpp"
 #include "limonp/StringUtil.hpp"
 
 namespace husky {
@@ -16,11 +16,11 @@ static const char* const KEY_PROTOCOL = "PROTOCOL";
 
 typedef unsigned char BYTE;
 
-inline BYTE toHex(BYTE x) {
+inline BYTE ToHex(BYTE x) {
   return x > 9 ? x -10 + 'A': x + '0';
 }
 
-inline BYTE fromHex(BYTE x) {
+inline BYTE FromHex(BYTE x) {
   return isdigit(x) ? x-'0' : x-'A'+10;
 }
 
@@ -32,8 +32,8 @@ inline void URLEncode(const string &sIn, string& sOut) {
       buf[0] = sIn[ix];
     } else {
       buf[0] = '%';
-      buf[1] = toHex( (BYTE)sIn[ix] >> 4 );
-      buf[2] = toHex( (BYTE)sIn[ix] % 16);
+      buf[1] = ToHex( (BYTE)sIn[ix] >> 4 );
+      buf[2] = ToHex( (BYTE)sIn[ix] % 16);
     }
     sOut += (char *)buf;
   }
@@ -43,8 +43,8 @@ inline void URLDecode(const string &sIn, string& sOut) {
   for( size_t ix = 0; ix < sIn.size(); ix++ ) {
     BYTE ch = 0;
     if(sIn[ix]=='%') {
-      ch = (fromHex(sIn[ix+1])<<4);
-      ch |= fromHex(sIn[ix+2]);
+      ch = (FromHex(sIn[ix+1])<<4);
+      ch |= FromHex(sIn[ix+2]);
       ix += 2;
     } else if(sIn[ix] == '+') {
       ch = ' ';
@@ -58,38 +58,38 @@ inline void URLDecode(const string &sIn, string& sOut) {
 class HttpReqInfo {
  public:
   HttpReqInfo() {
-    _isHeaderFinished = false;
-    _isBodyFinished = false;
-    _contentLength = 0;
+    is_header_finished_ = false;
+    is_body_finished_ = false;
+    content_length_ = 0;
   }
 
-  bool parseHeader(const string& buffer) {
-    return parseHeader(buffer.c_str(), buffer.size());
+  bool ParseHeader(const string& buffer) {
+    return ParseHeader(buffer.c_str(), buffer.size());
   }
-  bool parseHeader(const char* buffer, size_t len) {
+  bool ParseHeader(const char* buffer, size_t len) {
     string headerStr(buffer, len);
     size_t lpos = 0, rpos = 0;
     vector<string> buf;
     rpos = headerStr.find("\n", lpos);
     if(string::npos == rpos) {
-      LogError("headerStr[%s] illegal.", headerStr.c_str());
+      LOG(ERROR) << "headerStr[" << headerStr << "] illegal.";
       return false;
     }
     string firstline(headerStr, lpos, rpos - lpos);
-    trim(firstline);
-    split(firstline, buf, " ");
+    Trim(firstline);
+    Split(firstline, buf, " ");
     if (3 != buf.size()) {
-      LogError("parse header firstline[%s] failed.", firstline.c_str());
+      LOG(ERROR) << "parse header firstline [" << firstline << "] failed.";
       return false;
     }
-    _headerMap[KEY_METHOD] = trim(buf[0]);
-    _headerMap[KEY_URI] = trim(buf[1]);
-    _headerMap[KEY_PROTOCOL] = trim(buf[2]);
-    _parseUri(_headerMap[KEY_URI], _path,  _methodGetMap);
+    header_map_[KEY_METHOD] = Trim(buf[0]);
+    header_map_[KEY_URI] = Trim(buf[1]);
+    header_map_[KEY_PROTOCOL] = Trim(buf[2]);
+    ParseUri(header_map_[KEY_URI], path_,  method_get_map_);
 
     lpos = rpos + 1;
     if(lpos >= headerStr.size()) {
-      LogError("headerStr[%s] illegal.", headerStr.c_str());
+      LOG(ERROR) << "headerStr[" << headerStr << "] illegal.";
       return false;
     }
     //message header begin
@@ -101,57 +101,57 @@ class HttpReqInfo {
       }
       string k(s, 0, p);
       string v(s, p+1);
-      trim(k);
-      trim(v);
+      Trim(k);
+      Trim(v);
       if(k.empty()||v.empty()) {
-        LogError("headerStr[%s] illegal.", headerStr.c_str());
+        LOG(ERROR) << "headerStr[" << headerStr << "] illegal.";
         return false;
       }
-      upper(k);
-      _headerMap[k] = v;
+      Upper(k);
+      header_map_[k] = v;
       lpos = rpos + 1;
     }
     rpos ++;
-    _isHeaderFinished = true;
+    is_header_finished_ = true;
     string content_length;
-    if(!find("CONTENT-LENGTH", content_length)) {
-      _isBodyFinished = true;
+    if(!Find("CONTENT-LENGTH", content_length) || 0 == (content_length_ = atoi(content_length.c_str()))) {
+      is_body_finished_ = true;
       return true;
     }
-    _contentLength = atoi(content_length.c_str());
+    content_length_ = atoi(content_length.c_str());
     if(rpos < headerStr.size()) {
-      appendBody(headerStr.c_str() + rpos, headerStr.size() - rpos);
+      AppendBody(headerStr.c_str() + rpos, headerStr.size() - rpos);
     }
     return true;
     //message header end
   }
-  void appendBody(const char* buffer, size_t len) {
-    if(_isBodyFinished) {
+  void AppendBody(const char* buffer, size_t len) {
+    if(is_body_finished_) {
       return;
     }
-    _body.append(buffer, len);
-    if(_body.size() >= _contentLength) {
-      _isBodyFinished = true;
+    body_.append(buffer, len);
+    if(body_.size() >= content_length_) {
+      is_body_finished_ = true;
     } else {
-      _isBodyFinished = false;
+      is_body_finished_ = false;
     }
   }
-  bool isHeaderFinished() const {
-    return _isHeaderFinished;
+  bool IsHeaderFinished() const {
+    return is_header_finished_;
   }
-  bool isBodyFinished() const {
-    return _isBodyFinished;
+  bool IsBodyFinished() const {
+    return is_body_finished_;
   }
 
-  const string& set(const string& key, const string& value) {
-    return _headerMap[key] = value;
+  const string& Set(const string& key, const string& value) {
+    return header_map_[key] = value;
   }
-  bool find(const string& key, string& res)const {
-    return _find(_headerMap, key, res);
+  bool Find(const string& key, string& res)const {
+    return Find(header_map_, key, res);
   }
   bool GET(const string& argKey, string& res)const {
     string tmp;
-    if (!_find(_methodGetMap, argKey, tmp)) {
+    if (!Find(method_get_map_, argKey, tmp)) {
       return false;
     }
     URLDecode(tmp, res);
@@ -174,47 +174,44 @@ class HttpReqInfo {
     return true;
   }
 
-  //const string& getMethod() const
-  //{
-  //    return _headerMap.find(KEY_METHOD)->second;
-  //}
-  bool isGET() const {
+  bool IsGET() const {
     string str;
-    if(!_find(_headerMap, KEY_METHOD, str)) {
+    if(!Find(header_map_, KEY_METHOD, str)) {
       return false;
     }
     return str == "GET";
   }
-  bool isPOST() const {
+  bool IsPOST() const {
     string str;
-    if(!_find(_headerMap, KEY_METHOD, str)) {
+    if(!Find(header_map_, KEY_METHOD, str)) {
       return false;
     }
     return str == "POST";
   }
-  const unordered_map<string, string> & getMethodGetMap() const {
-    return _methodGetMap;
+  const unordered_map<string, string> & GetMethodGetMap() const {
+    return method_get_map_;
   }
-  const unordered_map<string, string> & getHeaders() const {
-    return _headerMap;
+  const unordered_map<string, string> & GetHeaders() const {
+    return header_map_;
   }
-  const string& getBody() const {
-    return _body;
+  const string& GetBody() const {
+    return body_;
   }
-  const string& getPath() const {
-    return _path;
+  const string& GetPath() const {
+    return path_;
   }
+
  private:
-  bool _isHeaderFinished;
-  bool _isBodyFinished;
-  size_t _contentLength;
-  unordered_map<string, string> _headerMap;
-  unordered_map<string, string> _methodGetMap;
-  string _path;
-  string _body;
+  bool is_header_finished_;
+  bool is_body_finished_;
+  size_t content_length_;
+  unordered_map<string, string> header_map_;
+  unordered_map<string, string> method_get_map_;
+  string path_;
+  string body_;
   friend ostream& operator<<(ostream& os, const HttpReqInfo& obj);
 
-  bool _find(const std::unordered_map<string, string>& mp, const string& key, string& res)const {
+  bool Find(const std::unordered_map<string, string>& mp, const string& key, string& res)const {
     std::unordered_map<string, string>::const_iterator it = mp.find(key);
     if(it == mp.end()) {
       return false;
@@ -223,7 +220,7 @@ class HttpReqInfo {
     return true;
   }
 
-  void _parseUri(const string& uri, string& path, std::unordered_map<string, string>& mp) {
+  void ParseUri(const string& uri, string& path, std::unordered_map<string, string>& mp) {
     if(uri.empty()) {
       return;
     }
@@ -259,7 +256,7 @@ class HttpReqInfo {
 };
 
 inline std::ostream& operator << (std::ostream& os, const husky::HttpReqInfo& obj) {
-  return os << obj._headerMap << obj._methodGetMap/* << obj._methodPostMap*/ << obj._path << obj._body ;
+  return os << obj.header_map_ << obj.method_get_map_/* << obj._methodPostMap*/ << obj.path_ << obj.body_ ;
 }
 
 }

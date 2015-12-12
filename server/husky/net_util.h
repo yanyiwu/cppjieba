@@ -16,34 +16,25 @@
 #include <vector>
 
 #include "limonp/StdExtension.hpp"
-#include "limonp/Logger.hpp"
+#include "limonp/Logging.hpp"
 
 namespace husky {
 static const size_t LISTEN_QUEUE_LEN = 1024;
 
 typedef int SocketFd;
 inline SocketFd CreateAndListenSocket(int port) {
-  SocketFd sock;
-  sock = socket(AF_INET, SOCK_STREAM, 0);
-  if (sock == -1) {
-    LogFatal("create socket failed");
-  }
+  SocketFd sock = socket(AF_INET, SOCK_STREAM, 0);
+  CHECK(sock != -1);
 
   int optval = 1; // nozero
-  if (-1 == setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval))) {
-    LogFatal("setsockopt failed");
-  }
+  CHECK(-1 != setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)));
 
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
-  if (-1 == ::bind(sock, (sockaddr*)&addr, sizeof(addr))) {
-    LogFatal(strerror(errno));
-  }
-  if (-1 == ::listen(sock, LISTEN_QUEUE_LEN)) {
-    LogFatal(strerror(errno));
-  }
+  CHECK(-1 != ::bind(sock, (sockaddr*)&addr, sizeof(addr)));
+  CHECK(-1 != ::listen(sock, LISTEN_QUEUE_LEN));
 
   return sock;
 }

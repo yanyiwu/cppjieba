@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 #include "limonp/Config.hpp"
-#include "husky/ThreadPoolServer.hpp"
+#include "husky/thread_pool_server.h"
 #include "Jieba.hpp"
 
 using namespace husky;
