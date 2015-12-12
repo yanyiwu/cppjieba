@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.2.1
 
 1. Upgrade [limonp] to version v0.4.1, [husky] to version v0.2.0
 
