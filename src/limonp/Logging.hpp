@@ -14,7 +14,7 @@
 #endif // CHECK
 
 #define LOG(level) limonp::Logger(limonp::level, __FILE__, __LINE__).Stream() 
-#define CHECK(exp) {if(!(exp)) LOG(FATAL) << #exp << " is false, abort."; }
+#define CHECK(exp) if(!(exp)) LOG(FATAL) << "exp: ["#exp << "] false. "
 
 namespace limonp {
 
