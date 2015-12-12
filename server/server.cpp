@@ -19,7 +19,7 @@ class ReqHandler: public IRequestHandler {
   virtual ~ReqHandler() {
   }
 
-  virtual bool doGET(const HttpReqInfo& httpReq, string& strSnd) {
+  virtual bool DoGET(const HttpReqInfo& httpReq, string& strSnd) {
     string sentence, method, format;
     string tmp;
     vector<string> words;
@@ -32,9 +32,9 @@ class ReqHandler: public IRequestHandler {
     return true;
   }
 
-  virtual bool doPOST(const HttpReqInfo& httpReq, string& strSnd) {
+  virtual bool DoPOST(const HttpReqInfo& httpReq, string& strSnd) {
     vector<string> words;
-    Run(httpReq.getBody(), "MIX", "simple", strSnd);
+    Run(httpReq.GetBody(), "MIX", "simple", strSnd);
     return true;
   }
 
@@ -57,7 +57,7 @@ class ReqHandler: public IRequestHandler {
       jieba_.Cut(sentence, words, false);
     }
     if (format == "simple") {
-      join(words.begin(), words.end(), strSnd, " ");
+      Join(words.begin(), words.end(), strSnd, " ");
     } else {
       strSnd << words;
     }
@@ -74,22 +74,22 @@ bool Run(int argc, char** argv) {
   if (!conf) {
     return false;
   }
-  int port = conf.get("port", 1339);
-  int threadNumber = conf.get("thread_number", 4);
-  int queueMaxSize = conf.get("queue_max_size", 1024);
-  string dictPath = conf.get("dict_path", "");
-  string modelPath = conf.get("model_path", "");
-  string userDictPath = conf.get("user_dict_path", "");
+  int port = conf.Get("port", 1339);
+  int threadNumber = conf.Get("thread_number", 4);
+  int queueMaxSize = conf.Get("queue_max_size", 1024);
+  string dictPath = conf.Get("dict_path", "");
+  string modelPath = conf.Get("model_path", "");
+  string userDictPath = conf.Get("user_dict_path", "");
 
-  LogInfo("config info: %s", conf.getConfigInfo().c_str());
+  LOG(INFO) << "config info: " << conf.GetConfigInfo();
   
   cppjieba::Jieba jieba(dictPath, 
         modelPath, 
         userDictPath);
   
   ReqHandler reqHandler(jieba);
-  ThreadPoolServer sf(threadNumber, queueMaxSize, port, reqHandler);
-  return sf.start();
+  ThreadPoolServer server(threadNumber, queueMaxSize, port, reqHandler);
+  return server.Start();
 }
 
 int main(int argc, char* argv[]) {

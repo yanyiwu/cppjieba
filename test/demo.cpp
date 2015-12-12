@@ -12,26 +12,26 @@ int main(int argc, char** argv) {
 
   cout << "[demo] Cut With HMM" << endl;
   jieba.Cut(s, words, true);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
   cout << "[demo] Cut Without HMM " << endl;
   jieba.Cut(s, words, false);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
   cout << "[demo] CutAll" << endl;
   jieba.CutAll(s, words);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
   cout << "[demo] CutForSearch" << endl;
   jieba.CutForSearch(s, words);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
   cout << "[demo] Insert User Word" << endl;
   jieba.Cut("男默女泪", words);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
   jieba.InsertUserWord("男默女泪");
   jieba.Cut("男默女泪", words);
-  cout << limonp::join(words.begin(), words.end(), "/") << endl;
+  cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
   cout << "[demo] Locate Words" << endl;
   vector<cppjieba::Jieba::LocWord> loc_words;

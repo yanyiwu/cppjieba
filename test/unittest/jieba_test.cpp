@@ -91,6 +91,6 @@ TEST(JiebaTest, InsertUserWord) {
     ASSERT_TRUE(jieba.InsertUserWord(newWord));
     jieba.Cut(newWord, words);
     result << words;
-    ASSERT_EQ(result, string_format("[\"%s\"]", newWord.c_str()));
+    ASSERT_EQ(result, StringFormat("[\"%s\"]", newWord.c_str()));
   }
 }

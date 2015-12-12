@@ -20,7 +20,7 @@ TEST(MixSegmentTest, Test1) {
     sentence = "我来自北京邮电大学。。。学号123456，用AK47";
     expected = "我/来自/北京邮电大学/。/。/。/学号/123456/，/用/AK47";
     segment.Cut(sentence, words);
-    actual = join(words.begin(), words.end(), "/");
+    actual = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
 
@@ -28,7 +28,7 @@ TEST(MixSegmentTest, Test1) {
     sentence = "B超 T恤";
     expected = "B超/ /T恤";
     segment.Cut(sentence, words);
-    actual = join(words.begin(), words.end(), "/");
+    actual = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
 
@@ -36,7 +36,7 @@ TEST(MixSegmentTest, Test1) {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭/研/大厦";
     segment.Cut(sentence, words, false);
-    actual = join(words.begin(), words.end(), "/");
+    actual = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
 
@@ -44,7 +44,7 @@ TEST(MixSegmentTest, Test1) {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭研/大厦";
     segment.Cut(sentence, words);
-    actual = join(words.begin(), words.end(), "/");
+    actual = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
 }
@@ -102,7 +102,7 @@ TEST(MixSegmentTest, TestUserDict) {
   ASSERT_EQ("[\"I\", \"B\", \"M\", \",\", \"3.14\"]", res);
 
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
-  res = limonp::join(words.begin(), words.end(), "/");
+  res = limonp::Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树/万树/梨花/开", res);
 }
 
@@ -113,7 +113,7 @@ TEST(MixSegmentTest, TestMultiUserDict) {
   string res;
 
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
-  res = limonp::join(words.begin(), words.end(), "/");
+  res = limonp::Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树万树梨花开", res);
 }
 
@@ -138,11 +138,11 @@ TEST(MPSegmentTest, Test1) {
   ASSERT_EQ("[\"南\", \"京\", \"市\", \"长\", \"江\", \"大\", \"桥\"]", s << words);
 
   segment.Cut("湖南长沙市天心区", words);
-  s = join(words.begin(), words.end(), "/");
+  s = Join(words.begin(), words.end(), "/");
   ASSERT_EQ("湖南长沙市/天心区", s);
 
   segment.Cut("湖南长沙市天心区", words, 3);
-  s = join(words.begin(), words.end(), "/");
+  s = Join(words.begin(), words.end(), "/");
   ASSERT_EQ("湖南/长沙市/天心区", s);
 }
 
@@ -254,7 +254,7 @@ TEST(QuerySegment, Test2) {
   {
     vector<string> words;
     segment.Cut("internal", words);
-    string s = join(words.begin(), words.end(), "/");
+    string s = Join(words.begin(), words.end(), "/");
     ASSERT_EQ("internal", s);
   }
 
@@ -263,7 +263,7 @@ TEST(QuerySegment, Test2) {
   {
     vector<string> words;
     segment.Cut("中国科学院", words);
-    string s = join(words.begin(), words.end(), "/");
+    string s = Join(words.begin(), words.end(), "/");
     ASSERT_EQ("中国科学院", s);
   }
 }

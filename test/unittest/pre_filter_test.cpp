@@ -20,7 +20,7 @@ TEST(PreFilterTest, Test1) {
       range = filter.Next();
       words.push_back(TransCode::Encode(range.begin, range.end));
     }
-    res = join(words.begin(), words.end(), "/");
+    res = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
   }
 
@@ -34,7 +34,7 @@ TEST(PreFilterTest, Test1) {
       range = filter.Next();
       words.push_back(TransCode::Encode(range.begin, range.end));
     }
-    res = join(words.begin(), words.end(), "/");
+    res = Join(words.begin(), words.end(), "/");
     for (size_t i = 0; i < words.size(); i++) {
     }
     ASSERT_EQ(res, expected);

@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
+1. Upgrade [limonp] to version v0.4.1, [husky] to version v0.2.0
+
 ## v4.2.0
 
 1. 修复[issue50]提到的多词典分隔符在Windows环境下存在的问题，从':'修改成'|'或';'。
@@ -66,14 +70,14 @@
 
 ## v2.4.3
 
-1. 更新 [Husky] 服务代码，新 [Husky] 为基于线程池的服务器简易框架。并且修复当 HTTP POST 请求时 body 过长数据可能丢失的问题。
+1. 更新 [husky] 服务代码，新 [husky] 为基于线程池的服务器简易框架。并且修复当 HTTP POST 请求时 body 过长数据可能丢失的问题。
 2. 修改 PosTagger 的参数结构，删除暂时无用的参数。并添加使用自定义字典的参数，也就是支持 **自定义词性**。
 3. 更好的支持 `mac osx` (原谅作者如此屌丝，这么晚才买 `mac` )。
 4. 支持 `Docker` ，具体请见 `Dockerfile` 。
 
 ## v2.4.2
 
-1. 适当使用 `vector`， 的基础上，使用`Limonp/LocalVector.hpp`作为`Unicode`的类型等优化，约提高性能 `30%`。
+1. 适当使用 `vector`， 的基础上，使用`limonp/LocalVector.hpp`作为`Unicode`的类型等优化，约提高性能 `30%`。
 2. 使 `cjserver` 支持用户自定义词典，通过在 `conf/server.conf` 里面配置 `user_dict_path` 来实现。
 3. 修复 `MPSegment` 切词时，当句子中含有特殊字符时，切词结果不完整的问题。
 4. 修改 `FullSegment` 减少内存使用。 
@@ -131,9 +135,9 @@
 1. 完成__最大概率分词算法__和__HMM分词算法__，并且将他们结合起来成效果最好的`MixSegment`。
 2. 进行大量的代码重构，将主要的功能性代码都写成了hpp文件。
 3. 使用`cmake`工具来管理项目。
-4. 使用 [Limonp]作为工具函数库，比如日志，字符串操作等常用函数。
-5. 使用 [Husky] 搭简易分词服务的服务器框架。
+4. 使用 [limonp]作为工具函数库，比如日志，字符串操作等常用函数。
+5. 使用 [husky] 搭简易分词服务的服务器框架。
 
-[Limonp]:http://github.com/yanyiwu/limonp.git
-[Husky]:http://github.com/yanyiwu/husky.git
+[limonp]:http://github.com/yanyiwu/limonp.git
+[husky]:http://github.com/yanyiwu/husky.git
 [issue50]:https://github.com/yanyiwu/cppjieba/issues/50
