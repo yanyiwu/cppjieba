@@ -1,4 +1,4 @@
-# CppJieba 
+# CppJieba [English](README_EN.md)
 
 [![Build Status](https://travis-ci.org/yanyiwu/cppjieba.png?branch=master)](https://travis-ci.org/yanyiwu/cppjieba) 
 [![Author](https://img.shields.io/badge/author-@yanyiwu-blue.svg?style=flat)](http://yanyiwu.com/) 
@@ -25,8 +25,8 @@ CppJieba是"结巴(Jieba)"中文分词的C++版本
 
 ### 依赖软件
 
-* `g++ (version >= 4.1 recommended) or clang++`;
-* `cmake (version >= 2.6 recommended)`;
+* `g++ (version >= 4.1 is recommended) or clang++`;
+* `cmake (version >= 2.6 is recommended)`;
 
 ### 下载和编译
 
