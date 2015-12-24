@@ -1,4 +1,8 @@
-# CppJieba [![Build Status](https://travis-ci.org/yanyiwu/cppjieba.png?branch=master)](https://travis-ci.org/yanyiwu/cppjieba)
+# CppJieba 
+
+[![Build Status](https://travis-ci.org/yanyiwu/cppjieba.png?branch=master)](https://travis-ci.org/yanyiwu/cppjieba) 
+[![Author](https://img.shields.io/badge/author-@yanyiwu-blue.svg?style=flat)](http://yanyiwu.com/) 
+[![License](https://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](http://yanyiwu.mit-license.org)
 
 ## 简介
 
