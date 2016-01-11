@@ -1,4 +1,4 @@
-#include "Jieba.hpp"
+#include "cppjieba/Jieba.hpp"
 
 using namespace std;
 

@@ -9,6 +9,11 @@
 3. server/husky -> deps/husky/
 4. test/unittest/gtest -> deps/gtest
 
+依赖库升级：
+
+1. [limonp] to version v0.5.1
+2. [husky] to version v0.2.0
+
 ## v4.2.1
 
 1. Upgrade [limonp] to version v0.4.1, [husky] to version v0.2.0

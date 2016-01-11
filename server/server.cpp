@@ -5,7 +5,7 @@
 #include <string.h>
 #include "limonp/Config.hpp"
 #include "husky/thread_pool_server.h"
-#include "Jieba.hpp"
+#include "cppjieba/Jieba.hpp"
 
 using namespace husky;
 using namespace cppjieba;
@@ -76,7 +76,6 @@ bool Run(int argc, char** argv) {
   }
   int port = conf.Get("port", 1339);
   int threadNumber = conf.Get("thread_number", 4);
-  int queueMaxSize = conf.Get("queue_max_size", 1024);
   string dictPath = conf.Get("dict_path", "");
   string modelPath = conf.Get("model_path", "");
   string userDictPath = conf.Get("user_dict_path", "");
@@ -88,7 +87,7 @@ bool Run(int argc, char** argv) {
         userDictPath);
   
   ReqHandler reqHandler(jieba);
-  ThreadPoolServer server(threadNumber, queueMaxSize, port, reqHandler);
+  ThreadPoolServer server(threadNumber, port, reqHandler);
   return server.Start();
 }
 
