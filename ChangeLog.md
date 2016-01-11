@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.3.0
 
 源码目录布局调整：
 
