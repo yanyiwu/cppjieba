@@ -1,4 +1,4 @@
-#include "src/Jieba.hpp"
+#include "cppjieba/Jieba.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;

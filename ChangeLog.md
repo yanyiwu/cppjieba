@@ -1,5 +1,14 @@
 # CppJieba ChangeLog
 
+## next version
+
+源码目录布局调整：
+
+1. src/ -> include/cppjieba/
+2. src/limonp/ -> deps/limonp/
+3. server/husky -> deps/husky/
+4. test/unittest/gtest -> deps/gtest
+
 ## v4.2.1
 
 1. Upgrade [limonp] to version v0.4.1, [husky] to version v0.2.0

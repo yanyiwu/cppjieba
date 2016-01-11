@@ -1,10 +1,10 @@
-#include "src/SegmentBase.hpp"
-#include "src/MixSegment.hpp"
-#include "src/MPSegment.hpp"
-#include "src/HMMSegment.hpp"
-#include "src/FullSegment.hpp"
-#include "src/QuerySegment.hpp"
-#include "src/LevelSegment.hpp"
+#include "cppjieba/SegmentBase.hpp"
+#include "cppjieba/MixSegment.hpp"
+#include "cppjieba/MPSegment.hpp"
+#include "cppjieba/HMMSegment.hpp"
+#include "cppjieba/FullSegment.hpp"
+#include "cppjieba/QuerySegment.hpp"
+#include "cppjieba/LevelSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;

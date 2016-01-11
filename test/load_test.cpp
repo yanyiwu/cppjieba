@@ -1,11 +1,11 @@
 #include <iostream>
 #include <ctime>
 #include <fstream>
-#include "../src/MPSegment.hpp"
-#include "../src/HMMSegment.hpp"
-#include "../src/MixSegment.hpp"
-#include "../src/KeywordExtractor.hpp"
-#include "../src/limonp/Colors.hpp"
+#include "cppjieba/MPSegment.hpp"
+#include "cppjieba/HMMSegment.hpp"
+#include "cppjieba/MixSegment.hpp"
+#include "cppjieba/KeywordExtractor.hpp"
+#include "limonp/Colors.hpp"
 
 using namespace cppjieba;
 

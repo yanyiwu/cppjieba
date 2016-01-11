@@ -1,4 +1,4 @@
-#include "src/KeywordExtractor.hpp"
+#include "cppjieba/KeywordExtractor.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;

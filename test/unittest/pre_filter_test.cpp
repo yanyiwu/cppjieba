@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "src/PreFilter.hpp"
+#include "cppjieba/PreFilter.hpp"
 
 using namespace cppjieba;
 

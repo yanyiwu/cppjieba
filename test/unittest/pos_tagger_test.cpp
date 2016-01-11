@@ -1,4 +1,4 @@
-#include "src/PosTagger.hpp"
+#include "cppjieba/PosTagger.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;

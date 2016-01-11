@@ -1,5 +1,5 @@
-#include "src/DictTrie.hpp"
-#include "src/MPSegment.hpp"
+#include "cppjieba/DictTrie.hpp"
+#include "cppjieba/MPSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;
