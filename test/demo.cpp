@@ -1,11 +1,18 @@
 #include "cppjieba/Jieba.hpp"
+#include "cppjieba/KeywordExtractor.hpp"
 
 using namespace std;
 
+const char* const DICT_PATH = "../dict/jieba.dict.utf8";
+const char* const HMM_PATH = "../dict/hmm_model.utf8";
+const char* const USER_DICT_PATH = "../dict/user.dict.utf8";
+const char* const IDF_PATH = "../dict/idf.utf8";
+const char* const STOP_WORD_PATH = "../dict/stop_words.utf8";
+
 int main(int argc, char** argv) {
-  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                            "../dict/hmm_model.utf8",
-                            "../dict/user.dict.utf8");
+  cppjieba::Jieba jieba(DICT_PATH,
+        HMM_PATH,
+        USER_DICT_PATH);
   vector<string> words;
   string result;
   string s = "我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。";
@@ -50,11 +57,14 @@ int main(int argc, char** argv) {
   cout << s << endl;
   cout << tagres << endl;;
 
-  //cout << "[demo] KEYWORD" << endl;
-  //vector<pair<string, double> > keywordres;
-  //jieba.Extract(s, keywordres, 5);
-  //cout << s << endl;
-  //cout << keywordres << endl;
-
+  cppjieba::KeywordExtractor extractor(jieba,
+        IDF_PATH,
+        STOP_WORD_PATH);
+  cout << "[demo] KEYWORD" << endl;
+  const size_t topk = 5;
+  vector<pair<string, double> > keywordres;
+  extractor.Extract(s, keywordres, topk);
+  cout << s << endl;
+  cout << keywordres << endl;
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ 重载 KeywordExtractor 的构造函数，可以传入 Jieba 进行字典和模型的构造。 
+
 ## v4.3.0
 
 源码目录布局调整：
