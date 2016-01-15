@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ [limonp] to version v0.5.2, fix incompatibility problem in Windows
+
 ## v4.3.1
 
 + 重载 KeywordExtractor 的构造函数，可以传入 Jieba 进行字典和模型的构造。 
