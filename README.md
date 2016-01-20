@@ -9,18 +9,14 @@
 
 CppJieba是"结巴(Jieba)"中文分词的C++版本
 
-代码细节详解请见 [代码详解]
-
 ## 特性
 
-+ 源代码都写进头文件`src/*.hpp`里，`include`即可使用。
++ 源代码都写进头文件`include/cppjieba/*.hpp`里，`include`即可使用。
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码， 因为`gbk`编码缺少严格测试，慎用。
-+ 内置分词服务`server/server.cpp`，在linux环境下可安装使用(可选)，可通过http参数选择不同分词算法进行分词。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典，多路径时支持分隔符'|'或者';'分隔。
 + 支持 `Linux` , `Mac OSX`, `Windows` 操作系统(Visual Studio 2012中编译通过，需要开Release模式，如果在Debug模式下会因为isspace之类的标准函数实现对中文支持不太好的原因导致运行终止)。
-+ 支持 `Docker`。
-+ 提供 C语言 api接口调用 [cjieba]。
++ 代码细节详解请见 [代码详解]
 
 ## 用法
 
@@ -77,116 +73,6 @@ make test
 ```
 
 详细请看 `test/demo.cpp`.
-
-
-## 服务使用
-
-服务默认使用 MixSegment 切词方式，如果想要修改成其他方式，请参考 `server/server.cpp` 源码文件。
-将对应的方式的代码行注释去掉，重新编译即可。
-
-### 启动服务
-
-```
-./bin/cjserver ../conf/server_example.conf
-```
-
-### 客户端请求示例
-
-```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥"
-```
-
-```
-["南京市", "长江大桥"]
-```
-
-```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple"
-```
-
-```
-南京市 长江大桥
-```
-
-默认切词算法是MixSegment切词算法，如果想要使用其他算法切词，可以使用参数method来设置。
-示例如下：
-
-```
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MP"
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=HMM"
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=MIX"
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=FULL"
-curl "http://127.0.0.1:11200/?key=南京市长江大桥&format=simple&method=QUERY"
-```
-
-用 chrome 浏览器打开也行 ( chrome 设置默认编码是`utf-8`):
-
-同时，也支持HTTP POST模式，使用如下调用:
-
-```
-curl -d "南京市长江大桥" "http://127.0.0.1:11200/"
-```
-
-返回结果如下：
-
-```
-["南京市", "长江大桥"]
-```
-
-因为 HTTP GET 请求有长度限制，如果需要请求长文的，请使用POST请求。
-
-### 安装服务(仅限 linux 系统)
-
-如果有需要**安装使用**的，可以按照如下操作：
-```
-sudo make install
-```
-
-### 服务启动和停止(仅限 linux 系统)
-
-```
-cd /usr/local/cppjieba
-./script/cjserver.start
-./script/cjserver.stop
-```
-
-### 卸载服务(仅限 linux 系统)
-
-```sh
-rm -rf /usr/local/cppjieba
-```
-
-## Docker 示例
-
-安装和启动
-
-```
-sudo docker pull yanyiwu/cppjieba
-sudo docker run -d -P yanyiwu/cppjieba
-```
-
-```
-sudo docker ps
-```
-
-```
-CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS              PORTS                      NAMES
-7c29325e9c20        yanyiwu/cppjieba:latest   "./bin/cjserver ../t   4 minutes ago       Up 4 minutes        0.0.0.0:49160->11200/tcp   angry_wilson        
-```
-
-可以看到正在运行的 Docker 容器(容器内运行着 `cjserver` 服务)，并且服务的端口号被映射为 `0.0.0.0:49160` 。
-
-所以现在可以来一发测试了：
-
-```
-curl "http://0.0.0.0:49160/?key=南京市长江大桥"
-```
-
-预期结果如下：
-
-```
-["南京市", "长江大桥"]
-```
 
 ### 分词结果示例
 
@@ -323,23 +209,22 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 ## 应用
 
 + [GoJieba] go语言版本的结巴中文分词。
-+ [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
 + [NodeJieba] Node.js 版本的结巴中文分词。
 + [simhash] 中文文档的的相似度计算
 + [exjieba] Erlang 版本的结巴中文分词。
 + [jiebaR] R语言版本的结巴中文分词。
-+ [libcppjieba] 是最简单易懂的CppJieba头文件库使用示例库。
-+ [KeywordServer] 50行搭建一个中文关键词抽取服务。
 + [cjieba] C语言版本的结巴分词。
 + [jieba_rb] Ruby 版本的结巴分词。
 + [iosjieba] iOS 版本的结巴分词。
++ [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
 + [pg_jieba] PostgreSQL 数据库的分词插件。
 + [ngx_http_cppjieba_module] Nginx 分词插件。
-+ [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
++ [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
++ [KeywordServer] 50行搭建一个中文关键词抽取服务。
 
 ## 线上演示
 
-http://cppjieba-webdemo.herokuapp.com/
+[Web-Demo](http://cppjieba-webdemo.herokuapp.com/)
 (建议使用chrome打开)
 
 ## 性能评测
@@ -350,21 +235,20 @@ http://cppjieba-webdemo.herokuapp.com/
 
 + Email: `i@yanyiwu.com`
 + QQ: 64162451
-
-![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
++ WeChat: ![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
 ## 鸣谢
 
-"结巴"中文分词作者: SunJunyi https://github.com/fxsjy/jieba
+"结巴"中文分词作者: [SunJunyi](https://github.com/fxsjy)
 
 ## 许可证
 
-MIT http://yanyiwu.mit-license.org
+[MIT](http://yanyiwu.mit-license.org)
 
 ## 作者
 
-- yanyiwu https://github.com/yanyiwu i@yanyiwu.com
-- aholic https://github.com/aholic ruochen.xu@gmail.com
+- [yanyiwu](yanyiwu.com)
+- [aholic](https://github.com/aholic)
 
 [GoJieba]:https://github.com/yanyiwu/gojieba
 [CppJieba]:https://github.com/yanyiwu/cppjieba
@@ -375,7 +259,6 @@ MIT http://yanyiwu.mit-license.org
 [jiebaR]:https://github.com/qinwf/jiebaR
 [simhash]:https://github.com/yanyiwu/simhash
 [代码详解]:https://github.com/yanyiwu/cppjieba/wiki/CppJieba%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3
-[libcppjieba]:https://github.com/yanyiwu/libcppjieba
 [issue25]:https://github.com/yanyiwu/cppjieba/issues/25
 [exjieba]:https://github.com/falood/exjieba
 [KeywordServer]:https://github.com/yanyiwu/keyword_server

@@ -80,5 +80,19 @@ Please see details in `test/demo.cpp`.
 
 + Email: `i@yanyiwu.com`
 + QQ: 64162451
++ WeChat: ![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
 
-![image](http://7viirv.com1.z0.glb.clouddn.com/5a7d1b5c0d_yanyiwu_personal_qrcodes.jpg)
+[GoJieba]:https://github.com/yanyiwu/gojieba
+[CppJieba]:https://github.com/yanyiwu/cppjieba
+[jannson]:https://github.com/jannson
+[cppjiebapy]:https://github.com/jannson/cppjiebapy
+[cppjiebapy_discussion]:https://github.com/yanyiwu/cppjieba/issues/1
+[NodeJieba]:https://github.com/yanyiwu/nodejieba
+[jiebaR]:https://github.com/qinwf/jiebaR
+[simhash]:https://github.com/yanyiwu/simhash
+[exjieba]:https://github.com/falood/exjieba
+[cjieba]:http://github.com/yanyiwu/cjieba
+[jieba_rb]:https://github.com/altkatz/jieba_rb
+[iosjieba]:https://github.com/yanyiwu/iosjieba
+[pg_jieba]:https://github.com/jaiminpan/pg_jieba
+[gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
