@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.3.3
 
 + Yet Another Incompatibility Problem Repair: Upgrade [limonp] to version v0.5.3, fix incompatibility problem in Windows
 
