@@ -18,7 +18,7 @@ CppJieba是"结巴(Jieba)"中文分词的C++版本
 + 内置分词服务`server/server.cpp`，在linux环境下可安装使用(可选)，可通过http参数选择不同分词算法进行分词。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典，多路径时支持分隔符'|'或者';'分隔。
-+ 支持 `linux` , `mac osx` 操作系统。
++ 支持 `Linux` , `Mac OSX`, `Windows` 操作系统(Visual Studio 2012中编译通过，需要开Release模式，如果在Debug模式下会因为isspace之类的标准函数实现对中文支持不太好的原因导致运行终止)。
 + 支持 `Docker`。
 + 提供 C语言 api接口调用 [cjieba]。
 
