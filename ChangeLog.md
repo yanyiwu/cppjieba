@@ -1,12 +1,10 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.4.0
 
 + 加代码容易删代码难，思索良久，还是决定把 Server 功能的源码剥离出这个项目。
 + 让 [cppjieba] 回到当年情窦未开时清纯的感觉，删除那些无关紧要的server代码，让整个项目轻装上阵，专注分词的核心代码。
-毕竟，不要因为走得太远，忘记了为什么出发。
-+ By the way, 之前的 server 相关的代码，如果你真的需要它，就去新的项目仓库 [cppjieba-server](https://github.com/yanyiwu/cppjieba-server) 找它吧，
-当然，不管你找还是不找，它就在那里，不喜不悲。
++ By the way, 之前的 server 相关的代码，如果你真的需要它，就去新的项目仓库 [cppjieba-server](https://github.com/yanyiwu/cppjieba-server) 找它们。
 
 ## v4.3.3
 
