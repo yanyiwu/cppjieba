@@ -1,9 +1,0 @@
-INSTALL(FILES 
-    hmm_model.utf8 
-    jieba.dict.utf8 
-    user.dict.utf8 
-    idf.utf8
-    stop_words.utf8
-    DESTINATION 
-    dict
-)
