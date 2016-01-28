@@ -3,7 +3,8 @@
 ## next version
 
 + 使用 valgrind 检查内存泄露的问题，定位出一个HMM模型初始化的问题导致内存泄露的bug，不过此内存泄露不是致命问题，
-因为只会在词典载入的时候发生，而词典载入通常情况下只会被运行一次，故不会导致致命问题。
+因为只会在词典载入的时候发生，而词典载入通常情况下只会被运行一次，故不会导致严重问题。
++ 感谢 [qinwf] 帮我发现这个bug，非常感谢。
 
 ## v4.4.0
 
@@ -178,3 +179,4 @@
 [limonp]:http://github.com/yanyiwu/limonp.git
 [husky]:http://github.com/yanyiwu/husky.git
 [issue50]:https://github.com/yanyiwu/cppjieba/issues/50
+[qinwf]:https://github.com/yanyiwu/cppjieba/pull/53#issuecomment-176264929
