@@ -1,9 +1,10 @@
 #ifndef CPPJIEBA_TRIE_HPP
 #define CPPJIEBA_TRIE_HPP
 
-#include "limonp/StdExtension.hpp"
 #include <vector>
 #include <queue>
+#include "limonp/StdExtension.hpp"
+#include "limonp/HashMap.hpp"
 
 namespace cppjieba {
 using namespace std;
@@ -40,7 +41,7 @@ class TrieNode {
   TrieNode(): next(NULL), ptValue(NULL) {
   }
  public:
-  typedef unordered_map<TrieKey, TrieNode*> NextMap;
+  typedef limonp::HashMap<TrieKey, TrieNode*> NextMap;
   NextMap *next;
   const DictUnit *ptValue;
 };
@@ -56,9 +57,8 @@ class Trie {
       if (_base[i].next == NULL) {
         continue;
       }
-      for (TrieNode::NextMap::iterator it = _base[i].next->begin(); it != _base[i].next->end(); it++) {
+      for (TrieNode::NextMap::const_iterator it = _base[i].next->Begin(); it != _base[i].next->End(); ++it) {
         DeleteNode(it->second);
-        it->second = NULL;
       }
       delete _base[i].next;
       _base[i].next = NULL;
@@ -76,8 +76,8 @@ class Trie {
       if (NULL == ptNode->next) {
         return NULL;
       }
-      citer = ptNode->next->find(*it);
-      if (ptNode->next->end() == citer) {
+      citer = ptNode->next->Find(*it);
+      if (ptNode->next->End() == citer) {
         return NULL;
       }
       ptNode = citer->second;
@@ -105,8 +105,8 @@ class Trie {
         if (ptNode->next == NULL) {
           break;
         }
-        citer = ptNode->next->find(*(begin + j));
-        if (ptNode->next->end() == citer) {
+        citer = ptNode->next->Find(*(begin + j));
+        if (ptNode->next->End() == citer) {
           break;
         }
         ptNode = citer->second;
@@ -129,11 +129,11 @@ class Trie {
       if (NULL == ptNode->next) {
         ptNode->next = new TrieNode::NextMap;
       }
-      kmIter = ptNode->next->find(*citer);
-      if (ptNode->next->end() == kmIter) {
+      kmIter = ptNode->next->Find(*citer);
+      if (ptNode->next->End() == kmIter) {
         TrieNode *nextNode = new TrieNode;
 
-        (*(ptNode->next))[*citer] = nextNode;
+        ptNode->next->Insert(make_pair(*citer, nextNode));
         ptNode = nextNode;
       } else {
         ptNode = kmIter->second;
@@ -154,17 +154,15 @@ class Trie {
     }
   }
 
-  void DeleteNode(TrieNode* node) {
+  void DeleteNode(const TrieNode* node) {
     if (NULL == node) {
       return;
     }
     if (NULL != node->next) {
-      TrieNode::NextMap::iterator it;
-      for (it = node->next->begin(); it != node->next->end(); it++) {
+      for (TrieNode::NextMap::const_iterator it = node->next->Begin(); it != node->next->End(); ++it) {
         DeleteNode(it->second);
       }
       delete node->next;
-      node->next = NULL;
     }
     delete node;
   }

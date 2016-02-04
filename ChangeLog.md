@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ 升级 [limonp] 并使用定制化的 limonp::HashMap 。
+
 ## v4.4.1
 
 + 使用 valgrind 检查内存泄露的问题，定位出一个HMM模型初始化的问题导致内存泄露的bug，不过此内存泄露不是致命问题，
