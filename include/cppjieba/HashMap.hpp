@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 
-namespace limonp {
+namespace cppjieba {
 
 static size_t PRIME_NUMBERS[] = {3, 7, 17, 37, 79, 163, 331, 
  673, 1361, 2729, 471, 10949, 
@@ -224,6 +224,6 @@ class HashMap {
   size_t size_;
 }; // class HashMap
 
-} // namespace limonp
+} // namespace cppjieba
 
 #endif // LIMONP_HASH_MAP_HPP

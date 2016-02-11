@@ -2,7 +2,8 @@
 
 ## next version
 
-+ 升级 [limonp] 并使用定制化的 limonp::HashMap 。
++ 开始在 Trie 中使用定制化的 cppjieba::HashMap ，并去除之前糟糕的针对 uint16 优化的用数组代替 map 的设计，
+该设计的主要问题是前提 unicode 每个字符必须是 uint16 ，则无法更全面得支持 unicode 多国字符。 
 
 ## v4.4.1
 
