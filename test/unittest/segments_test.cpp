@@ -146,36 +146,6 @@ TEST(MPSegmentTest, Test1) {
   ASSERT_EQ("湖南/长沙市/天心区", s);
 }
 
-//TEST(MPSegmentTest, Test2) {
-//  MPSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
-//  string line;
-//  ifstream ifs("../test/testdata/review.100");
-//  vector<string> words;
-//
-//  string eRes;
-//  {
-//    ifstream ifs("../test/testdata/review.100.res");
-//    ASSERT_TRUE(!!ifs);
-//    eRes << ifs;
-//  }
-//  string res;
-//
-//  while (getline(ifs, line)) {
-//    res += line;
-//    res += '\n';
-//
-//    segment.Cut(line, words);
-//    string s;
-//    s << words;
-//    res += s;
-//    res += '\n';
-//  }
-//  ofstream ofs("../test/testdata/review.100.res");
-//  ASSERT_TRUE(!!ofs);
-//  ofs << res;
-//
-//}
-
 TEST(HMMSegmentTest, Test1) {
   HMMSegment segment("../dict/hmm_model.utf8");;
   {
@@ -278,4 +248,14 @@ TEST(LevelSegmentTest, Test0) {
   vector<string> res;
   segment.Cut("南京市长江大桥", res);
   ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", s << res);
+}
+
+TEST(MPSegmentTest, Unicode32) {
+  string s("天气很好，🙋 我们去郊游。");
+  vector<string> words;
+
+  MPSegment segment("../dict/jieba.dict.utf8");;
+  segment.Cut(s, words);
+
+  ASSERT_EQ(Join(words.begin(), words.end(), "/"), "天气/很/好/，/🙋/ /我们/去/郊游/。");
 }
