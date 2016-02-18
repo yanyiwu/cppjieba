@@ -1,3 +1,5 @@
+/************************************
+ ************************************/
 #ifndef LIMONP_NONCOPYABLE_H
 #define LIMONP_NONCOPYABLE_H
 
