@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include "limonp/StdExtension.hpp"
+#include "Trie.hpp"
 
 namespace cppjieba {
 
@@ -25,7 +26,7 @@ inline ostream & operator << (ostream& os, const DictUnit& unit) {
 }
 
 struct Dag {
-  uint16_t rune;
+  Rune rune;
   LocalVector<pair<size_t, const DictUnit*> > nexts;
   const DictUnit * pInfo;
   double weight;
