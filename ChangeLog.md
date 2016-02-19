@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v4.5.1
+
++ Upgrade limonp to v0.5.5 to solve macro name conficts in some special case. 
+
 ## v4.5.0
 
 + 在 Trie 中去除之前糟糕的针对 uint16 优化的用数组代替 map 的设计，
