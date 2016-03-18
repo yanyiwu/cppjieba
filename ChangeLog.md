@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.5.2
 
 + Upgrade limonp to v0.5.6 to fix hidden trouble.
 
