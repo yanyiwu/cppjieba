@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ Upgrade limonp to v0.5.6 to fix hidden trouble.
+
 ## v4.5.1
 
 + Upgrade limonp to v0.5.5 to solve macro name conficts in some special case. 
