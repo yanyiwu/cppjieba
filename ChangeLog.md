@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.5.3
 
 + Upgrade limonp to v0.6.0
 
