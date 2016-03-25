@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
   cout << "[demo] Locate Words" << endl;
   vector<cppjieba::Jieba::LocWord> loc_words;
   jieba.Cut("南京市长江大桥", words, true);
-  jieba.Locate(words, loc_words);
+  cppjieba::Jieba::Locate(words, loc_words);
   for (size_t i = 0; i < loc_words.size(); i++) {
     cout << loc_words[i].word 
       << ", " << loc_words[i].begin

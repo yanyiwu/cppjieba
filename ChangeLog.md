@@ -1,5 +1,10 @@
 # CppJieba ChangeLog
 
+## next version
+
++ Change Jieba::Locate to be static function.
++ Change the return value of KeywordExtractor::Extract from bool to void.
+
 ## v4.5.3
 
 + Upgrade limonp to v0.6.0

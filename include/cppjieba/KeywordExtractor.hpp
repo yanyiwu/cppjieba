@@ -38,18 +38,15 @@ class KeywordExtractor {
   ~KeywordExtractor() {
   }
 
-  bool Extract(const string& sentence, vector<string>& keywords, size_t topN) const {
+  void Extract(const string& sentence, vector<string>& keywords, size_t topN) const {
     vector<pair<string, double> > topWords;
-    if (!Extract(sentence, topWords, topN)) {
-      return false;
-    }
+    Extract(sentence, topWords, topN);
     for (size_t i = 0; i < topWords.size(); i++) {
       keywords.push_back(topWords[i].first);
     }
-    return true;
   }
 
-  bool Extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
+  void Extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
     vector<string> words;
     segment_.Cut(sentence, words);
 
@@ -81,7 +78,6 @@ class KeywordExtractor {
     topN = min(topN, keywords.size());
     partial_sort(keywords.begin(), keywords.begin() + topN, keywords.end(), Compare);
     keywords.resize(topN);
-    return true;
   }
  private:
   void LoadIdfDict(const string& idfPath) {
