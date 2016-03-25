@@ -50,7 +50,7 @@ class Jieba {
   void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
     mp_seg_.Cut(sentence, words, max_word_len);
   }
-  void Locate(const vector<string>& words, vector<LocWord>& loc_words) const {
+  static void Locate(const vector<string>& words, vector<LocWord>& loc_words) {
     loc_words.resize(words.size());
     size_t begin = 0;
     for (size_t i = 0; i < words.size(); i++) {
