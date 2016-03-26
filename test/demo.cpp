@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
         STOP_WORD_PATH);
   cout << "[demo] KEYWORD" << endl;
   const size_t topk = 5;
-  vector<pair<string, double> > keywordres;
+  vector<cppjieba::KeywordExtractor::Word> keywordres;
   extractor.Extract(s, keywordres, topk);
   cout << s << endl;
   cout << keywordres << endl;
