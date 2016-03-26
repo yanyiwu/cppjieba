@@ -1,8 +1,8 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.6.0
 
-+ Change Jieba::Locate to be static function.
++ Change Jieba::Locate(deprecated) to be static function.
 + Change the return value of KeywordExtractor::Extract from bool to void.
 + Add KeywordExtractor::Word and add more overrided KeywordExtractor::Extract
 
