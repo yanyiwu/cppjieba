@@ -65,6 +65,8 @@ int main(int argc, char** argv) {
   vector<cppjieba::KeywordExtractor::Word> keywordres;
   extractor.Extract(s, keywordres, topk);
   cout << s << endl;
-  cout << keywordres << endl;
+  for (size_t i = 0; i < keywordres.size(); ++i) {
+    cout << keywordres[i].word << "|" << keywordres[i].weight << endl;
+  }
   return EXIT_SUCCESS;
 }
