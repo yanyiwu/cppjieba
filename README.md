@@ -216,8 +216,9 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [cjieba] C语言版本的结巴分词。
 + [jieba_rb] Ruby 版本的结巴分词。
 + [iosjieba] iOS 版本的结巴分词。
-+ [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
++ [SqlJieba] MySQL 全文索引的结巴中文分词插件。
 + [pg_jieba] PostgreSQL 数据库的分词插件。
++ [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
 + [ngx_http_cppjieba_module] Nginx 分词插件。
 + [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
 + [KeywordServer] 50行搭建一个中文关键词抽取服务。
@@ -267,6 +268,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
+[SqlJieba]:https://github.com/yanyiwu/sqljieba
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro

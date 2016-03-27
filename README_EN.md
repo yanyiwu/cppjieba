@@ -73,6 +73,7 @@ Please see details in `test/demo.cpp`.
 + [cjieba]
 + [jieba_rb]
 + [iosjieba]
++ [SqlJieba]
 + [pg_jieba]
 + [ngx_http_cppjieba_module]
 + [gitbook-plugin-search-pro]
@@ -95,5 +96,6 @@ Please see details in `test/demo.cpp`.
 [cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
+[SqlJieba]:https://github.com/yanyiwu/sqljieba
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
