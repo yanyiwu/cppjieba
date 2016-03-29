@@ -276,3 +276,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yanyiwu/cppjieba/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
