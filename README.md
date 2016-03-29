@@ -6,7 +6,7 @@
 [![Performance](https://img.shields.io/badge/performance-excellent-brightgreen.svg?style=flat)](http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html) 
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](http://yanyiwu.mit-license.org)
 
-[![logo](http://7viirv.com1.z0.glb.clouddn.com/CppJiebaLogo-v1.png)](http://yanyiwu.com)
+[![logo](http://7viirv.com1.z0.glb.clouddn.com/CppJiebaLogo-v1.png)](https://github.com/yanyiwu/cppjieba)
 
 ## 简介
 
@@ -18,7 +18,7 @@ CppJieba是"结巴(Jieba)"中文分词的C++版本
 + 支持`utf-8, gbk`编码，但是推荐使用`utf-8`编码， 因为`gbk`编码缺少严格测试，慎用。
 + 项目自带较为完善的单元测试，核心功能中文分词(utf8)的稳定性接受过线上环境检验。
 + 支持载自定义用户词典，多路径时支持分隔符'|'或者';'分隔。
-+ 支持 `Linux` , `Mac OSX`, `Windows` 操作系统(Visual Studio 2012中编译通过，需要开Release模式，如果在Debug模式下会因为isspace之类的标准函数实现对中文支持不太好的原因导致运行终止)。
++ 支持 `Linux` , `Mac OSX`, `Windows` 操作系统。
 
 ## 用法
 
