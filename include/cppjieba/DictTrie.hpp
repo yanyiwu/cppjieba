@@ -48,12 +48,12 @@ class DictTrie {
     return true;
   }
 
-  const DictUnit* Find(unicode::RuneStrArray::const_iterator begin, unicode::RuneStrArray::const_iterator end) const {
+  const DictUnit* Find(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
     return trie_->Find(begin, end);
   }
 
-  void Find(unicode::RuneStrArray::const_iterator begin, 
-        unicode::RuneStrArray::const_iterator end, 
+  void Find(RuneStrArray::const_iterator begin, 
+        RuneStrArray::const_iterator end, 
         vector<struct Dag>&res,
         size_t max_word_len = MAX_WORD_LENGTH) const {
     trie_->Find(begin, end, res, max_word_len);
@@ -124,7 +124,7 @@ class DictTrie {
         const string& word, 
         double weight, 
         const string& tag) {
-    if (!unicode::DecodeRunesInString(word, node_info.word)) {
+    if (!DecodeRunesInString(word, node_info.word)) {
       XLOG(ERROR) << "Decode " << word << " failed.";
       return false;
     }

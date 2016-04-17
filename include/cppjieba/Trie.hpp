@@ -9,15 +9,11 @@
 namespace cppjieba {
 
 using namespace std;
-using unicode::Rune;
-using unicode::RuneStr;
-using unicode::Unicode;
-using unicode::WordRange;
 
 const size_t MAX_WORD_LENGTH = 512;
 
 struct DictUnit {
-  unicode::Unicode word;
+  Unicode word;
   double weight;
   string tag;
 }; // struct DictUnit
@@ -62,14 +58,14 @@ class Trie {
     DeleteNode(root_);
   }
 
-  const DictUnit* Find(unicode::RuneStrArray::const_iterator begin, unicode::RuneStrArray::const_iterator end) const {
+  const DictUnit* Find(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
     if (begin == end) {
       return NULL;
     }
 
     const TrieNode* ptNode = root_;
     TrieNode::NextMap::const_iterator citer;
-    for (unicode::RuneStrArray::const_iterator it = begin; it != end; it++) {
+    for (RuneStrArray::const_iterator it = begin; it != end; it++) {
       if (NULL == ptNode->next) {
         return NULL;
       }
@@ -82,8 +78,8 @@ class Trie {
     return ptNode->ptValue;
   }
 
-  void Find(unicode::RuneStrArray::const_iterator begin, 
-        unicode::RuneStrArray::const_iterator end, 
+  void Find(RuneStrArray::const_iterator begin, 
+        RuneStrArray::const_iterator end, 
         vector<struct Dag>&res, 
         size_t max_word_len = MAX_WORD_LENGTH) const {
     assert(root_ != NULL);

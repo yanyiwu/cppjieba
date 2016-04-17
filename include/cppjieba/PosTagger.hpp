@@ -30,11 +30,11 @@ class PosTagger {
     segment_.Cut(src, CutRes);
 
     const DictUnit *tmp = NULL;
-    unicode::RuneStrArray runes;
+    RuneStrArray runes;
     const DictTrie * dict = segment_.GetDictTrie();
     assert(dict != NULL);
     for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
-      if (!unicode::DecodeRunesInString(*itr, runes)) {
+      if (!DecodeRunesInString(*itr, runes)) {
         XLOG(ERROR) << "Decode failed.";
         return false;
       }
@@ -48,7 +48,7 @@ class PosTagger {
     return !res.empty();
   }
  private:
-  const char* SpecialRule(const unicode::RuneStrArray& unicode) const {
+  const char* SpecialRule(const RuneStrArray& unicode) const {
     size_t m = 0;
     size_t eng = 0;
     for (size_t i = 0; i < unicode.size() && eng < unicode.size() / 2; i++) {

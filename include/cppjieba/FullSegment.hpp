@@ -29,7 +29,7 @@ class FullSegment: public SegmentBase {
         vector<string>& words) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
-    vector<unicode::WordRange> wrs;
+    vector<WordRange> wrs;
     wrs.reserve(sentence.size()/2);
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
@@ -37,11 +37,11 @@ class FullSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    unicode::GetStringsFromWordRanges(wrs, words);
+    GetStringsFromWordRanges(wrs, words);
   }
-  void Cut(unicode::RuneStrArray::const_iterator begin, 
-        unicode::RuneStrArray::const_iterator end, 
-        vector<unicode::WordRange>& res) const {
+  void Cut(RuneStrArray::const_iterator begin, 
+        RuneStrArray::const_iterator end, 
+        vector<WordRange>& res) const {
     //resut of searching in trie tree
     LocalVector<pair<size_t, const DictUnit*> > tRes;
 
@@ -63,13 +63,13 @@ class FullSegment: public SegmentBase {
         const DictUnit* du = dags[i].nexts[j].second;
         if (du == NULL) {
           if (dags[i].nexts.size() == 1 && maxIdx <= uIdx) {
-            unicode::WordRange wr(begin + i, begin + nextoffset);
+            WordRange wr(begin + i, begin + nextoffset);
             res.push_back(wr);
           }
         } else {
           wordLen = du->word.size();
           if (wordLen >= 2 || (dags[i].nexts.size() == 1 && maxIdx <= uIdx)) {
-            unicode::WordRange wr(begin + i, begin + nextoffset);
+            WordRange wr(begin + i, begin + nextoffset);
             res.push_back(wr);
           }
         }

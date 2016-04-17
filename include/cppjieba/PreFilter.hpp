@@ -9,14 +9,14 @@ class PreFilter {
  public:
   //TODO use WordRange instead of Range
   struct Range {
-    unicode::RuneStrArray::const_iterator begin;
-    unicode::RuneStrArray::const_iterator end;
+    RuneStrArray::const_iterator begin;
+    RuneStrArray::const_iterator end;
   }; // struct Range
 
   PreFilter(const unordered_set<Rune>& symbols, 
         const string& sentence)
     : symbols_(symbols) {
-    unicode::DecodeRunesInString(sentence, sentence_);
+    DecodeRunesInString(sentence, sentence_);
     cursor_ = sentence_.begin();
   }
   ~PreFilter() {
@@ -41,8 +41,8 @@ class PreFilter {
     return range;
   }
  private:
-  unicode::RuneStrArray::const_iterator cursor_;
-  unicode::RuneStrArray sentence_;
+  RuneStrArray::const_iterator cursor_;
+  RuneStrArray sentence_;
   const unordered_set<Rune>& symbols_;
 }; // class PreFilter
 

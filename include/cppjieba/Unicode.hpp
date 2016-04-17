@@ -8,7 +8,6 @@
 #include "limonp/LocalVector.hpp"
 
 namespace cppjieba {
-namespace unicode {
 
 typedef uint32_t Rune;
 
@@ -156,7 +155,7 @@ inline Unicode DecodeRunesInString(const std::string& s) {
 
 
 //[left, right]
-inline std::string GetStringFromRunes(unicode::RuneStrArray::const_iterator left, unicode::RuneStrArray::const_iterator right) {
+inline std::string GetStringFromRunes(RuneStrArray::const_iterator left, RuneStrArray::const_iterator right) {
   assert(right->str >= left->str);
   return std::string(left->str, right->str - left->str + right->len);
 }
@@ -173,7 +172,6 @@ inline std::vector<std::string> GetStringsFromWordRanges(const std::vector<WordR
   return result;
 }
 
-} // namespace unicode
 } // namespace cppjieba
 
 #endif // CPPJIEBA_UNICODE_H

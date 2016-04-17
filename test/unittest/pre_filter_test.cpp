@@ -20,7 +20,7 @@ TEST(PreFilterTest, Test1) {
     while (filter.HasNext()) {
       PreFilter::Range range;
       range = filter.Next();
-      words.push_back(unicode::GetStringFromRunes(range.begin, range.end - 1));
+      words.push_back(GetStringFromRunes(range.begin, range.end - 1));
     }
     res = limonp::Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
@@ -35,7 +35,7 @@ TEST(PreFilterTest, Test1) {
     while (filter.HasNext()) {
       PreFilter::Range range;
       range = filter.Next();
-      words.push_back(unicode::GetStringFromRunes(range.begin, range.end - 1));
+      words.push_back(GetStringFromRunes(range.begin, range.end - 1));
     }
     res = limonp::Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);

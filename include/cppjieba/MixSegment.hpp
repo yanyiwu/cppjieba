@@ -23,7 +23,7 @@ class MixSegment: public SegmentBase {
   void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
-    vector<unicode::WordRange> wrs;
+    vector<WordRange> wrs;
     wrs.reserve(sentence.size() / 2);
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
@@ -31,20 +31,20 @@ class MixSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    unicode::GetStringsFromWordRanges(wrs, words);
+    GetStringsFromWordRanges(wrs, words);
   }
 
-  void Cut(unicode::RuneStrArray::const_iterator begin, unicode::RuneStrArray::const_iterator end, vector<unicode::WordRange>& res, bool hmm) const {
+  void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
     if (!hmm) {
       mpSeg_.Cut(begin, end, res);
       return;
     }
-    vector<unicode::WordRange> words;
+    vector<WordRange> words;
     assert(end >= begin);
     words.reserve(end - begin);
     mpSeg_.Cut(begin, end, words);
 
-    vector<unicode::WordRange> hmmRes;
+    vector<WordRange> hmmRes;
     hmmRes.reserve(end - begin);
     for (size_t i = 0; i < words.size(); i++) {
       //if mp Get a word, it's ok, put it into result

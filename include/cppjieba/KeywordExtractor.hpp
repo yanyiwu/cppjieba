@@ -69,7 +69,7 @@ class KeywordExtractor {
     for (size_t i = 0; i < words.size(); ++i) {
       size_t t = offset;
       offset += words[i].size();
-      if (unicode::IsSingleWord(words[i]) || stopWords_.find(words[i]) != stopWords_.end()) {
+      if (IsSingleWord(words[i]) || stopWords_.find(words[i]) != stopWords_.end()) {
         continue;
       }
       wordmap[words[i]].offsets.push_back(t);

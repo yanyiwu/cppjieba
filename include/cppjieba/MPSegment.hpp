@@ -30,7 +30,7 @@ class MPSegment: public SegmentBase {
         size_t max_word_len = MAX_WORD_LENGTH) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
-    vector<unicode::WordRange> wrs;
+    vector<WordRange> wrs;
     wrs.reserve(sentence.size()/2);
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
@@ -38,11 +38,11 @@ class MPSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    unicode::GetStringsFromWordRanges(wrs, words);
+    GetStringsFromWordRanges(wrs, words);
   }
-  void Cut(unicode::RuneStrArray::const_iterator begin,
-           unicode::RuneStrArray::const_iterator end,
-           vector<unicode::WordRange>& words,
+  void Cut(RuneStrArray::const_iterator begin,
+           RuneStrArray::const_iterator end,
+           vector<WordRange>& words,
            size_t max_word_len = MAX_WORD_LENGTH) const {
     vector<Dag> dags;
     dictTrie_->Find(begin, 
@@ -90,20 +90,20 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void CutByDag(unicode::RuneStrArray::const_iterator begin, 
-        unicode::RuneStrArray::const_iterator end, 
+  void CutByDag(RuneStrArray::const_iterator begin, 
+        RuneStrArray::const_iterator end, 
         const vector<Dag>& dags, 
-        vector<unicode::WordRange>& words) const {
+        vector<WordRange>& words) const {
     size_t i = 0;
     while (i < dags.size()) {
       const DictUnit* p = dags[i].pInfo;
       if (p) {
         assert(p->word.size() >= 1);
-        unicode::WordRange wr(begin + i, begin + i + p->word.size() - 1);
+        WordRange wr(begin + i, begin + i + p->word.size() - 1);
         words.push_back(wr);
         i += p->word.size();
       } else { //single chinese word
-        unicode::WordRange wr(begin + i, begin + i);
+        WordRange wr(begin + i, begin + i);
         words.push_back(wr);
         i++;
       }
