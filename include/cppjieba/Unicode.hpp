@@ -49,10 +49,14 @@ struct WordRange {
 struct RuneStrLite {
   uint32_t rune;
   uint32_t len;
+  RuneStrLite(): rune(0), len(0) {
+  }
+  RuneStrLite(uint32_t r, uint32_t l): rune(r), len(l) {
+  }
 }; // struct RuneStrLite
 
 inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
-  RuneStrLite rp = {0, 0};
+  RuneStrLite rp(0, 0);
   if (str == NULL || len == 0) {
     return rp;
   }
@@ -114,7 +118,7 @@ inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) 
     if (rp.len == 0) {
       return false;
     }
-    RuneStr x = {rp.rune, s + i, rp.len};
+    RuneStr x(rp.rune, s + i, rp.len);
     runes.push_back(x);
     i += rp.len;
   }
