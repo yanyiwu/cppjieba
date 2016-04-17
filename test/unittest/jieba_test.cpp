@@ -37,25 +37,25 @@ TEST(JiebaTest, Test1) {
   result << words;
   ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
 
-  jieba.CutLevel("南京市长江大桥", words);
-  result << words;
-  ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", result);
+  //jieba.CutLevel("南京市长江大桥", words);
+  //result << words;
+  //ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", result);
 
-  vector<pair<string, size_t> > word_levels;
-  jieba.CutLevel("南京市长江大桥", word_levels);
-  result << word_levels;
-  ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
+  //vector<pair<string, size_t> > word_levels;
+  //jieba.CutLevel("南京市长江大桥", word_levels);
+  //result << word_levels;
+  //ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
 
-  vector<Jieba::LocWord> loc_words;
-  jieba.Cut("南京市长江大桥", words);
-  jieba.Locate(words, loc_words);
-  ASSERT_EQ(loc_words.size(), 2u);
-  ASSERT_EQ(loc_words[0].word, "南京市");
-  ASSERT_EQ(loc_words[0].begin, 0u);
-  ASSERT_EQ(loc_words[0].end, 3u);
-  ASSERT_EQ(loc_words[1].word, "长江大桥");
-  ASSERT_EQ(loc_words[1].begin, 3u);
-  ASSERT_EQ(loc_words[1].end, 7u);
+  //vector<Jieba::LocWord> loc_words;
+  //jieba.Cut("南京市长江大桥", words);
+  //jieba.Locate(words, loc_words);
+  //ASSERT_EQ(loc_words.size(), 2u);
+  //ASSERT_EQ(loc_words[0].word, "南京市");
+  //ASSERT_EQ(loc_words[0].begin, 0u);
+  //ASSERT_EQ(loc_words[0].end, 3u);
+  //ASSERT_EQ(loc_words[1].word, "长江大桥");
+  //ASSERT_EQ(loc_words[1].begin, 3u);
+  //ASSERT_EQ(loc_words[1].end, 7u);
 
   //vector<pair<string, string> > tagres;
   //jieba.Tag("iPhone6手机的最大特点是很容易弯曲。", tagres);

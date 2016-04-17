@@ -40,16 +40,16 @@ int main(int argc, char** argv) {
   jieba.Cut("男默女泪", words);
   cout << limonp::Join(words.begin(), words.end(), "/") << endl;
 
-  cout << "[demo] Locate Words" << endl;
-  vector<cppjieba::Jieba::LocWord> loc_words;
-  jieba.Cut("南京市长江大桥", words, true);
-  cppjieba::Jieba::Locate(words, loc_words);
-  for (size_t i = 0; i < loc_words.size(); i++) {
-    cout << loc_words[i].word 
-      << ", " << loc_words[i].begin
-      << ", " << loc_words[i].end
-      << endl;
-  }
+  //cout << "[demo] Locate Words" << endl;
+  //vector<cppjieba::Jieba::LocWord> loc_words;
+  //jieba.Cut("南京市长江大桥", words, true);
+  //cppjieba::Jieba::Locate(words, loc_words);
+  //for (size_t i = 0; i < loc_words.size(); i++) {
+  //  cout << loc_words[i].word 
+  //    << ", " << loc_words[i].begin
+  //    << ", " << loc_words[i].end
+  //    << endl;
+  //}
 
   cout << "[demo] TAGGING" << endl;
   vector<pair<string, string> > tagres;

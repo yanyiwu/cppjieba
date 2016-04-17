@@ -17,9 +17,9 @@ class LevelSegment: public SegmentBase{
   ~LevelSegment() {
   }
 
-  void Cut(Unicode::const_iterator begin,
-        Unicode::const_iterator end, 
-        vector<pair<Unicode, size_t> >& res) const {
+  void Cut(unicode::RuneStrArray::const_iterator begin,
+        unicode::RuneStrArray::const_iterator end, 
+        vector<pair<WordRange, size_t> >& res) const {
     res.clear();
     vector<Unicode> words;
     vector<Unicode> smallerWords;
@@ -49,9 +49,9 @@ class LevelSegment: public SegmentBase{
   void Cut(const string& sentence, 
         vector<pair<string, size_t> >& words) const {
     words.clear();
-    Unicode unicode;
-    TransCode::Decode(sentence, unicode);
-    vector<pair<Unicode, size_t> > unicodeWords;
+    RuneStrArray unicode;
+    unicode::DecodeRunesInString(sentence, unicode);
+    vector<pair<WordRange, size_t> > unicodeWords;
     Cut(unicode.begin(), unicode.end(), unicodeWords);
     words.resize(unicodeWords.size());
     for (size_t i = 0; i < words.size(); i++) {

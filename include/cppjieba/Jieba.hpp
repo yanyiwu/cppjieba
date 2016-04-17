@@ -3,7 +3,7 @@
 
 #include "QuerySegment.hpp"
 #include "PosTagger.hpp"
-#include "LevelSegment.hpp"
+//#include "LevelSegment.hpp"
 
 namespace cppjieba {
 
@@ -17,7 +17,7 @@ class Jieba {
       mix_seg_(&dict_trie_, &model_),
       full_seg_(&dict_trie_),
       query_seg_(&dict_trie_, &model_),
-      level_seg_(&dict_trie_),
+      //level_seg_(&dict_trie_),
       pos_tagger_(&dict_trie_, &model_) {
   }
   ~Jieba() {
@@ -41,26 +41,26 @@ class Jieba {
   void CutHMM(const string& sentence, vector<string>& words) const {
     hmm_seg_.Cut(sentence, words);
   }
-  void CutLevel(const string& sentence, vector<string>& words) const {
-    level_seg_.Cut(sentence, words);
-  }
-  void CutLevel(const string& sentence, vector<pair<string, size_t> >& words) const {
-    level_seg_.Cut(sentence, words);
-  }
+  //void CutLevel(const string& sentence, vector<string>& words) const {
+  //  level_seg_.Cut(sentence, words);
+  //}
+  //void CutLevel(const string& sentence, vector<pair<string, size_t> >& words) const {
+  //  level_seg_.Cut(sentence, words);
+  //}
   void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
     mp_seg_.Cut(sentence, words, max_word_len);
   }
-  static void Locate(const vector<string>& words, vector<LocWord>& loc_words) {
-    loc_words.resize(words.size());
-    size_t begin = 0;
-    for (size_t i = 0; i < words.size(); i++) {
-      size_t len = TransCode::Decode(words[i]).size();
-      loc_words[i].word = words[i];
-      loc_words[i].begin = begin;
-      loc_words[i].end = loc_words[i].begin + len;
-      begin = loc_words[i].end;
-    }
-  }
+  //static void Locate(const vector<string>& words, vector<LocWord>& loc_words) {
+  //  loc_words.resize(words.size());
+  //  size_t begin = 0;
+  //  for (size_t i = 0; i < words.size(); i++) {
+  //    size_t len = TransCode::Decode(words[i]).size();
+  //    loc_words[i].word = words[i];
+  //    loc_words[i].begin = begin;
+  //    loc_words[i].end = loc_words[i].begin + len;
+  //    begin = loc_words[i].end;
+  //  }
+  //}
   
   void Tag(const string& sentence, vector<pair<string, string> >& words) const {
     pos_tagger_.Tag(sentence, words);
@@ -89,7 +89,7 @@ class Jieba {
   MixSegment mix_seg_;
   FullSegment full_seg_;
   QuerySegment query_seg_;
-  LevelSegment level_seg_;
+  //LevelSegment level_seg_;
   
   PosTagger pos_tagger_;
   

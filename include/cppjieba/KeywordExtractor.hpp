@@ -69,7 +69,7 @@ class KeywordExtractor {
     for (size_t i = 0; i < words.size(); ++i) {
       size_t t = offset;
       offset += words[i].size();
-      if (IsSingleWord(words[i]) || stopWords_.find(words[i]) != stopWords_.end()) {
+      if (unicode::IsSingleWord(words[i]) || stopWords_.find(words[i]) != stopWords_.end()) {
         continue;
       }
       wordmap[words[i]].offsets.push_back(t);
@@ -134,14 +134,6 @@ class KeywordExtractor {
       stopWords_.insert(line);
     }
     assert(stopWords_.size());
-  }
-
-  bool IsSingleWord(const string& str) const {
-    Unicode unicode;
-    TransCode::Decode(str, unicode);
-    if (unicode.size() == 1)
-      return true;
-    return false;
   }
 
   static bool Compare(const Word& lhs, const Word& rhs) {

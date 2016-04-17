@@ -30,17 +30,19 @@ class MPSegment: public SegmentBase {
         size_t max_word_len = MAX_WORD_LENGTH) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
-    vector<Unicode> uwords;
-    uwords.reserve(sentence.size());
+    vector<unicode::WordRange> wrs;
+    wrs.reserve(sentence.size()/2);
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      Cut(range.begin, range.end, uwords, max_word_len);
+      Cut(range.begin, range.end, wrs, max_word_len);
     }
-    TransCode::Encode(uwords, words);
+    words.clear();
+    words.reserve(wrs.size());
+    unicode::GetStringsFromWordRanges(wrs, words);
   }
-  void Cut(Unicode::const_iterator begin,
-           Unicode::const_iterator end,
-           vector<Unicode>& words,
+  void Cut(unicode::RuneStrArray::const_iterator begin,
+           unicode::RuneStrArray::const_iterator end,
+           vector<unicode::WordRange>& words,
            size_t max_word_len = MAX_WORD_LENGTH) const {
     vector<Dag> dags;
     dictTrie_->Find(begin, 
@@ -48,7 +50,7 @@ class MPSegment: public SegmentBase {
           dags,
           max_word_len);
     CalcDP(dags);
-    CutByDag(dags, words);
+    CutByDag(begin, end, dags, words);
   }
 
   const DictTrie* GetDictTrie() const {
@@ -88,16 +90,21 @@ class MPSegment: public SegmentBase {
       }
     }
   }
-  void CutByDag(const vector<Dag>& dags, 
-        vector<Unicode>& words) const {
+  void CutByDag(unicode::RuneStrArray::const_iterator begin, 
+        unicode::RuneStrArray::const_iterator end, 
+        const vector<Dag>& dags, 
+        vector<unicode::WordRange>& words) const {
     size_t i = 0;
     while (i < dags.size()) {
       const DictUnit* p = dags[i].pInfo;
       if (p) {
-        words.push_back(p->word);
+        assert(p->word.size() >= 1);
+        unicode::WordRange wr = {begin + i, begin + i + p->word.size() - 1};
+        words.push_back(wr);
         i += p->word.size();
       } else { //single chinese word
-        words.push_back(Unicode(1, dags[i].rune));
+        unicode::WordRange wr = {begin + i, begin + i};
+        words.push_back(wr);
         i++;
       }
     }
