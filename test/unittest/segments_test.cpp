@@ -4,7 +4,6 @@
 #include "cppjieba/HMMSegment.hpp"
 #include "cppjieba/FullSegment.hpp"
 #include "cppjieba/QuerySegment.hpp"
-//#include "cppjieba/LevelSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;
@@ -237,20 +236,6 @@ TEST(QuerySegment, Test2) {
     ASSERT_EQ("中国科学院", s);
   }
 }
-
-/*
-TEST(LevelSegmentTest, Test0) {
-  string s;
-  LevelSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
-  vector<pair<string, size_t> > words;
-  segment.Cut("南京市长江大桥", words);
-  ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", s << words);
-
-  vector<string> res;
-  segment.Cut("南京市长江大桥", res);
-  ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", s << res);
-}
-*/
 
 TEST(MPSegmentTest, Unicode32) {
   string s("天气很好，🙋 我们去郊游。");

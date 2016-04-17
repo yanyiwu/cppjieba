@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ remove LevelSegment;
+
 ## v4.6.0
 
 + Change Jieba::Locate(deprecated) to be static function.
