@@ -28,6 +28,13 @@ class MPSegment: public SegmentBase {
   void Cut(const string& sentence, 
         vector<string>& words, 
         size_t max_word_len = MAX_WORD_LENGTH) const {
+    vector<Word> tmp;
+    Cut(sentence, tmp, max_word_len);
+    GetStringsFromWords(tmp, words);
+  }
+  void Cut(const string& sentence, 
+        vector<Word>& words, 
+        size_t max_word_len = MAX_WORD_LENGTH) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<WordRange> wrs;
@@ -38,7 +45,7 @@ class MPSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    GetStringsFromWordRanges(sentence, wrs, words);
+    GetWordsFromWordRanges(sentence, wrs, words);
   }
   void Cut(RuneStrArray::const_iterator begin,
            RuneStrArray::const_iterator end,

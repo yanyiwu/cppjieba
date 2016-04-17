@@ -37,35 +37,45 @@ TEST(JiebaTest, Test1) {
   result << words;
   ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
 
-  //jieba.CutLevel("南京市长江大桥", words);
-  //result << words;
-  //ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", result);
+}
+TEST(JiebaTest, WordTest) {
+  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
+                            "../dict/hmm_model.utf8",
+                            "../dict/user.dict.utf8");
+  vector<Word> words;
+  string result;
 
-  //vector<pair<string, size_t> > word_levels;
-  //jieba.CutLevel("南京市长江大桥", word_levels);
-  //result << word_levels;
-  //ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", result);
+  jieba.Cut("他来到了网易杭研大厦", words);
+  result << words;
+  ASSERT_EQ("[\"{\"word\": \"\xE4\xBB\x96\", \"offset\": 0}\", \"{\"word\": \"\xE6\x9D\xA5\xE5\x88\xB0\", \"offset\": 3}\", \"{\"word\": \"\xE4\xBA\x86\", \"offset\": 9}\", \"{\"word\": \"\xE7\xBD\x91\xE6\x98\x93\", \"offset\": 12}\", \"{\"word\": \"\xE6\x9D\xAD\xE7\xA0\x94\", \"offset\": 18}\", \"{\"word\": \"\xE5\xA4\xA7\xE5\x8E\xA6\", \"offset\": 24}\"]", result);
 
-  //vector<Jieba::LocWord> loc_words;
-  //jieba.Cut("南京市长江大桥", words);
-  //jieba.Locate(words, loc_words);
-  //ASSERT_EQ(loc_words.size(), 2u);
-  //ASSERT_EQ(loc_words[0].word, "南京市");
-  //ASSERT_EQ(loc_words[0].begin, 0u);
-  //ASSERT_EQ(loc_words[0].end, 3u);
-  //ASSERT_EQ(loc_words[1].word, "长江大桥");
-  //ASSERT_EQ(loc_words[1].begin, 3u);
-  //ASSERT_EQ(loc_words[1].end, 7u);
+  jieba.Cut("我来自北京邮电大学。", words, false);
+  result << words;
+  //ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", result);
+  ASSERT_EQ("[\"{\"word\": \"\xE6\x88\x91\", \"offset\": 0}\", \"{\"word\": \"\xE6\x9D\xA5\xE8\x87\xAA\", \"offset\": 3}\", \"{\"word\": \"\xE5\x8C\x97\xE4\xBA\xAC\xE9\x82\xAE\xE7\x94\xB5\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 9}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 27}\"]", result);
 
-  //vector<pair<string, string> > tagres;
-  //jieba.Tag("iPhone6手机的最大特点是很容易弯曲。", tagres);
-  //result << tagres;
-  //ASSERT_EQ("[\"iPhone6:eng\", \"手机:n\", \"的:uj\", \"最大:a\", \"特点:n\", \"是:v\", \"很:zg\", \"容易:a\", \"弯曲:v\", \"。:x\"]", result);
+  jieba.CutSmall("南京市长江大桥", words, 3);
+  //ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", result << words);
+  ASSERT_EQ("[\"{\"word\": \"\xE5\x8D\x97\xE4\xBA\xAC\xE5\xB8\x82\", \"offset\": 0}\", \"{\"word\": \"\xE9\x95\xBF\xE6\xB1\x9F\", \"offset\": 9}\", \"{\"word\": \"\xE5\xA4\xA7\xE6\xA1\xA5\", \"offset\": 15}\"]", result << words);
 
-  //vector<pair<string, double> > keywordres;
-  //jieba.Extract("我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。", keywordres, 5);
-  //result << keywordres;
-  //ASSERT_EQ(result, "[\"CEO:11.7392\", \"升职:10.8562\", \"加薪:10.6426\", \"手扶拖拉机:10.0089\", \"巅峰:9.49396\"]");
+  jieba.CutHMM("我来自北京邮电大学。。。学号123456", words);
+  result << words;
+  ASSERT_EQ("[\"{\"word\": \"\xE6\x88\x91\xE6\x9D\xA5\", \"offset\": 0}\", \"{\"word\": \"\xE8\x87\xAA\xE5\x8C\x97\xE4\xBA\xAC\", \"offset\": 6}\", \"{\"word\": \"\xE9\x82\xAE\xE7\x94\xB5\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 15}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 27}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 30}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 33}\", \"{\"word\": \"\xE5\xAD\xA6\xE5\x8F\xB7\", \"offset\": 36}\", \"{\"word\": \"123456\", \"offset\": 42}\"]", result);
+
+  jieba.Cut("我来自北京邮电大学。。。学号123456，用AK47", words);
+  result << words;
+  //ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\", \"。\", \"。\", \"学号\", \"123456\", \"，\", \"用\", \"AK47\"]", result);
+  ASSERT_EQ("[\"{\"word\": \"\xE6\x88\x91\", \"offset\": 0}\", \"{\"word\": \"\xE6\x9D\xA5\xE8\x87\xAA\", \"offset\": 3}\", \"{\"word\": \"\xE5\x8C\x97\xE4\xBA\xAC\xE9\x82\xAE\xE7\x94\xB5\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 9}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 27}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 30}\", \"{\"word\": \"\xE3\x80\x82\", \"offset\": 33}\", \"{\"word\": \"\xE5\xAD\xA6\xE5\x8F\xB7\", \"offset\": 36}\", \"{\"word\": \"123456\", \"offset\": 42}\", \"{\"word\": \"\xEF\xBC\x8C\", \"offset\": 48}\", \"{\"word\": \"\xE7\x94\xA8\", \"offset\": 51}\", \"{\"word\": \"AK47\", \"offset\": 54}\"]", result);
+
+  jieba.CutAll("我来自北京邮电大学", words);
+  result << words;
+  //ASSERT_EQ(result, "[\"我\", \"来自\", \"北京\", \"北京邮电\", \"北京邮电大学\", \"邮电\", \"邮电大学\", \"电大\", \"大学\"]");
+  ASSERT_EQ("[\"{\"word\": \"\xE6\x88\x91\", \"offset\": 0}\", \"{\"word\": \"\xE6\x9D\xA5\xE8\x87\xAA\", \"offset\": 3}\", \"{\"word\": \"\xE5\x8C\x97\xE4\xBA\xAC\", \"offset\": 9}\", \"{\"word\": \"\xE5\x8C\x97\xE4\xBA\xAC\xE9\x82\xAE\xE7\x94\xB5\", \"offset\": 9}\", \"{\"word\": \"\xE5\x8C\x97\xE4\xBA\xAC\xE9\x82\xAE\xE7\x94\xB5\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 9}\", \"{\"word\": \"\xE9\x82\xAE\xE7\x94\xB5\", \"offset\": 15}\", \"{\"word\": \"\xE9\x82\xAE\xE7\x94\xB5\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 15}\", \"{\"word\": \"\xE7\x94\xB5\xE5\xA4\xA7\", \"offset\": 18}\", \"{\"word\": \"\xE5\xA4\xA7\xE5\xAD\xA6\", \"offset\": 21}\"]", result);
+
+  jieba.CutForSearch("他来到了网易杭研大厦", words);
+  result << words;
+  //ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
+  ASSERT_EQ("[\"{\"word\": \"\xE4\xBB\x96\", \"offset\": 0}\", \"{\"word\": \"\xE6\x9D\xA5\xE5\x88\xB0\", \"offset\": 3}\", \"{\"word\": \"\xE4\xBA\x86\", \"offset\": 9}\", \"{\"word\": \"\xE7\xBD\x91\xE6\x98\x93\", \"offset\": 12}\", \"{\"word\": \"\xE6\x9D\xAD\xE7\xA0\x94\", \"offset\": 18}\", \"{\"word\": \"\xE5\xA4\xA7\xE5\x8E\xA6\", \"offset\": 24}\"]", result);
 }
 
 TEST(JiebaTest, InsertUserWord) {

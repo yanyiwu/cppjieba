@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <ostream>
 #include "limonp/LocalVector.hpp"
 
 namespace cppjieba {
@@ -13,6 +14,18 @@ using std::string;
 using std::vector;
 
 typedef uint32_t Rune;
+
+struct Word {
+  string word;
+  uint32_t offset;
+  Word(const string& w, uint32_t o)
+   : word(w), offset(o) {
+  }
+}; // struct Word
+
+inline std::ostream& operator << (std::ostream& os, const Word& w) {
+  return os << "{\"word\": \"" << w.word << "\", \"offset\": " << w.offset << "}";
+}
 
 struct RuneStr {
   Rune rune;
@@ -162,22 +175,35 @@ inline Unicode DecodeRunesInString(const string& s) {
 
 
 // [left, right]
+inline Word GetWordFromRunes(const string& s, RuneStrArray::const_iterator left, RuneStrArray::const_iterator right) {
+  assert(right->offset >= left->offset);
+  uint32_t len = right->offset - left->offset + right->len;
+  return Word(s.substr(left->offset, len), left->offset);
+}
+
 inline string GetStringFromRunes(const string& s, RuneStrArray::const_iterator left, RuneStrArray::const_iterator right) {
   assert(right->offset >= left->offset);
   uint32_t len = right->offset - left->offset + right->len;
   return s.substr(left->offset, len);
 }
 
-inline void GetStringsFromWordRanges(const string& s, const vector<WordRange>& wrs, vector<string>& words) {
+inline void GetWordsFromWordRanges(const string& s, const vector<WordRange>& wrs, vector<Word>& words) {
   for (size_t i = 0; i < wrs.size(); i++) {
-    words.push_back(GetStringFromRunes(s, wrs[i].left, wrs[i].right));
+    words.push_back(GetWordFromRunes(s, wrs[i].left, wrs[i].right));
   }
 }
 
-inline vector<string> GetStringsFromWordRanges(const string& s, const vector<WordRange>& wrs) {
-  vector<string> result;
-  GetStringsFromWordRanges(s, wrs, result);
+inline vector<Word> GetWordsFromWordRanges(const string& s, const vector<WordRange>& wrs) {
+  vector<Word> result;
+  GetWordsFromWordRanges(s, wrs, result);
   return result;
+}
+
+inline void GetStringsFromWords(const vector<Word>& words, vector<string>& strs) {
+  strs.resize(words.size());
+  for (size_t i = 0; i < words.size(); ++i) {
+    strs[i] = words[i].word;
+  }
 }
 
 } // namespace cppjieba

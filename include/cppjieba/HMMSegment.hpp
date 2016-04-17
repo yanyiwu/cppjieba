@@ -25,6 +25,12 @@ class HMMSegment: public SegmentBase {
 
   void Cut(const string& sentence, 
         vector<string>& words) const {
+    vector<Word> tmp;
+    Cut(sentence, tmp);
+    GetStringsFromWords(tmp, words);
+  }
+  void Cut(const string& sentence, 
+        vector<Word>& words) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<WordRange> wrs;
@@ -35,7 +41,7 @@ class HMMSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    GetStringsFromWordRanges(sentence, wrs, words);
+    GetWordsFromWordRanges(sentence, wrs, words);
   }
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res) const {
     RuneStrArray::const_iterator left = begin;

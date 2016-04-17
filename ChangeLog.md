@@ -2,7 +2,11 @@
 
 ## next version
 
+api changes:
+
++ override Cut functions, add location information into Word results;
 + remove LevelSegment;
++ remove Jieba::Locate;
 
 ## v4.6.0
 

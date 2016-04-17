@@ -21,6 +21,11 @@ class MixSegment: public SegmentBase {
   }
 
   void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
+    vector<Word> tmp;
+    Cut(sentence, tmp, hmm);
+    GetStringsFromWords(tmp, words);
+  }
+  void Cut(const string& sentence, vector<Word>& words, bool hmm = true) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
     vector<WordRange> wrs;
@@ -31,7 +36,7 @@ class MixSegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    GetStringsFromWordRanges(sentence, wrs, words);
+    GetWordsFromWordRanges(sentence, wrs, words);
   }
 
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
