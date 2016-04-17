@@ -31,6 +31,9 @@ typedef limonp::LocalVector<struct RuneStr> RuneStrArray;
 struct WordRange {
   RuneStrArray::const_iterator left;
   RuneStrArray::const_iterator right;
+  WordRange(RuneStrArray::const_iterator l, RuneStrArray::const_iterator r)
+   : left(l), right(r) {
+  }
   size_t Length() const {
     return right - left + 1;
   }
@@ -43,12 +46,6 @@ struct WordRange {
     return true;
   }
 }; // struct WordRange
-
-//struct RuneWordStr {
-//  Unicode word;
-//  const char* str;
-//  size_t len;
-//}; // struct RuneWordStr
 
 struct RuneStrLite {
   uint32_t rune;

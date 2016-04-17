@@ -63,13 +63,13 @@ class FullSegment: public SegmentBase {
         const DictUnit* du = dags[i].nexts[j].second;
         if (du == NULL) {
           if (dags[i].nexts.size() == 1 && maxIdx <= uIdx) {
-            unicode::WordRange wr = {begin + i, begin + nextoffset};
+            unicode::WordRange wr(begin + i, begin + nextoffset);
             res.push_back(wr);
           }
         } else {
           wordLen = du->word.size();
           if (wordLen >= 2 || (dags[i].nexts.size() == 1 && maxIdx <= uIdx)) {
-            unicode::WordRange wr = {begin + i, begin + nextoffset};
+            unicode::WordRange wr(begin + i, begin + nextoffset);
             res.push_back(wr);
           }
         }

@@ -57,7 +57,7 @@ class HMMSegment: public SegmentBase {
           }
           right ++;
         } while (false);
-        unicode::WordRange wr = {left, right - 1};
+        unicode::WordRange wr(left, right - 1);
         res.push_back(wr);
         left = right;
       } else {
@@ -114,7 +114,7 @@ class HMMSegment: public SegmentBase {
     for (size_t i = 0; i < status.size(); i++) {
       if (status[i] % 2) { //if (HMMModel::E == status[i] || HMMModel::S == status[i])
         right = begin + i + 1;
-        unicode::WordRange wr = {left, right - 1};
+        unicode::WordRange wr(left, right - 1);
         res.push_back(wr);
         left = right;
       }

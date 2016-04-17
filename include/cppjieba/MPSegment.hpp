@@ -99,11 +99,11 @@ class MPSegment: public SegmentBase {
       const DictUnit* p = dags[i].pInfo;
       if (p) {
         assert(p->word.size() >= 1);
-        unicode::WordRange wr = {begin + i, begin + i + p->word.size() - 1};
+        unicode::WordRange wr(begin + i, begin + i + p->word.size() - 1);
         words.push_back(wr);
         i += p->word.size();
       } else { //single chinese word
-        unicode::WordRange wr = {begin + i, begin + i};
+        unicode::WordRange wr(begin + i, begin + i);
         words.push_back(wr);
         i++;
       }
