@@ -37,7 +37,7 @@ class QuerySegment: public SegmentBase {
     }
     words.clear();
     words.reserve(wrs.size());
-    GetStringsFromWordRanges(wrs, words);
+    GetStringsFromWordRanges(sentence, wrs, words);
   }
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
     //use mix Cut first
