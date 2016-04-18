@@ -103,6 +103,23 @@ TEST(MixSegmentTest, TestUserDict) {
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
   res = limonp::Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树/万树/梨花/开", res);
+
+  // rand input
+  {
+    const size_t ITERATION = 16;
+    const size_t MAX_LEN = 256;
+    string s;
+    srand(time(NULL));
+
+    for (size_t i = 0; i < ITERATION; i++) {
+      size_t len = rand() % MAX_LEN;
+      s.resize(len);
+      for (size_t j = 0; j < len; j++) {
+        s[rand() % len] = rand();
+      }
+      segment.Cut(s, words);
+    }
+  }
 }
 
 TEST(MixSegmentTest, TestMultiUserDict) {
