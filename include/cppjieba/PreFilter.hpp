@@ -2,6 +2,7 @@
 #define CPPJIEBA_PRE_FILTER_H
 
 #include "Trie.hpp"
+#include "limonp/Logging.hpp"
 
 namespace cppjieba {
 
@@ -16,7 +17,9 @@ class PreFilter {
   PreFilter(const unordered_set<Rune>& symbols, 
         const string& sentence)
     : symbols_(symbols) {
-    DecodeRunesInString(sentence, sentence_);
+    if (!DecodeRunesInString(sentence, sentence_)) {
+      XLOG(ERROR) << "decode string: " << sentence << " failed"; 
+    }
     cursor_ = sentence_.begin();
   }
   ~PreFilter() {

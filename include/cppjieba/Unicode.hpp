@@ -38,6 +38,9 @@ struct RuneStr {
   }
 }; // struct RuneStr
 
+inline std::ostream& operator << (std::ostream& os, const RuneStr& r) {
+  return os << "{\"rune\": \"" << r.rune << "\", \"offset\": " << r.offset << ", \"len\": " << r.len << "}";
+}
 
 typedef limonp::LocalVector<Rune> Unicode;
 typedef limonp::LocalVector<struct RuneStr> RuneStrArray;
@@ -132,6 +135,7 @@ inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) 
   for (size_t i = 0; i < len;) {
     RuneStrLite rp = DecodeRuneInString(s + i, len - i);
     if (rp.len == 0) {
+      runes.clear();
       return false;
     }
     RuneStr x(rp.rune, i, rp.len);
