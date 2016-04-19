@@ -50,17 +50,20 @@ Output:
 [demo] Cut Without HMM
 我/是/拖拉机/学院/手扶拖拉机/专业/的/。/不用/多久/，/我/就/会/升职/加薪/，/当/上/C/E/O/，/走上/人生/巅峰/。
 [demo] CutAll
-我/是/拖拉/拖拉机/学院/手扶/手扶拖拉机/拖拉/拖拉机/专业/的/。/不用/多久/，/我/就/会升/升职/加薪/，/当上/C/E/O/，/走上/人生/巅峰/。[demo] CutForSearch
+我/是/拖拉/拖拉机/学院/手扶/手扶拖拉机/拖拉/拖拉机/专业/的/。/不用/多久/，/我/就/会升/升职/加薪/，/当上/C/E/O/，/走上/人生/巅峰/。
+[demo] CutForSearch
 我/是/拖拉机/学院/手扶/手扶拖拉机/拖拉/拖拉机/专业/的/。/不用/多久/，/我/就/会/升职/加薪/，/当上/CEO/，/走上/人生/巅峰/。
 [demo] Insert User Word
 男默/女泪
 男默女泪
-[demo] Locate Words
-南京市, 0, 3
-长江大桥, 3, 7
-[demo] TAGGING
+[demo] CutForSearch Word With Offset
+[{"word": "南京市", "offset": 0}, {"word": "长江", "offset": 9}, {"word": "长江大桥", "offset": 9}, {"word": "大桥", "offset": 15}]
+[demo] Tagging
 我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
-["我:r", "是:v", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当上:t", "CEO:eng", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
+[我:r, 是:v, 拖拉机:n, 学院:n, 手扶拖拉机:n, 专业:n, 的:uj, 。:x, 不用:v, 多久:m, ，:x, 我:r, 就:d, 会:v, 升职:v, 加薪:nr, ，:x, 当上:t, CEO:eng, ，:x, 走上:v, 人生:n, 巅峰:n, 。:x]
+[demo] Keyword Extraction
+我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
+[{"word": "CEO", "offset": [93], "weight": 11.7392}, {"word": "升职", "offset": [72], "weight": 10.8562}, {"word": "加薪", "offset": [78], "weight": 10.6426}, {"word": "手扶拖拉机", "offset": [21], "weight": 10.0089}, {"word": "巅峰", "offset": [111], "weight": 9.49396}]
 ```
 
 Please see details in `test/demo.cpp`.

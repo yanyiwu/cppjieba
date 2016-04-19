@@ -8,6 +8,10 @@ api changes:
 + remove LevelSegment;
 + remove Jieba::Locate;
 
+upgrade:
+
++ limonp -> v0.6.1
+
 ## v4.6.0
 
 + Change Jieba::Locate(deprecated) to be static function.
