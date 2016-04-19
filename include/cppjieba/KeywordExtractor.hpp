@@ -148,7 +148,7 @@ class KeywordExtractor {
 }; // class Jieba
 
 inline ostream& operator << (ostream& os, const KeywordExtractor::Word& word) {
-  return os << word.word << '|' << word.offsets << '|' << word.weight; 
+  return os << "{\"word\": \"" << word.word << "\", \"offset\": " << word.offsets << ", \"weight\": " << word.weight << "}"; 
 }
 
 } // namespace cppjieba
