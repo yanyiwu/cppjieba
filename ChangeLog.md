@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.7.0
 
 api changes:
 
