@@ -82,6 +82,7 @@ Please see details in `test/demo.cpp`.
 + [pg_jieba]
 + [ngx_http_cppjieba_module]
 + [gitbook-plugin-search-pro]
++ [cppjieba-server]
 
 ## Contact
 
@@ -104,3 +105,4 @@ Please see details in `test/demo.cpp`.
 [SqlJieba]:https://github.com/yanyiwu/sqljieba
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
+[cppjieba-server]:https://github.com/yanyiwu/cppjieba-server

@@ -224,6 +224,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [ngx_http_cppjieba_module] Nginx 分词插件。
 + [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
 + [KeywordServer] 50行搭建一个中文关键词抽取服务。
++ [cppjieba-server] CppJieba HTTP 服务器。
 
 ## 线上演示
 
@@ -274,6 +275,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [Jieba中文分词系列性能评测]:http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
+[cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yanyiwu/cppjieba/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
