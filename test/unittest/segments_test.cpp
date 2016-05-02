@@ -197,61 +197,52 @@ TEST(FullSegment, Test1) {
 }
 
 TEST(QuerySegment, Test1) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "", 3);
-  const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
+  QuerySegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "");
   vector<string> words;
-
-  segment.Cut(str, words);
-
   string s1, s2;
-  s1 << words;
-  s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"，\", \"后\", \"在\", \"日本\", \"京都\", \"京都大学\", \"大学\", \"深造\"]";
+
+  segment.Cut("小明硕士毕业于中国科学院计算所，后在日本京都大学深造", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/，/后/在/日本/京都/大学/日本京都大学/深造";
   ASSERT_EQ(s1, s2);
 
+  segment.Cut("亲口交代", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "亲口/交代";
+  ASSERT_EQ(s1, s2);
+
+  segment.Cut("他心理健康", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "他/心理/健康/心理健康";
+  ASSERT_EQ(s1, s2);
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english");
+  vector<string> words;
+  string s1, s2;
 
   {
-    const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
-    vector<string> words;
-
-    segment.Cut(str, words);
-
-    string s1, s2;
-    s1 << words;
-    s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"，\", \"后\", \"在\", \"日本\", \"京都\", \"京都大学\", \"大学\", \"深造\"]";
+    segment.Cut("小明硕士毕业于中国科学院计算所，后在日本京都大学深造", words);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/，/后/在/日本/京都/大学/京都大学/深造";
     ASSERT_EQ(s1, s2);
   }
 
   {
-    const char* str = "小明硕士毕业于中国科学院计算所iPhone6";
-    vector<string> words;
-
-    segment.Cut(str, words);
-
-    string s1, s2;
-    s1 << words;
-    s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"iPhone6\"]";
+    segment.Cut("小明硕士毕业于中国科学院计算所iPhone6", words);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/iPhone6";
     ASSERT_EQ(s1, s2);
   }
 
   {
-    vector<string> words;
-    segment.Cut("internal", words);
-    string s = Join(words.begin(), words.end(), "/");
-    ASSERT_EQ("internal", s);
-  }
-
-  segment.SetMaxWordLen(5);
-
-  {
-    vector<string> words;
     segment.Cut("中国科学院", words);
-    string s = Join(words.begin(), words.end(), "/");
-    ASSERT_EQ("中国科学院", s);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "中国/科学/学院/科学院/中国科学院";
+    ASSERT_EQ(s1, s2);
   }
+
 }
 
 TEST(MPSegmentTest, Unicode32) {
