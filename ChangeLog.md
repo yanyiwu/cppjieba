@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.8.0
 
 + rewrite QuerySegment, make `Jieba::CutForSearch` behaves the same as [jieba] `cut_for_search` api
 + remove Jieba::SetQuerySegmentThreshold
