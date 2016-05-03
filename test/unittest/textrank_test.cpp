@@ -42,7 +42,8 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.953149\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.794203\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.78716\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.767636\"]");
+    ASSERT_EQ(res, "[\"专业|[\"36\"]|1\", \"CEO|[\"94\"]|0.94764\", \"当上|[\"87\"]|0.79271\", \"手扶拖拉机|[\"21\"]|0.789347\", \"走上|[\"100\"]|0.768261\"]");
+    // ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.953149\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.794203\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.78716\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.767636\"]");
   }
 
   {
@@ -70,7 +71,8 @@ TEST(TextRankExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE4\xBC\x98\xE7\xA7\x80|[\"6\"]|1\", \"\xE6\xAF\x95\xE4\xB8\x9A\xE7\x94\x9F|[\"12\"]|0.996685\", \"\xE8\x93\x9D\xE7\xBF\x94|[\"0\"]|0.992994\"]");
+    ASSERT_EQ(res, "[\"蓝翔|[\"0\"]|1\", \"毕业生|[\"12\"]|0.996685\", \"优秀|[\"6\"]|0.992994\"]");
+    //ASSERT_EQ(res, "[\"\xE4\xBC\x98\xE7\xA7\x80|[\"6\"]|1\", \"\xE6\xAF\x95\xE4\xB8\x9A\xE7\x94\x9F|[\"12\"]|0.996685\", \"\xE8\x93\x9D\xE7\xBF\x94|[\"0\"]|0.992994\"]");
   }
 
   {
