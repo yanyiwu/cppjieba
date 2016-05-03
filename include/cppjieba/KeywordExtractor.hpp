@@ -136,14 +136,6 @@ class KeywordExtractor {
     assert(stopWords_.size());
   }
 
-  bool IsSingleWord(const string& str) const {
-    Unicode unicode;
-    TransCode::Decode(str, unicode);
-    if (unicode.size() == 1)
-      return true;
-    return false;
-  }
-
   static bool Compare(const Word& lhs, const Word& rhs) {
     return lhs.weight > rhs.weight;
   }
@@ -153,10 +145,10 @@ class KeywordExtractor {
   double idfAverage_;
 
   unordered_set<string> stopWords_;
-}; // class Jieba
+}; // class KeywordExtractor
 
 inline ostream& operator << (ostream& os, const KeywordExtractor::Word& word) {
-  return os << word.word << '|' << word.offsets << '|' << word.weight; 
+  return os << "{\"word\": \"" << word.word << "\", \"offset\": " << word.offsets << ", \"weight\": " << word.weight << "}"; 
 }
 
 } // namespace cppjieba

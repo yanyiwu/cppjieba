@@ -24,16 +24,14 @@ TEST(TextRankExtractorTest, Test1) {
       vector<pair<string, double> > words;
       Extractor.Extract(s, words, topN);
       res << words;
-      //ASSERT_EQ(res, "[\"世界:1\", \"你好:0.514286\"]");
-      ASSERT_EQ(res, "[\"\xE4\xB8\x96\xE7\x95\x8C:1\", \"\xE4\xBD\xA0\xE5\xA5\xBD:0.519787\"]");
+      ASSERT_EQ(res, "[世界:1, 你好:0.519787]");
     }
 
     {
       vector<TextRankExtractor::Word> words;
       Extractor.Extract(s, words, topN);
       res << words;
-      //ASSERT_EQ(res, "[\"世界|[\"6\", \"12\"]|1\", \"你好|[\"0\"]|0.514286\"]");
-      ASSERT_EQ(res, "[\"\xE4\xB8\x96\xE7\x95\x8C|[\"6\", \"12\"]|1\", \"\xE4\xBD\xA0\xE5\xA5\xBD|[\"0\"]|0.519787\"]");
+      ASSERT_EQ(res, "[{\"word\": \"世界\", \"offset\": [6, 12], \"weight\": 1}, {\"word\": \"你好\", \"offset\": [0], \"weight\": 0.519787}]");
     }
   }
 
@@ -44,8 +42,7 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.95375\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.801701\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.798968\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.775505\"]");
-    // ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.953149\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.794203\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.78716\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.767636\"]");
+    ASSERT_EQ(res, "[{\"word\": \"专业\", \"offset\": [36], \"weight\": 1}, {\"word\": \"CEO\", \"offset\": [94], \"weight\": 0.95375}, {\"word\": \"手扶拖拉机\", \"offset\": [21], \"weight\": 0.801701}, {\"word\": \"当上\", \"offset\": [87], \"weight\": 0.798968}, {\"word\": \"走上\", \"offset\": [100], \"weight\": 0.775505}]");
   }
 
   {
@@ -55,8 +52,7 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|1\", \"iPhone6|[\"6\"]|0.996126\"]");
-    //ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
+    ASSERT_EQ(res, "[{\"word\": \"一部\", \"offset\": [0], \"weight\": 1}, {\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 0.996126}]");
   }
 }
 
@@ -74,8 +70,7 @@ TEST(TextRankExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"蓝翔|[\"0\"]|1\", \"毕业生|[\"12\"]|0.996685\", \"优秀|[\"6\"]|0.992994\"]");
-    //ASSERT_EQ(res, "[\"\xE4\xBC\x98\xE7\xA7\x80|[\"6\"]|1\", \"\xE6\xAF\x95\xE4\xB8\x9A\xE7\x94\x9F|[\"12\"]|0.996685\", \"\xE8\x93\x9D\xE7\xBF\x94|[\"0\"]|0.992994\"]");
+    ASSERT_EQ(res, "[{\"word\": \"蓝翔\", \"offset\": [0], \"weight\": 1}, {\"word\": \"毕业生\", \"offset\": [12], \"weight\": 0.996685}, {\"word\": \"优秀\", \"offset\": [6], \"weight\": 0.992994}]");
   }
 
   {
@@ -85,7 +80,6 @@ TEST(TextRankExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    //ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
-    ASSERT_EQ(res, "[\"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|1\", \"iPhone6|[\"6\"]|0.996126\"]");
+    ASSERT_EQ(res, "[{\"word\": \"一部\", \"offset\": [0], \"weight\": 1}, {\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 0.996126}]");
   }
 }

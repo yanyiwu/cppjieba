@@ -4,7 +4,6 @@
 #include "cppjieba/HMMSegment.hpp"
 #include "cppjieba/FullSegment.hpp"
 #include "cppjieba/QuerySegment.hpp"
-#include "cppjieba/LevelSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;
@@ -104,6 +103,23 @@ TEST(MixSegmentTest, TestUserDict) {
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
   res = limonp::Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树/万树/梨花/开", res);
+
+  // rand input
+  {
+    const size_t ITERATION = 16;
+    const size_t MAX_LEN = 256;
+    string s;
+    srand(time(NULL));
+
+    for (size_t i = 0; i < ITERATION; i++) {
+      size_t len = rand() % MAX_LEN;
+      s.resize(len);
+      for (size_t j = 0; j < len; j++) {
+        s[rand() % len] = rand();
+      }
+      segment.Cut(s, words);
+    }
+  }
 }
 
 TEST(MixSegmentTest, TestMultiUserDict) {
@@ -181,73 +197,52 @@ TEST(FullSegment, Test1) {
 }
 
 TEST(QuerySegment, Test1) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "", 3);
-  const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
+  QuerySegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "");
   vector<string> words;
-
-  segment.Cut(str, words);
-
   string s1, s2;
-  s1 << words;
-  s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"，\", \"后\", \"在\", \"日本\", \"京都\", \"京都大学\", \"大学\", \"深造\"]";
+
+  segment.Cut("小明硕士毕业于中国科学院计算所，后在日本京都大学深造", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/，/后/在/日本/京都/大学/日本京都大学/深造";
   ASSERT_EQ(s1, s2);
 
+  segment.Cut("亲口交代", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "亲口/交代";
+  ASSERT_EQ(s1, s2);
+
+  segment.Cut("他心理健康", words);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "他/心理/健康/心理健康";
+  ASSERT_EQ(s1, s2);
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english", 3);
+  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english");
+  vector<string> words;
+  string s1, s2;
 
   {
-    const char* str = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造";
-    vector<string> words;
-
-    segment.Cut(str, words);
-
-    string s1, s2;
-    s1 << words;
-    s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"，\", \"后\", \"在\", \"日本\", \"京都\", \"京都大学\", \"大学\", \"深造\"]";
+    segment.Cut("小明硕士毕业于中国科学院计算所，后在日本京都大学深造", words);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/，/后/在/日本/京都/大学/京都大学/深造";
     ASSERT_EQ(s1, s2);
   }
 
   {
-    const char* str = "小明硕士毕业于中国科学院计算所iPhone6";
-    vector<string> words;
-
-    segment.Cut(str, words);
-
-    string s1, s2;
-    s1 << words;
-    s2 = "[\"小明\", \"硕士\", \"毕业\", \"于\", \"中国\", \"中国科学院\", \"科学\", \"科学院\", \"学院\", \"计算所\", \"iPhone6\"]";
+    segment.Cut("小明硕士毕业于中国科学院计算所iPhone6", words);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "小明/硕士/毕业/于/中国/科学/学院/科学院/中国科学院/计算/计算所/iPhone6";
     ASSERT_EQ(s1, s2);
   }
 
   {
-    vector<string> words;
-    segment.Cut("internal", words);
-    string s = Join(words.begin(), words.end(), "/");
-    ASSERT_EQ("internal", s);
-  }
-
-  segment.SetMaxWordLen(5);
-
-  {
-    vector<string> words;
     segment.Cut("中国科学院", words);
-    string s = Join(words.begin(), words.end(), "/");
-    ASSERT_EQ("中国科学院", s);
+    s1 = Join(words.begin(), words.end(), "/");
+    s2 = "中国/科学/学院/科学院/中国科学院";
+    ASSERT_EQ(s1, s2);
   }
-}
 
-TEST(LevelSegmentTest, Test0) {
-  string s;
-  LevelSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
-  vector<pair<string, size_t> > words;
-  segment.Cut("南京市长江大桥", words);
-  ASSERT_EQ("[\"南京市:0\", \"长江大桥:0\", \"南京:1\", \"长江:1\", \"大桥:1\"]", s << words);
-
-  vector<string> res;
-  segment.Cut("南京市长江大桥", res);
-  ASSERT_EQ("[\"南京市\", \"长江大桥\", \"南京\", \"长江\", \"大桥\"]", s << res);
 }
 
 TEST(MPSegmentTest, Unicode32) {

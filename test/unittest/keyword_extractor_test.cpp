@@ -22,14 +22,14 @@ TEST(KeywordExtractorTest, Test1) {
       vector<pair<string, double> > words;
       Extractor.Extract(s, words, topN);
       res << words;
-      ASSERT_EQ(res, "[\"世界:8.73506\", \"你好:7.95788\"]");
+      ASSERT_EQ(res, "[世界:8.73506, 你好:7.95788]");
     }
 
     {
       vector<KeywordExtractor::Word> words;
       Extractor.Extract(s, words, topN);
       res << words;
-      ASSERT_EQ(res, "[\"世界|[\"6\", \"12\"]|8.73506\", \"你好|[\"0\"]|7.95788\"]");
+      ASSERT_EQ(res, "[{\"word\": \"\xE4\xB8\x96\xE7\x95\x8C\", \"offset\": [6, 12], \"weight\": 8.73506}, {\"word\": \"\xE4\xBD\xA0\xE5\xA5\xBD\", \"offset\": [0], \"weight\": 7.95788}]");
     }
   }
 
@@ -40,7 +40,7 @@ TEST(KeywordExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"CEO|[\"93\"]|11.7392\", \"\xE5\x8D\x87\xE8\x81\x8C|[\"72\"]|10.8562\", \"\xE5\x8A\xA0\xE8\x96\xAA|[\"78\"]|10.6426\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|10.0089\", \"\xE5\xB7\x85\xE5\xB3\xB0|[\"111\"]|9.49396\"]");
+    ASSERT_EQ(res, "[{\"word\": \"CEO\", \"offset\": [93], \"weight\": 11.7392}, {\"word\": \"\xE5\x8D\x87\xE8\x81\x8C\", \"offset\": [72], \"weight\": 10.8562}, {\"word\": \"\xE5\x8A\xA0\xE8\x96\xAA\", \"offset\": [78], \"weight\": 10.6426}, {\"word\": \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA\", \"offset\": [21], \"weight\": 10.0089}, {\"word\": \"\xE5\xB7\x85\xE5\xB3\xB0\", \"offset\": [111], \"weight\": 9.49396}]");
   }
 
   {
@@ -50,7 +50,7 @@ TEST(KeywordExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|11.7392\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|6.47592\"]");
+    ASSERT_EQ(res, "[{\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 11.7392}, {\"word\": \"\xE4\xB8\x80\xE9\x83\xA8\", \"offset\": [0], \"weight\": 6.47592}]");
   }
 }
 
@@ -64,7 +64,7 @@ TEST(KeywordExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE8\x93\x9D\xE7\xBF\x94|[\"0\"]|11.7392\", \"\xE6\xAF\x95\xE4\xB8\x9A\xE7\x94\x9F|[\"12\"]|8.13549\", \"\xE4\xBC\x98\xE7\xA7\x80|[\"6\"]|6.78347\"]");
+    ASSERT_EQ(res, "[{\"word\": \"\xE8\x93\x9D\xE7\xBF\x94\", \"offset\": [0], \"weight\": 11.7392}, {\"word\": \"\xE6\xAF\x95\xE4\xB8\x9A\xE7\x94\x9F\", \"offset\": [12], \"weight\": 8.13549}, {\"word\": \"\xE4\xBC\x98\xE7\xA7\x80\", \"offset\": [6], \"weight\": 6.78347}]");
   }
 
   {
@@ -74,6 +74,6 @@ TEST(KeywordExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|11.7392\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|6.47592\"]");
+    ASSERT_EQ(res, "[{\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 11.7392}, {\"word\": \"\xE4\xB8\x80\xE9\x83\xA8\", \"offset\": [0], \"weight\": 6.47592}]");
   }
 }

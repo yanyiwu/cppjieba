@@ -1,5 +1,22 @@
 # CppJieba ChangeLog
 
+## v4.8.0
+
++ rewrite QuerySegment, make `Jieba::CutForSearch` behaves the same as [jieba] `cut_for_search` api
++ remove Jieba::SetQuerySegmentThreshold
+
+## v4.7.0
+
+api changes:
+
++ override Cut functions, add location information into Word results;
++ remove LevelSegment;
++ remove Jieba::Locate;
+
+upgrade:
+
++ limonp -> v0.6.1
+
 ## v4.6.0
 
 + Change Jieba::Locate(deprecated) to be static function.
@@ -204,3 +221,4 @@
 [husky]:http://github.com/yanyiwu/husky.git
 [issue50]:https://github.com/yanyiwu/cppjieba/issues/50
 [qinwf]:https://github.com/yanyiwu/cppjieba/pull/53#issuecomment-176264929
+[jieba]:https://github.com/fxsjy/jieba
