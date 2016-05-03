@@ -1,4 +1,4 @@
-﻿#ifndef CPPJIEBA_TEXTRANK_EXTRACTOR_H
+#ifndef CPPJIEBA_TEXTRANK_EXTRACTOR_H
 #define CPPJIEBA_TEXTRANK_EXTRACTOR_H
 
 #include <cmath>
@@ -174,13 +174,6 @@ namespace cppjieba {
       if (unicode.size() == 1)
         return true;
       return false;
-    }
-
-    static void sortMapValue(WordMap &map,vector<Word>& result,size_t topN){
-      for(auto i=map.begin();i!=map.end();i++){
-        result.push_back(i->second);
-      }
-      partial_sort(result.begin(),result.begin()+topN,result.end(),Compare);
     }
 
     static bool Compare(const Word &x,const Word &y){
