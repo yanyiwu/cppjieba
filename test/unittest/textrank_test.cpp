@@ -24,14 +24,16 @@ TEST(TextRankExtractorTest, Test1) {
       vector<pair<string, double> > words;
       Extractor.Extract(s, words, topN);
       res << words;
-      ASSERT_EQ(res, "[\"世界:1\", \"你好:0.514286\"]");
+      //ASSERT_EQ(res, "[\"世界:1\", \"你好:0.514286\"]");
+      ASSERT_EQ(res, "[\"\xE4\xB8\x96\xE7\x95\x8C:1\", \"\xE4\xBD\xA0\xE5\xA5\xBD:0.519787\"]");
     }
 
     {
       vector<TextRankExtractor::Word> words;
       Extractor.Extract(s, words, topN);
       res << words;
-      ASSERT_EQ(res, "[\"世界|[\"6\", \"12\"]|1\", \"你好|[\"0\"]|0.514286\"]");
+      //ASSERT_EQ(res, "[\"世界|[\"6\", \"12\"]|1\", \"你好|[\"0\"]|0.514286\"]");
+      ASSERT_EQ(res, "[\"\xE4\xB8\x96\xE7\x95\x8C|[\"6\", \"12\"]|1\", \"\xE4\xBD\xA0\xE5\xA5\xBD|[\"0\"]|0.519787\"]");
     }
   }
 
@@ -42,7 +44,7 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"专业|[\"36\"]|1\", \"CEO|[\"94\"]|0.94764\", \"当上|[\"87\"]|0.79271\", \"手扶拖拉机|[\"21\"]|0.789347\", \"走上|[\"100\"]|0.768261\"]");
+    ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.95375\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.801701\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.798968\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.775505\"]");
     // ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.953149\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.794203\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.78716\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.767636\"]");
   }
 
@@ -53,7 +55,8 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
+    ASSERT_EQ(res, "[\"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|1\", \"iPhone6|[\"6\"]|0.996126\"]");
+    //ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
   }
 }
 
@@ -82,6 +85,7 @@ TEST(TextRankExtractorTest, Test2) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
+    //ASSERT_EQ(res, "[\"iPhone6|[\"6\"]|1\", \"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|0.996126\"]");
+    ASSERT_EQ(res, "[\"\xE4\xB8\x80\xE9\x83\xA8|[\"0\"]|1\", \"iPhone6|[\"6\"]|0.996126\"]");
   }
 }

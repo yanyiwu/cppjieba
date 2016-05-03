@@ -12,15 +12,18 @@ namespace cppjieba {
   public:
     typedef struct _Word {string word;vector<size_t> offsets;double weight;}    Word; // struct Word
   private:
-    typedef std::unordered_map<string,Word> WordMap;
+    typedef std::map<string,Word> WordMap;
   
     class WordGraph{
     private:
       typedef double Score;
       typedef string Node;
-      typedef std::unordered_set<Node> NodeSet;
-      typedef std::unordered_map<Node,double> Edges;
-      typedef std::unordered_map<Node,Edges> Graph;
+      typedef std::set<Node> NodeSet;
+
+      typedef std::map<Node,double> Edges;
+      typedef std::map<Node,Edges> Graph;
+      //typedef std::unordered_map<Node,double> Edges;
+      //typedef std::unordered_map<Node,Edges> Graph;
 
       double d;
       Graph graph;
