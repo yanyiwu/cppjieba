@@ -83,10 +83,39 @@ namespace cppjieba {
     };
 
   public: 
+  TextRankExtractor(const string& dictPath, 
+        const string& hmmFilePath, 
+        const string& stopWordPath, 
+        const string& userDict = "") 
+    : segment_(dictPath, hmmFilePath, userDict) {
+    LoadStopWordDict(stopWordPath);
+  }
+  TextRankExtractor(const DictTrie* dictTrie, 
+        const HMMModel* model,
+        const string& stopWordPath) 
+    : segment_(dictTrie, model) {
+    LoadStopWordDict(stopWordPath);
+  }
     TextRankExtractor(const Jieba& jieba, const string& stopWordPath) : segment_(jieba.GetDictTrie(), jieba.GetHMMModel()) {
         LoadStopWordDict(stopWordPath);
     }
     ~TextRankExtractor() {
+    }
+
+    void Extract(const string& sentence, vector<string>& keywords, size_t topN) const {
+      vector<Word> topWords;
+      Extract(sentence, topWords, topN);
+      for (size_t i = 0; i < topWords.size(); i++) {
+        keywords.push_back(topWords[i].word);
+      }
+    }
+
+    void Extract(const string& sentence, vector<pair<string, double> >& keywords, size_t topN) const {
+      vector<Word> topWords;
+      Extract(sentence, topWords, topN);
+      for (size_t i = 0; i < topWords.size(); i++) {
+        keywords.push_back(pair<string, double>(topWords[i].word, topWords[i].weight));
+      }
     }
 
     void Extract(const string& sentence, vector<Word>& keywords, size_t topN, size_t span=5,size_t rankTime=10) const {
@@ -161,6 +190,10 @@ namespace cppjieba {
     MixSegment segment_;
     unordered_set<string> stopWords_;
   };
+  
+  inline ostream& operator << (ostream& os, const TextRankExtractor::Word& word) {
+    return os << word.word << '|' << word.offsets << '|' << word.weight; 
+  }
 } // namespace cppjieba
 
 #endif
