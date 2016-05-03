@@ -13,6 +13,7 @@ ADD_EXECUTABLE(test.run
     pos_tagger_test.cpp
     jieba_test.cpp
     pre_filter_test.cpp
+    textrank_test.cpp
 )
 TARGET_LINK_LIBRARIES(test.run gtest pthread)
 
