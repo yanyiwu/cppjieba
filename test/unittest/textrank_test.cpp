@@ -42,7 +42,8 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[{\"word\": \"专业\", \"offset\": [36], \"weight\": 1}, {\"word\": \"CEO\", \"offset\": [94], \"weight\": 0.95375}, {\"word\": \"手扶拖拉机\", \"offset\": [21], \"weight\": 0.801701}, {\"word\": \"当上\", \"offset\": [87], \"weight\": 0.798968}, {\"word\": \"走上\", \"offset\": [100], \"weight\": 0.775505}]");
+    ASSERT_EQ(res, "[{\"word\": \"当上\", \"offset\": [87], \"weight\": 1}, {\"word\": \"不用\", \"offset\": [48], \"weight\": 0.989848}, {\"word\": \"多久\", \"offset\": [54], \"weight\": 0.985126}, {\"word\": \"加薪\", \"offset\": [78], \"weight\": 0.983046}, {\"word\": \"升职\", \"offset\": [72], \"weight\": 0.980278}]");
+    //ASSERT_EQ(res, "[{\"word\": \"专业\", \"offset\": [36], \"weight\": 1}, {\"word\": \"CEO\", \"offset\": [94], \"weight\": 0.95375}, {\"word\": \"手扶拖拉机\", \"offset\": [21], \"weight\": 0.801701}, {\"word\": \"当上\", \"offset\": [87], \"weight\": 0.798968}, {\"word\": \"走上\", \"offset\": [100], \"weight\": 0.775505}]");
   }
 
   {
