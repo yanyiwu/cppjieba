@@ -1,0 +1,32 @@
+os: Visual Studio 2015
+
+platform: x64
+
+# clone directory
+clone_folder: c:\projects\cppjieba
+
+# scripts to run before build
+before_build:
+  - echo Running cmake...
+  - cd c:\projects\cppjieba
+  - cmake .
+
+build:
+  project: ALL_BUILD.vcxproj # path to Visual Studio solution or project
+
+# scripts to run after build
+after_build:
+  - cd Debug
+  - demo.exe
+  - load_test.exe
+  - cd ..
+  - COPY .\test\Debug\test.run.exe .\test\test.run.exe
+  - cd test
+  - test.run.exe
+  - cd ..
+  - 7z a c:\projects\all.zip * -tzip
+  - cd c:\projects
+
+artifacts:
+  - path: all.zip
+    name: all.zip

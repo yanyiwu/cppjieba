@@ -9,60 +9,64 @@
 #include "SegmentBase.hpp"
 #include "FullSegment.hpp"
 #include "MixSegment.hpp"
-#include "TransCode.hpp"
+#include "Unicode.hpp"
 #include "DictTrie.hpp"
 
 namespace cppjieba {
 class QuerySegment: public SegmentBase {
  public:
-  QuerySegment(const string& dict, const string& model, const string& userDict = "", size_t maxWordLen = 4)
+  QuerySegment(const string& dict, const string& model, const string& userDict = "")
     : mixSeg_(dict, model, userDict),
-      fullSeg_(mixSeg_.GetDictTrie()),
-      maxWordLen_(maxWordLen) {
-    assert(maxWordLen_);
+      trie_(mixSeg_.GetDictTrie()) {
   }
-  QuerySegment(const DictTrie* dictTrie, const HMMModel* model, size_t maxWordLen = 4)
-    : mixSeg_(dictTrie, model), fullSeg_(dictTrie), maxWordLen_(maxWordLen) {
+  QuerySegment(const DictTrie* dictTrie, const HMMModel* model)
+    : mixSeg_(dictTrie, model), trie_(dictTrie) {
   }
   ~QuerySegment() {
   }
   void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
+    vector<Word> tmp;
+    Cut(sentence, tmp, hmm);
+    GetStringsFromWords(tmp, words);
+  }
+  void Cut(const string& sentence, vector<Word>& words, bool hmm = true) const {
     PreFilter pre_filter(symbols_, sentence);
     PreFilter::Range range;
-    vector<Unicode> uwords;
-    uwords.reserve(sentence.size());
+    vector<WordRange> wrs;
+    wrs.reserve(sentence.size()/2);
     while (pre_filter.HasNext()) {
       range = pre_filter.Next();
-      Cut(range.begin, range.end, uwords, hmm);
+      Cut(range.begin, range.end, wrs, hmm);
     }
-    TransCode::Encode(uwords, words);
+    words.clear();
+    words.reserve(wrs.size());
+    GetWordsFromWordRanges(sentence, wrs, words);
   }
-  void Cut(Unicode::const_iterator begin, Unicode::const_iterator end, vector<Unicode>& res, bool hmm) const {
+  void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
     //use mix Cut first
-    vector<Unicode> mixRes;
+    vector<WordRange> mixRes;
     mixSeg_.Cut(begin, end, mixRes, hmm);
 
-    vector<Unicode> fullRes;
-    for (vector<Unicode>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
-      // if it's too long, Cut with fullSeg_, put fullRes in res
-      if (mixResItr->size() > maxWordLen_ && !IsAllAscii(*mixResItr)) {
-        fullSeg_.Cut(mixResItr->begin(), mixResItr->end(), fullRes);
-        for (vector<Unicode>::const_iterator fullResItr = fullRes.begin(); fullResItr != fullRes.end(); fullResItr++) {
-          res.push_back(*fullResItr);
+    vector<WordRange> fullRes;
+    for (vector<WordRange>::const_iterator mixResItr = mixRes.begin(); mixResItr != mixRes.end(); mixResItr++) {
+      if (mixResItr->Length() > 2) {
+        for (size_t i = 0; i + 1 < mixResItr->Length(); i++) {
+          WordRange wr(mixResItr->left + i, mixResItr->left + i + 1);
+          if (trie_->Find(wr.left, wr.right + 1) != NULL) {
+            res.push_back(wr);
+          }
         }
-
-        //clear tmp res
-        fullRes.clear();
-      } else { // just use the mix result
-        res.push_back(*mixResItr);
       }
+      if (mixResItr->Length() > 3) {
+        for (size_t i = 0; i + 2 < mixResItr->Length(); i++) {
+          WordRange wr(mixResItr->left + i, mixResItr->left + i + 2);
+          if (trie_->Find(wr.left, wr.right + 1) != NULL) {
+            res.push_back(wr);
+          }
+        }
+      }
+      res.push_back(*mixResItr);
     }
-  }
-  void SetMaxWordLen(size_t len) {
-    maxWordLen_ = len;
-  }
-  size_t GetMaxWordLen() const {
-    return maxWordLen_;
   }
  private:
   bool IsAllAscii(const Unicode& s) const {
@@ -74,8 +78,7 @@ class QuerySegment: public SegmentBase {
    return true;
   }
   MixSegment mixSeg_;
-  FullSegment fullSeg_;
-  size_t maxWordLen_;
+  const DictTrie* trie_;
 }; // QuerySegment
 
 } // namespace cppjieba

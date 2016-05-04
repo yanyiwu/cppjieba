@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "cppjieba/PreFilter.hpp"
+#include "limonp/StringUtil.hpp"
 
 using namespace cppjieba;
 
@@ -11,32 +12,32 @@ TEST(PreFilterTest, Test1) {
   string res;
 
   {
-    PreFilter filter(symbol, "你好，美丽的，世界");
+    string s = "你好，美丽的，世界";
+    PreFilter filter(symbol, s);
     expected = "你好/，/美丽的/，/世界";
     ASSERT_TRUE(filter.HasNext());
     vector<string> words;
     while (filter.HasNext()) {
       PreFilter::Range range;
       range = filter.Next();
-      words.push_back(TransCode::Encode(range.begin, range.end));
+      words.push_back(GetStringFromRunes(s, range.begin, range.end - 1));
     }
-    res = Join(words.begin(), words.end(), "/");
+    res = limonp::Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
   }
 
   {
-    PreFilter filter(symbol, "我来自北京邮电大学。。。学号123456，用AK47");
+    string s = "我来自北京邮电大学。。。学号123456，用AK47";
+    PreFilter filter(symbol, s);
     expected = "我来自北京邮电大学/。/。/。/学号123456/，/用AK47";
     ASSERT_TRUE(filter.HasNext());
     vector<string> words;
     while (filter.HasNext()) {
       PreFilter::Range range;
       range = filter.Next();
-      words.push_back(TransCode::Encode(range.begin, range.end));
+      words.push_back(GetStringFromRunes(s, range.begin, range.end - 1));
     }
-    res = Join(words.begin(), words.end(), "/");
-    for (size_t i = 0; i < words.size(); i++) {
-    }
+    res = limonp::Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
   }
 }

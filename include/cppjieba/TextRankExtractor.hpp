@@ -172,24 +172,16 @@ namespace cppjieba {
       assert(stopWords_.size());
     }
 
-    bool IsSingleWord(const string& str) const {
-      Unicode unicode;
-      TransCode::Decode(str, unicode);
-      if (unicode.size() == 1)
-        return true;
-      return false;
-    }
-
     static bool Compare(const Word &x,const Word &y){
       return x.weight > y.weight;
     }
 
     MixSegment segment_;
     unordered_set<string> stopWords_;
-  };
+  }; // class TextRankExtractor
   
   inline ostream& operator << (ostream& os, const TextRankExtractor::Word& word) {
-    return os << word.word << '|' << word.offsets << '|' << word.weight; 
+    return os << "{\"word\": \"" << word.word << "\", \"offset\": " << word.offsets << ", \"weight\": " << word.weight << "}"; 
   }
 } // namespace cppjieba
 
