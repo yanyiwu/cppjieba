@@ -135,8 +135,9 @@ namespace cppjieba {
         if (IsSingleWord(words[i]) || stopWords_.find(words[i]) != stopWords_.end()) {
           continue;
         }
-        for(size_t j=i+1;j<i+span && j<words.size();j++){
+        for(size_t j=i+1,skip=0;j<i+span+skip && j<words.size();j++){
           if (IsSingleWord(words[j]) || stopWords_.find(words[j]) != stopWords_.end()) {
+            skip++;
             continue;
           }
           graph.addEdge(words[i],words[j],1);
