@@ -14,6 +14,7 @@ ADD_EXECUTABLE(test.run
     jieba_test.cpp
     pre_filter_test.cpp
     unicode_test.cpp
+    textrank_test.cpp
 )
 
 if(MSVC)
