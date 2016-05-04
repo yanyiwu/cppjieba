@@ -44,7 +44,7 @@ TEST(TextRankExtractorTest, Test1) {
     size_t topN = 5;
     Extractor.Extract(s, wordweights, topN);
     res << wordweights;
-    ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.95375\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.801701\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.798968\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.775505\"]");
+    ASSERT_EQ(res, "[\"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|1\", \"\xE4\xB8\x8D\xE7\x94\xA8|[\"48\"]|0.989848\", \"\xE5\xA4\x9A\xE4\xB9\x85|[\"54\"]|0.985126\", \"\xE5\x8A\xA0\xE8\x96\xAA|[\"78\"]|0.983046\", \"\xE5\x8D\x87\xE8\x81\x8C|[\"72\"]|0.980278\"]");
     // ASSERT_EQ(res, "[\"\xE4\xB8\x93\xE4\xB8\x9A|[\"36\"]|1\", \"CEO|[\"94\"]|0.953149\", \"\xE6\x89\x8B\xE6\x89\xB6\xE6\x8B\x96\xE6\x8B\x89\xE6\x9C\xBA|[\"21\"]|0.794203\", \"\xE5\xBD\x93\xE4\xB8\x8A|[\"87\"]|0.78716\", \"\xE8\xB5\xB0\xE4\xB8\x8A|[\"100\"]|0.767636\"]");
   }
 
