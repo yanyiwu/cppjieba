@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ add TextRankExtractor by [@questionfish]
+
 ## v4.8.0
 
 + rewrite QuerySegment, make `Jieba::CutForSearch` behaves the same as [jieba] `cut_for_search` api
@@ -222,3 +226,4 @@ upgrade:
 [issue50]:https://github.com/yanyiwu/cppjieba/issues/50
 [qinwf]:https://github.com/yanyiwu/cppjieba/pull/53#issuecomment-176264929
 [jieba]:https://github.com/fxsjy/jieba
+[@questionfish]:https://github.com/questionfish
