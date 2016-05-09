@@ -3,6 +3,7 @@
 ## next version
 
 + add TextRankExtractor by [@questionfish]
++ add Jieba::ResetSeparators api for some special situation, for example in [issue67]
 
 ## v4.8.0
 
@@ -227,3 +228,4 @@ upgrade:
 [qinwf]:https://github.com/yanyiwu/cppjieba/pull/53#issuecomment-176264929
 [jieba]:https://github.com/fxsjy/jieba
 [@questionfish]:https://github.com/questionfish
+[issue67]:https://github.com/yanyiwu/cppjieba/issues/67
