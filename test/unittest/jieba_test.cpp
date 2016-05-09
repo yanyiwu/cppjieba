@@ -103,4 +103,15 @@ TEST(JiebaTest, InsertUserWord) {
     result << words;
     ASSERT_EQ(result, StringFormat("[\"%s\"]", newWord.c_str()));
   }
+
+  ASSERT_TRUE(jieba.InsertUserWord("同一个世界，同一个梦想"));
+  jieba.Cut("同一个世界，同一个梦想", words);
+  result = Join(words.begin(), words.end(), "/");
+  ASSERT_EQ(result, "同一个/世界/，/同一个/梦想");
+
+  jieba.ResetSeparators("");
+
+  jieba.Cut("同一个世界，同一个梦想", words);
+  result = Join(words.begin(), words.end(), "/");
+  ASSERT_EQ(result, "同一个世界，同一个梦想");
 }

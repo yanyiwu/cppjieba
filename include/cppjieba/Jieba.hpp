@@ -67,6 +67,15 @@ class Jieba {
     return dict_trie_.InsertUserWord(word, tag);
   }
 
+  void ResetSeparators(const string& s) {
+    //TODO
+    mp_seg_.ResetSeparators(s);
+    hmm_seg_.ResetSeparators(s);
+    mix_seg_.ResetSeparators(s);
+    full_seg_.ResetSeparators(s);
+    query_seg_.ResetSeparators(s);
+  }
+
   const DictTrie* GetDictTrie() const {
     return &dict_trie_;
   } 
