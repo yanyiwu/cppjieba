@@ -209,7 +209,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ## 其它词典资料分享
 
-+ [dict.367W.utf8.tar.gz] iLife(`562193561@qq.com`)
++ [dict.367W.utf8] iLife(562193561 at qq.com)
 
 ## 应用
 
@@ -270,7 +270,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [exjieba]:https://github.com/falood/exjieba
 [KeywordServer]:https://github.com/yanyiwu/keyword_server
 [ngx_http_cppjieba_module]:https://github.com/yanyiwu/ngx_http_cppjieba_module
-[dict.367W.utf8.tar.gz]:http://pan.baidu.com/s/1o6A0BWY
+[dict.367W.utf8]:https://github.com/qinwf/BigDict
 [cjieba]:http://github.com/yanyiwu/cjieba
 [jieba_rb]:https://github.com/altkatz/jieba_rb
 [iosjieba]:https://github.com/yanyiwu/iosjieba
