@@ -2,7 +2,6 @@
 #define CPPJIEAB_JIEBA_H
 
 #include "QuerySegment.hpp"
-#include "PosTagger.hpp"
 //#include "LevelSegment.hpp"
 
 namespace cppjieba {
@@ -16,9 +15,9 @@ class Jieba {
       hmm_seg_(&model_),
       mix_seg_(&dict_trie_, &model_),
       full_seg_(&dict_trie_),
-      query_seg_(&dict_trie_, &model_),
+      query_seg_(&dict_trie_, &model_)
       //level_seg_(&dict_trie_),
-      pos_tagger_(&dict_trie_, &model_) {
+      {
   }
   ~Jieba() {
   }
@@ -61,7 +60,7 @@ class Jieba {
   }
   
   void Tag(const string& sentence, vector<pair<string, string> >& words) const {
-    pos_tagger_.Tag(sentence, words);
+    mix_seg_.Tag(sentence, words);
   }
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     return dict_trie_.InsertUserWord(word, tag);
@@ -94,9 +93,7 @@ class Jieba {
   FullSegment full_seg_;
   QuerySegment query_seg_;
   //LevelSegment level_seg_;
-  
-  PosTagger pos_tagger_;
-  
+
 }; // class Jieba
 
 } // namespace cppjieba

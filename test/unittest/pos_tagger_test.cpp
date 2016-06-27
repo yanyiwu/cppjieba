@@ -1,4 +1,4 @@
-#include "cppjieba/PosTagger.hpp"
+#include "cppjieba/MixSegment.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;
@@ -13,7 +13,7 @@ static const char * const ANS_TEST3 = "[iPhone6:eng, 手机:n, 的:uj, 最大:a,
 //static const char * const ANS_TEST3 = "";
 
 TEST(PosTaggerTest, Test) {
-  PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
+  MixSegment tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
   {
     vector<pair<string, string> > res;
     tagger.Tag(QUERY_TEST1, res);
@@ -23,7 +23,7 @@ TEST(PosTaggerTest, Test) {
   }
 }
 TEST(PosTagger, TestUserDict) {
-  PosTagger tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
+  MixSegment tagger("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8");
   {
     vector<pair<string, string> > res;
     tagger.Tag(QUERY_TEST2, res);

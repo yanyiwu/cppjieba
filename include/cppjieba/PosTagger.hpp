@@ -1,8 +1,8 @@
 #ifndef CPPJIEBA_POS_TAGGING_H
 #define CPPJIEBA_POS_TAGGING_H
 
-#include "MixSegment.hpp"
 #include "limonp/StringUtil.hpp"
+#include "SegmentTagged.hpp"
 #include "DictTrie.hpp"
 
 namespace cppjieba {
@@ -14,24 +14,18 @@ static const char* const POS_X = "x";
 
 class PosTagger {
  public:
-  PosTagger(const string& dictPath,
-    const string& hmmFilePath,
-    const string& userDictPath = "")
-    : segment_(dictPath, hmmFilePath, userDictPath) {
-  }
-  PosTagger(const DictTrie* dictTrie, const HMMModel* model) 
-    : segment_(dictTrie, model) {
+  PosTagger() {
   }
   ~PosTagger() {
   }
 
-  bool Tag(const string& src, vector<pair<string, string> >& res) const {
+  bool Tag(const string& src, vector<pair<string, string> >& res, const SegmentTagged& segment) const {
     vector<string> CutRes;
-    segment_.Cut(src, CutRes);
+    segment.Cut(src, CutRes);
 
     const DictUnit *tmp = NULL;
     RuneStrArray runes;
-    const DictTrie * dict = segment_.GetDictTrie();
+    const DictTrie * dict = segment.GetDictTrie();
     assert(dict != NULL);
     for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
       if (!DecodeRunesInString(*itr, runes)) {
@@ -71,7 +65,6 @@ class PosTagger {
     return POS_ENG;
   }
 
-  MixSegment segment_;
 }; // class PosTagger
 
 } // namespace cppjieba
