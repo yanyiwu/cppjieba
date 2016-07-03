@@ -17,8 +17,10 @@ class SegmentBase {
   SegmentBase() {
     XCHECK(ResetSeparators(SPECIAL_SEPARATORS));
   }
-  ~SegmentBase() {
+  virtual ~SegmentBase() {
   }
+
+  virtual void Cut(const string& sentence, vector<string>& words) const = 0;
 
   bool ResetSeparators(const string& s) {
     symbols_.clear();
