@@ -52,11 +52,15 @@ int main(int argc, char** argv) {
   cout << jiebawords << endl;
 
   cout << "[demo] Lookup Tag for Single Token" << endl;
-  vector<pair<string, string> > LookupTagres = {{"拖拉机", ""}, {"CEO", ""}, {".",""}};
-  LookupTagres[0].second = jieba.LookupTag(LookupTagres[0].first);
-  LookupTagres[1].second = jieba.LookupTag(LookupTagres[1].first);
-  LookupTagres[2].second = jieba.LookupTag(LookupTagres[2].first);
-  cout << LookupTagres << endl;;
+  const int DemoTokenMaxLen = 32;
+  char DemoTokens[][DemoTokenMaxLen] = {"拖拉机", "CEO", "123", "。"};
+  vector<pair<string, string> > LookupTagres(sizeof(DemoTokens) / DemoTokenMaxLen);
+  vector<pair<string, string> >::iterator it;
+  for (it = LookupTagres.begin(); it != LookupTagres.end(); it++) {
+	it->first = DemoTokens[it - LookupTagres.begin()];
+	it->second = jieba.LookupTag(it->first);
+  }
+  cout << LookupTagres << endl;
 
   cout << "[demo] Tagging" << endl;
   vector<pair<string, string> > tagres;
