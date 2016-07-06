@@ -62,6 +62,9 @@ class Jieba {
   void Tag(const string& sentence, vector<pair<string, string> >& words) const {
     mix_seg_.Tag(sentence, words);
   }
+  string LookupTag(const string &str) const {
+    return mix_seg_.LookupTag(str);
+  }
   bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
     return dict_trie_.InsertUserWord(word, tag);
   }
