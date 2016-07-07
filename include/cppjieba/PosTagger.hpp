@@ -23,24 +23,29 @@ class PosTagger {
     vector<string> CutRes;
     segment.Cut(src, CutRes);
 
+    for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
+      res.push_back(make_pair(*itr, LookupTag(*itr, segment)));
+    }
+    return !res.empty();
+  }
+
+  string LookupTag(const string &str, const SegmentTagged& segment) const {
     const DictUnit *tmp = NULL;
     RuneStrArray runes;
     const DictTrie * dict = segment.GetDictTrie();
     assert(dict != NULL);
-    for (vector<string>::iterator itr = CutRes.begin(); itr != CutRes.end(); ++itr) {
-      if (!DecodeRunesInString(*itr, runes)) {
+      if (!DecodeRunesInString(str, runes)) {
         XLOG(ERROR) << "Decode failed.";
-        return false;
+        return POS_X;
       }
       tmp = dict->Find(runes.begin(), runes.end());
       if (tmp == NULL || tmp->tag.empty()) {
-        res.push_back(make_pair(*itr, SpecialRule(runes)));
+        return SpecialRule(runes);
       } else {
-        res.push_back(make_pair(*itr, tmp->tag));
+        return tmp->tag;
       }
-    }
-    return !res.empty();
   }
+
  private:
   const char* SpecialRule(const RuneStrArray& unicode) const {
     size_t m = 0;

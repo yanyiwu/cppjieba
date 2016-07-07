@@ -93,6 +93,10 @@ class MixSegment: public SegmentTagged {
     return tagger_.Tag(src, res, *this);
   }
 
+  string LookupTag(const string &str) const {
+    return tagger_.LookupTag(str, *this);
+  }
+
  private:
   MPSegment mpSeg_;
   HMMSegment hmmSeg_;
