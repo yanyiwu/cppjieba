@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <string>
 #include <cstring>
 #include <stdint.h>
 #include <cmath>
@@ -108,10 +109,17 @@ class DictTrie {
         buf.clear();
         Split(line, buf, " ");
         DictUnit node_info;
-        MakeNodeInfo(node_info, 
-              buf[0], 
-              user_word_default_weight_,
-              (buf.size() == 3 ? buf[2] : UNKNOWN_TAG));
+        if(buf.size() == 1){
+          MakeNodeInfo(node_info, 
+                buf[0], 
+                user_word_default_weight_,
+                UNKNOWN_TAG);
+        } else {
+          MakeNodeInfo(node_info, 
+                buf[0], 
+                (buf.size() == 2 ? std::stoi(buf[1], nullptr) : user_word_default_weight_),
+                (buf.size() == 3 ? buf[2] : buf[1]));
+        }
         static_node_infos_.push_back(node_info);
         if (node_info.word.size() == 1) {
           user_dict_single_chinese_word_.insert(node_info.word[0]);
