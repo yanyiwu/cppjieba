@@ -1,10 +1,11 @@
 # CppJieba ChangeLog
 
-## next version
+## v4.8.1
 
 + add TextRankExtractor by [@questionfish] in [pull request 65](https://github.com/yanyiwu/cppjieba/pull/65)
 + add Jieba::ResetSeparators api for some special situation, for example in [issue67](https://github.com/yanyiwu/cppjieba/issues/67)
 + fix [issue70](https://github.com/yanyiwu/cppjieba/issues/70)
++ support (word, freq, tag) format in user_dict, see details in [pr74](https://github.com/yanyiwu/cppjieba/pull/74)
 
 ## v4.8.0
 
