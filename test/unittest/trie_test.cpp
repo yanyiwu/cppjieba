@@ -74,8 +74,22 @@ TEST(DictTrieTest, UserDict) {
   cppjieba::RuneStrArray unicode;
   ASSERT_TRUE(DecodeRunesInString(word, unicode));
   const DictUnit * unit = trie.Find(unicode.begin(), unicode.end());
-  ASSERT_TRUE(unit);
+  ASSERT_TRUE(unit != NULL);
   ASSERT_NEAR(unit->weight, -14.100, 0.001);
+
+  word = "蓝翔";
+  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  unit = trie.Find(unicode.begin(), unicode.end());
+  ASSERT_TRUE(unit != NULL);
+  ASSERT_EQ(unit->tag, "nz");
+  ASSERT_NEAR(unit->weight, -14.100, 0.001);
+
+  word = "区块链";
+  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  unit = trie.Find(unicode.begin(), unicode.end());
+  ASSERT_TRUE(unit != NULL);
+  ASSERT_EQ(unit->tag, "nz");
+  ASSERT_NEAR(unit->weight, -15.6478, 0.001);
 }
 
 TEST(DictTrieTest, UserDictWithMaxWeight) {
