@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## next version
+
++ Notice(**api changed**) : Jieba class 3 arguments -> 5 arguments, and use KeywordExtractor in Jieba
+
 ## v4.8.1
 
 + add TextRankExtractor by [@questionfish] in [pull request 65](https://github.com/yanyiwu/cppjieba/pull/65)

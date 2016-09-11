@@ -2,22 +2,25 @@
 #define CPPJIEAB_JIEBA_H
 
 #include "QuerySegment.hpp"
-//#include "LevelSegment.hpp"
+#include "KeywordExtractor.hpp"
 
 namespace cppjieba {
 
 class Jieba {
  public:
-  Jieba(const string& dict_path, const string& model_path, const string& user_dict_path) 
+  Jieba(const string& dict_path, 
+        const string& model_path,
+        const string& user_dict_path, 
+        const string& idfPath, 
+        const string& stopWordPath) 
     : dict_trie_(dict_path, user_dict_path),
       model_(model_path),
       mp_seg_(&dict_trie_),
       hmm_seg_(&model_),
       mix_seg_(&dict_trie_, &model_),
       full_seg_(&dict_trie_),
-      query_seg_(&dict_trie_, &model_)
-      //level_seg_(&dict_trie_),
-      {
+      query_seg_(&dict_trie_, &model_),
+      extractor(&dict_trie_, &model_, idfPath, stopWordPath) {
   }
   ~Jieba() {
   }
@@ -84,7 +87,7 @@ class Jieba {
   const HMMModel* GetHMMModel() const {
     return &model_;
   }
- 
+
  private:
   DictTrie dict_trie_;
   HMMModel model_;
@@ -95,8 +98,9 @@ class Jieba {
   MixSegment mix_seg_;
   FullSegment full_seg_;
   QuerySegment query_seg_;
-  //LevelSegment level_seg_;
 
+ public:
+  KeywordExtractor extractor;
 }; // class Jieba
 
 } // namespace cppjieba

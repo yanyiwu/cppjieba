@@ -5,8 +5,10 @@ using namespace cppjieba;
 
 TEST(JiebaTest, Test1) {
   cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                            "../dict/hmm_model.utf8",
-                            "../dict/user.dict.utf8");
+                        "../dict/hmm_model.utf8",
+                        "../dict/user.dict.utf8",
+                        "../dict/idf.utf8",
+                        "../dict/stop_words.utf8");
   vector<string> words;
   string result;
 
@@ -40,8 +42,10 @@ TEST(JiebaTest, Test1) {
 }
 TEST(JiebaTest, WordTest) {
   cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                            "../dict/hmm_model.utf8",
-                            "../dict/user.dict.utf8");
+                        "../dict/hmm_model.utf8",
+                        "../dict/user.dict.utf8",
+                        "../dict/idf.utf8",
+                        "../dict/stop_words.utf8");
   vector<Word> words;
   string result;
 
@@ -80,8 +84,10 @@ TEST(JiebaTest, WordTest) {
 
 TEST(JiebaTest, InsertUserWord) {
   cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                            "../dict/hmm_model.utf8",
-                            "../dict/user.dict.utf8");
+                        "../dict/hmm_model.utf8",
+                        "../dict/user.dict.utf8",
+                        "../dict/idf.utf8",
+                        "../dict/stop_words.utf8");
   vector<string> words;
   string result;
 
@@ -114,4 +120,14 @@ TEST(JiebaTest, InsertUserWord) {
   jieba.Cut("同一个世界，同一个梦想", words);
   result = Join(words.begin(), words.end(), "/");
   ASSERT_EQ(result, "同一个世界，同一个梦想");
+
+  {
+    string s("一部iPhone6");
+    string res;
+    vector<KeywordExtractor::Word> wordweights;
+    size_t topN = 5;
+    jieba.extractor.Extract(s, wordweights, topN);
+    res << wordweights;
+    ASSERT_EQ(res, "[{\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 11.7392}, {\"word\": \"\xE4\xB8\x80\xE9\x83\xA8\", \"offset\": [0], \"weight\": 6.47592}]");
+  }
 }

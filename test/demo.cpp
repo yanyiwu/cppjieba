@@ -1,5 +1,4 @@
 #include "cppjieba/Jieba.hpp"
-#include "cppjieba/KeywordExtractor.hpp"
 
 using namespace std;
 
@@ -12,7 +11,9 @@ const char* const STOP_WORD_PATH = "../dict/stop_words.utf8";
 int main(int argc, char** argv) {
   cppjieba::Jieba jieba(DICT_PATH,
         HMM_PATH,
-        USER_DICT_PATH);
+        USER_DICT_PATH,
+        IDF_PATH,
+        STOP_WORD_PATH);
   vector<string> words;
   vector<cppjieba::Word> jiebawords;
   string s;
@@ -69,13 +70,10 @@ int main(int argc, char** argv) {
   cout << s << endl;
   cout << tagres << endl;;
 
-  cppjieba::KeywordExtractor extractor(jieba,
-        IDF_PATH,
-        STOP_WORD_PATH);
   cout << "[demo] Keyword Extraction" << endl;
   const size_t topk = 5;
   vector<cppjieba::KeywordExtractor::Word> keywordres;
-  extractor.Extract(s, keywordres, topk);
+  jieba.extractor.Extract(s, keywordres, topk);
   cout << s << endl;
   cout << keywordres << endl;
   return EXIT_SUCCESS;
