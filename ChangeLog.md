@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## next version
+## v5.0.0
 
 + Notice(**api changed**) : Jieba class 3 arguments -> 5 arguments, and use KeywordExtractor in Jieba
 
