@@ -36,10 +36,15 @@ struct RuneStr {
   Rune rune;
   uint32_t offset;
   uint32_t len;
+  uint32_t unicode_offset;
+  uint32_t unicode_length;
   RuneStr(): rune(0), offset(0), len(0) {
   }
   RuneStr(Rune r, uint32_t o, uint32_t l)
     : rune(r), offset(o), len(l) {
+  }
+  RuneStr(Rune r, uint32_t o, uint32_t l, uint32_t unicode_offset, uint32_t unicode_length)
+          : rune(r), offset(o), len(l), unicode_offset(unicode_offset), unicode_length(unicode_length) {
   }
 }; // struct RuneStr
 
@@ -137,15 +142,16 @@ inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
 inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) {
   runes.clear();
   runes.reserve(len / 2);
-  for (size_t i = 0; i < len;) {
+  for (size_t i = 0, j = 0; i < len;) {
     RuneStrLite rp = DecodeRuneInString(s + i, len - i);
     if (rp.len == 0) {
       runes.clear();
       return false;
     }
-    RuneStr x(rp.rune, i, rp.len);
+    RuneStr x(rp.rune, i, rp.len, j, 1);
     runes.push_back(x);
     i += rp.len;
+    ++j;
   }
   return true;
 }
