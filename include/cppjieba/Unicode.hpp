@@ -18,8 +18,13 @@ typedef uint32_t Rune;
 struct Word {
   string word;
   uint32_t offset;
+  uint32_t unicode_offset;
+  uint32_t unicode_length;
   Word(const string& w, uint32_t o)
    : word(w), offset(o) {
+  }
+  Word(const string& w, uint32_t o, uint32_t unicode_offset, uint32_t unicode_length)
+          : word(w), offset(o), unicode_offset(unicode_offset), unicode_length(unicode_length) {
   }
 }; // struct Word
 
@@ -182,7 +187,8 @@ inline Unicode DecodeRunesInString(const string& s) {
 inline Word GetWordFromRunes(const string& s, RuneStrArray::const_iterator left, RuneStrArray::const_iterator right) {
   assert(right->offset >= left->offset);
   uint32_t len = right->offset - left->offset + right->len;
-  return Word(s.substr(left->offset, len), left->offset);
+  uint32_t unicode_length = right->unicode_offset - left->unicode_offset + right->unicode_length;
+  return Word(s.substr(left->offset, len), left->offset, left->unicode_offset, unicode_length);
 }
 
 inline string GetStringFromRunes(const string& s, RuneStrArray::const_iterator left, RuneStrArray::const_iterator right) {
