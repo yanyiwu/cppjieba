@@ -341,7 +341,7 @@ class DictTrie {
 	  short tag_len_ = 0;
 	  fread(data_temp_, sizeof(char), sizeof(short), cache_file_);
 	  memcpy((char* )&tag_len_, data_temp_, sizeof(short));
-	  if(tag_len_ < CACHE_DATA_MAX_LEN)
+	  if(tag_len_ < data_temp_max_len_)
 	  {
 		fread(data_temp_, sizeof(char), tag_len_, cache_file_);
 		data_temp_[tag_len_] = '\0';
@@ -354,13 +354,12 @@ class DictTrie {
   bool UnSerialization()
   {
 	  //·´ÐòÁÐ»¯
-	  int data_temp_max_len_ = CACHE_DATA_MAX_LEN;
 	  char data_temp_[CACHE_DATA_MAX_LEN] = {'\0'};
 
 	  FILE* cache_file_ = fopen(CACHE_FILE, "rb");
 	  if(NULL == cache_file_)
 	  {
-		  XLOG(ERROR) << "file cache file read (" << CACHE_FILE << ") failed.";
+		  //XLOG(ERROR) << "file cache file read (" << CACHE_FILE << ") failed.";
 		  return false;
 	  }
 
