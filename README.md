@@ -228,6 +228,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
 + [KeywordServer] 50行搭建一个中文关键词抽取服务。
 + [cppjieba-server] CppJieba HTTP 服务器。
++ [phpjieba] php版本的结巴分词扩展。
 
 ## 线上演示
 
@@ -279,6 +280,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
 [cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
+[phpjieba]:https://github.com/jonnywang/phpjieba
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yanyiwu/cppjieba/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
