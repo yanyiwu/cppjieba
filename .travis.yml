@@ -1,7 +1,6 @@
 language: cpp
 before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get install cmake; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew install cmake; fi
 script: 
   - mkdir build
   - cd build
