@@ -2,6 +2,8 @@ PROJECT(CPPJIEBA)
 
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
+SET( CMAKE_VERBOSE_MAKEFILE on )
+
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps
   ${PROJECT_SOURCE_DIR}/include)
 
@@ -9,7 +11,10 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "/usr/local/cppjieba" CACHE PATH "default install path" FORCE )
 endif()
 
-ADD_DEFINITIONS(-O3 -Wall -g)
+ADD_DEFINITIONS(-O3 -Wall -g -fsanitize=address,undefined -std=c++0x)
+
+set(CMAKE_EXE_LINKER_FLAGS "-O3 -Wall -g -fsanitize=address,undefined -std=c++0x")
+
 IF(APPLE) # mac os
     ADD_DEFINITIONS(-std=c++0x)
 endif()
