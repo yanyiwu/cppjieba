@@ -229,6 +229,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [KeywordServer] 50行搭建一个中文关键词抽取服务。
 + [cppjieba-server] CppJieba HTTP 服务器。
 + [phpjieba] php版本的结巴分词扩展。
++ [perl5-jieba] Perl版本的结巴分词扩展。
 
 ## 线上演示
 
@@ -281,6 +282,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
 [cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
 [phpjieba]:https://github.com/jonnywang/phpjieba
+[perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yanyiwu/cppjieba/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

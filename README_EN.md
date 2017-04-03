@@ -86,6 +86,7 @@ Please see details in `test/demo.cpp`.
 + [ngx_http_cppjieba_module]
 + [gitbook-plugin-search-pro]
 + [cppjieba-server]
++ [perl5-jieba]
 
 ## Contact
 
@@ -109,3 +110,4 @@ Please see details in `test/demo.cpp`.
 [pg_jieba]:https://github.com/jaiminpan/pg_jieba
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
 [cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
+[perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
