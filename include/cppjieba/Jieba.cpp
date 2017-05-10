@@ -140,8 +140,11 @@ extern "C" {
         vector<string> words;
         segmentor->Cut(sentence, words, hmm);
         for (vector<string>::const_iterator iter =words.begin(); iter != words.end(); iter++){
-            PyList_Append(result,PyString_FromString((*iter).c_str()));
+            PyObject* a=PyString_FromString((*iter).c_str());
+            PyList_Append(result,a);
+            Py_XDECREF(a);
         }
+        //free(words);
         return result;
     }
 
@@ -158,6 +161,7 @@ extern "C" {
             string s=iter->first+'/'+iter->second;
             PyObject* p=PyString_FromString(s.c_str());
             PyList_Append(result,p);
+            Py_XDECREF(p);
         }
         return result;
     }
@@ -174,6 +178,10 @@ extern "C" {
             PyObject* word=PyString_FromString(iter->first.c_str());
             PyObject* p=PyTuple_Pack(2,word,weight);
             PyList_Append(result,p);
+            Py_XDECREF(weight);
+            Py_XDECREF(word);
+            Py_XDECREF(p);
+
         }
         return result;
     }

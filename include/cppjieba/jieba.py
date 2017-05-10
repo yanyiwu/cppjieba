@@ -68,7 +68,7 @@ if __name__=='__main__':
     start=time.time()
     for i in range(50):
         s=model.cut(text)
-    print len(s)
+        print len(s)
     print len(text)*50/(time.time()-start)/1000
     
     start=time.time()
@@ -78,9 +78,11 @@ if __name__=='__main__':
     print len(text)*50/(time.time()-start)/1000
     
     start=time.time()
-    for i in range(50):
-        s=model.extract(text,10)
-    print len(s)
+    text='中国政治中国政治'
+    while True:
+    #for i in range(50):
+        s=model.extract(text,30)
+        print len(s)
     for i,j in s:
         print i,j
     print (time.time()-start)/50
