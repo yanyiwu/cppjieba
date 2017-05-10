@@ -8,7 +8,7 @@ lib.Jieba_cut.restype = py_object
 lib.Jieba_tag.restype = py_object
 lib.Jieba_extract.restype = py_object
 
-class Jieba(object):
+class Tokenizer(object):
     def __init__(self, 
         dict_path=cur_dir+'/dict/jieba.dict.utf8', 
         model_path=cur_dir+'/dict/hmm_model.utf8', 
@@ -16,6 +16,12 @@ class Jieba(object):
         idfPath=cur_dir+'/dict/idf.utf8', 
         stopWordPath=cur_dir+'/dict/stop_words.utf8'):
         self.obj = lib.Jieba_new(dict_path, model_path, user_dict_path, idfPath, stopWordPath)
+
+    def add_word(self, word, tag='n', num=50):
+        return lib.Jieba_add_word(self.obj, word, tag, num)
+    
+    def load_user_dicts(self, paths):
+        return lib.Jieba_load_dict(self.obj, paths)
 
     def cut(self, sentence, hmm=True):
         return lib.Jieba_cut(self.obj, sentence, hmm)
@@ -30,8 +36,9 @@ class Jieba(object):
 
     def extract(self, sentence, topN):
         return lib.Jieba_extract(self.obj, sentence, topN)
+
 if __name__=='__main__':
-    model=Jieba()
+    model=Tokenizer()
     print model
     text='''
     全国两会是数千名中外记者关注中国发展、聚焦中国命运的“新闻发布厅”。“本届两会，处处彰显着‘开门办会’的会风，大家走进了更开放的会场，体会到了更民主的氛围。”光明日报社融媒体记者张永群说。
@@ -66,6 +73,10 @@ if __name__=='__main__':
     '''
     import time
     start=time.time()
+    for i in range(10000):
+        model.add_word('么么么么吗','n',100)
+    print 10000/(time.time()-start)
+
     for i in range(50):
         s=model.cut(text)
         print len(s)
@@ -79,11 +90,15 @@ if __name__=='__main__':
     
     start=time.time()
     text='中国政治中国政治'
-    while True:
-    #for i in range(50):
+    for i in range(50):
         s=model.extract(text,30)
         print len(s)
     for i,j in s:
         print i,j
     print (time.time()-start)/50
     print len(text)*50/(time.time()-start)/1000
+    
+    start=time.time()
+    for i in range(50):
+        model.load_user_dicts('user_dicts/地方.txt')
+    print (time.time()-start)/50
