@@ -142,7 +142,7 @@ inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
 inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) {
   runes.clear();
   runes.reserve(len / 2);
-  for (size_t i = 0, j = 0; i < len;) {
+  for (uint32_t i = 0, j = 0; i < len;) {
     RuneStrLite rp = DecodeRuneInString(s + i, len - i);
     if (rp.len == 0) {
       runes.clear();
