@@ -39,7 +39,23 @@ class KeywordExtractor {
   ~KeywordExtractor() {
   }
 
-  void Extract(const std::string& sentence, std::vector<std::string>& keywords, size_t topN) const {
+  std::vector<std::string> FilteStop(const std::vector<std::string>& wordsIn, const std::size_t max = 10000) const {
+    std::vector<std::string> wordsOut;
+    std::size_t count = 0;
+    for (std::size_t i = 0; i < wordsIn.size(); ++i) {
+      if(count > max){
+	break;
+      }
+      if (stopWords_.find(wordsIn[i]) != stopWords_.end()) {
+        continue;
+      }
+      wordsOut.push_back( wordsIn[i] );
+      ++count;
+    }
+    return std::move(wordsOut);
+  }
+
+  void Extract(const std::string& sentence, std::vector<std::string>& keywords, std::size_t topN) const {
     std::vector<Word> topWords;
     Extract(sentence, topWords, topN);
     for (size_t i = 0; i < topWords.size(); i++) {
