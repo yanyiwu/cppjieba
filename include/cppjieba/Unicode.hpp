@@ -16,14 +16,14 @@ using std::vector;
 typedef uint32_t Rune;
 
 struct Word {
-  string word;
-  uint32_t offset;
-  uint32_t unicode_offset;
-  uint32_t unicode_length;
-  Word(const string& w, uint32_t o)
+  std::string word;
+  std::uint32_t offset;
+  std::uint32_t unicode_offset;
+  std::uint32_t unicode_length;
+  Word(const std::string& w, std::uint32_t o)
    : word(w), offset(o) {
   }
-  Word(const string& w, uint32_t o, uint32_t unicode_offset, uint32_t unicode_length)
+  Word(const std::string& w, std::uint32_t o, std::uint32_t unicode_offset, std::uint32_t unicode_length)
           : word(w), offset(o), unicode_offset(unicode_offset), unicode_length(unicode_length) {
   }
 }; // struct Word
@@ -93,7 +93,7 @@ inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
     // 7bit, total 7bit
     rp.rune = (uint8_t)(str[0]) & 0x7f;
     rp.len = 1;
-  } else if ((uint8_t)str[0] <= 0xdf &&  1 < len) { 
+  } else if ((uint8_t)str[0] <= 0xdf &&  1 < len) {
     // 110xxxxxx
     // 5bit, total 5bit
     rp.rune = (uint8_t)(str[0]) & 0x1f;
