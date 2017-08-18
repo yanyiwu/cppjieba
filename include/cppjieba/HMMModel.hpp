@@ -6,8 +6,8 @@
 
 namespace cppjieba {
 
-using namespace limonp;
-typedef unordered_map<Rune, double> EmitProbMap;
+//using namespace limonp;
+typedef std::unordered_map<Rune, double> EmitProbMap;
 
 struct HMMModel {
   /*
@@ -16,7 +16,7 @@ struct HMMModel {
    * */
   enum {B = 0, E = 1, M = 2, S = 3, STATUS_SUM = 4};
 
-  HMMModel(const string& modelPath) {
+  HMMModel(const std::string& modelPath) {
     memset(startProb, 0, sizeof(startProb));
     memset(transProb, 0, sizeof(transProb));
     statMap[0] = 'B';
@@ -71,7 +71,7 @@ struct HMMModel {
     XCHECK(GetLine(ifile, line));
     XCHECK(LoadEmitProb(line, emitProbS));
   }
-  double GetEmitProb(const EmitProbMap* ptMp, Rune key, 
+  double GetEmitProb(const EmitProbMap* ptMp, Rune key,
         double defVal)const {
     EmitProbMap::const_iterator cit = ptMp->find(key);
     if (cit == ptMp->end()) {
