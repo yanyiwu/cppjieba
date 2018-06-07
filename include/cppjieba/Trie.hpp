@@ -15,7 +15,7 @@ const size_t MAX_WORD_LENGTH = 512;
 struct DictUnit {
   Unicode word;
   double weight;
-  string tag;
+  std::string tag;
 }; // struct DictUnit
 
 // for debugging
@@ -28,10 +28,10 @@ struct DictUnit {
 struct Dag {
   RuneStr runestr;
   // [offset, nexts.first]
-  limonp::LocalVector<pair<size_t, const DictUnit*> > nexts;
+  limonp::LocalVector<std::pair<size_t, const DictUnit*> > nexts;
   const DictUnit * pInfo;
   double weight;
-  size_t nextPos; // TODO
+  std::size_t nextPos; // TODO
   Dag():runestr(), pInfo(NULL), weight(0.0), nextPos(0) {
   }
 }; // struct Dag
@@ -43,7 +43,7 @@ class TrieNode {
   TrieNode(): next(NULL), ptValue(NULL) {
   }
  public:
-  typedef unordered_map<TrieKey, TrieNode*> NextMap;
+  typedef std::unordered_map<TrieKey, TrieNode*> NextMap;
   NextMap *next;
   const DictUnit *ptValue;
 };
@@ -78,9 +78,9 @@ class Trie {
     return ptNode->ptValue;
   }
 
-  void Find(RuneStrArray::const_iterator begin, 
-        RuneStrArray::const_iterator end, 
-        vector<struct Dag>&res, 
+  void Find(RuneStrArray::const_iterator begin,
+        RuneStrArray::const_iterator end,
+        vector<struct Dag>&res,
         size_t max_word_len = MAX_WORD_LENGTH) const {
     assert(root_ != NULL);
     res.resize(end - begin);

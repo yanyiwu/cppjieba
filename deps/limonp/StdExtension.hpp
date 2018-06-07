@@ -13,11 +13,11 @@
 #include <unordered_map>
 #include <unordered_set>
 #else
-#include <tr1/unordered_map>
-#include <tr1/unordered_set>
+#include <unordered_map>
+#include <unordered_set>
 namespace std {
-using std::tr1::unordered_map;
-using std::tr1::unordered_set;
+//using std::tr1::unordered_map;
+//using std::tr1::unordered_set;
 }
 
 #endif
@@ -34,7 +34,7 @@ using std::tr1::unordered_set;
 namespace std {
 
 template<typename T>
-ostream& operator << (ostream& os, const vector<T>& v) {
+ostream& operator << (ostream& os, const std::vector<T>& v) {
   if(v.empty()) {
     return os << "[]";
   }
@@ -47,7 +47,7 @@ ostream& operator << (ostream& os, const vector<T>& v) {
 }
 
 template<>
-inline ostream& operator << (ostream& os, const vector<string>& v) {
+inline ostream& operator << (ostream& os, const std::vector<string>& v) {
   if(v.empty()) {
     return os << "[]";
   }
@@ -60,7 +60,7 @@ inline ostream& operator << (ostream& os, const vector<string>& v) {
 }
 
 template<typename T>
-ostream& operator << (ostream& os, const deque<T>& dq) {
+ostream& operator << (ostream& os, const std::deque<T>& dq) {
   if(dq.empty()) {
     return os << "[]";
   }
@@ -74,27 +74,27 @@ ostream& operator << (ostream& os, const deque<T>& dq) {
 
 
 template<class T1, class T2>
-ostream& operator << (ostream& os, const pair<T1, T2>& pr) {
+ostream& operator << (ostream& os, const std::pair<T1, T2>& pr) {
   os << pr.first << ":" << pr.second ;
   return os;
 }
 
 
 template<class T>
-string& operator << (string& str, const T& obj) {
-  stringstream ss;
+std::string& operator << (std::string& str, const T& obj) {
+  std::stringstream ss;
   ss << obj; // call ostream& operator << (ostream& os,
   return str = ss.str();
 }
 
 template<class T1, class T2>
-ostream& operator << (ostream& os, const map<T1, T2>& mp) {
+ostream& operator << (ostream& os, const std::map<T1, T2>& mp) {
   if(mp.empty()) {
     os<<"{}";
     return os;
   }
   os<<'{';
-  typename map<T1, T2>::const_iterator it = mp.begin();
+  typename std::map<T1, T2>::const_iterator it = mp.begin();
   os<<*it;
   it++;
   while(it != mp.end()) {
@@ -104,6 +104,7 @@ ostream& operator << (ostream& os, const map<T1, T2>& mp) {
   os<<'}';
   return os;
 }
+
 template<class T1, class T2>
 ostream& operator << (ostream& os, const std::unordered_map<T1, T2>& mp) {
   if(mp.empty()) {
@@ -120,13 +121,13 @@ ostream& operator << (ostream& os, const std::unordered_map<T1, T2>& mp) {
 }
 
 template<class T>
-ostream& operator << (ostream& os, const set<T>& st) {
+ostream& operator << (ostream& os, const std::set<T>& st) {
   if(st.empty()) {
     os << "{}";
     return os;
   }
   os<<'{';
-  typename set<T>::const_iterator it = st.begin();
+  typename std::set<T>::const_iterator it = st.begin();
   os<<*it;
   it++;
   while(it != st.end()) {
@@ -143,14 +144,14 @@ bool IsIn(const ContainType& contain, const KeyType& key) {
 }
 
 template<class T>
-basic_string<T> & operator << (basic_string<T> & s, ifstream & ifs) {
-  return s.assign((istreambuf_iterator<T>(ifs)), istreambuf_iterator<T>());
+std::basic_string<T> & operator << (std::basic_string<T> & s, std::ifstream & ifs) {
+  return s.assign((std::istreambuf_iterator<T>(ifs)), std::istreambuf_iterator<T>());
 }
 
 template<class T>
-ofstream & operator << (ofstream & ofs, const basic_string<T>& s) {
-  ostreambuf_iterator<T> itr (ofs);
-  copy(s.begin(), s.end(), itr);
+std::ofstream & operator << (std::ofstream & ofs, const std::basic_string<T>& s) {
+  std::ostreambuf_iterator<T> itr (ofs);
+  std::copy(s.begin(), s.end(), itr);
   return ofs;
 }
 
