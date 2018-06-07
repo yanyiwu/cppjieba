@@ -80,8 +80,10 @@ class DictTrie {
     return min_weight_;
   }
 
-  void InserUserDictNode(vector<string>& buf){
+  void InserUserDictNode(const string& line){
+    vector<string> buf;
     DictUnit node_info;
+    Split(line, buf, " ");
     if(buf.size() == 1){
           MakeNodeInfo(node_info, 
                 buf[0], 
@@ -102,6 +104,12 @@ class DictTrie {
         if (node_info.word.size() == 1) {
           user_dict_single_chinese_word_.insert(node_info.word[0]);
         }
+  }
+  
+  void LoadUserDict(vector<string>& buf){
+    for (size_t i = 0; i < buf.size(); i++) {
+      InserUserDictNode(buf[i]);
+    }
   }
 
  private:
@@ -139,14 +147,12 @@ class DictTrie {
       ifstream ifs(files[i].c_str());
       XCHECK(ifs.is_open()) << "open " << files[i] << " failed"; 
       string line;
-      vector<string> buf;
+      
       for (; getline(ifs, line); lineno++) {
         if (line.size() == 0) {
           continue;
         }
-        buf.clear();
-        Split(line, buf, " ");
-        InserUserDictNode(buf);
+        InserUserDictNode(line);
       }
     }
   }

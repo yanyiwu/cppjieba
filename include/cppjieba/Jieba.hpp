@@ -88,6 +88,10 @@ class Jieba {
     return &model_;
   }
 
+  void LoadUserDict(vector<string>& buf)  {
+    dict_trie_.LoadUserDict(buf);
+  }
+
  private:
   DictTrie dict_trie_;
   HMMModel model_;
