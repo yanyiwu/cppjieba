@@ -226,6 +226,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
 + [ngx_http_cppjieba_module] Nginx 分词插件。
 + [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
++ [cppjieba-py] 由 [bung87] 基于 pybind11 封装的 python 模块,使用体验上接近于原jieba。
 + [KeywordServer] 50行搭建一个中文关键词抽取服务。
 + [cppjieba-server] CppJieba HTTP 服务器。
 + [phpjieba] php版本的结巴分词扩展。
@@ -263,6 +264,8 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [CppJieba]:https://github.com/yanyiwu/cppjieba
 [jannson]:https://github.com/jannson
 [cppjiebapy]:https://github.com/jannson/cppjiebapy
+[bung87]:https://github.com/bung87
+[cppjieba-py]:https://github.com/bung87/cppjieba-py
 [cppjiebapy_discussion]:https://github.com/yanyiwu/cppjieba/issues/1
 [NodeJieba]:https://github.com/yanyiwu/nodejieba
 [jiebaR]:https://github.com/qinwf/jiebaR
