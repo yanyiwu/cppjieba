@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
   s = "我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。";
   jieba.Tag(s, tagres);
   cout << s << endl;
-  cout << tagres << endl;;
+  cout << tagres << endl;
 
   cout << "[demo] Keyword Extraction" << endl;
   const size_t topk = 5;
