@@ -84,12 +84,21 @@ class Jieba {
   const DictTrie* GetDictTrie() const {
     return &dict_trie_;
   } 
+  
   const HMMModel* GetHMMModel() const {
     return &model_;
   }
 
-  void LoadUserDict(vector<string>& buf)  {
+  void LoadUserDict(const vector<string>& buf)  {
     dict_trie_.LoadUserDict(buf);
+  }
+
+  void LoadUserDict(const set<string>& buf)  {
+    dict_trie_.LoadUserDict(buf);
+  }
+
+  void LoadUserDict(const string& path)  {
+    dict_trie_.LoadUserDict(path);
   }
 
  private:

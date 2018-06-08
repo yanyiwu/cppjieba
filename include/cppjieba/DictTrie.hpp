@@ -80,7 +80,7 @@ class DictTrie {
     return min_weight_;
   }
 
-  void InserUserDictNode(const string& line){
+  void InserUserDictNode(const string& line) {
     vector<string> buf;
     DictUnit node_info;
     Split(line, buf, " ");
@@ -106,11 +106,36 @@ class DictTrie {
         }
   }
   
-  void LoadUserDict(vector<string>& buf){
+  void LoadUserDict(const vector<string>& buf) {
     for (size_t i = 0; i < buf.size(); i++) {
       InserUserDictNode(buf[i]);
     }
   }
+
+   void LoadUserDict(const set<string>& buf) {
+    std::set<string>::const_iterator iter;
+    for (iter = buf.begin(); iter != buf.end(); iter++){
+      InserUserDictNode(*iter);
+    }
+  }
+
+  void LoadUserDict(const string& filePaths) {
+    vector<string> files = limonp::Split(filePaths, "|;");
+    size_t lineno = 0;
+    for (size_t i = 0; i < files.size(); i++) {
+      ifstream ifs(files[i].c_str());
+      XCHECK(ifs.is_open()) << "open " << files[i] << " failed"; 
+      string line;
+      
+      for (; getline(ifs, line); lineno++) {
+        if (line.size() == 0) {
+          continue;
+        }
+        InserUserDictNode(line);
+      }
+    }
+  }
+
 
  private:
   void Init(const string& dict_path, const string& user_dict_paths, UserWordWeightOption user_word_weight_opt) {
@@ -140,22 +165,6 @@ class DictTrie {
 
   
 
-  void LoadUserDict(const string& filePaths) {
-    vector<string> files = limonp::Split(filePaths, "|;");
-    size_t lineno = 0;
-    for (size_t i = 0; i < files.size(); i++) {
-      ifstream ifs(files[i].c_str());
-      XCHECK(ifs.is_open()) << "open " << files[i] << " failed"; 
-      string line;
-      
-      for (; getline(ifs, line); lineno++) {
-        if (line.size() == 0) {
-          continue;
-        }
-        InserUserDictNode(line);
-      }
-    }
-  }
 
   bool MakeNodeInfo(DictUnit& node_info,
         const string& word, 
