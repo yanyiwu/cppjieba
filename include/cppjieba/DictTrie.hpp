@@ -72,6 +72,25 @@ class DictTrie {
     trie_->Find(begin, end, res, max_word_len);
   }
 
+  bool Find(const string& word)
+  {
+    const DictUnit *tmp = NULL;
+    RuneStrArray runes;
+    if (!DecodeRunesInString(word, runes))
+    {
+      XLOG(ERROR) << "Decode failed.";
+    }
+    tmp = Find(runes.begin(), runes.end());
+    if (tmp == NULL)
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
+
   bool IsUserDictSingleChineseWord(const Rune& word) const {
     return IsIn(user_dict_single_chinese_word_, word);
   }

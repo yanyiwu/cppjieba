@@ -72,6 +72,15 @@ class Jieba {
     return dict_trie_.InsertUserWord(word, tag);
   }
 
+  bool InsertUserWord(const string& word,int freq, const string& tag = UNKNOWN_TAG) {
+    return dict_trie_.InsertUserWord(word,freq, tag);
+  }
+
+  bool Find(const string& word)
+  {
+    return dict_trie_.Find(word);
+  }
+
   void ResetSeparators(const string& s) {
     //TODO
     mp_seg_.ResetSeparators(s);
