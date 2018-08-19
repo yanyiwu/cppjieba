@@ -56,13 +56,7 @@ class MPSegment: public SegmentTagged {
            RuneStrArray::const_iterator end,
            vector<WordRange>& words,
            size_t max_word_len = MAX_WORD_LENGTH) const {
-    vector<Dag> dags;
-    dictTrie_->Find(begin, 
-          end, 
-          dags,
-          max_word_len);
-    CalcDP(dags);
-    CutByDag(begin, end, dags, words);
+    BasicCut(begin,end,words,max_word_len);
   }
 
   const DictTrie* GetDictTrie() const {
@@ -77,6 +71,46 @@ class MPSegment: public SegmentTagged {
     return dictTrie_->IsUserDictSingleChineseWord(value);
   }
  private:
+  void BasicCut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res,size_t max_word_len) const {
+    RuneStrArray::const_iterator left = begin;
+    RuneStrArray::const_iterator right = begin;
+    while (right != end) {
+      if (right->rune < 0x80) {
+        if (left != right) {
+          InternalCut(left, right, res,max_word_len);
+        }
+        left = right;
+        do {
+          right = SequentialLetterRule(left, end);
+          if (right != left) {
+            break;
+          }
+          right = NumbersRule(left, end);
+          if (right != left) {
+            break;
+          }
+          right ++;
+        } while (false);
+        WordRange wr(left, right - 1);
+        res.push_back(wr);
+        left = right;
+      } else {
+        right++;
+      }
+    }
+    if (left != right) {
+      InternalCut(left, right, res, max_word_len);
+    }
+}
+  void InternalCut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res,size_t max_word_len = MAX_WORD_LENGTH) const {
+    vector<Dag> dags;
+    dictTrie_->Find(begin, 
+          end, 
+          dags,
+          max_word_len);
+    CalcDP(dags);
+    CutByDag(begin, end, dags, res);
+  }
   void CalcDP(vector<Dag>& dags) const {
     size_t nextPos;
     const DictUnit* p;

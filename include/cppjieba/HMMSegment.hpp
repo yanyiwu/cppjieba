@@ -44,6 +44,10 @@ class HMMSegment: public SegmentBase {
     GetWordsFromWordRanges(sentence, wrs, words);
   }
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res) const {
+    BasicCut(begin,end,res);
+  }
+ private:
+  void BasicCut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res) const {
     RuneStrArray::const_iterator left = begin;
     RuneStrArray::const_iterator right = begin;
     while (right != end) {
@@ -73,44 +77,7 @@ class HMMSegment: public SegmentBase {
     if (left != right) {
       InternalCut(left, right, res);
     }
-  }
- private:
-  // sequential letters rule
-  RuneStrArray::const_iterator SequentialLetterRule(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
-    Rune x = begin->rune;
-    if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
-      begin ++;
-    } else {
-      return begin;
-    }
-    while (begin != end) {
-      x = begin->rune;
-      if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9')) {
-        begin ++;
-      } else {
-        break;
-      }
-    }
-    return begin;
-  }
-  //
-  RuneStrArray::const_iterator NumbersRule(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
-    Rune x = begin->rune;
-    if ('0' <= x && x <= '9') {
-      begin ++;
-    } else {
-      return begin;
-    }
-    while (begin != end) {
-      x = begin->rune;
-      if ( ('0' <= x && x <= '9') || x == '.') {
-        begin++;
-      } else {
-        break;
-      }
-    }
-    return begin;
-  }
+}
   void InternalCut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res) const {
     vector<size_t> status;
     Viterbi(begin, end, status);

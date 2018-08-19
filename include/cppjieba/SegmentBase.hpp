@@ -4,7 +4,7 @@
 #include "limonp/Logging.hpp"
 #include "PreFilter.hpp"
 #include <cassert>
-
+// #include "Unicode.hpp"
 
 namespace cppjieba {
 
@@ -39,6 +39,46 @@ class SegmentBase {
   }
  protected:
   unordered_set<Rune> symbols_;
+ 
+  // sequential letters rule
+RuneStrArray::const_iterator SequentialLetterRule(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
+  Rune x = begin->rune;
+  if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
+    begin ++;
+  } else {
+    return begin;
+  }
+  while (begin != end) {
+    x = begin->rune;
+    if (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9')) {
+      begin ++;
+    } else {
+      break;
+    }
+  }
+  return begin;
+}
+//
+RuneStrArray::const_iterator NumbersRule(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
+  Rune x = begin->rune;
+  if ('0' <= x && x <= '9') {
+    begin ++;
+  } else {
+    return begin;
+  }
+  while (begin != end) {
+    x = begin->rune;
+    if ( ('0' <= x && x <= '9') || x == '.') {
+      begin++;
+    } else {
+      break;
+    }
+  }
+  return begin;
+}
+// private:
+//   virtual void InternalCut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res,size_t max_word_len) const = 0;
+
 }; // class SegmentBase
 
 } // cppjieba
