@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](http://yanyiwu.mit-license.org)
 [![Build status](https://ci.appveyor.com/api/projects/status/wl30fjnm2rhft6ta/branch/master?svg=true)](https://ci.appveyor.com/project/yanyiwu/cppjieba/branch/master)
 
-[![logo](http://7viirv.com1.z0.glb.clouddn.com/CppJiebaLogo-v1.png)](https://github.com/yanyiwu/cppjieba)
+[![logo](http://images.yanyiwu.com/CppJiebaLogo-v1.png)](https://github.com/yanyiwu/cppjieba)
 
 ## 简介
 
