@@ -288,5 +288,3 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yanyiwu/cppjieba/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
