@@ -38,10 +38,10 @@ struct RuneStr {
   uint32_t len;
   uint32_t unicode_offset;
   uint32_t unicode_length;
-  RuneStr(): rune(0), offset(0), len(0) {
+  RuneStr(): rune(0), offset(0), len(0), unicode_offset(0), unicode_length(0) {
   }
   RuneStr(Rune r, uint32_t o, uint32_t l)
-    : rune(r), offset(o), len(l) {
+    : rune(r), offset(o), len(l), unicode_offset(0), unicode_length(0) {
   }
   RuneStr(Rune r, uint32_t o, uint32_t l, uint32_t unicode_offset, uint32_t unicode_length)
           : rune(r), offset(o), len(l), unicode_offset(unicode_offset), unicode_length(unicode_length) {
