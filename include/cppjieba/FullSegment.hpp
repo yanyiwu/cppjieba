@@ -48,7 +48,7 @@ class FullSegment: public SegmentBase {
   void Cut(RuneStrArray::const_iterator begin, 
         RuneStrArray::const_iterator end, 
         vector<WordRange>& res) const {
-    // resut of searching in trie tree
+    // result of searching in trie tree
     LocalVector<pair<size_t, const DictUnit*> > tRes;
 
     // max index of res's words
