@@ -87,6 +87,7 @@ Please see details in `test/demo.cpp`.
 + [gitbook-plugin-search-pro]
 + [cppjieba-server]
 + [perl5-jieba]
++ [jieba-dlang]
 
 ## Contact
 
@@ -111,3 +112,4 @@ Please see details in `test/demo.cpp`.
 [gitbook-plugin-search-pro]:https://plugins.gitbook.com/plugin/search-pro
 [cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
 [perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
+[jieba-dlang]:https://github.com/shove70/jieba
