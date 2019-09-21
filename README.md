@@ -232,6 +232,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [cppjieba-server] CppJieba HTTP 服务器。
 + [phpjieba] php版本的结巴分词扩展。
 + [perl5-jieba] Perl版本的结巴分词扩展。
++ [jieba-dlang] D 语言的结巴分词 Deimos Bindings。
 
 ## 线上演示
 
@@ -277,5 +278,6 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 [cppjieba-server]:https://github.com/yanyiwu/cppjieba-server
 [phpjieba]:https://github.com/jonnywang/phpjieba
 [perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
+[jieba-dlang]:https://github.com/shove70/jieba
 
 
