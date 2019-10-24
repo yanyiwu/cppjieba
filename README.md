@@ -245,14 +245,12 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 [Jieba中文分词系列性能评测]
 
-## 客服
+## Contributors
 
-+ Email: `i@yanyiwu.com`
+### Code Contributors
 
-## 作者
-
-- [yanyiwu](yanyiwu.com)
-- [aholic](https://github.com/aholic)
+This project exists thanks to all the people who contribute.
+<a href="https://github.com/yanyiwu/cppjieba/graphs/contributors"><img src="https://opencollective.com/cppjieba/contributors.svg?width=890&button=false" /></a>
 
 [GoJieba]:https://github.com/yanyiwu/gojieba
 [CppJieba]:https://github.com/yanyiwu/cppjieba
