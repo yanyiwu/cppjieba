@@ -29,6 +29,7 @@ using std::tr1::unordered_set;
 #include <fstream>
 #include <sstream>
 
+#define print(x) std::cout << x << std::endl
 
 namespace std {
 
