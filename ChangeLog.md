@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v5.0.2
+
++ Upgrade [limonp](https://github.com/yanyiwu/limonp) -> v0.6.1
+
 ## v5.0.1
 
 + Make Compiler Happier.
