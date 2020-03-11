@@ -1,5 +1,7 @@
 # CppJieba ChangeLog
 
++ Upgrade [limonp](https://github.com/yanyiwu/limonp) -> v0.6.3
+
 ## v5.0.2
 
 + Upgrade [limonp](https://github.com/yanyiwu/limonp) -> v0.6.1
