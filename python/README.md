@@ -3,7 +3,11 @@
 ## Install
 
 ```bash
-$ python install .
+$ git clone https://github.com/hscspring/cppjieba.git
+$ cd cppjieba
+$ pip install .
+$ # or :
+$ python setup.py install
 ```
 
 ## Usage
