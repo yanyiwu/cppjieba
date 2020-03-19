@@ -1,4 +1,4 @@
-直接 fork [yanyiwu/cppjieba: "结巴" 中文分词的 C++ 版本](https://github.com/yanyiwu/cppjieba) 包装，性能接近。
+Fork [yanyiwu/cppjieba: "结巴" 中文分词的 C++ 版本](https://github.com/yanyiwu/cppjieba) 包装，性能接近。
 
 ## Install
 
