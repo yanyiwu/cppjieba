@@ -1,8 +1,6 @@
+import os
 from pathlib import Path
 import cppjieba_pybind as cppjieba
-
-
-import os
 
 root = Path(os.path.dirname(os.path.abspath(__file__)))
 
