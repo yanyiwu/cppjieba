@@ -1,2 +1,0 @@
-cppjieba
-cppjieba_pybind
