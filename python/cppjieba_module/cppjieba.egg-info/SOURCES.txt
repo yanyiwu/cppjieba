@@ -1,0 +1,11 @@
+README.md
+setup.py
+python/cppjieba_module/cppjieba/CppJieba.py
+python/cppjieba_module/cppjieba/__init__.py
+python/cppjieba_module/cppjieba.egg-info/PKG-INFO
+python/cppjieba_module/cppjieba.egg-info/SOURCES.txt
+python/cppjieba_module/cppjieba.egg-info/dependency_links.txt
+python/cppjieba_module/cppjieba.egg-info/not-zip-safe
+python/cppjieba_module/cppjieba.egg-info/requires.txt
+python/cppjieba_module/cppjieba.egg-info/top_level.txt
+python/cppjieba_module/cppjieba/pybind/cppjieba_pybind.cc
