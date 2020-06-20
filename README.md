@@ -245,6 +245,10 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 [Jieba中文分词系列性能评测]
 
+## Sponsorship
+
+[![sponsorship](http://yanyiwu.com/img/gitads_720x300.png)](https://tracking.gitads.io/?campaign=gitads&repo=testrepo&redirect=gitads.io)
+
 ## Contributors
 
 ### Code Contributors
