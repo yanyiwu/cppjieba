@@ -247,7 +247,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 
 ## Sponsorship
 
-[![sponsorship](http://yanyiwu.com/img/gitads_720x300.png)](https://tracking.gitads.io/?campaign=gitads&repo=testrepo&redirect=gitads.io)
+[![sponsorship](http://images.gitads.io/cppjieba)](https://tracking.gitads.io/?campaign=gitads&repo=cppjieba&redirect=gitads.io)
 
 ## Contributors
 
