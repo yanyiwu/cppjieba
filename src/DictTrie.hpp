@@ -18,7 +18,7 @@
 namespace CppJieba
 {
     using namespace Limonp;
-    const double MIN_DOUBLE = -3.14e+100;
+    const double MIN_DOUBLE = -3.14e+101;
     const double MAX_DOUBLE = 3.14e+100;
     const size_t DICT_COLUMN_NUM = 3;
     const char* const UNKNOWN_TAG = "x";
