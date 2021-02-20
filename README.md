@@ -226,6 +226,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [iosjieba] iOS 版本的结巴分词。
 + [SqlJieba] MySQL 全文索引的结巴中文分词插件。
 + [pg_jieba] PostgreSQL 数据库的分词插件。
++ [simple] SQLite3 FTS5 数据库的分词插件。
 + [gitbook-plugin-search-pro] 支持中文搜索的 gitbook 插件。
 + [ngx_http_cppjieba_module] Nginx 分词插件。
 + [cppjiebapy] 由 [jannson] 开发的供 python 模块调用的项目 [cppjiebapy], 相关讨论 [cppjiebapy_discussion] .
@@ -283,5 +284,6 @@ This project exists thanks to all the people who contribute.
 [phpjieba]:https://github.com/jonnywang/phpjieba
 [perl5-jieba]:https://metacpan.org/pod/distribution/Lingua-ZH-Jieba/lib/Lingua/ZH/Jieba.pod
 [jieba-dlang]:https://github.com/shove70/jieba
+[simple]:https://github.com/wangfenjin/simple
 
 
