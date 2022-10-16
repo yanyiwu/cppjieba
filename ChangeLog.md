@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v5.0.5
+
++ Merged [pr-171 submodule update limonp to v0.6.6 #171](https://github.com/yanyiwu/cppjieba/pull/171)
+
 ## v5.0.4
 
 + Merged [pr-168 limonp as submodule #168](https://github.com/yanyiwu/cppjieba/pull/168)
