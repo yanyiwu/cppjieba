@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v5.1.0
+
++ Merged [feature: add RemoveWord api from gojieba/pull/99 #172](https://github.com/yanyiwu/cppjieba/pull/172)
+
 ## v5.0.5
 
 + Merged [pr-171 submodule update limonp to v0.6.6 #171](https://github.com/yanyiwu/cppjieba/pull/171)
