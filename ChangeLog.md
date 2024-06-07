@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## v5.1.1
+
++ Merged [pr-186](https://github.com/yanyiwu/cppjieba/pull/186)
+
 ## v5.1.0
 
 + Merged [feature: add RemoveWord api from gojieba/pull/99 #172](https://github.com/yanyiwu/cppjieba/pull/172)
