@@ -14,11 +14,6 @@ IF(APPLE) # mac os
     ADD_DEFINITIONS(-std=c++0x)
 endif()
 
-# cmake .. -DENC=GBK
-# IF (DEFINED ENC)
-#     ADD_DEFINITIONS(-DCPPJIEBA_${ENC})
-# ENDIF()
-
 ADD_SUBDIRECTORY(deps)
 ADD_SUBDIRECTORY(test)
 
