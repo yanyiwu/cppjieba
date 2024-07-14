@@ -1,5 +1,9 @@
 # CppJieba ChangeLog
 
+## Next
+
++ [submodule:deps/limonp] upgrade to v0.6.7
+
 ## v5.1.1
 
 + Merged [pr-186](https://github.com/yanyiwu/cppjieba/pull/186)
