@@ -1,6 +1,6 @@
 # CppJieba ChangeLog
 
-## Next
+## v5.1.2
 
 + [submodule:deps/limonp] upgrade to v0.6.7
 
