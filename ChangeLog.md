@@ -1,6 +1,6 @@
 # ChangeLog
 
-## Next Version
+## v5.1.3
 
 + [googletest] git submodule add googletest-1.6.0
 
