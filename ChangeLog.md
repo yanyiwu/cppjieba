@@ -1,4 +1,8 @@
-# CppJieba ChangeLog
+# ChangeLog
+
+## Next Version
+
++ [googletest] git submodule add googletest-1.6.0
 
 ## v5.1.2
 
