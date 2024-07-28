@@ -1,4 +1,12 @@
-# ChangeLog
+# CHANGELOG
+
+## v5.2.0
+
++ [CI] windows-[2019,2022]
++ [googletest] v1.6.0->v1.10.0
++ [CI] ubuntu version from 20 to 22, macos version from 12 to 14
++ [CMake] mini_required 2.6->3.5 and fix CXX_VERSION variable passed from cmd
++ [CI] matrix and multi cpp version [11, 14]
 
 ## v5.1.3
 
