@@ -22,6 +22,7 @@ jobs:
           macos-12,
           macos-13,
           macos-14,
+          windows-2022,
         ]  
         cpp_version: [11, 14]
 
