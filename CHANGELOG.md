@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v5.3.0
+
++ [c++17,c++20] compatibility
++ limonp version 0.6.7 -> 0.9.0
+
 ## v5.2.0
 
 + [CI] windows-[2019,2022]
