@@ -1,7 +1,20 @@
+if (MSVC)
+	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+endif()
+
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG release-1.11.0
+)
+FetchContent_MakeAvailable(googletest)
+
+
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/gtest/include)
 
 ADD_DEFINITIONS(-DLOGGING_LEVEL=LL_WARNING)
 
@@ -17,8 +30,4 @@ ADD_EXECUTABLE(test.run
     textrank_test.cpp
 )
 
-if(MSVC)
-	TARGET_LINK_LIBRARIES(test.run gtest)
-else()
-	TARGET_LINK_LIBRARIES(test.run gtest pthread)
-endif()
+TARGET_LINK_LIBRARIES(test.run gtest)
