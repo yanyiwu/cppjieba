@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v5.3.1
+
++ [cmake] fetch googletest
++ [submodules] rm test/googletest
+
 ## v5.3.0
 
 + [c++17,c++20] compatibility
