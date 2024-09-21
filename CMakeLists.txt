@@ -16,10 +16,27 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 ADD_DEFINITIONS(-O3 -g)
 
-ADD_SUBDIRECTORY(test)
-
-ENABLE_TESTING()
-if(NOT MSVC)
-	ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
-	ADD_TEST(NAME ./load_test COMMAND ./load_test)
+# Define a variable to check if this is the top-level project
+if(NOT DEFINED CPPJIEBA_TOP_LEVEL_PROJECT)
+    if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+        set(CPPJIEBA_TOP_LEVEL_PROJECT ON)
+    else()
+        set(CPPJIEBA_TOP_LEVEL_PROJECT OFF)
+    endif()
 endif()
+
+
+option(CPPJIEBA_BUILD_TESTS "Build cppjieba tests" ${CPPJIEBA_TOP_LEVEL_PROJECT})
+
+if(CPPJIEBA_BUILD_TESTS)
+  ENABLE_TESTING()
+
+  ADD_SUBDIRECTORY(test)
+  if(NOT MSVC)
+    ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
+    ADD_TEST(NAME ./load_test COMMAND ./load_test)
+  endif()
+endif()
+
+
+# ... other CMake configurations ...
