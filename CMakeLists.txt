@@ -17,3 +17,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 ADD_DEFINITIONS(-O3 -g)
 
 ADD_SUBDIRECTORY(test)
+
+ENABLE_TESTING()
+if(NOT MSVC)
+	ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
+	ADD_TEST(NAME ./load_test COMMAND ./load_test)
+endif()
