@@ -76,7 +76,7 @@ make test
 [{"word": "CEO", "offset": [93], "weight": 11.7392}, {"word": "升职", "offset": [72], "weight": 10.8562}, {"word": "加薪", "offset": [78], "weight": 10.6426}, {"word": "手扶拖拉机", "offset": [21], "weight": 10.0089}, {"word": "巅峰", "offset": [111], "weight": 9.49396}]
 ```
 
-详细请看 `test/demo.cpp`.
+For more details, please see [demo](https://github.com/yanyiwu/cppjieba-demo).
 
 ### 分词结果示例
 
@@ -182,7 +182,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 ["CEO:11.7392", "升职:10.8562", "加薪:10.6426", "手扶拖拉机:10.0089", "巅峰:9.49396"]
 ```
 
-详细请见 `test/demo.cpp`.
+For more details, please see [demo](https://github.com/yanyiwu/cppjieba-demo).
 
 ### 词性标注
 
@@ -191,7 +191,7 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 ["我:r", "是:v", "拖拉机:n", "学院:n", "手扶拖拉机:n", "专业:n", "的:uj", "。:x", "不用:v", "多久:m", "，:x", "我:r", "就:d", "会:v", "升职:v", "加薪:nr", "，:x", "当上:t", "CEO:eng", "，:x", "走上:v", "人生:n", "巅峰:n", "。:x"]
 ```
 
-详细请看 `test/demo.cpp`.
+For more details, please see [demo](https://github.com/yanyiwu/cppjieba-demo).
 
 支持自定义词性。
 比如在(`dict/user.dict.utf8`)增加一行
@@ -232,11 +232,6 @@ Query方法先使用Mix方法切词，对于切出来的较长的词再使用Ful
 + [phpjieba] php版本的结巴分词扩展。
 + [perl5-jieba] Perl版本的结巴分词扩展。
 + [jieba-dlang] D 语言的结巴分词 Deimos Bindings。
-
-## 线上演示
-
-[Web-Demo](http://cppjieba-webdemo.herokuapp.com/)
-(建议使用chrome打开)
 
 ## 性能评测
 
