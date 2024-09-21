@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v5.3.2
+
++ removed test/demo.cpp and linked https://github.com/yanyiwu/cppjieba-demo
++ Update Demo Link in README.md
++ [github/actions] stale 1 year ago issues
++ limonp v0.9.0 -> v1.0.0
+
 ## v5.3.1
 
 + [cmake] fetch googletest
