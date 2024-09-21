@@ -149,13 +149,12 @@ class DictTrie {
 
   void LoadUserDict(const string& filePaths) {
     vector<string> files = limonp::Split(filePaths, "|;");
-    size_t lineno = 0;
     for (size_t i = 0; i < files.size(); i++) {
       ifstream ifs(files[i].c_str());
       XCHECK(ifs.is_open()) << "open " << files[i] << " failed"; 
       string line;
       
-      for (; getline(ifs, line); lineno++) {
+      while(getline(ifs, line)) {
         if (line.size() == 0) {
           continue;
         }
@@ -214,7 +213,7 @@ class DictTrie {
     vector<string> buf;
 
     DictUnit node_info;
-    for (size_t lineno = 0; getline(ifs, line); lineno++) {
+    while (getline(ifs, line)) {
       Split(line, buf, " ");
       XCHECK(buf.size() == DICT_COLUMN_NUM) << "split result illegal, line:" << line;
       MakeNodeInfo(node_info, 
