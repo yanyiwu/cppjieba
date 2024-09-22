@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v5.4.0
+
++ unittest: class Jiaba add default argument input
++ class Jieba: support default dictpath
++ cmake: avoid testing when FetchContent by other project
++ class DictTrie: removed unused var
+
 ## v5.3.2
 
 + removed test/demo.cpp and linked https://github.com/yanyiwu/cppjieba-demo
