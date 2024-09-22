@@ -3,6 +3,39 @@
 
 using namespace cppjieba;
 
+TEST(JiebaTest, Test0) {
+  cppjieba::Jieba jieba;
+  vector<string> words;
+  string result;
+
+  jieba.Cut("他来到了网易杭研大厦", words);
+  result << words;
+  ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
+
+  jieba.Cut("我来自北京邮电大学。", words, false);
+  result << words;
+  ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\"]", result);
+
+  jieba.CutSmall("南京市长江大桥", words, 3);
+  ASSERT_EQ("[\"南京市\", \"长江\", \"大桥\"]", result << words);
+
+  jieba.CutHMM("我来自北京邮电大学。。。学号123456", words);
+  result << words;
+  ASSERT_EQ("[\"我来\", \"自北京\", \"邮电大学\", \"。\", \"。\", \"。\", \"学号\", \"123456\"]", result);
+
+  jieba.Cut("我来自北京邮电大学。。。学号123456，用AK47", words);
+  result << words;
+  ASSERT_EQ("[\"我\", \"来自\", \"北京邮电大学\", \"。\", \"。\", \"。\", \"学号\", \"123456\", \"，\", \"用\", \"AK47\"]", result);
+
+  jieba.CutAll("我来自北京邮电大学", words);
+  result << words;
+  ASSERT_EQ(result, "[\"我\", \"来自\", \"北京\", \"北京邮电\", \"北京邮电大学\", \"邮电\", \"邮电大学\", \"电大\", \"大学\"]");
+
+  jieba.CutForSearch("他来到了网易杭研大厦", words);
+  result << words;
+  ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
+}
+
 TEST(JiebaTest, Test1) {
   cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
                         "../dict/hmm_model.utf8",
