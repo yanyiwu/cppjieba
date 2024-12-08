@@ -85,7 +85,7 @@ class DictTrie {
   {
     const DictUnit *tmp = NULL;
     RuneStrArray runes;
-    if (!DecodeRunesInString(word, runes))
+    if (!DecodeUTF8RunesInString(word, runes))
     {
       XLOG(ERROR) << "Decode failed.";
     }
@@ -197,7 +197,7 @@ class DictTrie {
         const string& word, 
         double weight, 
         const string& tag) {
-    if (!DecodeRunesInString(word, node_info.word)) {
+    if (!DecodeUTF8RunesInString(word, node_info.word)) {
       XLOG(ERROR) << "Decode " << word << " failed.";
       return false;
     }

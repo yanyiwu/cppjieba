@@ -84,7 +84,7 @@ struct RuneStrLite {
   }
 }; // struct RuneStrLite
 
-inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
+inline RuneStrLite DecodeUTF8ToRune(const char* str, size_t len) {
   RuneStrLite rp(0, 0);
   if (str == NULL || len == 0) {
     return rp;
@@ -139,11 +139,11 @@ inline RuneStrLite DecodeRuneInString(const char* str, size_t len) {
   return rp;
 }
 
-inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) {
+inline bool DecodeUTF8RunesInString(const char* s, size_t len, RuneStrArray& runes) {
   runes.clear();
   runes.reserve(len / 2);
   for (uint32_t i = 0, j = 0; i < len;) {
-    RuneStrLite rp = DecodeRuneInString(s + i, len - i);
+    RuneStrLite rp = DecodeUTF8ToRune(s + i, len - i);
     if (rp.len == 0) {
       runes.clear();
       return false;
@@ -156,14 +156,14 @@ inline bool DecodeRunesInString(const char* s, size_t len, RuneStrArray& runes) 
   return true;
 }
 
-inline bool DecodeRunesInString(const string& s, RuneStrArray& runes) {
-  return DecodeRunesInString(s.c_str(), s.size(), runes);
+inline bool DecodeUTF8RunesInString(const string& s, RuneStrArray& runes) {
+  return DecodeUTF8RunesInString(s.c_str(), s.size(), runes);
 }
 
-inline bool DecodeRunesInString(const char* s, size_t len, Unicode& unicode) {
+inline bool DecodeUTF8RunesInString(const char* s, size_t len, Unicode& unicode) {
   unicode.clear();
   RuneStrArray runes;
-  if (!DecodeRunesInString(s, len, runes)) {
+  if (!DecodeUTF8RunesInString(s, len, runes)) {
     return false;
   }
   unicode.reserve(runes.size());
@@ -174,17 +174,17 @@ inline bool DecodeRunesInString(const char* s, size_t len, Unicode& unicode) {
 }
 
 inline bool IsSingleWord(const string& str) {
-  RuneStrLite rp = DecodeRuneInString(str.c_str(), str.size());
+  RuneStrLite rp = DecodeUTF8ToRune(str.c_str(), str.size());
   return rp.len == str.size();
 }
 
-inline bool DecodeRunesInString(const string& s, Unicode& unicode) {
-  return DecodeRunesInString(s.c_str(), s.size(), unicode);
+inline bool DecodeUTF8RunesInString(const string& s, Unicode& unicode) {
+  return DecodeUTF8RunesInString(s.c_str(), s.size(), unicode);
 }
 
-inline Unicode DecodeRunesInString(const string& s) {
+inline Unicode DecodeUTF8RunesInString(const string& s) {
   Unicode result;
-  DecodeRunesInString(s, result);
+  DecodeUTF8RunesInString(s, result);
   return result;
 }
 

@@ -34,7 +34,7 @@ class PosTagger {
     RuneStrArray runes;
     const DictTrie * dict = segment.GetDictTrie();
     assert(dict != NULL);
-      if (!DecodeRunesInString(str, runes)) {
+      if (!DecodeUTF8RunesInString(str, runes)) {
         XLOG(ERROR) << "Decode failed.";
         return POS_X;
       }

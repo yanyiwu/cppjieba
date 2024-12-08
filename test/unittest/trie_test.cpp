@@ -15,7 +15,7 @@ TEST(TrieTest, Empty) {
 TEST(TrieTest, Construct) {
   vector<Unicode> keys;
   vector<const DictUnit*> values;
-  keys.push_back(DecodeRunesInString("你"));
+  keys.push_back(DecodeUTF8RunesInString("你"));
   values.push_back((const DictUnit*)(NULL));
   Trie trie(keys, values);
 }
@@ -32,7 +32,7 @@ TEST(DictTrieTest, Test1) {
   ASSERT_LT(trie.GetMinWeight() + 15.6479, 0.001);
   string word("来到");
   cppjieba::RuneStrArray uni;
-  ASSERT_TRUE(DecodeRunesInString(word, uni));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, uni));
   //DictUnit nodeInfo;
   //nodeInfo.word = uni;
   //nodeInfo.tag = "v";
@@ -52,13 +52,13 @@ TEST(DictTrieTest, Test1) {
   LocalVector<pair<size_t, const DictUnit*> > res;
   const char * words[] = {"清", "清华", "清华大学"};
   for (size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
-    ASSERT_TRUE(DecodeRunesInString(words[i], uni));
+    ASSERT_TRUE(DecodeUTF8RunesInString(words[i], uni));
     res.push_back(make_pair(uni.size() - 1, trie.Find(uni.begin(), uni.end())));
     //resMap[uni.size() - 1] = trie.Find(uni.begin(), uni.end());
   }
   vector<pair<size_t, const DictUnit*> > vec;
   vector<struct Dag> dags;
-  ASSERT_TRUE(DecodeRunesInString(word, uni));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, uni));
   trie.Find(uni.begin(), uni.end(), dags);
   ASSERT_EQ(dags.size(), uni.size());
   ASSERT_NE(dags.size(), 0u);
@@ -72,20 +72,20 @@ TEST(DictTrieTest, UserDict) {
   DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
   string word = "云计算";
   cppjieba::RuneStrArray unicode;
-  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
   const DictUnit * unit = trie.Find(unicode.begin(), unicode.end());
   ASSERT_TRUE(unit != NULL);
   ASSERT_NEAR(unit->weight, -14.100, 0.001);
 
   word = "蓝翔";
-  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
   unit = trie.Find(unicode.begin(), unicode.end());
   ASSERT_TRUE(unit != NULL);
   ASSERT_EQ(unit->tag, "nz");
   ASSERT_NEAR(unit->weight, -14.100, 0.001);
 
   word = "区块链";
-  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
   unit = trie.Find(unicode.begin(), unicode.end());
   ASSERT_TRUE(unit != NULL);
   ASSERT_EQ(unit->tag, "nz");
@@ -96,7 +96,7 @@ TEST(DictTrieTest, UserDictWithMaxWeight) {
   DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8", DictTrie::WordWeightMax);
   string word = "云计算";
   cppjieba::RuneStrArray unicode;
-  ASSERT_TRUE(DecodeRunesInString(word, unicode));
+  ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
   const DictUnit * unit = trie.Find(unicode.begin(), unicode.end());
   ASSERT_TRUE(unit);
   ASSERT_NEAR(unit->weight, -2.975, 0.001);
@@ -108,7 +108,7 @@ TEST(DictTrieTest, Dag) {
   {
     string word = "清华大学";
     cppjieba::RuneStrArray unicode;
-    ASSERT_TRUE(DecodeRunesInString(word, unicode));
+    ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
     vector<struct Dag> res;
     trie.Find(unicode.begin(), unicode.end(), res);
 
@@ -122,7 +122,7 @@ TEST(DictTrieTest, Dag) {
   {
     string word = "北京邮电大学";
     cppjieba::RuneStrArray unicode;
-    ASSERT_TRUE(DecodeRunesInString(word, unicode));
+    ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
     vector<struct Dag> res;
     trie.Find(unicode.begin(), unicode.end(), res);
 
@@ -136,7 +136,7 @@ TEST(DictTrieTest, Dag) {
   {
     string word = "长江大桥";
     cppjieba::RuneStrArray unicode;
-    ASSERT_TRUE(DecodeRunesInString(word, unicode));
+    ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
     vector<struct Dag> res;
     trie.Find(unicode.begin(), unicode.end(), res);
 
@@ -150,7 +150,7 @@ TEST(DictTrieTest, Dag) {
   {
     string word = "长江大桥";
     cppjieba::RuneStrArray unicode;
-    ASSERT_TRUE(DecodeRunesInString(word, unicode));
+    ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
     vector<struct Dag> res;
     trie.Find(unicode.begin(), unicode.end(), res, 3);
 
@@ -164,7 +164,7 @@ TEST(DictTrieTest, Dag) {
   {
     string word = "长江大桥";
     cppjieba::RuneStrArray unicode;
-    ASSERT_TRUE(DecodeRunesInString(word, unicode));
+    ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
     vector<struct Dag> res;
     trie.Find(unicode.begin(), unicode.end(), res, 4);
 

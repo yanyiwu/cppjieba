@@ -25,7 +25,7 @@ class SegmentBase {
   bool ResetSeparators(const string& s) {
     symbols_.clear();
     RuneStrArray runes;
-    if (!DecodeRunesInString(s, runes)) {
+    if (!DecodeUTF8RunesInString(s, runes)) {
       XLOG(ERROR) << "decode " << s << " failed";
       return false;
     }

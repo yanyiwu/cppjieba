@@ -8,7 +8,7 @@ using namespace std;
 TEST(UnicodeTest, Test1) {
   string s = "你好世界";
   RuneStrArray runes;
-  ASSERT_TRUE(DecodeRunesInString(s, runes));
+  ASSERT_TRUE(DecodeUTF8RunesInString(s, runes));
   string actual;
   string expected = "[\"{\"rune\": \"20320\", \"offset\": 0, \"len\": 3}\", \"{\"rune\": \"22909\", \"offset\": 3, \"len\": 3}\", \"{\"rune\": \"19990\", \"offset\": 6, \"len\": 3}\", \"{\"rune\": \"30028\", \"offset\": 9, \"len\": 3}\"]";
   actual << runes;
@@ -18,7 +18,7 @@ TEST(UnicodeTest, Test1) {
 TEST(UnicodeTest, Illegal) {
   string s = "123\x80";
   RuneStrArray runes;
-  ASSERT_FALSE(DecodeRunesInString(s, runes));
+  ASSERT_FALSE(DecodeUTF8RunesInString(s, runes));
   string actual;
   string expected = "[]";
   actual << runes;
@@ -38,6 +38,6 @@ TEST(UnicodeTest, Rand) {
       s[rand() % len] = rand();
     }
     RuneStrArray runes;
-    DecodeRunesInString(s, runes);
+    DecodeUTF8RunesInString(s, runes);
   }
 }

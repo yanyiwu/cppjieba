@@ -17,7 +17,7 @@ class PreFilter {
   PreFilter(const unordered_set<Rune>& symbols, 
         const string& sentence)
     : symbols_(symbols) {
-    if (!DecodeRunesInString(sentence, sentence_)) {
+    if (!DecodeUTF8RunesInString(sentence, sentence_)) {
       XLOG(ERROR) << "decode failed. "; 
     }
     cursor_ = sentence_.begin();
