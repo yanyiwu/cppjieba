@@ -35,7 +35,7 @@ class PosTagger {
     const DictTrie * dict = segment.GetDictTrie();
     assert(dict != NULL);
       if (!DecodeUTF8RunesInString(str, runes)) {
-        XLOG(ERROR) << "Decode failed.";
+        XLOG(ERROR) << "UTF-8 decode failed for word: " << str;
         return POS_X;
       }
       tmp = dict->Find(runes.begin(), runes.end());

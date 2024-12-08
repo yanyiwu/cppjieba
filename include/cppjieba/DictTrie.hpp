@@ -198,7 +198,7 @@ class DictTrie {
         double weight, 
         const string& tag) {
     if (!DecodeUTF8RunesInString(word, node_info.word)) {
-      XLOG(ERROR) << "Decode " << word << " failed.";
+      XLOG(ERROR) << "UTF-8 decode failed for dict word: " << word;
       return false;
     }
     node_info.weight = weight;

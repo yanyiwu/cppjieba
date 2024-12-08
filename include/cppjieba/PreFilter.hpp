@@ -18,7 +18,7 @@ class PreFilter {
         const string& sentence)
     : symbols_(symbols) {
     if (!DecodeUTF8RunesInString(sentence, sentence_)) {
-      XLOG(ERROR) << "decode failed. "; 
+      XLOG(ERROR) << "UTF-8 decode failed for input sentence"; 
     }
     cursor_ = sentence_.begin();
   }

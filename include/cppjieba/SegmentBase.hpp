@@ -26,7 +26,7 @@ class SegmentBase {
     symbols_.clear();
     RuneStrArray runes;
     if (!DecodeUTF8RunesInString(s, runes)) {
-      XLOG(ERROR) << "decode " << s << " failed";
+      XLOG(ERROR) << "UTF-8 decode failed for separators: " << s;
       return false;
     }
     for (size_t i = 0; i < runes.size(); i++) {
