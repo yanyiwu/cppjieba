@@ -5,7 +5,6 @@
 [![Platform](https://img.shields.io/badge/platform-Linux,macOS,Windows-green.svg?style=flat)](https://github.com/yanyiwu/cppjieba)
 [![Performance](https://img.shields.io/badge/performance-excellent-brightgreen.svg?style=flat)](http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html) 
 [![Tag](https://img.shields.io/github/v/tag/yanyiwu/cppjieba.svg)](https://github.com/yanyiwu/cppjieba/releases)
-[<img src="https://api.gitsponsors.com/api/badge/img?id=10885469" height="20">](https://api.gitsponsors.com/api/badge/link?p=pDUVT2hK0hl+GEXxPwmB2MSzsN5vhEcgMAN1pUE70N0brvu5DmWEBU8x8VomyEU8k3laMsg8dI8DWKNOkjAeigtVibLY9bRgZJEnDkq7rpWG6bXIhGPlQ80JavedYyjrzQNXbJKBPhMFpUXXb+7omA==)
 
 ## 简介
 
