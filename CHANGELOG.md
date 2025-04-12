@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v5.5.0
+
++ feat: add Windows ARM64 build support
++ build: upgrade googletest from 1.11.0 to 1.12.1
++ build: update CMake minimum version requirement to 3.10
++ fix: make namespaces explicit and fix missing includes
++ ci: update stale-issues workflow configuration
+
 ## v5.4.0
 
 + unittest: class Jiaba add default argument input
