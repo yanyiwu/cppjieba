@@ -1,8 +1,10 @@
 message(STATUS "MSVC value: ${MSVC}")
 if (MSVC)
-	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
+	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 	add_compile_options(/utf-8)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 endif()
 
 include(FetchContent)
@@ -40,7 +42,7 @@ ADD_EXECUTABLE(test.run
     textrank_test.cpp
 )
 
-TARGET_LINK_LIBRARIES(test.run gtest gtest_main)
+TARGET_LINK_LIBRARIES(test.run gtest gtest_main gmock gmock_main)
 
 enable_testing()
 ADD_TEST(NAME test.run COMMAND test.run)
