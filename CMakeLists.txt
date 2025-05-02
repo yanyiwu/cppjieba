@@ -31,6 +31,7 @@ option(CPPJIEBA_BUILD_TESTS "Build cppjieba tests" ${CPPJIEBA_TOP_LEVEL_PROJECT}
 if(CPPJIEBA_BUILD_TESTS)
   ENABLE_TESTING()
 
+  message(STATUS "MSVC value: ${MSVC}")
   ADD_SUBDIRECTORY(test)
   if(NOT MSVC)
     ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)

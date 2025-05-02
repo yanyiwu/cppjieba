@@ -1,6 +1,7 @@
 if (MSVC)
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+	add_compile_options(/utf-8)
 endif()
 
 include(FetchContent)
