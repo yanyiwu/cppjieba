@@ -1,13 +1,14 @@
 #include "cppjieba/TextRankExtractor.hpp"
 #include "gtest/gtest.h"
+#include "test_paths.h"
 
 using namespace cppjieba;
 
 TEST(TextRankExtractorTest, Test1) {
   TextRankExtractor Extractor(
-    "../test/testdata/extra_dict/jieba.dict.small.utf8",
-    "../dict/hmm_model.utf8", 
-    "../dict/stop_words.utf8");
+    TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8",
+    DICT_DIR "/hmm_model.utf8", 
+    DICT_DIR "/stop_words.utf8");
   {
     string s("你好世界世界而且而且");
     string res;
@@ -59,10 +60,10 @@ TEST(TextRankExtractorTest, Test1) {
 
 TEST(TextRankExtractorTest, Test2) {
   TextRankExtractor Extractor(
-    "../test/testdata/extra_dict/jieba.dict.small.utf8",
-    "../dict/hmm_model.utf8",
-    "../dict/stop_words.utf8",
-    "../test/testdata/userdict.utf8");
+    TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8",
+    DICT_DIR "/hmm_model.utf8",
+    DICT_DIR "/stop_words.utf8",
+    TEST_DATA_DIR "/userdict.utf8");
 
   {
     string s("\xe8\x93\x9d\xe7\xbf\x94\xe4\xbc\x98\xe7\xa7\x80\xe6\xaf\x95\xe4\xb8\x9a\xe7\x94\x9f");

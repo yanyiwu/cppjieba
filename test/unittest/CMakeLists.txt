@@ -1,3 +1,4 @@
+message(STATUS "MSVC value: ${MSVC}")
 if (MSVC)
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -13,11 +14,19 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test)
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 ADD_DEFINITIONS(-DLOGGING_LEVEL=LL_WARNING)
+
+# Add include directories
+INCLUDE_DIRECTORIES(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_BINARY_DIR}/test
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/deps/limonp/include
+    ${CMAKE_BINARY_DIR}/_deps/googletest-src/googletest/include
+)
 
 ADD_EXECUTABLE(test.run 
     gtest_main.cpp 
@@ -31,4 +40,8 @@ ADD_EXECUTABLE(test.run
     textrank_test.cpp
 )
 
-TARGET_LINK_LIBRARIES(test.run gtest)
+TARGET_LINK_LIBRARIES(test.run gtest gtest_main)
+
+enable_testing()
+ADD_TEST(NAME test.run COMMAND test.run)
+SET_TESTS_PROPERTIES(test.run PROPERTIES WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

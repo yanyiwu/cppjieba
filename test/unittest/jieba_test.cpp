@@ -1,5 +1,6 @@
 #include "cppjieba/Jieba.hpp"
 #include "gtest/gtest.h"
+#include "test_paths.h"
 
 using namespace cppjieba;
 
@@ -37,11 +38,11 @@ TEST(JiebaTest, Test0) {
 }
 
 TEST(JiebaTest, Test1) {
-  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                        "../dict/hmm_model.utf8",
-                        "../dict/user.dict.utf8",
-                        "../dict/idf.utf8",
-                        "../dict/stop_words.utf8");
+  cppjieba::Jieba jieba(DICT_DIR "/jieba.dict.utf8",
+                        DICT_DIR "/hmm_model.utf8",
+                        DICT_DIR "/user.dict.utf8",
+                        DICT_DIR "/idf.utf8",
+                        DICT_DIR "/stop_words.utf8");
   vector<string> words;
   string result;
 
@@ -71,14 +72,14 @@ TEST(JiebaTest, Test1) {
   jieba.CutForSearch("他来到了网易杭研大厦", words);
   result << words;
   ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
-
 }
+
 TEST(JiebaTest, WordTest) {
-  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                        "../dict/hmm_model.utf8",
-                        "../dict/user.dict.utf8",
-                        "../dict/idf.utf8",
-                        "../dict/stop_words.utf8");
+  cppjieba::Jieba jieba(DICT_DIR "/jieba.dict.utf8",
+                        DICT_DIR "/hmm_model.utf8",
+                        DICT_DIR "/user.dict.utf8",
+                        DICT_DIR "/idf.utf8",
+                        DICT_DIR "/stop_words.utf8");
   vector<Word> words;
   string result;
 
@@ -116,11 +117,11 @@ TEST(JiebaTest, WordTest) {
 }
 
 TEST(JiebaTest, InsertUserWord) {
-  cppjieba::Jieba jieba("../dict/jieba.dict.utf8",
-                        "../dict/hmm_model.utf8",
-                        "../dict/user.dict.utf8",
-                        "../dict/idf.utf8",
-                        "../dict/stop_words.utf8");
+  cppjieba::Jieba jieba(DICT_DIR "/jieba.dict.utf8",
+                        DICT_DIR "/hmm_model.utf8",
+                        DICT_DIR "/user.dict.utf8",
+                        DICT_DIR "/idf.utf8",
+                        DICT_DIR "/stop_words.utf8");
   vector<string> words;
   string result;
 
