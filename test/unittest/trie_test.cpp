@@ -1,10 +1,11 @@
 #include "cppjieba/DictTrie.hpp"
 #include "cppjieba/MPSegment.hpp"
 #include "gtest/gtest.h"
+#include "test_paths.h"
 
 using namespace cppjieba;
 
-static const char* const DICT_FILE = "../test/testdata/extra_dict/jieba.dict.small.utf8";
+static const char* const DICT_FILE = TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8";
 
 TEST(TrieTest, Empty) {
   vector<Unicode> keys;
@@ -33,12 +34,6 @@ TEST(DictTrieTest, Test1) {
   string word("来到");
   cppjieba::RuneStrArray uni;
   ASSERT_TRUE(DecodeUTF8RunesInString(word, uni));
-  //DictUnit nodeInfo;
-  //nodeInfo.word = uni;
-  //nodeInfo.tag = "v";
-  //nodeInfo.weight = -8.87033;
-  //s1 << nodeInfo;
-  //s2 << (*trie.Find(uni.begin(), uni.end()));
   const DictUnit* du = trie.Find(uni.begin(), uni.end());
   ASSERT_TRUE(du != NULL);
   ASSERT_EQ(2u, du->word.size());
@@ -47,14 +42,12 @@ TEST(DictTrieTest, Test1) {
   ASSERT_EQ("v", du->tag);
   ASSERT_NEAR(-8.870, du->weight, 0.001);
 
-  //EXPECT_EQ("[\"26469\", \"21040\"] v -8.870", s2);
   word = "清华大学";
   LocalVector<pair<size_t, const DictUnit*> > res;
   const char * words[] = {"清", "清华", "清华大学"};
   for (size_t i = 0; i < sizeof(words)/sizeof(words[0]); i++) {
     ASSERT_TRUE(DecodeUTF8RunesInString(words[i], uni));
     res.push_back(make_pair(uni.size() - 1, trie.Find(uni.begin(), uni.end())));
-    //resMap[uni.size() - 1] = trie.Find(uni.begin(), uni.end());
   }
   vector<pair<size_t, const DictUnit*> > vec;
   vector<struct Dag> dags;
@@ -65,11 +58,10 @@ TEST(DictTrieTest, Test1) {
   s1 << res;
   s2 << dags[0].nexts;
   ASSERT_EQ(s1, s2);
-  
 }
 
 TEST(DictTrieTest, UserDict) {
-  DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
+  DictTrie trie(DICT_FILE, TEST_DATA_DIR "/userdict.utf8");
   string word = "云计算";
   cppjieba::RuneStrArray unicode;
   ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
@@ -93,7 +85,7 @@ TEST(DictTrieTest, UserDict) {
 }
 
 TEST(DictTrieTest, UserDictWithMaxWeight) {
-  DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8", DictTrie::WordWeightMax);
+  DictTrie trie(DICT_FILE, TEST_DATA_DIR "/userdict.utf8", DictTrie::WordWeightMax);
   string word = "云计算";
   cppjieba::RuneStrArray unicode;
   ASSERT_TRUE(DecodeUTF8RunesInString(word, unicode));
@@ -103,7 +95,7 @@ TEST(DictTrieTest, UserDictWithMaxWeight) {
 }
 
 TEST(DictTrieTest, Dag) {
-  DictTrie trie(DICT_FILE, "../test/testdata/userdict.utf8");
+  DictTrie trie(DICT_FILE, TEST_DATA_DIR "/userdict.utf8");
 
   {
     string word = "清华大学";

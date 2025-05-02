@@ -5,11 +5,12 @@
 #include "cppjieba/FullSegment.hpp"
 #include "cppjieba/QuerySegment.hpp"
 #include "gtest/gtest.h"
+#include "test_paths.h"
 
 using namespace cppjieba;
 
 TEST(MixSegmentTest, Test1) {
-  MixSegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");;
+  MixSegment segment(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8");
   string sentence;
   vector<string> words;
   string actual;
@@ -49,16 +50,18 @@ TEST(MixSegmentTest, Test1) {
 }
 
 TEST(MixSegmentTest, NoUserDict) {
-  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8");
+  MixSegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8", DICT_DIR "/hmm_model.utf8");
   const char* str = "令狐冲是云计算方面的专家";
   vector<string> words;
   segment.Cut(str, words);
   string res;
   ASSERT_EQ("[\"令狐冲\", \"是\", \"云\", \"计算\", \"方面\", \"的\", \"专家\"]", res << words);
-
 }
+
 TEST(MixSegmentTest, UserDict) {
-  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../dict/user.dict.utf8");
+  MixSegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8", 
+                    DICT_DIR "/hmm_model.utf8", 
+                    DICT_DIR "/user.dict.utf8");
   {
     const char* str = "令狐冲是云计算方面的专家";
     vector<string> words;
@@ -83,9 +86,10 @@ TEST(MixSegmentTest, UserDict) {
     ASSERT_EQ("[\"IBM\", \",\", \"3.14\"]", res);
   }
 }
+
 TEST(MixSegmentTest, TestUserDict) {
-  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", 
-        "../test/testdata/userdict.utf8");
+  MixSegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8", DICT_DIR "/hmm_model.utf8", 
+        TEST_DATA_DIR "/userdict.utf8");
   vector<string> words;
   string res;
 
@@ -123,8 +127,8 @@ TEST(MixSegmentTest, TestUserDict) {
 }
 
 TEST(MixSegmentTest, TestMultiUserDict) {
-  MixSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", 
-        "../test/testdata/userdict.utf8;../test/testdata/userdict.2.utf8");
+  MixSegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8", DICT_DIR "/hmm_model.utf8", 
+        TEST_DATA_DIR "/userdict.utf8;" TEST_DATA_DIR "/userdict.2.utf8");
   vector<string> words;
   string res;
 
@@ -134,7 +138,7 @@ TEST(MixSegmentTest, TestMultiUserDict) {
 }
 
 TEST(MPSegmentTest, Test1) {
-  MPSegment segment("../dict/jieba.dict.utf8");;
+  MPSegment segment(DICT_DIR "/jieba.dict.utf8");
   string s;
   vector<string> words;
   segment.Cut("我来自北京邮电大学。", words);
@@ -163,7 +167,7 @@ TEST(MPSegmentTest, Test1) {
 }
 
 TEST(HMMSegmentTest, Test1) {
-  HMMSegment segment("../dict/hmm_model.utf8");;
+  HMMSegment segment(DICT_DIR "/hmm_model.utf8");
   {
     const char* str = "我来自北京邮电大学。。。学号123456";
     const char* res[] = {"我来", "自北京", "邮电大学", "。", "。", "。", "学号", "123456"};
@@ -182,7 +186,7 @@ TEST(HMMSegmentTest, Test1) {
 }
 
 TEST(FullSegment, Test1) {
-  FullSegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8");
+  FullSegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8");
   vector<string> words;
   string s;
 
@@ -197,7 +201,7 @@ TEST(FullSegment, Test1) {
 }
 
 TEST(QuerySegment, Test1) {
-  QuerySegment segment("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "");
+  QuerySegment segment(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8", "");
   vector<string> words;
   string s1, s2;
 
@@ -218,7 +222,9 @@ TEST(QuerySegment, Test1) {
 }
 
 TEST(QuerySegment, Test2) {
-  QuerySegment segment("../test/testdata/extra_dict/jieba.dict.small.utf8", "../dict/hmm_model.utf8", "../test/testdata/userdict.utf8|../test/testdata/userdict.english");
+  QuerySegment segment(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8", 
+                      DICT_DIR "/hmm_model.utf8", 
+                      TEST_DATA_DIR "/userdict.utf8|" TEST_DATA_DIR "/userdict.english");
   vector<string> words;
   string s1, s2;
 
@@ -242,14 +248,13 @@ TEST(QuerySegment, Test2) {
     s2 = "中国/科学/学院/科学院/中国科学院";
     ASSERT_EQ(s1, s2);
   }
-
 }
 
 TEST(MPSegmentTest, Unicode32) {
   string s("天气很好，🙋 我们去郊游。");
   vector<string> words;
 
-  MPSegment segment("../dict/jieba.dict.utf8");;
+  MPSegment segment(DICT_DIR "/jieba.dict.utf8");
   segment.Cut(s, words);
 
   ASSERT_EQ(Join(words.begin(), words.end(), "/"), "天气/很/好/，/🙋/ /我们/去/郊游/。");

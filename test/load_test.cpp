@@ -6,14 +6,17 @@
 #include "cppjieba/MixSegment.hpp"
 #include "cppjieba/KeywordExtractor.hpp"
 #include "limonp/Colors.hpp"
+#include "cppjieba/Jieba.hpp"
+#include "gtest/gtest.h"
+#include "test_paths.h"
 
 using namespace cppjieba;
 
 void Cut(size_t times = 50) {
-  MixSegment seg("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8");
+  MixSegment seg(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8");
   vector<string> res;
   string doc;
-  ifstream ifs("../test/testdata/weicheng.utf8");
+  ifstream ifs(TEST_DATA_DIR "/weicheng.utf8");
   assert(ifs);
   doc << ifs;
   long beginTime = clock();
@@ -29,10 +32,13 @@ void Cut(size_t times = 50) {
 }
 
 void Extract(size_t times = 400) {
-  KeywordExtractor Extractor("../dict/jieba.dict.utf8", "../dict/hmm_model.utf8", "../dict/idf.utf8", "../dict/stop_words.utf8");
+  KeywordExtractor Extractor(DICT_DIR "/jieba.dict.utf8", 
+                           DICT_DIR "/hmm_model.utf8", 
+                           DICT_DIR "/idf.utf8", 
+                           DICT_DIR "/stop_words.utf8");
   vector<string> words;
   string doc;
-  ifstream ifs("../test/testdata/review.100");
+  ifstream ifs(TEST_DATA_DIR "/review.100");
   assert(ifs);
   doc << ifs;
   long beginTime = clock();
@@ -47,8 +53,24 @@ void Extract(size_t times = 400) {
   ColorPrintln(GREEN, "Extract: [%.3lf seconds]time consumed.", double(endTime - beginTime)/CLOCKS_PER_SEC);
 }
 
-int main(int argc, char ** argv) {
+TEST(LoadTest, Test1) {
+  Jieba jieba(DICT_DIR "/jieba.dict.utf8",
+              DICT_DIR "/hmm_model.utf8",
+              DICT_DIR "/user.dict.utf8",
+              DICT_DIR "/idf.utf8",
+              DICT_DIR "/stop_words.utf8");
+  vector<string> words;
+  string result;
+
+  jieba.Cut("他来到了网易杭研大厦", words);
+  result << words;
+  string expected = "[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]";
+  ASSERT_EQ(expected, result);
+}
+
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
   Cut();
   Extract();
-  return EXIT_SUCCESS;
+  return RUN_ALL_TESTS();
 }
