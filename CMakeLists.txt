@@ -33,10 +33,8 @@ if(CPPJIEBA_BUILD_TESTS)
 
   message(STATUS "MSVC value: ${MSVC}")
   ADD_SUBDIRECTORY(test)
-  if(NOT MSVC)
-    ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
-    ADD_TEST(NAME ./load_test COMMAND ./load_test)
-  endif()
+  ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
+  ADD_TEST(NAME ./load_test COMMAND ./load_test)
 endif()
 
 
