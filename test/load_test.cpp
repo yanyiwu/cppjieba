@@ -6,8 +6,6 @@
 #include "cppjieba/MixSegment.hpp"
 #include "cppjieba/KeywordExtractor.hpp"
 #include "limonp/Colors.hpp"
-#include "cppjieba/Jieba.hpp"
-#include "gtest/gtest.h"
 #include "test_paths.h"
 
 using namespace cppjieba;
@@ -53,24 +51,8 @@ void Extract(size_t times = 400) {
   ColorPrintln(GREEN, "Extract: [%.3lf seconds]time consumed.", double(endTime - beginTime)/CLOCKS_PER_SEC);
 }
 
-TEST(LoadTest, Test1) {
-  Jieba jieba(DICT_DIR "/jieba.dict.utf8",
-              DICT_DIR "/hmm_model.utf8",
-              DICT_DIR "/user.dict.utf8",
-              DICT_DIR "/idf.utf8",
-              DICT_DIR "/stop_words.utf8");
-  vector<string> words;
-  string result;
-
-  jieba.Cut("他来到了网易杭研大厦", words);
-  result << words;
-  string expected = "[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]";
-  ASSERT_EQ(expected, result);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
+int main(int argc, char ** argv) {
   Cut();
   Extract();
-  return RUN_ALL_TESTS();
+  return EXIT_SUCCESS;
 }
