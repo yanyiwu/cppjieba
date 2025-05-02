@@ -4,10 +4,6 @@ PROJECT(CPPJIEBA)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/limonp/include
   ${PROJECT_SOURCE_DIR}/include)
 
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set (CMAKE_INSTALL_PREFIX "/usr/local/cppjieba" CACHE PATH "default install path" FORCE )
-endif()
-
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)
 endif()
@@ -25,10 +21,7 @@ if(NOT DEFINED CPPJIEBA_TOP_LEVEL_PROJECT)
     endif()
 endif()
 
-
-option(CPPJIEBA_BUILD_TESTS "Build cppjieba tests" ${CPPJIEBA_TOP_LEVEL_PROJECT})
-
-if(CPPJIEBA_BUILD_TESTS)
+if(CPPJIEBA_TOP_LEVEL_PROJECT)
   ENABLE_TESTING()
 
   message(STATUS "MSVC value: ${MSVC}")
@@ -36,6 +29,3 @@ if(CPPJIEBA_BUILD_TESTS)
   ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
   ADD_TEST(NAME ./load_test COMMAND ./load_test)
 endif()
-
-
-# ... other CMake configurations ...
