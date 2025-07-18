@@ -21,11 +21,13 @@ if(NOT DEFINED CPPJIEBA_TOP_LEVEL_PROJECT)
     endif()
 endif()
 
-add_library(cppjieba INTERFACE)
-target_include_directories(cppjieba INTERFACE
-  ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/deps/limonp/include
-)
+if(NOT TARGET cppjieba)
+  add_library(cppjieba INTERFACE)
+  target_include_directories(cppjieba INTERFACE
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/deps/limonp/include
+  )
+endif()
 
 if(CPPJIEBA_TOP_LEVEL_PROJECT)
   ENABLE_TESTING()
