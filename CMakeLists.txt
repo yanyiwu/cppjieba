@@ -29,6 +29,12 @@ if(NOT TARGET cppjieba)
   )
 endif()
 
+include(GNUInstallDirs)
+install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY dict/
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/cppjieba/dict)
+
 if(CPPJIEBA_TOP_LEVEL_PROJECT)
   ENABLE_TESTING()
 
