@@ -259,3 +259,41 @@ TEST(MPSegmentTest, Unicode32) {
 
   ASSERT_EQ(Join(words.begin(), words.end(), "/"), "天气/很/好/，/🙋/ /我们/去/郊游/。");
 }
+
+// Regression test for heap corruption ("corrupted size vs. prev_size") with
+// input strings larger than 2114 bytes. The bug was caused by using
+// LocalVector<RuneStr> (only safe for primitive types) for RuneStrArray.
+TEST(MixSegmentTest, LongInput) {
+  // 2114 is the byte length threshold beyond which the original heap
+  // corruption was triggered when RuneStrArray used LocalVector<RuneStr>.
+  const size_t HEAP_CORRUPTION_THRESHOLD = 2114;
+
+  MixSegment segment(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8");
+  vector<string> words;
+
+  // Test with a long Chinese string (> HEAP_CORRUPTION_THRESHOLD bytes)
+  string phrase = "我来到北京清华大学进行学习和研究工作，非常愉快，让我有了很大的收获。";
+  string long_chinese;
+  while (long_chinese.size() < HEAP_CORRUPTION_THRESHOLD + 1000) {
+    long_chinese += phrase;
+  }
+  ASSERT_GT(long_chinese.size(), HEAP_CORRUPTION_THRESHOLD);
+  segment.Cut(long_chinese, words);
+  ASSERT_GT(words.size(), size_t(0));
+
+  // Test with a long ASCII string (> HEAP_CORRUPTION_THRESHOLD bytes)
+  string long_ascii(HEAP_CORRUPTION_THRESHOLD + 1000, 'a');
+  words.clear();
+  segment.Cut(long_ascii, words);
+  ASSERT_GT(words.size(), size_t(0));
+
+  // Test with a very long string (> 6000 bytes)
+  string very_long_chinese;
+  while (very_long_chinese.size() < 6000) {
+    very_long_chinese += phrase;
+  }
+  ASSERT_GT(very_long_chinese.size(), size_t(6000));
+  words.clear();
+  segment.Cut(very_long_chinese, words);
+  ASSERT_GT(words.size(), size_t(0));
+}
