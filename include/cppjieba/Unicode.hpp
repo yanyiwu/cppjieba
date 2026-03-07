@@ -53,7 +53,7 @@ inline std::ostream& operator << (std::ostream& os, const RuneStr& r) {
 }
 
 typedef limonp::LocalVector<Rune> Unicode;
-typedef limonp::LocalVector<struct RuneStr> RuneStrArray;
+typedef std::vector<RuneStr> RuneStrArray;
 
 // [left, right]
 struct WordRange {
@@ -142,13 +142,17 @@ inline RuneStrLite DecodeUTF8ToRune(const char* str, size_t len) {
 inline bool DecodeUTF8RunesInString(const char* s, size_t len, RuneStrArray& runes) {
   runes.clear();
   runes.reserve(len / 2);
-  for (uint32_t i = 0, j = 0; i < len;) {
+  for (size_t i = 0, j = 0; i < len;) {
     RuneStrLite rp = DecodeUTF8ToRune(s + i, len - i);
     if (rp.len == 0) {
       runes.clear();
       return false;
     }
-    RuneStr x(rp.rune, i, rp.len, j, 1);
+    if (i > UINT32_MAX || j > UINT32_MAX) {
+      runes.clear();
+      return false;
+    }
+    RuneStr x(rp.rune, static_cast<uint32_t>(i), rp.len, static_cast<uint32_t>(j), 1);
     runes.push_back(x);
     i += rp.len;
     ++j;

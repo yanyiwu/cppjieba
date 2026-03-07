@@ -10,7 +10,7 @@ TEST(UnicodeTest, Test1) {
   RuneStrArray runes;
   ASSERT_TRUE(DecodeUTF8RunesInString(s, runes));
   string actual;
-  string expected = "[\"{\"rune\": \"20320\", \"offset\": 0, \"len\": 3}\", \"{\"rune\": \"22909\", \"offset\": 3, \"len\": 3}\", \"{\"rune\": \"19990\", \"offset\": 6, \"len\": 3}\", \"{\"rune\": \"30028\", \"offset\": 9, \"len\": 3}\"]";
+  string expected = "[{\"rune\": \"20320\", \"offset\": 0, \"len\": 3}, {\"rune\": \"22909\", \"offset\": 3, \"len\": 3}, {\"rune\": \"19990\", \"offset\": 6, \"len\": 3}, {\"rune\": \"30028\", \"offset\": 9, \"len\": 3}]";
   actual << runes;
   ASSERT_EQ(expected, actual);
 }
