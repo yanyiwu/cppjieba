@@ -91,9 +91,20 @@ class HMMSegment: public SegmentBase {
         break;
       }
     }
+    // Optionally consume a decimal suffix (e.g. "abc1.2" -> keep together)
+    if (begin != end && begin->rune == '.') {
+      RuneStrArray::const_iterator after_dot = begin + 1;
+      if (after_dot != end && '0' <= after_dot->rune && after_dot->rune <= '9') {
+        begin++; // consume '.'
+        while (begin != end && '0' <= begin->rune && begin->rune <= '9') {
+          begin++;
+        }
+      }
+    }
     return begin;
   }
-  //
+  // numbers rule: digits optionally followed by letters, then an optional decimal suffix
+  // Handles the digit-starting subset of Python jieba finalseg re_skip = "[a-zA-Z0-9]+(?:\.\d+)?"
   RuneStrArray::const_iterator NumbersRule(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end) const {
     Rune x = begin->rune;
     if ('0' <= x && x <= '9') {
@@ -103,10 +114,20 @@ class HMMSegment: public SegmentBase {
     }
     while (begin != end) {
       x = begin->rune;
-      if ( ('0' <= x && x <= '9') || x == '.') {
+      if (('0' <= x && x <= '9') || ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z')) {
         begin++;
       } else {
         break;
+      }
+    }
+    // Optionally consume a decimal suffix (e.g. "3.14" or "5G3.14")
+    if (begin != end && begin->rune == '.') {
+      RuneStrArray::const_iterator after_dot = begin + 1;
+      if (after_dot != end && '0' <= after_dot->rune && after_dot->rune <= '9') {
+        begin++; // consume '.'
+        while (begin != end && '0' <= begin->rune && begin->rune <= '9') {
+          begin++;
+        }
       }
     }
     return begin;

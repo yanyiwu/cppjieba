@@ -33,6 +33,24 @@ TEST(MixSegmentTest, Test1) {
   }
 
   {
+    // Digit+letter combinations should be kept together, matching Python jieba behavior
+    sentence = "5G网络速度快";
+    expected = "5G/网络/速度/快";
+    segment.Cut(sentence, words);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
+    // Decimal number followed by letters: decimal and letters remain separate
+    sentence = "3.5KG重量";
+    expected = "3.5/KG/重量";
+    segment.Cut(sentence, words);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭/研/大厦";
     segment.Cut(sentence, words, false);
@@ -180,6 +198,45 @@ TEST(HMMSegmentTest, Test1) {
     const char* str = "IBM,1.2,123";
     const char* res[] = {"IBM", ",", "1.2", ",", "123"};
     vector<string> words;
+    segment.Cut(str, words);
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+  }
+}
+
+TEST(HMMSegmentTest, AlphanumericCombinations) {
+  // Tests for digit+letter and letter+decimal combinations to align with
+  // Python jieba finalseg behavior: re_skip = "[a-zA-Z0-9]+(?:\.\d+)?"
+  HMMSegment segment(DICT_DIR "/hmm_model.utf8");
+  vector<string> words;
+
+  {
+    // digit followed by letter (no decimal) should stay together
+    const char* str = "5G";
+    const char* res[] = {"5G"};
+    segment.Cut(str, words);
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+  }
+
+  {
+    // digit followed by letter then Chinese
+    const char* str = "3D打印";
+    const char* res[] = {"3D", "打印"};
+    segment.Cut(str, words);
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+  }
+
+  {
+    // decimal number followed by letters: decimal and letters are separate
+    const char* str = "3.5KG";
+    const char* res[] = {"3.5", "KG"};
+    segment.Cut(str, words);
+    ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
+  }
+
+  {
+    // letter followed by digit followed by decimal
+    const char* str = "v1.2";
+    const char* res[] = {"v1.2"};
     segment.Cut(str, words);
     ASSERT_EQ(words, vector<string>(res, res + sizeof(res)/sizeof(res[0])));
   }
