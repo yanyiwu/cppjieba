@@ -200,6 +200,14 @@ TEST(FullSegment, Test1) {
   ASSERT_EQ(s, "[\"上市\", \"公司\", \"C\", \"E\", \"O\"]");
 }
 
+TEST(FullSegment, NullDictUnitDoesNotSkipFollowingRune) {
+  FullSegment segment(DICT_DIR "/jieba.dict.utf8");
+  vector<string> words;
+
+  segment.Cut("崎岖的牙齿", words);
+  ASSERT_EQ("崎岖/的/牙齿", Join(words.begin(), words.end(), "/"));
+}
+
 TEST(QuerySegment, Test1) {
   QuerySegment segment(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8", "");
   vector<string> words;
