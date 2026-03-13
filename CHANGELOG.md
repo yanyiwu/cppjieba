@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## Unreleased
+
++ fix: FullSegment no longer skips the rune after a null dictionary match
++ test: cover the FullSegment regression and related mixed alphanumeric segmentation cases
+
+## v5.6.2
+
++ perf: cache parsed main dictionary across DictTrie instances
+
+## v5.6.1
+
++ build: update CMakeLists.txt and CMake workflows
++ build: guard the cppjieba target, fix limonp include path, and install headers and dict resources
++ fix: avoid heap corruption for very long strings
+
+## v5.6.0
+
++ fix: remove outdated entry from jieba dictionary
++ build: refine CMakeLists.txt and test configuration
++ docs: update README.md
++ deps: upgrade limonp from v1.0.0 to v1.0.1
+
 ## v5.5.0
 
 + feat: add Windows ARM64 build support
