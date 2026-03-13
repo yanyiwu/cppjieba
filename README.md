@@ -2,7 +2,7 @@
 
 [![CMake](https://github.com/yanyiwu/cppjieba/actions/workflows/cmake.yml/badge.svg)](https://github.com/yanyiwu/cppjieba/actions/workflows/cmake.yml)
 [![Author](https://img.shields.io/badge/author-@yanyiwu-blue.svg?style=flat)](http://yanyiwu.com/) 
-[![Platform](https://img.shields.io/badge/platform-Linux,macOS,Windows-green.svg?style=flat)](https://github.com/yanyiwu/cppjieba)
+[![Platform](https://img.shields.io/badge/platform-Linux,macOS,Windows,OpenHarmony-green.svg?style=flat)](https://github.com/yanyiwu/cppjieba)
 [![Performance](https://img.shields.io/badge/performance-excellent-brightgreen.svg?style=flat)](http://yanyiwu.com/work/2015/06/14/jieba-series-performance-test.html) 
 [![Tag](https://img.shields.io/github/v/tag/yanyiwu/cppjieba.svg)](https://github.com/yanyiwu/cppjieba/releases)
 
@@ -16,7 +16,7 @@ CppJieba是"结巴(Jieba)"中文分词的C++版本
 - 📦 易集成：源代码以头文件形式提供 (`include/cppjieba/*.hpp`)，包含即可使用
 - 🔍 多种分词模式：支持精确模式、全模式、搜索引擎模式等
 - 📚 自定义词典：支持用户自定义词典，支持多词典路径（使用'|'或';'分隔）
-- 💻 跨平台：支持 Linux、macOS、Windows 操作系统
+- 💻 跨平台：支持 Linux、macOS、Windows、OpenHarmony 操作系统
 - 🌈 UTF-8编码：原生支持 UTF-8 编码的中文处理
 
 ## 快速开始
@@ -42,6 +42,10 @@ make
 
 make test
 ```
+
+### OpenHarmony
+
+仓库中提供了一个最小 OpenHarmony 原生集成示例，包含构建配置、示例代码以及可复现测试步骤，详见 [examples/openharmony](examples/openharmony/README.md)。
 
 ## 使用示例
 
@@ -241,5 +245,4 @@ CppJieba 已经被广泛应用于各种编程语言的分词实现中：
 
 
 如果您觉得 CppJieba 对您有帮助，欢迎 star ⭐️ 支持项目！
-
 
