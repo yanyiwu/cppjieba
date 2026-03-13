@@ -46,6 +46,7 @@ if(CPPJIEBA_TOP_LEVEL_PROJECT)
 
   message(STATUS "MSVC value: ${MSVC}")
   ADD_SUBDIRECTORY(test)
+  ADD_SUBDIRECTORY(examples/openharmony)
   ADD_TEST(NAME ./test/test.run COMMAND ./test/test.run)
   ADD_TEST(NAME ./load_test COMMAND ./load_test)
 endif()
