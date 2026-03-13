@@ -34,11 +34,11 @@ int main() {
   const std::string sentence = "OpenHarmony 原生应用可以直接集成 cppjieba";
   jieba.Cut(sentence, words, true);
 
-  for (size_t i = 0; i < words.size(); ++i) {
-    if (i != 0) {
+  for (auto it = words.begin(); it != words.end(); ++it) {
+    if (it != words.begin()) {
       std::cout << "/";
     }
-    std::cout << words[i];
+    std::cout << *it;
   }
   std::cout << std::endl;
   return 0;
