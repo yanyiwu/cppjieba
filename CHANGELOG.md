@@ -4,7 +4,6 @@
 
 + fix: FullSegment no longer skips the rune after a null dictionary match
 + test: cover the FullSegment regression and related mixed alphanumeric segmentation cases
-+ release: compared with v5.6.2, the current unreleased change set is small and suitable for a patch release such as v5.6.3 if maintainers want to publish it
 
 ## v5.6.2
 
