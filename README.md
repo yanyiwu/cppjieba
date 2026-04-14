@@ -229,6 +229,7 @@ CppJieba 已经被广泛应用于各种编程语言的分词实现中：
 - [pg_jieba](https://github.com/jaiminpan/pg_jieba) - PostgreSQL 分词插件
 - [gitbook-plugin-search-pro](https://plugins.gitbook.com/plugin/search-pro) - Gitbook 中文搜索插件
 - [ngx_http_cppjieba_module](https://github.com/yanyiwu/ngx_http_cppjieba_module) - Nginx 分词插件
+- [OpenCC](https://github.com/byvoid/OpenCC) - OpenCC 中的 jieba 分词插件
 
 ## 贡献指南
 
