@@ -89,7 +89,8 @@ TEST(UnicodePathTest, LoadsResourcesFromUnicodePath) {
     vector<string> words;
     string result;
     jieba.Cut("他来到了网易杭研大厦", words);
-    ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result << words);
+    result << words;
+    ASSERT_EQ("[\"他\", \"来到\", \"了\", \"网易\", \"杭研\", \"大厦\"]", result);
   }
 
   {

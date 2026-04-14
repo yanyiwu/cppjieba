@@ -19,6 +19,7 @@ inline void OpenInputFile(std::ifstream& ifs, const std::string& path) {
     ifs.open(converter.from_bytes(path).c_str());
     return;
   } catch (const std::range_error&) {
+    // Fall back to the existing narrow-path behavior for non-UTF-8 inputs.
   }
 #endif
   ifs.open(path.c_str());
