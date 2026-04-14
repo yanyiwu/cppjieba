@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #endif
 
+#include "cppjieba/UnicodeFile.hpp"
 #include "cppjieba/Jieba.hpp"
 #include "cppjieba/KeywordExtractor.hpp"
 #include "cppjieba/TextRankExtractor.hpp"
