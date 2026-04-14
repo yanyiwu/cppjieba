@@ -49,7 +49,8 @@ void OpenOutputFile(std::ofstream& ofs, const string& path) {
 }
 
 void CopyFile(const string& src, const string& dst) {
-  std::ifstream ifs(src.c_str(), std::ios::binary);
+  std::ifstream ifs;
+  OpenInputFile(ifs, src);
   ASSERT_TRUE(ifs.is_open()) << src;
   std::ofstream ofs;
   OpenOutputFile(ofs, dst);
