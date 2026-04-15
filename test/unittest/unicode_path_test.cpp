@@ -4,8 +4,6 @@
 
 #ifdef _WIN32
 #include <direct.h>
-#include <codecvt>
-#include <locale>
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -26,16 +24,11 @@ string TestPathJoin(const string& lhs, const string& rhs) {
   return lhs + "/" + rhs;
 }
 
-#ifdef _WIN32
-std::wstring Utf8ToWide(const string& path) {
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
-  return converter.from_bytes(path);
-}
-#endif
-
 void MakeDir(const string& path) {
 #ifdef _WIN32
-  ASSERT_TRUE(_wmkdir(Utf8ToWide(path).c_str()) == 0 || errno == EEXIST) << path;
+  std::wstring widePath;
+  ASSERT_TRUE(Utf8ToWidePath(path, widePath)) << path;
+  ASSERT_TRUE(_wmkdir(widePath.c_str()) == 0 || errno == EEXIST) << path;
 #else
   ASSERT_TRUE(mkdir(path.c_str(), 0755) == 0 || errno == EEXIST) << path;
 #endif
@@ -43,7 +36,9 @@ void MakeDir(const string& path) {
 
 void OpenOutputFile(std::ofstream& ofs, const string& path) {
 #ifdef _WIN32
-  ofs.open(Utf8ToWide(path).c_str(), std::ios::binary);
+  std::wstring widePath;
+  ASSERT_TRUE(Utf8ToWidePath(path, widePath)) << path;
+  ofs.open(widePath.c_str(), std::ios::binary);
 #else
   ofs.open(path.c_str(), std::ios::binary);
 #endif
