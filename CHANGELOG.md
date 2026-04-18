@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## v5.6.4
+
++ fix: support loading dictionary and model files from Unicode paths on Windows
++ unittest: add regression coverage for Unicode resource paths
++ docs: add OpenCC link to README
+
+## v5.6.3
+
++ fix: align alphanumeric segmentation with Python jieba
++ fix: handle nullptr word length safely in FullSegment
+
+## v5.6.2
+
++ perf: cache parsed main dictionary across DictTrie instances
++ ci: remove unsupported macos-13 runner from CMake matrix
+
+## v5.6.1
+
++ fix: avoid heap corruption for overly long input lines
++ cmake: add guard for cppjieba target
++ install: add headers and dictionaries to install output
++ deps: fix limonp path
++ ci: update CMake workflow
+
 ## v5.5.0
 
 + feat: add Windows ARM64 build support
