@@ -43,6 +43,24 @@ make
 make test
 ```
 
+### Benchmark
+
+项目提供了一个用于本地性能对比的 benchmark 目标：
+
+```sh
+make benchmark
+```
+
+它会构建并运行 `test/benchmark.cpp`，输出以下指标：
+
+- `DictTrieLoad`: 词典加载耗时，以及可用时的进程 RSS 内存占用
+- `HMMModelLoad`: HMM 模型加载耗时，以及可用时的进程 RSS 内存占用
+- `MPCut`: `MPSegment` 对基准文本的分词吞吐
+- `MixCut`: `MixSegment` 对基准文本的分词吞吐
+- `DictFind`: 词典查找吞吐
+
+这个 benchmark 主要用于本地修改前后的性能回归和对比，不作为默认测试的一部分。
+
 ## 使用示例
 
 ```
@@ -242,5 +260,4 @@ CppJieba 已经被广泛应用于各种编程语言的分词实现中：
 
 
 如果您觉得 CppJieba 对您有帮助，欢迎 star ⭐️ 支持项目！
-
 
