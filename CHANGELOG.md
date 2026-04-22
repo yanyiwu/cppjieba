@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v5.6.5
+
++ deps: upgrade limonp to v1.0.2
+
 ## v5.6.4
 
 + fix: support loading dictionary and model files from Unicode paths on Windows
