@@ -65,6 +65,14 @@ TEST(MixSegmentTest, Test1) {
     actual = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(actual, expected);
   }
+
+  {
+    sentence = "马克思主义和习总书记新时代中国特色社会主义";
+    expected = "马克思主义/和/习总书记/新/时代/中国/特色/社会主义";
+    segment.Cut(sentence, words);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
 }
 
 TEST(MixSegmentTest, NoUserDict) {
