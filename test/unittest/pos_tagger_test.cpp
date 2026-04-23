@@ -40,3 +40,14 @@ TEST(PosTagger, TestUserDict) {
     ASSERT_EQ(s, ANS_TEST3);
   }
 }
+
+TEST(PosTagger, DefaultUserDictRegression) {
+  MixSegment tagger(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8", DICT_DIR "/user.dict.utf8");
+  {
+    vector<pair<string, string> > res;
+    tagger.Tag("在马克思主义和习总书记新时代中国特色社会主义的思想指引下", res);
+    string s;
+    s << res;
+    ASSERT_EQ(s, "[在:p, 马克思主义:n, 和:c, 习总书记:nr, 新时代:n, 中国特色社会主义:nz, 的:uj, 思想:n, 指引:v, 下:f]");
+  }
+}
