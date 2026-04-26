@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
   const std::string dict_path = DICT_DIR "/jieba.dict.utf8";
   const std::string model_path = DICT_DIR "/hmm_model.utf8";
   const std::string user_dict_path = DICT_DIR "/user.dict.utf8";
-  const std::string cut_doc = ReadFile(TEST_DATA_DIR "/weicheng.utf8");
+  const std::string cut_doc = ReadFile(TEST_DATA_DIR "/synthetic_doc.utf8");
   const std::vector<std::string> queries = LoadDictWords(dict_path, 50000);
 
   if (cut_doc.empty()) {

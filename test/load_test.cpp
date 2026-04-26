@@ -14,7 +14,7 @@ void Cut(size_t times = 50) {
   MixSegment seg(DICT_DIR "/jieba.dict.utf8", DICT_DIR "/hmm_model.utf8");
   vector<string> res;
   string doc;
-  ifstream ifs(TEST_DATA_DIR "/weicheng.utf8");
+  ifstream ifs(TEST_DATA_DIR "/synthetic_doc.utf8");
   assert(ifs);
   doc << ifs;
   long beginTime = clock();
