@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v5.6.7
+
++ docs: document dictionary file formats
++ test: add `了解` segmentation regression coverage
++ test: replace copyrighted benchmark test data with synthetic text
+
 ## v5.6.6
 
 + fix: add `习总书记` to the main dictionary for the reported `和习` segmentation case
