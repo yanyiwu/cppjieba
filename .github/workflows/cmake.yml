@@ -21,6 +21,7 @@ jobs:
           ubuntu-latest,
           macos-14,
           macos-latest,
+          macos-26,
           windows-2022,
           windows-latest,
         ]  
