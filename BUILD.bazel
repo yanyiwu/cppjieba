@@ -1,0 +1,28 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "limonp",
+    hdrs = glob(["deps/limonp/include/limonp/**/*.hpp"]),
+    includes = ["deps/limonp/include"],
+)
+
+filegroup(
+    name = "dict",
+    srcs = glob(["dict/**"]),
+)
+
+cc_library(
+    name = "cppjieba",
+    hdrs = glob(["include/cppjieba/**/*.hpp"]),
+    includes = ["include"],
+    deps = [":limonp"],
+)
+
+cc_test(
+    name = "bazel_smoke_test",
+    srcs = ["test/bazel_smoke_test.cpp"],
+    data = [":dict"],
+    deps = [":cppjieba"],
+)
