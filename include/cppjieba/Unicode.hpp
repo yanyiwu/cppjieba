@@ -1,6 +1,7 @@
 #ifndef CPPJIEBA_UNICODE_H
 #define CPPJIEBA_UNICODE_H
 
+#include <cassert>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
