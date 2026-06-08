@@ -1,5 +1,5 @@
 #include "cppjieba/Unicode.hpp"
-#include "limonp/StdExtension.hpp"
+#include "cppjieba/Utils.hpp"
 #include "gtest/gtest.h"
 
 using namespace cppjieba;

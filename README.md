@@ -33,8 +33,6 @@ CppJieba是"结巴(Jieba)"中文分词的C++版本
 ```sh
 git clone https://github.com/yanyiwu/cppjieba.git
 cd cppjieba
-git submodule init
-git submodule update
 mkdir build
 cd build
 cmake ..

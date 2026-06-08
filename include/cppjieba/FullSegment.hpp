@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <set>
 #include <cassert>
-#include "limonp/Logging.hpp"
+#include "Utils.hpp"
 #include "DictTrie.hpp"
 #include "SegmentBase.hpp"
 #include "Unicode.hpp"

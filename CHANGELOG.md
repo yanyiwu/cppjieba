@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
++ deps: remove the limonp submodule dependency
+
 ## v5.6.7
 
 + docs: document dictionary file formats

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <queue>
-#include "limonp/StdExtension.hpp"
+#include "Utils.hpp"
 #include "Unicode.hpp"
 
 namespace cppjieba {
@@ -28,7 +28,7 @@ struct DictUnit {
 struct Dag {
   RuneStr runestr;
   // [offset, nexts.first]
-  limonp::LocalVector<pair<size_t, const DictUnit*> > nexts;
+  LocalVector<pair<size_t, const DictUnit*> > nexts;
   const DictUnit * pInfo;
   double weight;
   size_t nextPos; // TODO

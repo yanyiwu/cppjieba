@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-        with:
-          submodules: recursive
 
       - name: Test
         run: npx --yes @bazel/bazelisk test //:bazel_smoke_test

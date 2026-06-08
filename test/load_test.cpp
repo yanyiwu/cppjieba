@@ -5,7 +5,6 @@
 #include "cppjieba/HMMSegment.hpp"
 #include "cppjieba/MixSegment.hpp"
 #include "cppjieba/KeywordExtractor.hpp"
-#include "limonp/Colors.hpp"
 #include "test_paths.h"
 
 using namespace cppjieba;
@@ -26,7 +25,7 @@ void Cut(size_t times = 50) {
   }
   printf("\n");
   long endTime = clock();
-  ColorPrintln(GREEN, "Cut: [%.3lf seconds]time consumed.", double(endTime - beginTime)/CLOCKS_PER_SEC);
+  printf("Cut: [%.3lf seconds]time consumed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
 }
 
 void Extract(size_t times = 400) {
@@ -48,7 +47,7 @@ void Extract(size_t times = 400) {
   }
   printf("\n");
   long endTime = clock();
-  ColorPrintln(GREEN, "Extract: [%.3lf seconds]time consumed.", double(endTime - beginTime)/CLOCKS_PER_SEC);
+  printf("Extract: [%.3lf seconds]time consumed.\n", double(endTime - beginTime)/CLOCKS_PER_SEC);
 }
 
 int main(int argc, char ** argv) {

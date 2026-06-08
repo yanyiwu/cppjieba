@@ -131,7 +131,7 @@ TEST(MixSegmentTest, TestUserDict) {
   ASSERT_EQ("[\"I\", \"B\", \"M\", \",\", \"3.14\"]", res);
 
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
-  res = limonp::Join(words.begin(), words.end(), "/");
+  res = Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树/万树/梨花/开", res);
 
   // rand input
@@ -159,7 +159,7 @@ TEST(MixSegmentTest, TestMultiUserDict) {
   string res;
 
   segment.Cut("忽如一夜春风来，千树万树梨花开", words);
-  res = limonp::Join(words.begin(), words.end(), "/");
+  res = Join(words.begin(), words.end(), "/");
   ASSERT_EQ("忽如一夜春风来/，/千树万树梨花开", res);
 }
 

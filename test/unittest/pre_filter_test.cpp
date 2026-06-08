@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "cppjieba/PreFilter.hpp"
-#include "limonp/StringUtil.hpp"
+#include "cppjieba/Utils.hpp"
 
 using namespace cppjieba;
 
@@ -22,7 +22,7 @@ TEST(PreFilterTest, Test1) {
       range = filter.Next();
       words.push_back(GetStringFromRunes(s, range.begin, range.end - 1));
     }
-    res = limonp::Join(words.begin(), words.end(), "/");
+    res = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
   }
 
@@ -37,7 +37,7 @@ TEST(PreFilterTest, Test1) {
       range = filter.Next();
       words.push_back(GetStringFromRunes(s, range.begin, range.end - 1));
     }
-    res = limonp::Join(words.begin(), words.end(), "/");
+    res = Join(words.begin(), words.end(), "/");
     ASSERT_EQ(res, expected);
   }
 }
