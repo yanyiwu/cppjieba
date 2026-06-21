@@ -56,6 +56,9 @@ enum {
   LL_FATAL = 4,
 };
 
+const double MIN_DOUBLE = -3.14e+100;
+const double MAX_DOUBLE = 3.14e+100;
+
 static const char* const LOG_LEVEL_ARRAY[] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 static const char* const LOG_TIME_FORMAT = "%Y-%m-%d %H:%M:%S";
 
