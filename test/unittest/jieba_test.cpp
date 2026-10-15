@@ -189,6 +189,10 @@ TEST(JiebaTest, LoadUserDict) {
   const DictUnit* initial = find("蓝翔");
   ASSERT_TRUE(initial != NULL);
   ASSERT_EQ("nz", initial->tag);
+  jieba.LoadUserDict(vector<string>(1, "运行时稳定测试词 10 nz"));
+  const DictUnit* runtime = find("运行时稳定测试词");
+  ASSERT_TRUE(runtime != NULL);
+  const DictUnit runtime_payload = *runtime;
   vector<string> words;
   jieba.Cut("杭研", words);
   ASSERT_EQ("杭研", Join(words.begin(), words.end(), "/"));
@@ -238,4 +242,22 @@ TEST(JiebaTest, LoadUserDict) {
   ASSERT_EQ(initial, find("蓝翔"));
   ASSERT_EQ("nz", initial->tag);
   ASSERT_EQ("nz", jieba.LookupTag("蓝翔"));
+  ASSERT_EQ(runtime, find("运行时稳定测试词"));
+  ASSERT_TRUE(runtime_payload.word == runtime->word);
+  ASSERT_EQ(runtime_payload.tag, runtime->tag);
+  ASSERT_DOUBLE_EQ(runtime_payload.weight, runtime->weight);
+
+  jieba.LoadUserDict(vector<string>(1, "运行时稳定测试词 20 nt"));
+  const DictUnit* replacement = find("运行时稳定测试词");
+  ASSERT_TRUE(replacement != NULL);
+  ASSERT_NE(runtime, replacement);
+  ASSERT_TRUE(runtime_payload.word == replacement->word);
+  ASSERT_EQ("nt", replacement->tag);
+  ASSERT_NEAR(runtime_payload.weight + std::log(2.0), replacement->weight, 1e-12);
+  ASSERT_EQ("nt", jieba.LookupTag("运行时稳定测试词"));
+  jieba.Cut("运行时稳定测试词", words, false);
+  ASSERT_EQ("运行时稳定测试词", Join(words.begin(), words.end(), "/"));
+  ASSERT_TRUE(runtime_payload.word == runtime->word);
+  ASSERT_EQ(runtime_payload.tag, runtime->tag);
+  ASSERT_DOUBLE_EQ(runtime_payload.weight, runtime->weight);
 }
