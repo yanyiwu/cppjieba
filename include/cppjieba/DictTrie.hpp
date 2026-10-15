@@ -10,6 +10,7 @@
 #include <memory>
 #include <mutex>
 #include <set>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -30,7 +31,8 @@ class DictTrie {
     WordWeightMax,
   }; // enum UserWordWeightOption
 
-  DictTrie(const std::string& dict_path, const std::string& user_dict_paths = "", UserWordWeightOption user_word_weight_opt = WordWeightMedian) {
+  DictTrie(const std::string& dict_path, const std::string& user_dict_paths = "", UserWordWeightOption user_word_weight_opt = WordWeightMedian)
+    : trie_(NULL) {
     Init(dict_path, user_dict_paths, user_word_weight_opt);
   }
 
@@ -50,7 +52,7 @@ class DictTrie {
 
   bool InsertUserWord(const std::string& word,int freq, const std::string& tag = UNKNOWN_TAG) {
     DictUnit node_info;
-    double weight = freq ? log(1.0 * freq / freq_sum_) : user_word_default_weight_ ;
+    double weight = freq > 0 ? log(1.0 * freq / freq_sum_) : user_word_default_weight_ ;
     if (!MakeNodeInfo(node_info, word, weight , tag)) {
       return false;
     }
@@ -108,28 +110,46 @@ class DictTrie {
 
   void InserUserDictNode(const std::string& line) {
     std::vector<std::string> buf;
+    std::istringstream stream(line);
+    std::string field;
+    while (stream >> field) {
+      buf.push_back(field);
+    }
+    if (buf.empty() || buf.size() > DICT_COLUMN_NUM || buf[0].empty()) {
+      XLOG(ERROR) << "invalid user dict line: " << line;
+      return;
+    }
+
+    double weight = user_word_default_weight_;
+    std::string tag = UNKNOWN_TAG;
+    if (buf.size() == 2) {
+      tag = buf[1];
+    } else if (buf.size() == 3) {
+      int freq = 0;
+      std::istringstream frequency(buf[1]);
+      if ((frequency >> freq) && frequency.eof() && freq > 0) {
+        assert(freq_sum_ > 0.0);
+        weight = log(1.0 * freq / freq_sum_);
+      } else {
+        XLOG(WARNING) << "invalid user dict frequency, using default weight: " << line;
+      }
+      tag = buf[2];
+    }
+
     DictUnit node_info;
-    Split(line, buf, " ");
-    if(buf.size() == 1){
-          MakeNodeInfo(node_info,
-                buf[0],
-                user_word_default_weight_,
-                UNKNOWN_TAG);
-        } else if (buf.size() == 2) {
-          MakeNodeInfo(node_info,
-                buf[0],
-                user_word_default_weight_,
-                buf[1]);
-        } else if (buf.size() == 3) {
-          int freq = atoi(buf[1].c_str());
-          assert(freq_sum_ > 0.0);
-          double weight = log(1.0 * freq / freq_sum_);
-          MakeNodeInfo(node_info, buf[0], weight, buf[2]);
-        }
-        static_node_infos_.push_back(node_info);
-        if (node_info.word.size() == 1) {
-          user_dict_single_chinese_word_.insert(node_info.word[0]);
-        }
+    if (!MakeNodeInfo(node_info, buf[0], weight, tag)) {
+      return;
+    }
+    if (trie_ == NULL) {
+      static_node_infos_.push_back(node_info);
+    } else {
+      active_node_infos_.push_back(node_info);
+      const DictUnit* stored = &active_node_infos_.back();
+      trie_->InsertNode(stored->word, stored);
+    }
+    if (node_info.word.size() == 1) {
+      user_dict_single_chinese_word_.insert(node_info.word[0]);
+    }
   }
 
   void LoadUserDict(const std::vector<std::string>& buf) {

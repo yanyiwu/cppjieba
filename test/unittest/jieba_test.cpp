@@ -1,6 +1,7 @@
 #include "cppjieba/Jieba.hpp"
 #include "gtest/gtest.h"
 #include "test_paths.h"
+#include <cmath>
 
 using namespace cppjieba;
 
@@ -172,4 +173,91 @@ TEST(JiebaTest, InsertUserWord) {
     res << wordweights;
     ASSERT_EQ(res, "[{\"word\": \"iPhone6\", \"offset\": [6], \"weight\": 11.7392}, {\"word\": \"\xE4\xB8\x80\xE9\x83\xA8\", \"offset\": [0], \"weight\": 6.47592}]");
   }
+}
+
+TEST(JiebaTest, LoadUserDict) {
+  Jieba jieba(TEST_DATA_DIR "/extra_dict/jieba.dict.small.utf8",
+              DICT_DIR "/hmm_model.utf8", TEST_DATA_DIR "/userdict.utf8",
+              DICT_DIR "/idf.utf8", DICT_DIR "/stop_words.utf8");
+  const auto find = [&jieba](const string& word) -> const DictUnit* {
+    RuneStrArray runes;
+    if (!DecodeUTF8RunesInString(word, runes)) {
+      return NULL;
+    }
+    return jieba.GetDictTrie()->Find(runes.begin(), runes.end());
+  };
+  const DictUnit* initial = find("蓝翔");
+  ASSERT_TRUE(initial != NULL);
+  ASSERT_EQ("nz", initial->tag);
+  jieba.LoadUserDict(vector<string>(1, "运行时稳定测试词 10 nz"));
+  const DictUnit* runtime = find("运行时稳定测试词");
+  ASSERT_TRUE(runtime != NULL);
+  const DictUnit runtime_payload = *runtime;
+  vector<string> words;
+  jieba.Cut("杭研", words);
+  ASSERT_EQ("杭研", Join(words.begin(), words.end(), "/"));
+
+  vector<string> rows = {
+      " \t数据科学\tnz \r\n", "连续空格测试词   10000000   nt  \r\n",
+      "默认词频测试词", "零词频测试词 0 nz", "负词频测试词 -1 nz",
+      "无效词频测试词 nope nz", "研 n", " \t\r\n"};
+  for (size_t i = 0; i < 256; ++i) {
+    rows.push_back("追加词" + std::to_string(i) + " nz");
+  }
+  jieba.LoadUserDict(rows);
+  ASSERT_FALSE(jieba.Find("数据科学\tnz"));
+  const char* loaded[] = {"数据科学", "连续空格测试词", "默认词频测试词",
+                          "零词频测试词", "负词频测试词", "无效词频测试词"};
+  const char* tags[] = {"nz", "nt", "x", "nz", "nz", "nz"};
+  for (size_t i = 0; i < sizeof(loaded) / sizeof(loaded[0]); ++i) {
+    ASSERT_TRUE(jieba.Find(loaded[i]));
+    ASSERT_EQ(tags[i], jieba.LookupTag(loaded[i]));
+    jieba.Cut(loaded[i], words, false);
+    ASSERT_EQ(loaded[i], Join(words.begin(), words.end(), "/"));
+  }
+  const DictUnit* default_word = find("默认词频测试词");
+  ASSERT_TRUE(default_word != NULL);
+  for (size_t i = 3; i < sizeof(loaded) / sizeof(loaded[0]); ++i) {
+    const DictUnit* unit = find(loaded[i]);
+    ASSERT_TRUE(unit != NULL);
+    ASSERT_TRUE(std::isfinite(unit->weight));
+    ASSERT_DOUBLE_EQ(default_word->weight, unit->weight);
+  }
+  jieba.Cut("杭研", words);
+  ASSERT_EQ("杭/研", Join(words.begin(), words.end(), "/"));
+
+  set<string> set_rows;
+  set_rows.insert("运行时集合测试词 nz");
+  jieba.LoadUserDict(set_rows);
+  ASSERT_TRUE(jieba.Find("运行时集合测试词"));
+  ASSERT_EQ("nz", jieba.LookupTag("运行时集合测试词"));
+  jieba.Cut("运行时集合测试词", words, false);
+  ASSERT_EQ("运行时集合测试词", Join(words.begin(), words.end(), "/"));
+
+  ASSERT_FALSE(jieba.Find("千树万树梨花开"));
+  jieba.LoadUserDict(string(TEST_DATA_DIR "/userdict.2.utf8"));
+  ASSERT_TRUE(jieba.Find("千树万树梨花开"));
+  jieba.Cut("千树万树梨花开", words, false);
+  ASSERT_EQ("千树万树梨花开", Join(words.begin(), words.end(), "/"));
+  ASSERT_EQ(initial, find("蓝翔"));
+  ASSERT_EQ("nz", initial->tag);
+  ASSERT_EQ("nz", jieba.LookupTag("蓝翔"));
+  ASSERT_EQ(runtime, find("运行时稳定测试词"));
+  ASSERT_TRUE(runtime_payload.word == runtime->word);
+  ASSERT_EQ(runtime_payload.tag, runtime->tag);
+  ASSERT_DOUBLE_EQ(runtime_payload.weight, runtime->weight);
+
+  jieba.LoadUserDict(vector<string>(1, "运行时稳定测试词 20 nt"));
+  const DictUnit* replacement = find("运行时稳定测试词");
+  ASSERT_TRUE(replacement != NULL);
+  ASSERT_NE(runtime, replacement);
+  ASSERT_TRUE(runtime_payload.word == replacement->word);
+  ASSERT_EQ("nt", replacement->tag);
+  ASSERT_NEAR(runtime_payload.weight + std::log(2.0), replacement->weight, 1e-12);
+  ASSERT_EQ("nt", jieba.LookupTag("运行时稳定测试词"));
+  jieba.Cut("运行时稳定测试词", words, false);
+  ASSERT_EQ("运行时稳定测试词", Join(words.begin(), words.end(), "/"));
+  ASSERT_TRUE(runtime_payload.word == runtime->word);
+  ASSERT_EQ(runtime_payload.tag, runtime->tag);
+  ASSERT_DOUBLE_EQ(runtime_payload.weight, runtime->weight);
 }
