@@ -44,7 +44,7 @@ class MixSegment: public SegmentTagged {
 
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
     if (!hmm) {
-      mpSeg_.Cut(begin, end, res);
+      CutWithoutHMM(begin, end, res);
       return;
     }
     vector<WordRange> words;
@@ -97,6 +97,32 @@ class MixSegment: public SegmentTagged {
   }
 
  private:
+  static bool IsAsciiAlnum(Rune x) {
+    return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9');
+  }
+
+  // Like Python jieba's cut(HMM=False): consecutive single-rune ASCII letters
+  // and digits from the MP result are kept as one word, e.g. "IBM", "5000".
+  void CutWithoutHMM(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res) const {
+    vector<WordRange> words;
+    assert(end >= begin);
+    words.reserve(end - begin);
+    mpSeg_.Cut(begin, end, words);
+
+    for (size_t i = 0; i < words.size(); i++) {
+      if (words[i].left != words[i].right || !IsAsciiAlnum(words[i].left->rune)) {
+        res.push_back(words[i]);
+        continue;
+      }
+      size_t j = i;
+      while (j + 1 < words.size() && words[j + 1].left == words[j + 1].right && IsAsciiAlnum(words[j + 1].left->rune)) {
+        j++;
+      }
+      res.push_back(WordRange(words[i].left, words[j].left));
+      i = j;
+    }
+  }
+
   MPSegment mpSeg_;
   HMMSegment hmmSeg_;
   PosTagger tagger_;
