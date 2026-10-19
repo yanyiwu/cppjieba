@@ -3,6 +3,7 @@
 ## Unreleased
 
 + deps: remove the limonp submodule dependency
++ fix: keep runs of ASCII letters and digits whole when cutting without HMM (`Cut(..., false)`, `CutForSearch(..., false)`), matching Python jieba's `cut(HMM=False)`
 
 ## v5.6.7
 

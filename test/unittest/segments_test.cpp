@@ -59,6 +59,34 @@ TEST(MixSegmentTest, Test1) {
   }
 
   {
+    // Without HMM, runs of ASCII letters and digits stay whole, matching
+    // Python jieba's cut(HMM=False)
+    sentence = "我在IBM工作，用AK47拍了5000张照片";
+    expected = "我/在/IBM/工作/，/用/AK47/拍/了/5000/张/照片";
+    segment.Cut(sentence, words, false);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+
+    sentence = "圆周率约等于3.14";
+    expected = "圆周率/约等于/3/./14";
+    segment.Cut(sentence, words, false);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+
+    sentence = "iPhone13和ipad";
+    expected = "iPhone13/和/ipad";
+    segment.Cut(sentence, words, false);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+
+    sentence = "B超 T恤";
+    expected = "B超/ /T恤";
+    segment.Cut(sentence, words, false);
+    actual = Join(words.begin(), words.end(), "/");
+    ASSERT_EQ(actual, expected);
+  }
+
+  {
     sentence = "他来到了网易杭研大厦";
     expected = "他/来到/了/网易/杭研/大厦";
     segment.Cut(sentence, words);
@@ -291,6 +319,11 @@ TEST(QuerySegment, Test1) {
   segment.Cut("他心理健康", words);
   s1 = Join(words.begin(), words.end(), "/");
   s2 = "他/心理/健康/心理健康";
+  ASSERT_EQ(s1, s2);
+
+  segment.Cut("我在IBM工作，用AK47拍了5000张照片", words, false);
+  s1 = Join(words.begin(), words.end(), "/");
+  s2 = "我/在/IBM/工作/，/用/AK47/拍/了/5000/张/照片";
   ASSERT_EQ(s1, s2);
 }
 
