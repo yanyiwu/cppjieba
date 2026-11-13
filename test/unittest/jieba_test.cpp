@@ -83,6 +83,30 @@ TEST(JiebaTest, Test1) {
   ASSERT_EQ("[\"让\", \"我\", \"去\", \"了解\", \"一下\"]", result);
 }
 
+TEST(JiebaTest, AmbiguousYiZhiZhi) {
+  cppjieba::Jieba jieba;
+  const string sentences[] = {"一只只小猫", "一只只箱子", "一只只要十元"};
+  const string expected[] = {
+      "一只只/小猫", "一只只/箱子", "一只/只要/十元"};
+  vector<string> words;
+
+  for (size_t mode = 0; mode < 2; ++mode) {
+    for (size_t i = 0; i < 3; ++i) {
+      jieba.Cut(sentences[i], words, mode != 0);
+      ASSERT_EQ(expected[i], Join(words.begin(), words.end(), "/"));
+    }
+  }
+
+  vector<Word> word_offsets;
+  jieba.Cut(sentences[0], word_offsets, false);
+  ASSERT_EQ("一只只", word_offsets[0].word);
+  ASSERT_EQ(0u, word_offsets[0].offset);
+  ASSERT_EQ(3u, word_offsets[0].unicode_length);
+  ASSERT_EQ("小猫", word_offsets[1].word);
+  ASSERT_EQ(9u, word_offsets[1].offset);
+  ASSERT_EQ(3u, word_offsets[1].unicode_offset);
+}
+
 TEST(JiebaTest, WordTest) {
   cppjieba::Jieba jieba(DICT_DIR "/jieba.dict.utf8",
                         DICT_DIR "/hmm_model.utf8",

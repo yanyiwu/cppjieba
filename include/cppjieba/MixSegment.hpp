@@ -40,6 +40,7 @@ class MixSegment: public SegmentTagged {
     words.clear();
     words.reserve(wrs.size());
     GetWordsFromWordRanges(sentence, wrs, words);
+    MergeYiZhiZhi(words);
   }
 
   void Cut(RuneStrArray::const_iterator begin, RuneStrArray::const_iterator end, vector<WordRange>& res, bool hmm) const {
@@ -97,6 +98,35 @@ class MixSegment: public SegmentTagged {
   }
 
  private:
+  static bool IsNounTag(const string& tag) {
+    return !tag.empty() && tag[0] == 'n';
+  }
+
+  bool IsNounPhraseAfter(const vector<Word>& words, size_t index) const {
+    if (index >= words.size()) {
+      return false;
+    }
+    const string tag = LookupTag(words[index].word);
+    if (IsNounTag(tag)) {
+      return true;
+    }
+    return index + 1 < words.size() &&
+        !tag.empty() && tag[0] == 'a' &&
+        IsNounTag(LookupTag(words[index + 1].word));
+  }
+
+  void MergeYiZhiZhi(vector<Word>& words) const {
+    for (size_t i = 0; i + 2 < words.size(); ++i) {
+      if (words[i].word != "一只" || words[i + 1].word != "只" ||
+          !IsNounPhraseAfter(words, i + 2)) {
+        continue;
+      }
+      words[i].word += words[i + 1].word;
+      words[i].unicode_length += words[i + 1].unicode_length;
+      words.erase(words.begin() + i + 1);
+    }
+  }
+
   static bool IsAsciiAlnum(Rune x) {
     return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') || ('0' <= x && x <= '9');
   }
